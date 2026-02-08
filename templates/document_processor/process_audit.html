@@ -1,0 +1,1153 @@
+{% extends 'base_adminlte.html' %}
+
+{% block page_title %}Hujjat Yaratish{% endblock %}
+
+{% block extra_css %}
+<style>
+    .form-section {
+        border-bottom: 2px solid #eee;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+    }
+
+    .form-section h4 {
+        color: #0d6efd;
+        margin-bottom: 15px;
+    }
+
+    .hidden-field {
+        display: none;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card card-primary">
+            <div class="card-header">
+                <h3 class="card-title">Hujjatlarni Generatsiya Qilish Formasi</h3>
+            </div>
+            <!-- /.card-header -->
+            <!-- form start -->
+            <form method="post" action="{% url 'create_loan' %}">
+                {% csrf_token %}
+                <div class="card-body">
+
+                    <!-- TEST MODE CHECKBOX -->
+                    <div class="alert alert-warning">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="test-mode">
+                            <label class="custom-control-label font-weight-bold" for="test-mode">TEST REJIMI (Barcha
+                                maydonlarni avtomatik to'ldirish)</label>
+                        </div>
+                    </div>
+
+                    <!-- SHAXSIY MA'LUMOTLAR -->
+                    <div class="form-section">
+                        <h4>1. Qarz Oluvchi Ma'lumotlari</h4>
+                        <div class="row">
+                            <div class="col-md-5 form-group">
+                                {{ form.qarz_oluvchi_fish.label_tag }}
+                                {{ form.qarz_oluvchi_fish }}
+                                <small class="form-text text-muted">Masalan: HAMROYEV BOBUR RAVSHANOVICH</small>
+                                {% if form.qarz_oluvchi_fish.errors %}
+                                <div class="text-danger">{{ form.qarz_oluvchi_fish.errors }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-3 form-group">
+                                {{ form.qarz_oluvchi_pasport_seriya.label_tag }}
+                                {{ form.qarz_oluvchi_pasport_seriya }}
+                                <small class="form-text text-muted">Masalan: AD3074652</small>
+                            </div>
+                            <div class="col-md-4 form-group">
+                                {{ form.qarz_oluvchi_jshshir.label_tag }}
+                                {{ form.qarz_oluvchi_jshshir }}
+                                <small class="form-text text-muted">14 xonali raqam</small>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 form-group">
+                                {{ form.qarz_oluvchi_tugilgan_sana.label_tag }}
+                                {{ form.qarz_oluvchi_tugilgan_sana }}
+                                <small class="form-text text-muted">Masalan: 10.02.1994</small>
+                            </div>
+                            <div class="col-md-6 form-group">
+                                {{ form.qarz_oluvchi_telefon.label_tag }}
+                                {{ form.qarz_oluvchi_telefon }}
+                                <small class="form-text text-muted">+998 90 123-45-67</small>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 form-group">
+                                {{ form.qarz_oluvchi_pasport_berilgan.label_tag }}
+                                {{ form.qarz_oluvchi_pasport_berilgan }}
+                                <small class="form-text text-muted">Masalan: 19.01.2017 yilda berilgan</small>
+                            </div>
+                            <div class="col-md-6 form-group">
+                                {{ form.qarz_oluvchi_manzil.label_tag }}
+                                {{ form.qarz_oluvchi_manzil }}
+                                <small class="form-text text-muted">Doimiy yashash manzili</small>
+                            </div>
+                        </div>
+
+                        <!-- BOG'LANISH UCHUN SHAXSLAR -->
+                        <div class="form-section">
+                            <h4>Bo'g'lanish uchun shaxslar</h4>
+
+                            <!-- 1-shaxs -->
+                            <h6 class="text-primary mt-3">1-shaxs</h6>
+                            <div class="row">
+                                <div class="col-md-4 form-group">
+                                    {{ form.kontakt_1_fish.label_tag }}
+                                    {{ form.kontakt_1_fish }}
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    {{ form.kontakt_1_telefon.label_tag }}
+                                    {{ form.kontakt_1_telefon }}
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    {{ form.kontakt_1_qarindoshlik.label_tag }}
+                                    {{ form.kontakt_1_qarindoshlik }}
+                                </div>
+                            </div>
+
+                            <!-- 2-shaxs -->
+                            <h6 class="text-primary mt-3">2-shaxs</h6>
+                            <div class="row">
+                                <div class="col-md-4 form-group">
+                                    {{ form.kontakt_2_fish.label_tag }}
+                                    {{ form.kontakt_2_fish }}
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    {{ form.kontakt_2_telefon.label_tag }}
+                                    {{ form.kontakt_2_telefon }}
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    {{ form.kontakt_2_qarindoshlik.label_tag }}
+                                    {{ form.kontakt_2_qarindoshlik }}
+                                </div>
+                            </div>
+
+                            <!-- 3-shaxs -->
+                            <h6 class="text-primary mt-3">3-shaxs</h6>
+                            <div class="row">
+                                <div class="col-md-4 form-group">
+                                    {{ form.kontakt_3_fish.label_tag }}
+                                    {{ form.kontakt_3_fish }}
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    {{ form.kontakt_3_telefon.label_tag }}
+                                    {{ form.kontakt_3_telefon }}
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    {{ form.kontakt_3_qarindoshlik.label_tag }}
+                                    {{ form.kontakt_3_qarindoshlik }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- KREDIT MA'LUMOTLARI -->
+                        <div class="form-section">
+                            <h4>2. Kredit Ma'lumotlari</h4>
+                            <div class="row">
+                                <div class="col-md-6 form-group">
+                                    {{ form.shartnoma_raqami.label_tag }}
+                                    {{ form.shartnoma_raqami }}
+                                </div>
+                                <div class="col-md-6 form-group">
+                                    {{ form.shartnoma_sanasi.label_tag }}
+                                    {{ form.shartnoma_sanasi }}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 form-group">
+                                    {{ form.kredit_miqdori.label_tag }}
+                                    {{ form.kredit_miqdori }}
+                                </div>
+                                <div class="col-md-6 form-group">
+                                    {{ form.kredit_miqdori_soz.label_tag }}
+                                    {{ form.kredit_miqdori_soz }}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 form-group">
+                                    {{ form.kredit_turi.label_tag }}
+                                    {{ form.kredit_turi }}
+                                </div>
+                                <div class="col-md-6 form-group">
+                                    {{ form.grafik.label_tag }}
+                                    {{ form.grafik }}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4 form-group">
+                                    {{ form.kredit_muddat_oy.label_tag }}
+                                    {{ form.kredit_muddat_oy }}
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    {{ form.foiz_stavkasi.label_tag }}
+                                    {{ form.foiz_stavkasi }}
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    {{ form.foiz_stavkasi_soz.label_tag }}
+                                    {{ form.foiz_stavkasi_soz }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- GAROV MA'LUMOTLARI -->
+                        <div class="form-section">
+                            <h4>3. Garov Ma'lumotlari</h4>
+
+                            <div class="row">
+                                <!-- Chap ustun: Garov Turlari (Icons) -->
+                                <div class="col-md-3">
+                                    <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist"
+                                        aria-orientation="vertical">
+                                        <a class="nav-link active text-center py-3 mb-2 border" id="tab-avto"
+                                            data-toggle="pill" href="#content-avto" role="tab"
+                                            onclick="selectTab('avto')">
+                                            <i class="fas fa-car fa-2x mb-2"></i><br>
+                                            Avtomobil
+                                        </a>
+                                        <a class="nav-link text-center py-3 mb-2 border" id="tab-kochmas"
+                                            data-toggle="pill" href="#content-kochmas" role="tab"
+                                            onclick="selectTab('kochmas_mulk')">
+                                            <i class="fas fa-building fa-2x mb-2"></i><br>
+                                            Ko'chmas Mulk
+                                        </a>
+                                        <a class="nav-link text-center py-3 mb-2 border" id="tab-tilla"
+                                            data-toggle="pill" href="#content-tilla" role="tab"
+                                            onclick="selectTab('tilla')">
+                                            <i class="fas fa-coins fa-2x mb-2"></i><br>
+                                            Tilla Buyumlar
+                                        </a>
+                                        <a class="nav-link text-center py-3 mb-2 border" id="tab-sugurta"
+                                            data-toggle="pill" href="#content-sugurta" role="tab"
+                                            onclick="selectTab('sugurta')">
+                                            <i class="fas fa-shield-alt fa-2x mb-2"></i><br>
+                                            Sug'urta
+                                        </a>
+                                        <a class="nav-link text-center py-3 mb-2 border" id="tab-owner"
+                                            data-toggle="pill" href="#content-owner" role="tab"
+                                            onclick="selectTab('owner')">
+                                            <i class="fas fa-user-check fa-2x mb-2"></i><br>
+                                            Garov Egasi
+                                        </a>
+                                    </div>
+
+                                    <!-- Yashirin Inputs -->
+                                    <div class="d-none">
+                                        {{ form.garov_turi }}
+                                        {{ form.garov_egasi }}
+                                    </div>
+                                </div>
+
+                                <!-- O'ng ustun: Mos maydonlar -->
+                                <div class="col-md-9">
+                                    <div class="card card-outline card-primary h-100">
+                                        <div class="card-body">
+                                            <!-- Fields start here -->
+
+                                            <!-- GAROV EGASI -->
+                                            <div id="owner-fields" class="hidden-field">
+                                                <h5 class="text-primary"><i class="fas fa-user-check mr-2"></i> Garov
+                                                    Egasi
+                                                    (Uchinchi shaxs)</h5>
+
+                                                <div class="alert alert-light border mb-3">
+                                                    <div class="custom-control custom-checkbox">
+                                                        {{ form.uchinchi_shaxs_mavjud }}
+                                                        <label class="custom-control-label font-weight-bold"
+                                                            for="id_uchinchi_shaxs_mavjud">Garov mulkdori uchinchi
+                                                            shaxsmi?</label>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    {{ form.garov_egasi_fish.label_tag }}
+                                                    {{ form.garov_egasi_fish }}
+                                                </div>
+                                                <div class="form-group">
+                                                    {{ form.garov_egasi_pasport.label_tag }}
+                                                    {{ form.garov_egasi_pasport }}
+                                                </div>
+                                                <div class="form-group">
+                                                    {{ form.garov_egasi_manzil.label_tag }}
+                                                    {{ form.garov_egasi_manzil }}
+                                                </div>
+                                            </div>
+
+                                            <!-- Dinamik Maydonlar -->
+
+                                            <!-- AVTOMOBIL -->
+                                            <div id="avto-fields">
+                                                <h5 class="text-primary"><i class="fas fa-car mr-2"></i> Avtomobil
+                                                    Ma'lumotlari</h5>
+                                                <div class="row">
+                                                    <div class="col-md-6 form-group">
+                                                        {{ form.avto_nomi.label_tag }}
+                                                        {{ form.avto_nomi }}
+                                                    </div>
+                                                    <div class="col-md-6 form-group">
+                                                        {{ form.avto_raqam.label_tag }}
+                                                        {{ form.avto_raqam }}
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6 form-group">
+                                                        {{ form.avto_kuzov_turi.label_tag }}
+                                                        {{ form.avto_kuzov_turi }}
+                                                    </div>
+                                                    <div class="col-md-6 form-group">
+                                                        {{ form.avto_kuzov.label_tag }}
+                                                        {{ form.avto_kuzov }}
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6 form-group">
+                                                        {{ form.avto_dvigatel.label_tag }}
+                                                        {{ form.avto_dvigatel }}
+                                                    </div>
+                                                    <div class="col-md-6 form-group">
+                                                        {{ form.avto_shassi.label_tag }}
+                                                        {{ form.avto_shassi }}
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-4 form-group">
+                                                        {{ form.avto_yil.label_tag }}
+                                                        {{ form.avto_yil }}
+                                                    </div>
+                                                    <div class="col-md-4 form-group">
+                                                        {{ form.avto_rang.label_tag }}
+                                                        {{ form.avto_rang }}
+                                                    </div>
+                                                    <div class="col-md-4 form-group">
+                                                        {{ form.avto_yurgan.label_tag }}
+                                                        {{ form.avto_yurgan }}
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    {{ form.avto_bahosi.label_tag }} {{ form.avto_bahosi }}
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6 form-group">
+                                                        {{ form.avto_texpasport.label_tag }} {{ form.avto_texpasport }}
+                                                    </div>
+                                                    <div class="col-md-6 form-group">
+                                                        {{ form.avto_texpasport_sana.label_tag }}
+                                                        {{ form.avto_texpasport_sana }}
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    {{ form.avto_manzil.label_tag }} {{ form.avto_manzil }}
+                                                </div>
+                                            </div>
+
+                                            <!-- KO'CHMAS MULK -->
+                                            <div id="kochmas-fields" class="hidden-field">
+                                                <h5 class="text-primary"><i class="fas fa-building mr-2"></i> Ko'chmas
+                                                    Mulk
+                                                    Ma'lumotlari</h5>
+
+                                                <div class="form-group">
+                                                    {{ form.mulk_manzili.label_tag }}
+                                                    {{ form.mulk_manzili }}
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col-md-4 form-group">
+                                                        {{ form.mulk_umumiy_maydoni.label_tag }}
+                                                        {{ form.mulk_umumiy_maydoni }}
+                                                    </div>
+                                                    <div class="col-md-4 form-group">
+                                                        {{ form.mulk_yashash_maydoni.label_tag }}
+                                                        {{ form.mulk_yashash_maydoni }}
+                                                    </div>
+                                                    <div class="col-md-4 form-group">
+                                                        {{ form.mulk_qurilish_maydoni.label_tag }}
+                                                        {{ form.mulk_qurilish_maydoni }}
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    {{ form.mulk_turi.label_tag }}
+                                                    {{ form.mulk_turi }}
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col-md-6 form-group">
+                                                        {{ form.mulk_bahosi.label_tag }}
+                                                        {{ form.mulk_bahosi }}
+                                                    </div>
+                                                    <div class="col-md-6 form-group">
+                                                        {{ form.mulk_bahosi_soz.label_tag }}
+                                                        {{ form.mulk_bahosi_soz }}
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col-md-6 form-group">
+                                                        {{ form.mulk_dalolatnoma_raqami.label_tag }}
+                                                        {{ form.mulk_dalolatnoma_raqami }}
+                                                    </div>
+                                                    <div class="col-md-6 form-group">
+                                                        {{ form.mulk_dalolatnoma_sanasi.label_tag }}
+                                                        {{ form.mulk_dalolatnoma_sanasi }}
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- TILLA (Hozircha bo'sh, agar kerak bo'lsa qo'shiladi) -->
+                                            <div id="tilla-fields" class="hidden-field">
+                                                <h5 class="text-primary"><i class="fas fa-coins mr-2"></i> Tilla
+                                                    Buyumlar
+                                                    Ma'lumotlari</h5>
+
+                                                <div class="form-group">
+                                                    {{ form.tilla_nomi.label_tag }}
+                                                    {{ form.tilla_nomi }}
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col-md-6 form-group">
+                                                        {{ form.tilla_probi.label_tag }}
+                                                        {{ form.tilla_probi }}
+                                                    </div>
+                                                    <div class="col-md-6 form-group">
+                                                        {{ form.tilla_vazni.label_tag }}
+                                                        {{ form.tilla_vazni }}
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col-md-4 form-group">
+                                                        {{ form.tilla_soni.label_tag }}
+                                                        {{ form.tilla_soni }}
+                                                    </div>
+                                                    <div class="col-md-4 form-group">
+                                                        {{ form.tilla_bahosi.label_tag }}
+                                                        {{ form.tilla_bahosi }}
+                                                    </div>
+                                                    <div class="col-md-4 form-group">
+                                                        {{ form.tilla_bahosi_soz.label_tag }}
+                                                        {{ form.tilla_bahosi_soz }}
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- SUG'URTA -->
+                                            <div id="sugurta-fields" class="hidden-field">
+                                                <h5 class="text-primary"><i class="fas fa-shield-alt mr-2"></i> Sug'urta
+                                                    Polisi Sozlamalari</h5>
+
+                                                <div class="alert alert-light border mb-3">
+                                                    <div class="custom-control custom-checkbox">
+                                                        {{ form.sugurta_mavjud }}
+                                                        <label class="custom-control-label font-weight-bold"
+                                                            for="id_sugurta_mavjud">{{ form.sugurta_mavjud.label
+                                                            }}</label>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    {{ form.sugurta_kompaniyasi.label_tag }}
+                                                    {{ form.sugurta_kompaniyasi }}
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col-md-6 form-group">
+                                                        {{ form.sugurta_polisi.label_tag }}
+                                                        {{ form.sugurta_polisi }}
+                                                    </div>
+                                                    <div class="col-md-6 form-group">
+                                                        {{ form.sugurta_sanasi.label_tag }}
+                                                        {{ form.sugurta_sanasi }}
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6 form-group">
+                                                        {{ form.sugurta_summasi.label_tag }}
+                                                        {{ form.sugurta_summasi }}
+                                                    </div>
+                                                    <div class="col-md-6 form-group">
+                                                        {{ form.sugurta_summasi_soz.label_tag }}
+                                                        {{ form.sugurta_summasi_soz }}
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- MOLIYAVIY HOLAT -->
+                        <div class="form-section">
+                            <h4>4. Mijozning Moliyaviy Holati</h4>
+                            <div class="form-group">
+                                {{ form.qarz_oluvchi_ish_joyi.label_tag }}
+                                {{ form.qarz_oluvchi_ish_joyi }}
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4 form-group">
+                                    {{ form.qarz_oluvchi_daromad.label_tag }}
+                                    {{ form.qarz_oluvchi_daromad }}
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    {{ form.qarz_oluvchi_xarajatlar.label_tag }}
+                                    {{ form.qarz_oluvchi_xarajatlar }}
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    {{ form.qarz_oluvchi_tahminiy_tolov.label_tag }}
+                                    {{ form.qarz_oluvchi_tahminiy_tolov }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                {{ form.qarz_oluvchi_majburiyatlar.label_tag }}
+                                {{ form.qarz_oluvchi_majburiyatlar }}
+                                <small class="form-text text-muted">Mavjud kreditlar bank nomi, qoldiq summasi va oylik
+                                    to'lovi bilan.</small>
+                            </div>
+                        </div>
+
+                        <!-- TASHKILOT -->
+                        <div class="form-section">
+                            <h4>5. Tashkilot Ma'lumotlari</h4>
+                            <div class="row">
+                                <div class="col-md-6 form-group">
+                                    {{ form.filial_nomi.label_tag }}
+                                    {{ form.filial_nomi }}
+                                </div>
+                                <div class="col-md-6 form-group">
+                                    {{ form.filial_boshligi.label_tag }}
+                                    {{ form.filial_boshligi }}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 form-group">
+                                    {{ form.ishonchnoma_sanasi.label_tag }}
+                                    {{ form.ishonchnoma_sanasi }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- GRAFIK -->
+                        <div class="form-section">
+                            <h4>6. Grafik (Exceldan nusxa)</h4>
+                            <div class="form-group">
+                                <label for="id_grafik_matni">{{ form.grafik_matni.label }}:</label>
+                                {{ form.grafik_matni }}
+                                <small class="form-text text-muted">{{ form.grafik_matni.help_text }}</small>
+                            </div>
+                        </div>
+
+                        <!-- MONITORING -->
+                        <div class="form-section">
+                            <h4>7. Monitoring Sanalari</h4>
+                            <div class="row">
+                                <div class="col-md-3 form-group">
+                                    {{ form.monitoring_sana_1.label_tag }}
+                                    {{ form.monitoring_sana_1 }}
+                                </div>
+                                <div class="col-md-3 form-group">
+                                    {{ form.monitoring_sana_2.label_tag }}
+                                    {{ form.monitoring_sana_2 }}
+                                </div>
+                                <div class="col-md-3 form-group">
+                                    {{ form.monitoring_sana_3.label_tag }}
+                                    {{ form.monitoring_sana_3 }}
+                                </div>
+                                <div class="col-md-3 form-group">
+                                    {{ form.monitoring_sana_4.label_tag }}
+                                    {{ form.monitoring_sana_4 }}
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <!-- /.card-body -->
+
+                    <div class="card-footer">
+                        <button type="submit" class="btn btn-success">Saqlash va Yuborish</button>
+                        <a href="{% url 'dashboard' %}" class="btn btn-secondary">Bekor qilish</a>
+                    </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Raqamni so'zga aylantirish funksiyasi (O'zbek tilida)
+    function numberToWordsUzbek(s) {
+        // Remove spaces and convert to string
+        s = s.toString().replace(/\s/g, '');
+        if (isNaN(s) || s === '') return '';
+
+        const birliklar = ["", "bir", "ikki", "uch", "to'rt", "besh", "olti", "yetti", "sakkiz", "to'qqiz"];
+        const onliklar = ["", "o'n", "yigirma", "o'ttiz", "qirq", "ellik", "oltmish", "yetmish", "sakson", "to'qson"];
+        const darajalar = ["", "ming", "million", "milliard", "trillion"];
+
+        let n = parseInt(s, 10);
+        if (n === 0) return "nol";
+
+        let words = [];
+        let i = 0;
+
+        while (n > 0) {
+            let chunk = n % 1000;
+            if (chunk > 0) {
+                let chunkWords = [];
+                let yuz = Math.floor(chunk / 100);
+                let on = Math.floor((chunk % 100) / 10);
+                let bir = chunk % 10;
+
+                if (yuz > 0) {
+                    chunkWords.push(birliklar[yuz] + " yuz");
+                }
+                if (on > 0) {
+                    chunkWords.push(onliklar[on]);
+                }
+                if (bir > 0) {
+                    chunkWords.push(birliklar[bir]);
+                }
+
+                // Add degree (ming, million etc.)
+                if (darajalar[i]) {
+                    chunkWords.push(darajalar[i]);
+                }
+
+                words.unshift(chunkWords.join(" "));
+            }
+            n = Math.floor(n / 1000);
+            i++;
+        }
+
+        return words.join(" ");
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        // Formni bootstrap klasslari bilan bezash
+        let inputs = document.querySelectorAll('input[type="text"], input[type="date"], input[type="number"], textarea, select');
+        inputs.forEach(input => input.classList.add('form-control'));
+
+        // ==========================================
+        // YORDAMCHI FUNKSIYALAR
+        // ==========================================
+
+        // Katta harflarga o'tkazish
+        function textToUpperCase(selector) {
+            const el = document.querySelector(selector);
+            if (el) {
+                el.addEventListener('input', function () {
+                    this.value = this.value.toUpperCase();
+                });
+            }
+        }
+
+        // Raqamli format (minglik ajratuvchi) va so'z bilan yozish
+        function applyMoneyMaskAndWords(amountSelector, wordsSelector) {
+            const $amount = $(amountSelector);
+            const $words = $(wordsSelector);
+
+            if ($amount.length) {
+                $amount.inputmask({
+                    alias: "numeric",
+                    groupSeparator: " ",
+                    autoGroup: true,
+                    digits: 0,
+                    rightAlign: false,
+                    removeMaskOnSubmit: true,
+                    allowMinus: false
+                });
+
+                $amount.on('input keyup change', function () {
+                    let val = $(this).inputmask('unmaskedvalue');
+                    if ($words.length) {
+                        let text = numberToWordsUzbek(val);
+                        if (text) text = text.charAt(0).toUpperCase() + text.slice(1);
+                        $words.val(text);
+                    }
+                });
+            }
+        }
+
+        // Sana maskasi (DD.MM.YYYY)
+        function applyDateMask(selector) {
+            const $el = $(selector);
+            if ($el.length) {
+                $el.inputmask({
+                    mask: "99.99.9999",
+                    placeholder: "dd.mm.yyyy",
+                    alias: "datetime",
+                    inputFormat: "dd.mm.yyyy"
+                });
+            }
+        }
+
+        // Apply to all date-mask elements
+        $('.date-mask').inputmask({
+            mask: "99.99.9999",
+            placeholder: "dd.mm.yyyy",
+            alias: "datetime",
+            inputFormat: "dd.mm.yyyy"
+        });
+
+        // ==========================================
+        // 1. SHAXSIY MA'LUMOTLAR
+        // ==========================================
+        textToUpperCase('#id_qarz_oluvchi_fish');
+
+        // Telefon raqami maskasi
+        const phoneSelector = '#id_qarz_oluvchi_telefon';
+        if ($(phoneSelector).length) {
+            $(phoneSelector).inputmask({
+                mask: "+\\9\\98 99 999-99-99",
+                placeholder: "_",
+                showMaskOnHover: false,
+                showMaskOnFocus: true
+            });
+        }
+
+        // Kontakt Shaxslar
+        const contactFields = [
+            { name: '#id_kontakt_1_fish', phone: '#id_kontakt_1_telefon' },
+            { name: '#id_kontakt_2_fish', phone: '#id_kontakt_2_telefon' },
+            { name: '#id_kontakt_3_fish', phone: '#id_kontakt_3_telefon' }
+        ];
+
+        contactFields.forEach(field => {
+            textToUpperCase(field.name);
+            if ($(field.phone).length) {
+                $(field.phone).inputmask({
+                    mask: "+\\9\\98 99 999-99-99",
+                    placeholder: "_",
+                    showMaskOnHover: false,
+                    showMaskOnFocus: true
+                });
+            }
+        });
+
+        const pasportInput = document.getElementById('id_qarz_oluvchi_pasport_seriya');
+        if (pasportInput) {
+            $(pasportInput).inputmask({
+                mask: "AA9999999",
+                placeholder: "_"
+            });
+            pasportInput.addEventListener('input', function () { this.value = this.value.toUpperCase(); });
+        }
+
+        applyDateMask('#id_qarz_oluvchi_tugilgan_sana');
+
+        // JSHSHIR maskasi (14 digits)
+        const jshshirInput = document.getElementById('id_qarz_oluvchi_jshshir');
+        if (jshshirInput) {
+            $(jshshirInput).inputmask({
+                mask: "99999999999999",
+                placeholder: "",
+                rightAlign: false
+            });
+        }
+
+        // ==========================================
+        // 2. KREDIT MA'LUMOTLARI
+        // ==========================================
+        textToUpperCase('#id_shartnoma_raqami');
+        applyDateMask('#id_shartnoma_sanasi');
+        applyMoneyMaskAndWords('#id_kredit_miqdori', '#id_kredit_miqdori_soz');
+
+        const muddatInput = document.getElementById('id_kredit_muddat_oy');
+        if (muddatInput) {
+            muddatInput.type = "number";
+            muddatInput.min = "1";
+            muddatInput.max = "60"; // 60 oy gacha ruxsat beramiz, user 12 degan bo'lsa ham
+        }
+
+        const $foizInput = $('#id_foiz_stavkasi');
+        const $foizSozInput = $('#id_foiz_stavkasi_soz');
+        if ($foizInput.length) {
+            $foizInput.on('input keyup change', function () {
+                let val = $(this).val();
+                if ($foizSozInput.length) {
+                    let text = numberToWordsUzbek(val);
+                    if (text) text = text.charAt(0).toUpperCase() + text.slice(1);
+                    $foizSozInput.val(text);
+                }
+            });
+        }
+
+        // ==========================================
+        // 3. AVTOMOBIL MA'LUMOTLARI
+        // ==========================================
+        // Davlat raqami, Kuzov, Dvigatel, Texpasport -> Upper Case
+        textToUpperCase('#id_avto_raqam');
+        textToUpperCase('#id_avto_kuzov');
+        textToUpperCase('#id_avto_dvigatel');
+        textToUpperCase('#id_avto_rang');
+        textToUpperCase('#id_avto_texpasport');
+
+        applyDateMask('#id_avto_texpasport_sana');
+
+        // Texpasport max length 20
+        const texpasport = document.getElementById('id_avto_texpasport');
+        if (texpasport) {
+            texpasport.maxLength = 20;
+        }
+
+        // Ishlab chiqarilgan yili: 4 xonali son, 2000-2050
+        const avtoYil = document.getElementById('id_avto_yil');
+        if (avtoYil) {
+            $(avtoYil).inputmask({ mask: "9999", placeholder: "" });
+            avtoYil.addEventListener('change', function () {
+                let val = parseInt(this.value);
+                if (val < 2000 || val > 2050) {
+                    alert("Avtomobil yili 2000 va 2050 oralig'ida bo'lishi kerak!");
+                    this.value = '';
+                }
+            });
+        }
+
+        // Yurgan masofasi: number
+        $('#id_avto_yurgan').inputmask({ alias: "integer", groupSeparator: " ", autoGroup: true, rightAlign: false });
+
+        // Baholangan qiymati: number (pul ko'rinishida boalaqoladi, aniqlik bo'lmasa)
+        // User "number" degan, lekin so'z bilan so'ramagan. Shunchaki chiroyli formatlaymiz.
+        $('#id_avto_bahosi').inputmask({ alias: "numeric", groupSeparator: " ", autoGroup: true, digits: 0, rightAlign: false, suffix: " so'm", removeMaskOnSubmit: true });
+
+        // ==========================================
+        // 4. MOLIYAVIY HOLAT
+        // ==========================================
+        $('#id_qarz_oluvchi_daromad').inputmask({ alias: "numeric", groupSeparator: " ", autoGroup: true, digits: 0, rightAlign: false, suffix: " so'm", removeMaskOnSubmit: true });
+        $('#id_qarz_oluvchi_xarajatlar').inputmask({ alias: "numeric", groupSeparator: " ", autoGroup: true, digits: 0, rightAlign: false, suffix: " so'm", removeMaskOnSubmit: true });
+        $('#id_qarz_oluvchi_tahminiy_tolov').inputmask({ alias: "numeric", groupSeparator: " ", autoGroup: true, digits: 0, rightAlign: false, suffix: " so'm", removeMaskOnSubmit: true });
+
+        textToUpperCase('#id_qarz_oluvchi_ish_joyi');
+
+        // ==========================================
+        // 5. KO'CHMAS MULK MA'LUMOTLARI
+        // ==========================================
+        // Maydonlar: 45,2 ko'rinishida (float, comma)
+        const areaInputs = ['#id_mulk_umumiy_maydoni', '#id_mulk_yashash_maydoni', '#id_mulk_qurilish_maydoni'];
+        areaInputs.forEach(sel => {
+            $(sel).inputmask({
+                alias: "numeric",
+                digits: 2,
+                radixPoint: ",",
+                groupSeparator: " ",
+                autoGroup: true,
+                rightAlign: false
+            });
+        });
+
+        // Bahosi va so'z bilan
+        applyMoneyMaskAndWords('#id_mulk_bahosi', '#id_mulk_bahosi_soz');
+
+        // Dalolatnoma sanasi
+        applyDateMask('#id_mulk_dalolatnoma_sanasi');
+
+        // ==========================================
+        // 5. TILLA BUYUMLAR MA'LUMOTLARI
+        // ==========================================
+        // Probsi: number (masalan 583)
+        $('#id_tilla_probi').inputmask({ mask: "999", placeholder: "" });
+
+        // Umumiy vazni (gr): number
+        $('#id_tilla_vazni').inputmask({ alias: "numeric", digits: 2, radixPoint: ",", rightAlign: false, suffix: " gr" });
+
+        // Soni (dona): number
+        $('#id_tilla_soni').inputmask({ alias: "integer", rightAlign: false, suffix: " dona" });
+
+        // Bahosi va so'z bilan
+        applyMoneyMaskAndWords('#id_tilla_bahosi', '#id_tilla_bahosi_soz');
+
+        // ==========================================
+        // 6. SUG'URTA POLISI
+        // ==========================================
+        // Polisi raqami: number
+        $('#id_sugurta_polisi').inputmask({ regex: "[0-9]*", rightAlign: false }); // Faqat raqamlar
+
+        // Sanasi
+        applyDateMask('#id_sugurta_sanasi');
+
+        // Summasi va so'z bilan
+        applyMoneyMaskAndWords('#id_sugurta_summasi', '#id_sugurta_summasi_soz');
+
+        // ==========================================
+        // 7. GAROV EGASI (UCHINCHI SHAXS)
+        // ==========================================
+        // F.I.Sh: Upper case, faqat harflar
+        const egasiFish = document.getElementById('id_garov_egasi_fish');
+        if (egasiFish) {
+            egasiFish.addEventListener('input', function () {
+                // Faqat lotin harflari, bo'sh joy va ' (apostrof) ga ruxsat
+                this.value = this.value.replace(/[^a-zA-Z\s\']/g, '').toUpperCase();
+            });
+        }
+
+        // Pasport: Mask AD0174617
+        const egasiPasport = document.getElementById('id_garov_egasi_pasport');
+        if (egasiPasport) {
+            $(egasiPasport).inputmask({
+                mask: "AA9999999",
+                placeholder: "_"
+            });
+            egasiPasport.addEventListener('input', function () { this.value = this.value.toUpperCase(); });
+        }
+
+
+        // ==========================================
+        // TABS VA LOGIKA
+        // ==========================================
+        let formChecks = document.querySelectorAll('.form-check-input');
+        formChecks.forEach(check => check.classList.add('custom-control-input'));
+
+        const $garovTuriSelect = $('#id_garov_turi');
+        const $avtoFields = $('#avto-fields');
+        const $kochmasFields = $('#kochmas-fields');
+        const $tillaFields = $('#tilla-fields');
+        const $sugurtaFields = $('#sugurta-fields');
+
+        // Tab bosilganda ishlaydigan funksiya
+        window.selectTab = function (type) {
+            // 1. Vizual Tab Aktivlash
+            $('.nav-pills .nav-link').removeClass('active');
+
+            if (type === 'sugurta' || type === 'owner') {
+                if (type === 'sugurta') $('#tab-sugurta').addClass('active');
+                if (type === 'owner') $('#tab-owner').addClass('active');
+            } else {
+                $garovTuriSelect.val(type);
+                if (type === 'avto') $('#tab-avto').addClass('active');
+                else if (type === 'kochmas_mulk') $('#tab-kochmas').addClass('active');
+                else if (type === 'tilla') $('#tab-tilla').addClass('active');
+            }
+
+            // 2. Maydonlarni ko'rsatish/yashirish
+            $avtoFields.hide();
+            $kochmasFields.hide();
+            $tillaFields.hide();
+            // Sug'urta va Owner tablari alohida, ular garov turini o'zgartirmaydi, shunchaki o'zini ko'rsatadi
+            // Lekin UI da joylashuv qanday? process_audit.html da hammasi bitta konteynerda (col-md-9 ichida).
+            // Shuning uchun hammasini yashirib, keragini ochamiz.
+            $sugurtaFields.hide();
+            $('#owner-fields').hide();
+
+            if (type === 'avto') $avtoFields.show();
+            else if (type === 'kochmas_mulk') $kochmasFields.show();
+            else if (type === 'tilla') $tillaFields.show();
+            else if (type === 'sugurta') $sugurtaFields.show();
+            else if (type === 'owner') $('#owner-fields').show();
+        };
+
+        // Init based on current select value
+        let initialType = $garovTuriSelect.val() || 'avto';
+        selectTab(initialType);
+
+        // Garov turi select o'zgarganda (programmatically o'zgarsa)
+        $garovTuriSelect.on('change', function () {
+            selectTab($(this).val());
+        });
+
+        // Sug'urta checkbox logikasi
+        const $sugurtaCheckbox = $('#id_sugurta_mavjud');
+        const $sugurtaInputs = $('#sugurta-fields input:not(#id_sugurta_mavjud)');
+
+        function toggleSugurtaInputs() {
+            if ($sugurtaCheckbox.is(':checked')) {
+                $sugurtaInputs.prop('disabled', false);
+            } else {
+                $sugurtaInputs.prop('disabled', true);
+            }
+        }
+        toggleSugurtaInputs();
+        $sugurtaCheckbox.on('change', toggleSugurtaInputs);
+
+        // Owner checkbox logikasi
+        const $ownerCheckbox = $('#id_uchinchi_shaxs_mavjud');
+        const $ownerInputs = $('#owner-fields input:not(#id_uchinchi_shaxs_mavjud), #owner-fields textarea');
+
+        function toggleOwnerInputs() {
+            if ($ownerCheckbox.is(':checked')) {
+                $ownerInputs.prop('disabled', false);
+            } else {
+                $ownerInputs.prop('disabled', true);
+            }
+        }
+        toggleOwnerInputs();
+        $ownerCheckbox.on('change', toggleOwnerInputs);
+
+
+        // ==========================================
+        // TEST REJIMI (RANDOM DATA)
+        // ==========================================
+        $('#test-mode').on('change', function () {
+            if ($(this).is(':checked')) {
+                // Confirm
+                if (!confirm("Diqqat! Barcha maydonlar yangi ma'lumotlar bilan to'ldiriladi. Davom etasizmi?")) {
+                    $(this).prop('checked', false);
+                    return;
+                }
+
+                // Random Data Helpers
+                const firstNames = ["BOBUR", "ANVAR", "SARDOR", "JAHONGIR", "OLIM", "KARIM", "JAMSHID", "SHERZOD", "AZIZ", "FARHOD"];
+                const lastNames = ["ALIYEV", "VALIYEV", "KARIMOV", "RAHIMOV", "NORTOYEV", "ESHPULATOV", "TURDIEV", "SOBIROV", "SHARIPOV"];
+                const middleNames = ["ADHAMOVICH", "BOTIROVICH", "SHOKIROVICH", "OLIMOVICH", "KARIMOVICH", "AZIZOVICH"];
+                const regions = ["TOSHKENT", "BUXORO", "SAMARQAND", "ANDIJON", "FARG'ONA", "NAMANGAN", "QASHQADARYO", "SURXONDARYO"];
+                const streets = ["MUSTAQILLIK", "NAVOIY", "AMIR TEMUR", "BUXORO", "SAMARQUAND", "TINCHLIK", "DO'STLIK"];
+
+                const getRandomItem = (arr) => arr[Math.floor(Math.random() * arr.length)];
+                const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+                const getRandomAlphaNum = (length) => {
+                    const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+                    let result = '';
+                    for (let i = 0; i < length; i++) {
+                        result += chars.charAt(Math.floor(Math.random() * chars.length));
+                    }
+                    return result;
+                };
+
+                // 1. Shaxsiy Ma'lumotlar
+                let fName = getRandomItem(firstNames);
+                let lName = getRandomItem(lastNames);
+                let mName = getRandomItem(middleNames);
+                let fish = `${lName} ${fName} ${mName}`;
+
+                $('#id_qarz_oluvchi_fish').val(fish).trigger('input');
+                $('#id_qarz_oluvchi_jshshir').val(getRandomInt(1000000, 9999999) + "" + getRandomInt(1000000, 9999999)).trigger('input');
+                $('#id_qarz_oluvchi_pasport_seriya').val("AD" + getRandomInt(1000000, 9999999)).trigger('input');
+                $('#id_qarz_oluvchi_tugilgan_sana').val(`${getRandomInt(10, 28)}.${getRandomInt(10, 12)}.${getRandomInt(1980, 2000)}`).trigger('input');
+                $('#id_qarz_oluvchi_telefon').val(`+998 9${getRandomInt(0, 9)} ${getRandomInt(100, 999)}-${getRandomInt(10, 99)}-${getRandomInt(10, 99)}`).trigger('input');
+
+                let region = getRandomItem(regions);
+                $('#id_qarz_oluvchi_pasport_berilgan').val(`${region} VILOYATI IIB tomonidan ${getRandomInt(10, 28)}.${getRandomInt(10, 12)}.${getRandomInt(2015, 2024)} yilda berilgan`);
+                $('#id_qarz_oluvchi_manzil').val(`${region} shahar, ${getRandomItem(streets)} ko'chasi, ${getRandomInt(1, 100)}-uy`);
+
+                // 4. Moliyaviy Holat
+                const jobs = ["O'QITUVCHI", "SHIFOKOR", "DASTURCHI", "HAYDOVCHI", "TADBIRKOR", "MUHANDIS"];
+                $('#id_qarz_oluvchi_ish_joyi').val(`${getRandomItem(jobs)}`);
+                $('#id_qarz_oluvchi_daromad').val(getRandomInt(3, 15) * 1000000).trigger('input');
+                $('#id_qarz_oluvchi_xarajatlar').val(getRandomInt(1, 5) * 1000000).trigger('input');
+                $('#id_qarz_oluvchi_tahminiy_tolov').val(getRandomInt(1, 3) * 1000000).trigger('input');
+
+                // 1.5 Kontaktlar
+                $('#id_kontakt_1_fish').val(getRandomItem(lastNames) + " " + getRandomItem(firstNames)).trigger('input');
+                $('#id_kontakt_1_telefon').val(`+998 9${getRandomInt(0, 9)} ${getRandomInt(100, 999)}-${getRandomInt(10, 99)}-${getRandomInt(10, 99)}`).trigger('input');
+                $('#id_kontakt_1_qarindoshlik').val(getRandomItem(['ota', 'ona', 'aka', 'uka']));
+
+                $('#id_kontakt_2_fish').val(getRandomItem(lastNames) + " " + getRandomItem(firstNames)).trigger('input');
+                $('#id_kontakt_2_telefon').val(`+998 9${getRandomInt(0, 9)} ${getRandomInt(100, 999)}-${getRandomInt(10, 99)}-${getRandomInt(10, 99)}`).trigger('input');
+                $('#id_kontakt_2_qarindoshlik').val(getRandomItem(['turmush_ortogi', 'boshqa']));
+
+                $('#id_kontakt_3_fish').val(getRandomItem(lastNames) + " " + getRandomItem(firstNames)).trigger('input');
+                $('#id_kontakt_3_telefon').val(`+998 9${getRandomInt(0, 9)} ${getRandomInt(100, 999)}-${getRandomInt(10, 99)}-${getRandomInt(10, 99)}`).trigger('input');
+                $('#id_kontakt_3_qarindoshlik').val('boshqa');
+
+                $('#id_qarz_oluvchi_majburiyatlar').val("MAJBURIYATLAR YO'Q");
+
+                // 2. Kredit Ma'lumotlari
+                $('#id_shartnoma_raqami').val("K-" + getRandomInt(1000, 9999));
+                $('#id_shartnoma_sanasi').val("01.02.2026").trigger('input');
+                $('#id_kredit_miqdori').val(getRandomInt(50, 500) * 1000000).trigger('input'); // 50 mln - 500 mln
+                $('#id_kredit_muddat_oy').val("12");
+                $('#id_foiz_stavkasi').val("24").trigger('input');
+
+                // 3. Garov Turlari (Faqat tanlanganini to'ldiramiz)
+                let currentGarovType = $('#id_garov_turi').val();
+
+                if (currentGarovType === 'avto') {
+                    // AVTO
+                    const cars = [
+                        { name: "CHEVROLET MALIBU 2", price: 250000000 },
+                        { name: "CHEVROLET COBALT", price: 120000000 },
+                        { name: "CHEVROLET GENTRA", price: 140000000 },
+                        { name: "KIA K5", price: 350000000 },
+                        { name: "HYUNDAI SONATA", price: 300000000 },
+                        { name: "BYD SONG PLUS", price: 320000000 }
+                    ];
+                    let car = getRandomItem(cars);
+                    let randomRegion = getRandomItem(regions);
+                    let randomStreet = getRandomItem(streets);
+
+                    $('#id_avto_nomi').val(car.name).trigger('input');
+                    $('#id_avto_raqam').val(`${getRandomInt(10, 99)}${String.fromCharCode(65 + getRandomInt(0, 25))}${getRandomInt(100, 999)}${String.fromCharCode(65 + getRandomInt(0, 25))}${String.fromCharCode(65 + getRandomInt(0, 25))}`).trigger('input');
+                    $('#id_avto_kuzov_turi').val(getRandomItem(['SEDAN', 'XETCHBIK', 'SUV', 'UNIVERSAL'])).trigger('input');
+                    $('#id_avto_kuzov').val("HGCM" + getRandomAlphaNum(10)).trigger('input');
+                    $('#id_avto_dvigatel').val("D43M" + getRandomAlphaNum(10)).trigger('input');
+                    $('#id_avto_shassi').val("FR" + getRandomAlphaNum(12)).trigger('input');
+                    $('#id_avto_yil').val(getRandomInt(2020, 2024)).trigger('change');
+                    $('#id_avto_rang').val(getRandomItem(["OQ", "QORA", "KULRANG", "SHAMPAN", "QIZIL"])).trigger('input');
+                    $('#id_avto_yurgan').val(getRandomInt(5000, 50000)).trigger('input');
+                    $('#id_avto_bahosi').val(car.price).trigger('input');
+                    $('#id_avto_texpasport').val("AAF" + getRandomInt(1000000, 9999999)).trigger('input');
+                    $('#id_avto_texpasport_sana').val(`${getRandomInt(10, 28)}.${getRandomInt(10, 12)}.${getRandomInt(2018, 2024)}`).trigger('input');
+                    $('#id_avto_manzil').val(`${randomRegion} shahar, ${randomStreet} ko'chasi, ${getRandomInt(1, 100)}-uy`).trigger('input');
+                }
+                else if (currentGarovType === 'kochmas_mulk') {
+                    // KO'CHMAS MULK
+                    let mulkRegion = getRandomItem(regions);
+                    let mulkStreet = getRandomItem(streets);
+                    let area = getRandomInt(40, 120);
+
+                    $('#id_mulk_manzili').val(`${mulkRegion} shahar, ${mulkStreet} ko'chasi, ${getRandomInt(1, 100)}-uy`);
+                    $('#id_mulk_umumiy_maydoni').val(area).trigger('input');
+                    $('#id_mulk_yashash_maydoni').val((area * 0.7).toFixed(1)).trigger('input');
+                    $('#id_mulk_qurilish_maydoni').val(area).trigger('input');
+                    $('#id_mulk_turi').val("XONADON");
+                    $('#id_mulk_bahosi').val(area * 5000000).trigger('input'); // ~5 mln so'm per kv
+                    $('#id_mulk_dalolatnoma_raqami').val("D-" + getRandomInt(100, 999));
+                    $('#id_mulk_dalolatnoma_sanasi').val("15.01.2026").trigger('input');
+                }
+                else if (currentGarovType === 'tilla') {
+                    // TILLA
+                    $('#id_tilla_nomi').val("Tilla uzuk va sirg'a");
+                    $('#id_tilla_probi').val("583");
+                    $('#id_tilla_vazni').val(getRandomInt(10, 50)).trigger('input');
+                    $('#id_tilla_soni').val(getRandomInt(1, 5));
+                    $('#id_tilla_bahosi').val(getRandomInt(5, 20) * 1000000).trigger('input');
+                }
+
+                // SUG'URTA
+                $('#id_sugurta_mavjud').prop('checked', true).trigger('change');
+                $('#id_sugurta_kompaniyasi').val("O'ZBEKINVEST SUG'URTA KOMPANIYASI");
+                $('#id_sugurta_polisi').val(getRandomInt(1000000, 9999999));
+                $('#id_sugurta_sanasi').val("01.02.2026").trigger('input');
+                $('#id_sugurta_summasi').val(getRandomInt(100, 200) * 1000000).trigger('input');
+
+                // Garov Egasi (Uchinchi shaxs)
+                // Random 30% check
+                if (Math.random() > 0.7) {
+                    $('#id_uchinchi_shaxs_mavjud').prop('checked', true).trigger('change');
+                    let ownerFName = getRandomItem(firstNames);
+                    let ownerLName = getRandomItem(lastNames);
+                    let ownerMName = getRandomItem(middleNames);
+                    $('#id_garov_egasi_fish').val(`${ownerLName} ${ownerFName} ${ownerMName}`).trigger('input');
+                    $('#id_garov_egasi_pasport').val("AB" + getRandomInt(1000000, 9999999)).trigger('input');
+                    $('#id_garov_egasi_manzil').val(`${getRandomItem(regions)} shahar, ${getRandomItem(streets)} ko'chasi`);
+                } else {
+                    $('#id_uchinchi_shaxs_mavjud').prop('checked', false).trigger('change');
+                }
+
+                // Tashkilot
+                const officials = ["A. Otabekov", "M. Gapparov", "S. Rahimov", "B. Ikromov", "J. Sobirov", "F. Karimov"];
+                $('#id_filial_boshligi').val(getRandomItem(officials));
+                $('#id_ishonchnoma_sanasi').val("01.01.2025").trigger('input');
+
+                // Grafik
+                $('#id_grafik_matni').val("Grafik matni namuna uchun yozildi...");
+
+                // Sanalar (Monitoring)
+                $('#id_monitoring_sana_1').val("01.05.2026").trigger('input');
+                $('#id_monitoring_sana_2').val("01.08.2026").trigger('input');
+                $('#id_monitoring_sana_3').val("01.11.2026").trigger('input');
+                $('#id_monitoring_sana_4').val("01.02.2027").trigger('input');
+            }
+        });
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,109 @@
+{% extends 'base_adminlte.html' %}
+
+{% block page_title %}Shaxsiy Kabinet{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-4">
+        <!-- Profile Image -->
+        <div class="card card-primary card-outline">
+            <div class="card-body box-profile">
+                <div class="text-center">
+                    <img class="profile-user-img img-fluid img-circle"
+                        src="https://ui-avatars.com/api/?name={{ request.user.username }}&background=random&size=128"
+                        alt="User profile picture">
+                </div>
+
+                <h3 class="profile-username text-center">{{ request.user.username }}</h3>
+                <p class="text-muted text-center">
+                    {% if request.user.is_superuser %}
+                    Admin
+                    {% elif request.user.groups.exists %}
+                    {% for group in request.user.groups.all %}
+                    {{ group.name }}{% if not forloop.last %}, {% endif %}
+                    {% endfor %}
+                    {% else %}
+                    Foydalanuvchi
+                    {% endif %}
+                </p>
+
+                <ul class="list-group list-group-unbordered mb-3">
+                    <li class="list-group-item">
+                        <b>Email</b> <a class="float-right">{{ request.user.email|default:"Kiritilmagan" }}</a>
+                    </li>
+                    <li class="list-group-item">
+                        <b>Oxirgi kirish</b> <a class="float-right">{{ request.user.last_login|date:"d.m.Y H:i" }}</a>
+                    </li>
+                    <li class="list-group-item">
+                        <b>Ro'yxatdan o'tgan</b> <a class="float-right">{{ request.user.date_joined|date:"d.m.Y" }}</a>
+                    </li>
+                </ul>
+
+                <form id="logout-form-profile" action="{% url 'logout' %}" method="post" style="display: none;">
+                    {% csrf_token %}
+                </form>
+                <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form-profile').submit();"
+                    class="btn btn-danger btn-block"><b>Chiqish</b></a>
+            </div>
+            <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+    </div>
+
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header p-2">
+                <ul class="nav nav-pills">
+                    <li class="nav-item"><a class="nav-link active" href="#activity" data-toggle="tab">Faoliyat</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#settings" data-toggle="tab">Sozlamalar</a></li>
+                </ul>
+            </div><!-- /.card-header -->
+            <div class="card-body">
+                <div class="tab-content">
+                    <div class="active tab-pane" id="activity">
+                        <p class="text-muted">Sizning tizimdagi so'nggi harakatlaringiz tarixi (Hozircha bo'sh).</p>
+                    </div>
+                    <!-- /.tab-pane -->
+
+                    <div class="tab-pane" id="settings">
+                        <form class="form-horizontal">
+                            <div class="form-group row">
+                                <label for="inputName" class="col-sm-2 col-form-label">Ism</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="inputName" placeholder="Ismingiz"
+                                        value="{{ request.user.first_name }}">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="inputEmail" class="col-sm-2 col-form-label">Email</label>
+                                <div class="col-sm-10">
+                                    <input type="email" class="form-control" id="inputEmail" placeholder="Email"
+                                        value="{{ request.user.email }}">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="offset-sm-2 col-sm-10">
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox"> Men shartlarga roziman
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="offset-sm-2 col-sm-10">
+                                    <button type="submit" class="btn btn-danger" disabled>Saqlash (Tez orada)</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- /.tab-pane -->
+                </div>
+                <!-- /.tab-content -->
+            </div><!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+    </div>
+</div>
+{% endblock %}

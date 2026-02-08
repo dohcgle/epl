@@ -1,0 +1,193 @@
+{% load humanize %}
+<!DOCTYPE html>
+<html lang="uz">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Monitoring Dalolatnomasi</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 1cm 1.5cm;
+        }
+
+        body {
+            font-family: "Times New Roman", Times, serif;
+            font-size: 10pt;
+            line-height: 1.15;
+            text-align: justify;
+        }
+
+        .header {
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .doc-title {
+            text-align: center;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .location-date {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        p {
+            text-align: justify;
+            text-indent: 1cm;
+            margin-bottom: 15px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            margin-bottom: 20px;
+            font-size: 10pt;
+        }
+
+        th,
+        td {
+            border: 1px solid black;
+            padding: 5px;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        th {
+            background-color: #f0f0f0;
+            font-weight: bold;
+        }
+
+        .signatures-box {
+            margin-top: 40px;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .signer-col {
+            width: 48%;
+            vertical-align: top;
+        }
+
+        .signer-title {
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .signer-name {
+            text-align: center;
+            margin-top: 5px;
+            font-weight: bold;
+        }
+
+        /* Django template o'zgaruvchilari uchun rang */
+        .var {
+            color: #900000;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header">
+        <span class="var">{{ loan.shartnoma_sanasi|date:"d.m.Y" }}</span> y.dan
+        № <span class="var">{{ loan.shartnoma_raqami }}</span>-sonli Mikroqarz shartnomasi bo‘yicha garovga
+        qo‘yilgan mol-mulkni tekshirish bo’yicha <span class="var">{{ loan.qarz_oluvchi_fish }}</span> bilan tuzilgan
+    </div>
+
+    <div class="doc-title">DALOLATNOMA</div>
+
+    <div class="location-date">
+        <div>Toshkent shahri</div>
+        <div><span class="var">{{ loan.created_at|date:"d.m.Y" }}</span></div>
+    </div>
+
+    <p>
+        Men, «PULLOL BUSINESS MIKROMOLIYA TASHKILOTI» MChJ <span class="var">{{ loan.filial_nomi }}</span> boshlig'i
+        <span class="var">{{ loan.filial_boshligi }}</span>, jismoniy
+        shaxs <span class="var">{{ loan.qarz_oluvchi_fish }}</span>
+        <span class="var">{{ loan.shartnoma_sanasi|date:"d.m.Y" }}</span> y.dan
+        № <span class="var">{{ loan.shartnoma_raqami }}</span>-sonli
+        mikroqarz shartnomasi bo‘yicha garovga qo‘yilgan mol-mulkni ko‘zdan kechirdim.
+    </p>
+
+    <p>
+        Garov sifatida quyida ko’rsatilgan mulk qabul qilinadi:
+    </p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Nomi</th>
+                <th>Kuzov turi va kuzov raqami*</th>
+                <th>Dvigatel va shassi raqami*</th>
+                <th>Ishlab chiqarilgan yili va rangi**</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><span class="var">{{ loan.avto_nomi }}</span></td>
+                <td>
+                    kuzov turi - <span class="var">{{ loan.avto_kuzov_turi }}</span>,
+                    <br>
+                    kuzov raqami - <span class="var">{{ loan.avto_kuzov }}</span>
+                </td>
+                <td>
+                    dvigatel raqami - <span class="var">{{ loan.avto_dvigatel }}</span>,
+                    <br>
+                    shassi raqami - <span class="var">{{ loan.avto_shassi }}</span>
+                </td>
+                <td>
+                    rangi - <span class="var">{{ loan.avto_rang }}</span>,
+                    <br>
+                    ishlab chiqarilgan yili - <span class="var">{{ loan.avto_yil }}</span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div style="margin-left: 1cm; margin-bottom: 10px;">
+        -* avtotransport egasi: <strong><span class="var">{{ loan.garov_egasi_fish }}</span></strong><br>
+        -* texnik pasport: <strong><span class="var">{{ loan.avto_texpasport }}</span></strong><br>
+        -* ro‘yxatdan o‘tgan manzili/garaj manzili: <strong><span class="var">{{ loan.avto_manzil }}</span></strong><br>
+        -* davlat raqami: <strong><span class="var">{{ loan.avto_raqam }}</span></strong>
+    </div>
+
+    <p>
+        Shu bilan birga, yuqoridagi mulkning kelishilgan garov qiymati
+        <span class="var">{{ loan.avto_bahosi|intcomma }}</span>
+        (<span class="var">{{ loan.avto_bahosi_soz }}</span>) so'm.
+    </p>
+
+    <p>
+        Garovga qo‘yilgan mol-mulkni ko‘zdan kechirish natijasida ushbu mulk qoniqarli holatda ekanligi ma’lum bo‘ldi va
+        bu haqida mazkur dalolatnoma tuzildi.
+    </p>
+
+    <table class="requisites" style="margin-top: 40px; border: none; width: 100%;">
+        <tr>
+            <td style="border: none; width: 50%; text-align: left;">
+                <strong><span class="var">{{ loan.filial_nomi }}</span> boshlig‘i</strong><br><br>
+                <div style="height: 40px; border-bottom: 1px solid black; width: 80%;"></div>
+                <strong><span class="var">{{ loan.filial_boshligi }}</span></strong>
+            </td>
+            <td style="border: none; width: 50%; text-align: left;">
+                <strong>Jismoniy shaxs, qarzdor</strong><br><br>
+                <div style="height: 40px; border-bottom: 1px solid black; width: 80%;"></div>
+                <strong><span class="var">{{ loan.qarz_oluvchi_fish }}</span></strong>
+            </td>
+        </tr>
+    </table>
+
+</body>
+
+</html>

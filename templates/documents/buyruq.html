@@ -1,0 +1,212 @@
+{% load humanize %}
+<!DOCTYPE html>
+<html lang="uz">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Mikroqarz ajratish bo'yicha buyruq</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 1cm 1.5cm;
+        }
+
+        body {
+            font-family: "Times New Roman", Times, serif;
+            font-size: 10pt;
+            line-height: 1.15;
+            text-align: justify;
+        }
+
+        .header {
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        .doc-number {
+            text-align: center;
+            margin-bottom: 30px;
+            font-weight: bold;
+        }
+
+        p {
+            text-indent: 1cm;
+            margin-bottom: 10px;
+        }
+
+        .list-item {
+            margin-left: 1cm;
+            margin-bottom: 5px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            margin-bottom: 20px;
+            font-size: 10pt;
+        }
+
+        th,
+        td {
+            border: 1px solid black;
+            padding: 5px;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        th {
+            background-color: #f0f0f0;
+            font-weight: bold;
+        }
+
+        td {
+            text-align: left;
+        }
+
+        .signatures-box {
+            margin-top: 50px;
+            page-break-inside: avoid;
+        }
+
+        .signature-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .role-title {
+            width: 40%;
+            font-weight: bold;
+        }
+
+        .signer-name {
+            width: 40%;
+            text-align: right;
+            font-weight: bold;
+        }
+
+        .qr-code {
+            text-align: center;
+            width: 20%;
+        }
+
+        /* Django template o'zgaruvchilari uchun rang */
+        .var {
+            color: #900000;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header">
+        «PULLOL BUSINESS MIKROMOLIYA TASHKILOTI» MChJ
+    </div>
+
+    <div class="doc-number">
+        DIREKTORINING 
+        <span class="var">{{ loan.shartnoma_sanasi|date:"d.m.Y" }}</span> y.dagi 
+        № <span class="var">{{ loan.shartnoma_raqami }}</span>-sonli BUYRUG‘I
+    </div>
+
+    <p>
+        Men, <strong><span class="var">{{ loan.filial_boshligi }}</span></strong> «PULLOL BUSINESS MIKROMOLIYA
+        TASHKILOTI» MChJ direktori,
+        jismoniy shaxs <strong><span class="var">{{ loan.qarz_oluvchi_fish }}</span></strong>ga quyidagi shartlarda
+        mikroqarz berishni buyuraman:
+    </p>
+
+    <div class="list-item">
+        1. Mikroqarz summasi: <strong><span class="var">{{ loan.kredit_miqdori|intcomma }}</span> 
+            (<span class="var">{{ loan.kredit_miqdori_soz }}</span>) so‘m.</strong>
+    </div>
+    <div class="list-item">
+        2. Mikroqarz muddati: <strong><span class="var">{{ loan.kredit_muddat_oy }}</span> oy.</strong>
+    </div>
+    <div class="list-item">
+        3. Mikroqarzdan foydalanganlik uchun foiz stavkasi: <strong>yillik 
+            <span class="var">{{ loan.foiz_stavkasi }}</span>% 
+            (<span class="var">{{ loan.foiz_stavkasi_soz }}</span>) foiz.</strong>
+    </div>
+    <div class="list-item">
+        4. Mikroqarz bo‘yicha asosiy qarz va foizlarni to‘lash:
+        <br>- mikroqarz shartnomasi bo‘yicha har oy differensial to‘lovlari amalga oshiriladi.
+    </div>
+
+    {% if is_avto %}
+    <p>
+        5. <strong><span class="var">{{ loan.garov_egasi_fish }}</span></strong>ga tegishli 
+        <strong><span class="var">{{ loan.avto_nomi }}</span></strong> ko‘rinishidagi
+        transport vositasini quyidagi ma’lumotlarga muvofiq garovga qabul qilinsin:
+    </p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Nomi</th>
+                <th>Kuzov turi va kuzov raqami*</th>
+                <th>Dvigatel va shassi raqami*</th>
+                <th>Ishlab chiqarilgan yili va rangi*</th>
+                <th>Kelishilgan garov qiymati, so‘m</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><span class="var">{{ loan.avto_nomi }}</span></td>
+                <td><span class="var">{{ loan.avto_kuzov_turi }}</span>, 
+                    <span class="var">{{ loan.avto_kuzov }}</span>
+                </td>
+                <td><span class="var">{{ loan.avto_dvigatel }}</span>, 
+                    <span class="var">{{ loan.avto_shassi }}</span>
+                </td>
+                <td><span class="var">{{ loan.avto_yil }}</span>, 
+                    <span class="var">{{ loan.avto_rang }}</span>
+                </td>
+                <td><span class="var">{{ loan.avto_bahosi|intcomma }}</span><br>
+                    (<span class="var">{{ loan.avto_bahosi_soz }}</span>)</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="list-item" style="font-size: 9pt;">
+        -* avtotransport egasi: <strong><span class="var">{{ loan.garov_egasi_fish }}</span></strong><br>
+        -* texnik pasport: <strong><span class="var">{{ loan.avto_texpasport }}</span></strong><br>
+        -* ro‘yxatdan o‘tgan manzili/garaj manzili: <strong><span class="var">{{ loan.avto_manzil }}</span></strong><br>
+        -* davlat raqami: <strong><span class="var">{{ loan.avto_raqam }}</span></strong>
+    </div>
+
+    {% elif is_kochmas %}
+    <p>
+        5. <strong><span class="var">{{ loan.garov_egasi_fish }}</span></strong>ga tegishli 
+        <strong><span class="var">{{ loan.mulk_turi }}</span></strong> ko‘rinishidagi
+        ko‘chmas mulkni quyidagi ma’lumotlarga muvofiq garovga qabul qilinsin:
+    </p>
+
+    <p>Manzil: <span class="var">{{ loan.mulk_manzili }}</span></p>
+    <p>Kelishilgan qiymati: <strong><span class="var">{{ loan.mulk_bahosi|intcomma }}</span></strong> so‘m.</p>
+    {% endif %}
+
+    <table class="requisites" style="margin-top: 40px; border: none;">
+        <tr>
+            <td style="border: none; width: 60%; text-align: left;">
+                <strong>«PULLOL BUSINESS MIKROMOLIYA TASHKILOTI» MChJ direktori</strong>
+            </td>
+            <td style="border: none; width: 20%; text-align: center;">
+                {% if qr_manager %}
+                <img src="{{ qr_manager }}" alt="QR" style="width: 2.2cm; height: 2.2cm;">
+                {% endif %}
+            </td>
+            <td style="border: none; width: 20%; text-align: right; vertical-align: middle;">
+                <strong><span class="var">{{ loan.filial_boshligi }}</span></strong>
+            </td>
+        </tr>
+    </table>
+
+</body>
+
+</html>

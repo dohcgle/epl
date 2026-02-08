@@ -1,0 +1,112 @@
+{% extends 'base_dashboard.html' %}
+
+{% block content %}
+<div class="mb-6 flex justify-between items-center">
+    <h2 class="text-2xl font-bold text-gray-800">Hujjatlar Ro'yxati</h2>
+    <div class="flex gap-2">
+        <a href="?status=all"
+            class="px-3 py-1 rounded {% if current_filter == 'all' %}bg-gray-800 text-white{% else %}bg-gray-200 text-gray-700{% endif %}">Barchasi</a>
+        <a href="?status=pending_moderator"
+            class="px-3 py-1 rounded {% if current_filter == 'pending_moderator' %}bg-yellow-500 text-white{% else %}bg-gray-200 text-gray-700{% endif %}">Moderator</a>
+        <a href="?status=pending_director"
+            class="px-3 py-1 rounded {% if current_filter == 'pending_director' %}bg-orange-500 text-white{% else %}bg-gray-200 text-gray-700{% endif %}">Direktor</a>
+        <a href="?status=completed"
+            class="px-3 py-1 rounded {% if current_filter == 'completed' %}bg-green-600 text-white{% else %}bg-gray-200 text-gray-700{% endif %}">Yakunlangan</a>
+    </div>
+</div>
+
+<div class="bg-white shadow-md rounded overflow-x-auto">
+    <table class="min-w-full leading-normal">
+        <thead>
+            <tr class="bg-gray-100 text-gray-800 uppercase text-xs font-bold font-sans">
+                <th class="py-3 px-4 text-left">T/r</th>
+                <th class="py-3 px-4 text-left">Yuklovchi</th>
+                <th class="py-3 px-4 text-center">Sana</th>
+                <th class="py-3 px-4 text-left">Qarz oluvchi FIO</th>
+                <th class="py-3 px-4 text-left">Kredit summasi</th>
+                <th class="py-3 px-4 text-left">Garov nomi</th>
+                <th class="py-3 px-4 text-center">Status</th>
+                <th class="py-3 px-4 text-center">Harakat</th>
+                <th class="py-3 px-4 text-center">PDF</th>
+            </tr>
+        </thead>
+        <tbody class="text-gray-700 text-sm">
+            {% for doc in documents %}
+            <tr class="border-b border-gray-200 hover:bg-gray-50 transition">
+                <td class="py-3 px-4 text-left">{{ forloop.counter }}</td>
+                <td class="py-3 px-4 text-left font-semibold">{{ doc.uploaded_by.first_name }} {{
+                    doc.uploaded_by.last_name }}</td>
+                <td class="py-3 px-4 text-center">{{ doc.created_at|date:"Y-m-d H:i" }}</td>
+                <td class="py-3 px-4 text-left">{{ doc.borrower_name|default:"-" }}</td>
+                <td class="py-3 px-4 text-left">{{ doc.credit_amount|default:"-" }}</td>
+                <td class="py-3 px-4 text-left">{{ doc.collateral_name|default:"-" }}</td>
+                <td class="py-3 px-4 text-center">
+                    <span class="inline-block py-1 px-3 rounded-full text-xs font-semibold
+                        {% if doc.status == 'completed' %}bg-green-100 text-green-700
+                        {% elif doc.status == 'pending_moderator' %}bg-yellow-100 text-yellow-700
+                        {% elif doc.status == 'pending_director' %}bg-blue-100 text-blue-700
+                        {% elif doc.status == 'rejected' %}bg-red-100 text-red-700
+                        {% else %}bg-gray-100 text-gray-700{% endif %}">
+                        {{ doc.get_status_display }}
+                    </span>
+                </td>
+                <td class="py-3 px-4 text-center">
+                    <!-- Action Buttons -->
+                    {% if user.groups.all.0.name == 'Moderator' or user.is_superuser %}
+                    {% if doc.status == 'pending_moderator' %}
+                    <button onclick="approveDoc('{{ doc.id }}')"
+                        class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-1 px-3 rounded shadow transition text-xs">
+                        <i class="fas fa-check mr-1"></i> Tasdiqlash
+                    </button>
+                    {% endif %}
+                    {% endif %}
+
+                    {% if user.groups.all.0.name == 'Director' or user.is_superuser %}
+                    {% if doc.status == 'pending_director' %}
+                    <button onclick="approveDoc('{{ doc.id }}')"
+                        class="bg-green-600 hover:bg-green-700 text-white font-bold py-1 px-4 rounded shadow transition text-xs">
+                        <i class="fas fa-file-signature mr-1"></i> Imzo Qo'yish
+                    </button>
+                    {% endif %}
+                    {% endif %}
+                </td>
+                <td class="py-3 px-4 text-center">
+                    {% if doc.status == 'completed' and doc.processed_file %}
+                    <a href="{{ doc.processed_file.url }}"
+                        class="text-blue-600 hover:text-blue-900 font-bold underline text-xs" download>
+                        <i class="fas fa-download mr-1"></i> Yuklab Olish (ZIP)
+                    </a>
+                    {% else %}
+                    <span class="text-gray-400">-</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<script>
+    async function approveDoc(docId) {
+        if (!confirm('Hujjatni tasdiqlashni xohlaysizmi?')) return;
+
+        try {
+            const response = await fetch(`/approve/${docId}/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'
+                }
+            });
+            const data = await response.json();
+            if (data.status === 'success') {
+                alert('Muvaffaqiyatli bajarildi!');
+                location.reload();
+            } else {
+                alert('Xatolik: ' + data.error);
+            }
+        } catch (e) {
+            alert('Tarmoq xatoligi');
+        }
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="uz">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hujjat Tizimi Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .sidebar {
+            transition: width 0.3s;
+        }
+
+        .nav-item:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .active-nav {
+            background-color: #3b82f6;
+            color: white !important;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100 font-sans antialiased">
+    <div class="flex h-screen overflow-hidden">
+        <!-- Sidebar -->
+        <div class="bg-gray-900 text-white w-64 flex-shrink-0 flex flex-col transition-all duration-300 sidebar">
+            <!-- Brand -->
+            <div class="h-16 flex items-center justify-center border-b border-gray-800">
+                <a href="{% url 'dashboard' %}" class="text-xl font-bold tracking-wider hover:text-blue-400 transition">
+                    <i class="fas fa-file-invoice mr-2"></i> EPL TIZIM
+                </a>
+            </div>
+
+            <!-- User Profile -->
+            <div class="p-6 border-b border-gray-800">
+                <div class="flex items-center space-x-3">
+                    <div
+                        class="bg-blue-600 rounded-full w-12 h-12 flex items-center justify-center text-xl font-bold shadow-lg">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="overflow-hidden">
+                        <p class="font-semibold text-sm truncate uppercase tracking-wide">
+                            {% if request.user.first_name and request.user.last_name %}
+                            {{ request.user.first_name }} {{ request.user.last_name }}
+                            {% else %}
+                            {{ request.user.username }}
+                            {% endif %}
+                        </p>
+                        <p class="text-xs text-gray-400 mt-1 flex items-center">
+                            <i class="fas fa-circle text-green-500 text-[8px] mr-1.5"></i>
+                            {% if request.user.groups.all %}
+                            {{ request.user.groups.all.0.name }}
+                            {% else %}
+                            Administrator
+                            {% endif %}
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation -->
+            <nav class="flex-1 overflow-y-auto py-4">
+                <ul class="space-y-1 px-3">
+                    <li>
+                        <a href="{% url 'dashboard' %}"
+                            class="flex items-center px-4 py-3 rounded-md text-gray-300 hover:text-white transition-colors {% if request.resolver_match.url_name == 'dashboard' %}active-nav{% endif %}">
+                            <i class="fas fa-tachometer-alt w-6 text-center"></i>
+                            <span class="ml-2 font-medium">Dashboard</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'document_list' %}"
+                            class="flex items-center px-4 py-3 rounded-md text-gray-300 hover:text-white transition-colors {% if request.resolver_match.url_name == 'document_list' %}active-nav{% endif %}">
+                            <i class="fas fa-list-alt w-6 text-center"></i>
+                            <span class="ml-2 font-medium">Hujjatlar</span>
+                            <!-- Optional Badge -->
+                            <!-- <span class="ml-auto bg-blue-600 text-xs px-2 py-0.5 rounded-full">New</span> -->
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'upload_document' %}"
+                            class="flex items-center px-4 py-3 rounded-md text-gray-300 hover:text-white transition-colors {% if request.resolver_match.url_name == 'upload_document' %}active-nav{% endif %}">
+                            <i class="fas fa-cloud-upload-alt w-6 text-center"></i>
+                            <span class="ml-2 font-medium">Yuklash</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+            <!-- Logout -->
+            <div class="p-4 border-t border-gray-800">
+                <form action="{% url 'logout' %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit"
+                        class="w-full flex items-center justify-center px-4 py-2 bg-red-600 hover:bg-red-700 rounded transition text-sm font-semibold shadow-md">
+                        <i class="fas fa-sign-out-alt mr-2"></i> Chiqish
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-1 flex flex-col h-screen overflow-hidden bg-gray-100">
+            <!-- Topbar (Optional, kept minimal as Sidebar has brand) -->
+            <header class="h-16 bg-white shadow-sm flex items-center justify-between px-6 z-10">
+                <button class="text-gray-500 hover:text-gray-700 focus:outline-none lg:hidden">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+                <div class="flex items-center space-x-4 ml-auto">
+                    <!-- Notifications? -->
+                    <button class="text-gray-400 hover:text-gray-600 relative">
+                        <i class="fas fa-bell"></i>
+                        <!-- <span class="absolute top-0 right-0 h-2 w-2 rounded-full bg-red-500"></span> -->
+                    </button>
+                </div>
+            </header>
+
+            <!-- Content Scroll Area -->
+            <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-6">
+                <!-- Values passed from views often include page_title -->
+                {% if page_title %}
+                <div class="mb-6">
+                    <h1 class="text-2xl font-semibold text-gray-800">{{ page_title }}</h1>
+                </div>
+                {% endif %}
+
+                {% block content %}
+                {% endblock %}
+            </main>
+        </div>
+    </div>
+</body>
+
+</html>

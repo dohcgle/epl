@@ -1,0 +1,137 @@
+{% extends 'base_adminlte.html' %}
+
+{% block page_title %}Boshqaruv Paneli{% endblock %}
+
+{% block content %}
+<div class="row">
+    <!-- Jami -->
+    <div class="col-lg-3 col-6">
+        <div class="small-box bg-info">
+            <div class="inner">
+                <h3>{{ total_docs }}</h3>
+                <p>Jami Hujjatlar</p>
+            </div>
+            <div class="icon">
+                <i class="fas fa-file-invoice"></i>
+            </div>
+            <a href="{% url 'document_list' %}" class="small-box-footer">Ro'yxatga o'tish <i
+                    class="fas fa-arrow-circle-right"></i></a>
+        </div>
+    </div>
+    <!-- Kutilmoqda -->
+    <div class="col-lg-3 col-6">
+        <div class="small-box bg-warning">
+            <div class="inner">
+                <h3>{{ pending_count }}</h3>
+                <p>Jarayonda / Kutilmoqda</p>
+            </div>
+            <div class="icon">
+                <i class="fas fa-clock"></i>
+            </div>
+            <a href="{% url 'document_list' %}" class="small-box-footer">Ko'rish <i
+                    class="fas fa-arrow-circle-right"></i></a>
+        </div>
+    </div>
+    <!-- Yakunlandi -->
+    <div class="col-lg-3 col-6">
+        <div class="small-box bg-success">
+            <div class="inner">
+                <h3>{{ completed_count }}</h3>
+                <p>Muvaffaqiyatli</p>
+            </div>
+            <div class="icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <a href="{% url 'document_list' %}" class="small-box-footer">Arxiv <i
+                    class="fas fa-arrow-circle-right"></i></a>
+        </div>
+    </div>
+    <!-- Rad etildi -->
+    <div class="col-lg-3 col-6">
+        <div class="small-box bg-danger">
+            <div class="inner">
+                <h3>{{ rejected_count }}</h3>
+                <p>Rad Etilgan</p>
+            </div>
+            <div class="icon">
+                <i class="fas fa-ban"></i>
+            </div>
+            <a href="{% url 'document_list' %}" class="small-box-footer">Sababini ko'rish <i
+                    class="fas fa-arrow-circle-right"></i></a>
+        </div>
+    </div>
+</div>
+
+<!-- Main row -->
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header border-transparent">
+                <h3 class="card-title">So'nggi Hujjatlar</h3>
+
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                    <button type="button" class="btn btn-tool" data-card-widget="remove">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+            <!-- /.card-header -->
+            {% load humanize %}
+            <div class="table-responsive">
+                <table class="table m-0">
+                    <thead>
+                        <tr>
+                            <th>Sana</th>
+                            <th>Qarz Oluvchi</th>
+                            <th>Garov Turi</th>
+                            <th>Kredit Summasi</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for doc in recent_docs %}
+                        <tr>
+                            <td>{{ doc.created_at|date:"d.m.Y H:i" }}</td>
+                            <td>{{ doc.borrower_name|default:"-" }}</td>
+                            <td>
+                                {% if doc.collateral_name %}
+                                <span class="badge badge-info">{{ doc.collateral_name }}</span>
+                                {% else %}
+                                -
+                                {% endif %}
+                            </td>
+                            <td>{{ doc.credit_amount|intcomma|default:"-" }} so'm</td>
+                            <td>
+                                {% if doc.status == 'completed' %}
+                                <span class="badge badge-success">Yakunlandi</span>
+                                {% elif doc.status == 'rejected' %}
+                                <span class="badge badge-danger">Rad etildi</span>
+                                {% else %}
+                                <span class="badge badge-warning">Jarayonda</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" class="text-center">Hujjatlar mavjud emas</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.table-responsive -->
+        </div>
+        <!-- /.card-body -->
+        <div class="card-footer clearfix">
+            <a href="{% url 'process_audit' %}" class="btn btn-sm btn-info float-left">Yangi Hujjat Yaratish</a>
+            <a href="{% url 'document_list' %}" class="btn btn-sm btn-secondary float-right">Barcha Hujjatlarni
+                Ko'rish</a>
+        </div>
+        <!-- /.card-footer -->
+    </div>
+</div>
+</div>
+{% endblock %}

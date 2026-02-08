@@ -1,0 +1,17 @@
+1. Muqova
+2. Anketa
+3. Mijoz Anketa
+4. Kredit ariza
+5. Majburiyatnoma
+6. Garov ariza
+7. Xulosa
+8. Qaror
+9. Shartnoma
+10. Grafik
+11. Dalolatnoma
+12. Buyruq
+13. Monitoring_1
+14. Monitoring_2
+15. Monitoring_3
+16. Monitoring_4
+

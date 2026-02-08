@@ -1,0 +1,13 @@
+templates/documents/
+muqova.html:
+    - Mikroqarz shartnoma y.dan №K-1401: shartmoma sanasi chiqmayapti
+    - Toshkent shahar, y. :  shartmoma sanasi chiqmayapti
+anketa.html:
+    - Telefon: qarz oluvchi telefon raqami chiqmayapti
+    - dinamik o'zgaruchilar qizi ranga buyalamagan, bular FISH, pasport kim tomonidan va qachon berilgan, manzil, telefon, ish joyi,
+
+mijoz_anketa.html:
+    - dinamik o'zgaruchilar qizi ranga buyalmagan, bular FISH, Tug'ilgan sanasi, Pasport seriyasi va raqami, Kim tomonidan va qachon berilgan, Kim tomonidan va qachon berilgan, Telefon raqami,
+      Ish joyi va lavozimi, Kredit turi, Garov turi, Nomi va rusumi, Ishlab chiqarilgan yili, Namangan filiali, O. Ataboyev KARIMOV AZIZ SHOKIROVICH
+      - imkoni bo'sa bir sahifaga joylashtir.
+      - barcha imlo xatolarni tuzatish kerak.

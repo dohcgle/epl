@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    command: gunicorn --bind 0.0.0.0:8000 --timeout 300 config.wsgi:application
+    volumes:
+      - .:/app
+      - media_volume:/app/media
+      - static_volume:/app/static
+    expose:
+      - 8000
+    environment:
+      - DEBUG=1
+      - ALLOWED_HOSTS=localhost,127.0.0.1,web
+    depends_on:
+      - db
+
+  nginx:
+    image: nginx:alpine
+    volumes:
+      - ./nginx:/etc/nginx/conf.d
+      - media_volume:/app/media
+      - static_volume:/app/static
+    ports:
+      - "80:80"
+    depends_on:
+      - web
+
+  db:
+    image: postgres:15
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=epl_db
+      - POSTGRES_USER=epl_user
+      - POSTGRES_PASSWORD=epl_password
+
+volumes:
+  media_volume:
+  postgres_data:
+  static_volume:

@@ -1,0 +1,46 @@
+Hujjatlar To'plami:
+Hech qayerda gapini o'zgartirma, faqat barcha hujjalarda imlo xatolarni to'g'irla.
+
+1. Muqova:
+    - "Mikroqarz miqdori:" summani minglik qil masalan 420 000 000 so'm.
+    - "Mikroqarz shartnoma None y.dan №K-1401" None to'grilarb qo'y.
+    - Toshkent sh. orniga Toshket shahar - ariza kiritilgan sana yoz. masalan 08.02.2026 y.
+    - Dizaynni professional qil.
+2.  Anketa:
+    - Telefon: bush kelyapti
+3.  Mijoz Anketasi:
+    - Telefon: bush kelyapti
+    - Tug'ilgan sanasi: bush kelyapti
+    - Arizani qabul qildi: bu yerg filial nomi va filial boshlig'i ismi yoziladi.
+4. Kredit Ariza
+    - Dizaynni professional qil.
+    - filial nomi va filial boshlig'i dinamik qil
+5.  Majburiyatnoma
+    - Dizaynni professional qil.
+    - filial nomi va filial boshlig'i dinamik qil
+6.  Garov Arizasi:
+    - Dizaynni professional qil.
+    - filial nomi va filial boshlig'i dinamik qil
+7.  Xulosa:
+    - Tug'ilgan sanasi: bush kelyapti
+    - filial nomi va filial boshlig'i dinamik qil
+    - Dizaynni professional qil.
+8. Qaror:
+    - Dizaynni professional qil.
+    - Sana: bush kelyapti
+9. Shartnoma:
+    - matnda filial nomi va filial boshlig'i dinamik qil
+    - Dizaynni professional qil.
+10. Grafik:
+    - matnda filial nomi va filial boshlig'i dinamik qil
+    - Dizaynni professional qil.
+11. Dalolatnoma:
+    - matnda filial nomi va filial boshlig'i dinamik qil
+    - Dizaynni professional qil.
+12. Buyruq:
+    - Dizaynni professional qil.
+13.  Monitoring_1,  Monitoring_2, Monitoring_3, Monitoring_4:
+    - matnda filial nomi va filial boshlig'i dinamik qil
+    - rekvizitlarini jadval qilib ber.
+    - Dizaynni professional qil.
+

@@ -1,0 +1,239 @@
+{% load humanize %}
+<!DOCTYPE html>
+<html lang="uz">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Mijoz Anketasi</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 1.5cm;
+
+            @bottom-center {
+                content: "";
+            }
+        }
+
+        body {
+            font-family: "Times New Roman", Times, serif;
+            font-size: 10pt;
+            line-height: 1.1;
+        }
+
+        .header {
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        h3 {
+            text-align: center;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 5px;
+            margin-bottom: 10px;
+            font-size: 10pt;
+        }
+
+        th,
+        td {
+            border: 1px solid black;
+            padding: 3px 5px;
+            text-align: left;
+            vertical-align: top;
+        }
+
+        th {
+            background-color: #f0f0f0;
+            font-weight: bold;
+            text-align: center;
+            width: 40%;
+        }
+
+        .section-title {
+            background-color: #e0e0e0;
+            font-weight: bold;
+            text-align: center;
+            padding: 5px;
+            border: 1px solid black;
+        }
+
+        .signatures-box {
+            margin-top: 20px;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .signer-col {
+            width: 48%;
+            vertical-align: top;
+        }
+
+        .signer-title {
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .signer-line {
+            border-top: 1px solid black;
+            width: 80%;
+            margin: 0 auto;
+            margin-top: 20px;
+        }
+
+        .signer-name {
+            text-align: center;
+            margin-top: 5px;
+            font-weight: bold;
+        }
+
+        /* Django template o'zgaruvchilari uchun rang */
+        .var {
+            color: #900000;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header">
+        «PULLOL BUSINESS MIKROMOLIYA TASHKILOTI» MChJ
+    </div>
+
+    <h3>JISMONIY SHAXSLAR UCHUN ARIZA-ANKETA</h3>
+
+    <table>
+        <tr>
+            <td colspan="2" class="section-title">1. MIJOZ HAQIDA MA‘LUMOT</td>
+        </tr>
+        <tr>
+            <th>F.I.Sh. (to‘liq):</th>
+            <td><span class="var">{{ loan.qarz_oluvchi_fish }}</span></td>
+        </tr>
+        <tr>
+            <th>Tug‘ilgan sanasi:</th>
+            <td><span class="var">{{ loan.qarz_oluvchi_tugilgan_sana|date:"d.m.Y" }}</span></td>
+        </tr>
+        <tr>
+            <th>Pasport seriyasi va raqami:</th>
+            <td><span class="var">{{ loan.qarz_oluvchi_pasport_seriya }}</span></td>
+        </tr>
+        <tr>
+            <th>Kim tomonidan va qachon berilgan:</th>
+            <td><span class="var">{{ loan.qarz_oluvchi_pasport_berilgan }}</span></td>
+        </tr>
+        <tr>
+            <th>Doimiy yashash manzili:</th>
+            <td><span class="var">{{ loan.qarz_oluvchi_manzil }}</span></td>
+        </tr>
+        <tr>
+            <th>Telefon raqami:</th>
+            <td><span class="var">{{ loan.qarz_oluvchi_telefon }}</span></td>
+        </tr>
+        <tr>
+            <th>Ish joyi va lavozimi:</th>
+            <td><span class="var">{{ loan.qarz_oluvchi_ish_joyi }}</span></td>
+        </tr>
+        <tr>
+            <th>O‘rtacha oylik daromad:</th>
+            <td><span class="var">{{ loan.qarz_oluvchi_daromad|intcomma }}</span> so‘m</td>
+        </tr>
+    </table>
+
+    <table>
+        <tr>
+            <td colspan="2" class="section-title">2. SO‘RALAYOTGAN KREDIT MA‘LUMOTLARI</td>
+        </tr>
+        <tr>
+            <th>Kreditning maqsadi:</th>
+            <td>Iste’mol ehtiyojlari uchun / Tadbirkorlik faoliyati uchun</td>
+        </tr>
+        <tr>
+            <th>So‘ralayotgan summa:</th>
+            <td><span class="var">{{ loan.kredit_miqdori|intcomma }}</span>
+                (<span class="var">{{ loan.kredit_miqdori_soz }}</span>) so‘m
+            </td>
+        </tr>
+        <tr>
+            <th>Kredit muddati:</th>
+            <td><span class="var">{{ loan.kredit_muddat_oy }}</span> oy</td>
+        </tr>
+        <tr>
+            <th>Kredit turi:</th>
+            <td><span class="var">{{ loan.get_kredit_turi_display }}</span></td>
+        </tr>
+    </table>
+
+    {% if is_avto %}
+    <table>
+        <tr>
+            <td colspan="2" class="section-title">3. TAKLIF ETILAYOTGAN TA’MINOT (GAROV)</td>
+        </tr>
+        <tr>
+            <th>Garov turi:</th>
+            <td><span class="var">Avtotransport vositasi</span></td>
+        </tr>
+        <tr>
+            <th>Nomi va rusumi:</th>
+            <td><span class="var">{{ loan.avto_nomi }}</span></td>
+        </tr>
+        <tr>
+            <th>Ishlab chiqarilgan yili:</th>
+            <td><span class="var">{{ loan.avto_yil }}</span></td>
+        </tr>
+        <tr>
+            <th>Davlat raqami:</th>
+            <td><span class="var">{{ loan.avto_raqam }}</span></td>
+        </tr>
+        <tr>
+            <th>Baholangan qiymati:</th>
+            <td><span class="var">{{ loan.avto_bahosi|intcomma }}</span> so‘m</td>
+        </tr>
+    </table>
+    {% endif %}
+
+    <div style="margin-top: 10px; text-align: justify; font-size: 10pt;">
+        Men, ushbu arizada ko‘rsatilgan ma’lumotlarning to‘g‘riligini tasdiqlayman. Mikromoliya tashkilotiga
+        mening kredit tariximni tekshirish va shaxsiy ma’lumotlarimdan foydalanish uchun rozilik beraman.
+    </div>
+
+    <table style="width: 100%; border: none; margin-top: 20px;">
+        <tr>
+            <td style="border: none; width: 50%; text-align: center; vertical-align: top;">
+                <div class="signer-title">Arizani qabul qildi:</div>
+                <div style="height: 70px; display: flex; flex-direction: column; justify-content: flex-end;">
+                    <strong><span class="var">{{ loan.filial_nomi }}</span></strong>
+                    <strong><span class="var">{{ loan.filial_boshligi }}</span></strong>
+                    <br>
+                </div>
+                <div class="signer-line"></div>
+                <div class="signer-name">(Imzo)</div>
+            </td>
+            <td style="border: none; width: 50%; text-align: center; vertical-align: top;">
+                <div class="signer-title">Ariza beruvchi:</div>
+                <div style="height: 70px; display: flex; flex-direction: column; justify-content: flex-end;">
+                    <strong><span class="var">{{ loan.qarz_oluvchi_fish }}</span></strong>
+                    <br>
+                </div>
+                <div class="signer-line"></div>
+                <div class="signer-name">(Imzo)</div>
+            </td>
+        </tr>
+    </table>
+
+    <div style="margin-top: 15px; font-size: 10pt;">
+        Sana: <span class="var">{{ loan.created_at|date:"d.m.Y" }}</span> y.
+    </div>
+
+</body>
+
+</html>

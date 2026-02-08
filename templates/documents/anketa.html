@@ -1,0 +1,144 @@
+{% load humanize %}
+<!DOCTYPE html>
+<html lang="uz">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Anketa</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+
+            @bottom-center {
+                content: "Sahifa " counter(page) " / " counter(pages);
+                font-size: 10pt;
+            }
+        }
+
+        body {
+            font-family: "Times New Roman", Times, serif;
+            font-size: 11pt;
+            line-height: 1.2;
+        }
+
+        .header {
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        h3 {
+            text-align: center;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            margin-bottom: 20px;
+            font-size: 11pt;
+        }
+
+        th,
+        td {
+            border: 1px solid black;
+            padding: 5px;
+            text-align: left;
+            vertical-align: top;
+        }
+
+        th {
+            background-color: #f0f0f0;
+            font-weight: bold;
+            width: 40%;
+        }
+
+        .signatures-box {
+            margin-top: 40px;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .footer-date {
+            margin-top: 30px;
+            font-weight: bold;
+        }
+
+        /* Django template o'zgaruvchilari uchun rang */
+        .var {
+            color: #900000;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header">
+        «PULLOL BUSINESS MIKROMOLIYA TASHKILOTI» MChJ
+    </div>
+
+    <h3>ANKETA</h3>
+
+    <table>
+        <tr>
+            <th colspan="2" style="text-align: center;">MIJOZ MA'LUMOTLARI</th>
+        </tr>
+        <tr>
+            <th>F.I.Sh.:</th>
+            <td><span class="var">{{ loan.qarz_oluvchi_fish }}</span></td>
+        </tr>
+        <tr>
+            <th>Pasport:</th>
+            <td><span class="var">{{ loan.qarz_oluvchi_pasport_seriya }}</span>, <span class="var">{{
+                    loan.qarz_oluvchi_pasport_berilgan }}</span></td>
+        </tr>
+        <tr>
+            <th>Manzil:</th>
+            <td><span class="var">{{ loan.qarz_oluvchi_manzil }}</span></td>
+        </tr>
+        <tr>
+            <th>Telefon:</th>
+            <td><span class="var">{{ loan.qarz_oluvchi_telefon }}</span></td>
+        </tr>
+        <tr>
+            <th>Ish joyi:</th>
+            <td><span class="var">{{ loan.qarz_oluvchi_ish_joyi }}</span></td>
+        </tr>
+    </table>
+
+    <table>
+        <tr>
+            <th colspan="2" style="text-align: center;">KREDIT MA'LUMOTLARI</th>
+        </tr>
+        <tr>
+            <th>Kredit summasi:</th>
+            <td><span class="var">{{ loan.kredit_miqdori|intcomma }}</span> so'm</td>
+        </tr>
+        <tr>
+            <th>Muddati:</th>
+            <td><span class="var">{{ loan.kredit_muddat_oy }}</span> oy</td>
+        </tr>
+        <tr>
+            <th>Foiz stavkasi:</th>
+            <td><span class="var">{{ loan.foiz_stavkasi }}</span>%</td>
+        </tr>
+    </table>
+
+    <div class="signatures-box">
+        <div style="width: 100%;">
+            <strong>Mijoz imzosi:</strong> _______________________ <strong>{{ loan.qarz_oluvchi_fish }}</strong>
+        </div>
+    </div>
+
+    <div class="footer-date">
+        Sana: <span class="var">{{ loan.created_at|date:"d.m.Y" }}</span> y.
+    </div>
+
+</body>
+
+</html>

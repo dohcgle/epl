@@ -1,0 +1,181 @@
+{% load humanize %}
+<!DOCTYPE html>
+<html lang="uz">
+
+<head>
+    <meta charset="UTF-8">
+    <title>To'lov jadvali</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 1cm 1.5cm;
+        }
+
+        body {
+            font-family: "Times New Roman", Times, serif;
+            font-size: 10pt;
+            line-height: 1.15;
+            text-align: justify;
+        }
+
+        .header {
+            text-align: right;
+            margin-bottom: 20px;
+        }
+
+        h3 {
+            text-align: center;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            margin-bottom: 20px;
+            font-size: 10pt;
+        }
+
+        th,
+        td {
+            border: 1px solid black;
+            padding: 5px;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        th {
+            background-color: #f0f0f0;
+            font-weight: bold;
+        }
+
+        .note {
+            font-size: 9pt;
+            font-style: italic;
+            text-align: justify;
+            margin-top: 10px;
+        }
+
+        .signatures-box {
+            margin-top: 40px;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .signer-col {
+            width: 48%;
+            vertical-align: top;
+        }
+
+        .signer-title {
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 10px;
+            text-decoration: underline;
+        }
+
+        .signer-details {
+            margin-bottom: 5px;
+        }
+
+        .qr-code {
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        /* Django template o'zgaruvchilari uchun rang */
+        .var {
+            color: #900000;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header">
+        <span class="var">{{ loan.shartnoma_sanasi|date:"d.m.Y" }}</span> y.dagi №<span class="var">{{
+            loan.shartnoma_raqami }}</span>-BR mikroqarz shartnomasiga 1-sonli ilova
+    </div>
+
+    <h3>TO‘LOV JADVALI</h3>
+
+    <!-- Exceldan kelgan jadval -->
+    {% autoescape off %}
+    <span class="var">{{ loan.grafik_matni }}</span>
+    {% endautoescape %}
+
+    <div class="note">
+        *Mikroqarz bo‘yicha to‘lovlar to‘lov jadvalida ko‘rsatilmagan sanalarda to‘langan taqdirda, to‘lov summasi
+        mikroqarz shartnomasining 2.4.-bandiga muvofiq mikroqarz qoldig‘iga hisoblangan foizlar summasiga
+        o‘zgartiriladi.
+    </div>
+
+    <table class="requisites">
+        <thead>
+            <tr>
+                <th>«Mikromoliya tashkiloti»</th>
+                <th>«Qarz oluvchi»</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td style="text-align: left;">
+                    <strong>«PULLOL BUSINESS MIKROMOLIYA TASHKILOTI» MChJ</strong><br><br>
+                    Manzil: Toshkent shahri, Yakkasaroy tumani, Rakat ko‘chasi, 10-uy, 18-xonadon<br>
+                    h/r: 20208000405643889001<br>
+                    MFO: 01088, ATB “Kapitalbank” Markaziy amaliyotlar bo‘limi<br>
+                    STIR: 310430149<br>
+                    Tel: (55) 510 02 16, (97) 714 14 17, (97) 706 96 65<br><br>
+                    <strong><span class="var">{{ loan.filial_nomi }}</span> boshlig‘i</strong><br><br>
+
+                    <table style="width: 100%; border: none;">
+                        <tr>
+                            <td style="border: none; width: 40%; padding: 0;">
+                                {% if qr_manager %}
+                                <img src="{{ qr_manager }}" alt="QR" style="width: 2.2cm; height: 2.2cm;">
+                                {% endif %}
+                            </td>
+                            <td style="border: none; width: 60%; vertical-align: middle; padding: 0; text-align: left;">
+                                <strong><span class="var">{{ loan.filial_boshligi }}</span></strong>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+                <td style="text-align: left;">
+                    <strong><span class="var">{{ loan.qarz_oluvchi_fish }}</span></strong><br><br>
+                    Manzil: <span class="var">{{ loan.qarz_oluvchi_manzil }}</span><br>
+                    Pasport seriyasi: <span class="var">{{ loan.qarz_oluvchi_pasport_seriya }}</span>,
+                    <span class="var">{{ loan.qarz_oluvchi_pasport_berilgan }}</span><br>
+                    Tel: <span class="var">{{ loan.qarz_oluvchi_telefon }}</span><br><br>
+
+                    {% if loan.kontakt_1_fish %}
+                    <div style="font-size: 8pt;">
+                        <span class="var">{{ loan.kontakt_1_telefon }}</span> (<span class="var">{{
+                            loan.kontakt_1_qarindoshlik|upper }}</span> - <span class="var">{{ loan.kontakt_1_fish
+                            }}</span>)
+                    </div>
+                    {% endif %}
+                    {% if loan.kontakt_2_fish %}
+                    <div style="font-size: 8pt;">
+                        <span class="var">{{ loan.kontakt_2_telefon }}</span> (<span class="var">{{
+                            loan.kontakt_2_qarindoshlik|upper }}</span> - <span class="var">{{ loan.kontakt_2_fish
+                            }}</span>)
+                    </div>
+                    {% endif %}
+                    <br>
+                    <div style="height: 40px; border-bottom: 1px solid black; margin-bottom: 5px;"></div>
+                    <div style="text-align: center;">(Imzo)</div>
+                    <div style="text-align: right; margin-top: 10px;">
+                        <strong><span class="var">{{ loan.qarz_oluvchi_fish }}</span></strong>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+</body>
+
+</html>

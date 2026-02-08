@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="uz">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Excel to PDF Converter</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f2f5;
+            margin: 0;
+        }
+
+        .container {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 1.5rem;
+            color: #333;
+        }
+
+        .upload-area {
+            border: 2px dashed #ccc;
+            padding: 2rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: border-color 0.3s;
+            margin-bottom: 1rem;
+        }
+
+        .upload-area:hover {
+            border-color: #007bff;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        #message {
+            margin-top: 1rem;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .success {
+            color: green;
+        }
+
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Hujjat Generator</h1>
+        <form id="uploadForm">
+            <label class="upload-area">
+                <input type="file" name="file" accept=".xlsx" required>
+                <span id="fileName">Excel faylni tanlang yoki shu yerga tashlang</span>
+            </label>
+
+            <div style="margin-bottom: 1rem; text-align: left;">
+                <p style="margin-bottom: 0.5rem; font-weight: bold; color: #555; text-align: center;">Hujjat turlari:
+                </p>
+                <div style="display: flex; flex-wrap: wrap; gap: 15px; justify-content: center;">
+                    <label style="cursor: pointer; display: flex; align-items: center;">
+                        <input type="checkbox" name="doc_type_bayonnoma" checked style="margin-right: 5px;"> Bayonnoma
+                    </label>
+                    <label style="cursor: pointer; display: flex; align-items: center;">
+                        <input type="checkbox" name="doc_type_xulosa" checked style="margin-right: 5px;"> Xulosa
+                    </label>
+                    <label style="cursor: pointer; display: flex; align-items: center;">
+                        <input type="checkbox" name="doc_type_shartnoma" checked style="margin-right: 5px;"> Shartnoma
+                    </label>
+                    <label style="cursor: pointer; display: flex; align-items: center;">
+                        <input type="checkbox" name="doc_type_grafik" checked style="margin-right: 5px;"> Grafik
+                    </label>
+                    <label style="cursor: pointer; display: flex; align-items: center;">
+                        <input type="checkbox" name="doc_type_dalolatnoma" checked style="margin-right: 5px;">
+                        Dalolatnoma
+                    </label>
+                    <label style="cursor: pointer; display: flex; align-items: center;">
+                        <input type="checkbox" name="doc_type_buyruq" checked style="margin-right: 5px;"> Buyruq
+                    </label>
+                    <label style="cursor: pointer; display: flex; align-items: center;">
+                        <input type="checkbox" name="doc_type_monitoring_1" checked style="margin-right: 5px;">
+                        Monitoring 1
+                    </label>
+                    <label style="cursor: pointer; display: flex; align-items: center;">
+                        <input type="checkbox" name="doc_type_monitoring_2" checked style="margin-right: 5px;">
+                        Monitoring 2
+                    </label>
+                    <label style="cursor: pointer; display: flex; align-items: center;">
+                        <input type="checkbox" name="doc_type_monitoring_3" checked style="margin-right: 5px;">
+                        Monitoring 3
+                    </label>
+                    <label style="cursor: pointer; display: flex; align-items: center;">
+                        <input type="checkbox" name="doc_type_monitoring_4" checked style="margin-right: 5px;">
+                        Monitoring 4
+                    </label>
+                </div>
+            </div>
+
+            <div style="margin-bottom: 1rem; text-align: left; display: flex; justify-content: center;">
+                <label style="cursor: pointer; display: flex; align-items: center;">
+                    <input type="checkbox" name="include_qr" checked style="margin-right: 8px;">
+                    QR Kod qo'shish
+                </label>
+            </div>
+
+            <button type="submit" id="submitBtn">Generatsiya Qilish</button>
+        </form>
+        <div id="message"></div>
+    </div>
+
+    <script>
+        const form = document.getElementById('uploadForm');
+        const fileInput = document.querySelector('input[type="file"]');
+        const fileNameSpan = document.getElementById('fileName');
+        const messageDiv = document.getElementById('message');
+        const submitBtn = document.getElementById('submitBtn');
+
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                fileNameSpan.textContent = e.target.files[0].name;
+            }
+        });
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(form);
+
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Jarayonda...';
+            messageDiv.textContent = '';
+
+            try {
+                const response = await fetch('/api/process/', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    messageDiv.innerHTML = `<span class="success">Muvaffaqiyatli!</span> <br><a href="${data.download_url}" download>Natijani Yuklab Olish (ZIP)</a>`;
+                    submitBtn.textContent = 'Tayyor';
+                } else {
+                    messageDiv.innerHTML = `<span class="error">Xatolik: ${data.error || 'Noma\'lum xato'}</span>`;
+                    submitBtn.textContent = 'Qayta urinish';
+                }
+            } catch (error) {
+                messageDiv.innerHTML = `<span class="error">Tarmoq xatoligi: ${error.message}</span>`;
+                submitBtn.textContent = 'Qayta urinish';
+            } finally {
+                submitBtn.disabled = false;
+            }
+        });
+    </script>
+</body>
+
+</html>

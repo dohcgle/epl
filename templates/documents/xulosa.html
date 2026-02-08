@@ -1,0 +1,329 @@
+{% load humanize %}
+<!DOCTYPE html>
+<html lang="uz">
+
+<head>
+    <meta charset="UTF-8">
+    <style>
+        @page {
+            size: A4;
+            margin: 1cm 1.5cm;
+        }
+
+        body {
+            font-family: "Times New Roman", Times, serif;
+            font-size: 10pt;
+            line-height: 1.1;
+            text-align: justify;
+        }
+
+        h3 {
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .header-text {
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-weight: bold;
+            margin-top: 15px;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            border-bottom: 1px solid #000;
+            padding-bottom: 2px;
+        }
+
+        .info-row {
+            margin-bottom: 3px;
+        }
+
+        .bold {
+            font-weight: bold;
+        }
+
+        p {
+            margin-bottom: 5px;
+        }
+
+        table.collateral-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            font-size: 10pt;
+        }
+
+        table.collateral-table th,
+        table.collateral-table td {
+            border: 1px solid #000;
+            padding: 5px;
+            text-align: center;
+        }
+
+        table.collateral-table th {
+            background-color: #f0f0f0;
+            font-weight: bold;
+        }
+
+        .signature-section {
+            margin-top: 30px;
+        }
+
+        .signature-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .role-title {
+            width: 40%;
+            font-weight: bold;
+        }
+
+        .signature-qr {
+            width: 20%;
+            text-align: center;
+        }
+
+        .signer-name {
+            width: 40%;
+            text-align: right;
+            font-weight: bold;
+        }
+
+        /* Django template o'zgaruvchilari uchun rang */
+        .var {
+            color: #900000;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header-text">
+        «PULLOL BUSINESS MIKROMOLIYA TASHKILOTI» MChJ mikromoliya tashkilotining <br>
+        XULOSASI
+    </div>
+
+    <div class="section-title">MIJOZ HAQIDA MA‘LUMOTLAR</div>
+    <div class="info-row"><span class="bold">Mijozning to‘liq ismi sharifi:</span>
+        <span class="var">{{ loan.qarz_oluvchi_fish }}</span>
+    </div>
+    <div class="info-row"><span class="bold">Tug‘ilgan sanasi:</span>
+        <span class="var">{{ loan.qarz_oluvchi_tugilgan_sana|date:"d.m.Y" }}</span> yil
+    </div>
+    <div class="info-row"><span class="bold">Pasport ma’lumotlari:</span>
+        <span class="var">{{ loan.qarz_oluvchi_pasport_seriya }}</span>,
+        <span class="var">{{ loan.qarz_oluvchi_pasport_berilgan }}</span>
+    </div>
+    <div class="info-row"><span class="bold">Ro‘yxatdan o‘tgan manzili:</span>
+        <span class="var">{{ loan.qarz_oluvchi_manzil }}</span>
+    </div>
+    <div class="info-row"><span class="bold">Ish joyi, lavozimi:</span>
+        <span class="var">{{ loan.qarz_oluvchi_ish_joyi }}</span>
+    </div>
+
+    <div class="section-title">Mijoz tomonidan so‘ralgan mikroqarz shartlari:</div>
+    <div class="info-row"><span class="bold">Mikroqarz summasi:</span>
+        <span class="var">{{ loan.kredit_miqdori|intcomma }}</span>
+        (<span class="var">{{ loan.kredit_miqdori_soz }}</span>) so‘m.
+    </div>
+    <div class="info-row"><span class="bold">Mikroqarz muddati:</span>
+        <span class="var">{{ loan.kredit_muddat_oy }}</span> oy.
+    </div>
+    <div class="info-row"><span class="bold">Mikroqarzdan foydalanganlik uchun foiz stavkasi:</span> yillik
+        <span class="var">{{ loan.foiz_stavkasi }}</span>% 
+        (<span class="var">{{ loan.foiz_stavkasi_soz }}</span>) foiz.
+    </div>
+    <div class="info-row"><span class="bold">Mikroqarz bo‘yicha asosiy qarz va foizlarni to‘lash:</span> mikroqarz
+        shartnomasi bo‘yicha har oy differensial to‘lovlari amalga oshiriladi.</div>
+
+    <div class="section-title">Mikroqarz ta’minoti:</div>
+    {% if is_avto %}
+    <p>
+        Egalik huquqi <span class="bold"><span class="var">{{ loan.garov_egasi_fish }}</span></span>ga tegishli bo‘lgan
+        garovga olingan
+        avtomobil: <br>
+        <span class="bold">{{ loan.avto_nomi }}</span>, rangi - <span class="var">{{ loan.avto_rang }}</span>,
+        ishlab chiqarilgan yili - <span class="var">{{ loan.avto_yil }}</span>,
+        davlat raqam belgisi <span class="bold"><span class="var">{{ loan.avto_raqam }}</span>
+
+        </span>,
+        kuzov turi - <span class="var">{{ loan.avto_kuzov_turi }}</span>, kuzov raqami 
+        <span class="var">{{ loan.avto_kuzov }}</span>,
+        dvigatel raqami <span class="var">{{ loan.avto_dvigatel }}</span>,
+        shassi raqami - <span class="var">{{ loan.avto_shassi }}</span>.
+    </p>
+
+    <table class="collateral-table">
+        <thead>
+            <tr>
+                <th>Nomi</th>
+                <th>Kuzov turi va kuzov raqami</th>
+                <th>Dvigatel va shassi raqami</th>
+                <th>Ishlab chiqarilgan yili va rangi</th>
+                <th>Kelishilgan garov qiymati, so‘m</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><span class="var">{{ loan.avto_nomi }}</span></td>
+                <td><span class="var">{{ loan.avto_kuzov_turi }}</span>, 
+                    <span class="var">{{ loan.avto_kuzov }}</span>
+                </td>
+                <td><span class="var">{{ loan.avto_dvigatel }}</span>, 
+                    <span class="var">{{ loan.avto_shassi }}</span>
+                </td>
+                <td><span class="var">{{ loan.avto_yil }}</span>, 
+                    <span class="var">{{ loan.avto_rang }}</span>
+                </td>
+                <td><span class="var">{{ loan.avto_bahosi|intcomma }}</span> <br> 
+                    (<span class="var">{{ loan.avto_bahosi_soz }}</span>)</td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="info-row">* avtotransport egasi: <span class="var">{{ loan.garov_egasi_fish }}</span></div>
+    <div class="info-row">* texnik pasport: <span class="var">{{ loan.avto_texpasport }}</span></div>
+    <div class="info-row">* ro‘yxatdan o‘tgan manzili/garaj manzili: 
+        <span class="var">{{ loan.avto_manzil }}</span>
+    </div>
+    <div class="info-row">* davlat raqami: <span class="var">{{ loan.avto_raqam }}</span></div>
+
+    {% elif is_kochmas %}
+    <p>
+        Egalik huquqi <span class="bold"><span class="var">{{ loan.garov_egasi_fish }}</span></span>ga tegishli bo‘lgan,
+        <span class="bold"><span class="var">{{ loan.mulk_manzili }}</span></span> manzilida joylashgan
+        <span class="bold">
+            <span class="var">{{ loan.mulk_turi }}</span>
+        </span>.
+        <br>Umumiy maydoni: <span class="var">{{ loan.mulk_umumiy_maydoni }}</span>, Yashash maydoni: <span
+            class="var">{{ loan.mulk_yashash_maydoni }}</span>, Qurilish
+        osti maydoni: <span class="var">{{ loan.mulk_qurilish_maydoni }}</span>.
+        <br>Kelishilgan qiymati: <span class="bold">
+            <span class="var">{{ loan.mulk_bahosi|intcomma }}</span></span>
+        so‘m.
+    </p>
+    {% else %}
+    <p>Boshqa turdagi garov: <span class="var">{{ loan.garov_turi }}</span></p>
+    {% endif %}
+
+    <div class="section-title">Mijozning moliyaviy holati</div>
+    <div class="info-row">Anketaga muvofiq <span class="bold">
+        <span class="var">{{ loan.qarz_oluvchi_fish }}</span></span>ning o‘rtacha oylik
+        daromadi <span class="var">{{ loan.qarz_oluvchi_daromad|intcomma }}</span> so‘mni tashkil etdi.</div>
+    <div class="info-row">Mijozning o‘rtacha oylik xarajatlari <span class="var">{{
+            loan.qarz_oluvchi_xarajatlar|intcomma }}</span> so‘mni
+        tashkil etdi.</div>
+    <div class="info-row">Mikroqarz bo‘yicha oylik differensial to‘lovi miqdori (taxminiy)
+        <span class="var">{{ loan.qarz_oluvchi_tahminiy_tolov|intcomma }}</span> so‘mni tashkil etadi.
+    </div>
+    <div class="info-row">Mijoz quyidagi majburiyatlarga ega: 
+        <span class="var">{{ loan.qarz_oluvchi_majburiyatlar }}</span>.</div>
+    <div class="info-row">Ayni paytda muddati o‘tgan qarzdorligi mavjud emas (Kredit byurosi ma’lumotiga ko‘ra).</div>
+
+    <div class="header-text" style="margin-top: 20px;">
+        KREDIT QO‘MITASINING XULOSASI
+    </div>
+
+    <p>
+        «PULLOL BUSINESS MIKROMOLIYA TASHKILOTI» MChJ mikromoliya tashkilotining xulosasiga quyidagi shartlarda <span
+            class="bold"><span class="var">{{ loan.qarz_oluvchi_fish }}</span></span>ga mikroqarz berish masalasi
+        kiritiladi:
+    </p>
+    <div class="info-row"><span class="bold">Mikroqarz summasi:</span>
+        <span class="var">{{ loan.kredit_miqdori|intcomma }}</span>
+        (<span class="var">{{ loan.kredit_miqdori_soz }}</span>) so‘m.
+    </div>
+    <div class="info-row"><span class="bold">Mikroqarz muddati:</span> 
+        <span class="var">{{ loan.kredit_muddat_oy }}</span> oy.
+    </div>
+    <div class="info-row"><span class="bold">Foiz stavkasi:</span> yillik
+        <span class="var">{{ loan.foiz_stavkasi }}</span>%
+        (<span class="var">{{ loan.foiz_stavkasi_soz }}</span>).
+    </div>
+
+    <p>
+        «PULLOL BUSINESS MIKROMOLIYA TASHKILOTI» MChJ mikromoliya tashkilotining xulosasi
+        <span class="var">{{ loan.created_at|date:"d.m.Y" }}</span> y. tayyorlangan.
+    </p>
+
+    <table style="width: 100%; border: none; margin-top: 20px;">
+        <tr>
+            <td style="border: none; width: 40%; text-align: left; vertical-align: middle;">
+                <strong><span class="var">{{ loan.filial_nomi }}</span> boshlig‘i</strong>
+            </td>
+            <td style="border: none; width: 20%; text-align: center; vertical-align: middle;">
+                {% if qr_manager %}
+                <img src="{{ qr_manager }}" alt="QR" style="width: 2.2cm; height: 2.2cm;">
+                {% endif %}
+            </td>
+            <td style="border: none; width: 40%; text-align: right; vertical-align: middle;">
+                <strong><span class="var">{{ loan.filial_boshligi }}</span></strong>
+            </td>
+        </tr>
+    </table>
+
+    <p class="bold" style="margin-top: 15px;">
+        «PULLOL BUSINESS MIKROMOLIYA TASHKILOTI» MChJ mikromoliya tashkilotining Kredit qo‘mitasi a’zolari xulosa va
+        taqdim etilgan ma’lumotlar bilan tanishdilar:
+    </p>
+
+    <table style="width: 100%; border: none; margin-top: 10px;">
+        <tr>
+            <td style="border: none; width: 40%; text-align: left; vertical-align: middle;">
+                <strong>Kredit qo‘mitasi raisi:</strong>
+            </td>
+            <td style="border: none; width: 20%; text-align: center; vertical-align: middle;">
+                {% if qr_obidov %}
+                <img src="{{ qr_obidov }}" alt="QR" style="width: 2.2cm; height: 2.2cm;">
+                {% endif %}
+            </td>
+            <td style="border: none; width: 40%; text-align: right; vertical-align: middle;">
+                <strong>Obidov A. Sh.</strong>
+            </td>
+        </tr>
+    </table>
+
+    <table style="width: 100%; border: none; margin-top: 5px;">
+        <tr>
+            <td style="border: none; width: 40%; text-align: left; vertical-align: middle;">
+                <strong>Kredit qo‘mitasi a’zosi:</strong>
+            </td>
+            <td style="border: none; width: 20%; text-align: center; vertical-align: middle;">
+                {% if qr_akramov %}
+                <img src="{{ qr_akramov }}" alt="QR" style="width: 2.2cm; height: 2.2cm;">
+                {% endif %}
+            </td>
+            <td style="border: none; width: 40%; text-align: right; vertical-align: middle;">
+                <strong>Akramov R.N.</strong>
+            </td>
+        </tr>
+    </table>
+
+    <table style="width: 100%; border: none; margin-top: 5px;">
+        <tr>
+            <td style="border: none; width: 40%; text-align: left; vertical-align: middle;">
+                <strong>Kredit qo‘mitasi a’zosi:</strong>
+            </td>
+            <td style="border: none; width: 20%; text-align: center; vertical-align: middle;">
+                {% if qr_eshbekov %}
+                <img src="{{ qr_eshbekov }}" alt="QR" style="width: 2.2cm; height: 2.2cm;">
+                {% endif %}
+            </td>
+            <td style="border: none; width: 40%; text-align: right; vertical-align: middle;">
+                <strong>Eshbekov S.O.</strong>
+            </td>
+        </tr>
+    </table>
+
+</body>
+
+</html>

@@ -1,0 +1,133 @@
+{% extends 'base_adminlte.html' %}
+{% load humanize %}
+
+{% block page_title %}Direktor Kabineti{% endblock %}
+
+{% block extra_css %}
+<!-- DataTables -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap4.min.css">
+<style>
+    .filters th {
+        padding: 5px !important;
+    }
+
+    .filters input {
+        width: 100%;
+        padding: 3px;
+        box-sizing: border-box;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Arizalar ro'yxati (Direktor)</h3>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+                {% if loans %}
+                <table id="loanTable" class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Qarz Oluvchi</th>
+                            <th>Kredit Miqdori</th>
+                            <th>Garov Turi</th>
+                            <th>Operator</th>
+                            <th>Holati</th>
+                            <th>Sanasi</th>
+                            <th>Amallar</th>
+                        </tr>
+                        <tr class="filters">
+                            <th></th>
+                            <th><input type="text" placeholder="FISH bo'yicha"></th>
+                            <th><input type="text" placeholder="Summa bo'yicha"></th>
+                            <th><input type="text" placeholder="Garov bo'yicha"></th>
+                            <th><input type="text" placeholder="Operator bo'yicha"></th>
+                            <th><input type="text" placeholder="Status bo'yicha"></th>
+                            <th><input type="text" placeholder="Sana bo'yicha"></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for loan in loans %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ loan.qarz_oluvchi_fish }}</td>
+                            <td>{{ loan.kredit_miqdori|intcomma }} so'm</td>
+                            <td>
+                                {% if loan.garov_turi == 'avto' %}
+                                <span class="badge badge-info"><i class="fas fa-car"></i> Avtomobil</span>
+                                {% elif loan.garov_turi == 'kochmas_mulk' %}
+                                <span class="badge badge-warning"><i class="fas fa-building"></i> Ko'chmas mulk</span>
+                                {% elif loan.garov_turi == 'tilla' %}
+                                <span class="badge badge-success"><i class="fas fa-coins"></i> Tilla</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ loan.created_by.username }}</td>
+                            <td>
+                                {% if loan.status == 'completed' %}
+                                <span class="badge badge-success">Imzolangan</span>
+                                {% elif loan.status == 'rejected' %}
+                                <span class="badge badge-danger">Rad Etilgan</span>
+                                {% else %}
+                                <span class="badge badge-warning">Imzolanmagan</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ loan.created_at|date:"d.m.Y H:i" }}</td>
+                            <td>
+                                <a href="{% url 'view_application' loan.id %}" class="btn btn-primary btn-sm">
+                                    <i class="fas fa-eye"></i> Ko'rish
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <div class="alert alert-info">
+                    Arizalar mavjud emas.
+                </div>
+                {% endif %}
+            </div>
+            <!-- /.card-body -->
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<!-- DataTables -->
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap4.min.js"></script>
+<script>
+    $(document).ready(function () {
+        var table = $('#loanTable').DataTable({
+            "order": [[6, "desc"]],
+            "language": {
+                "lengthMenu": "Har bir sahifada _MENU_ ta yozuv ko'rsatilsin",
+                "zeroRecords": "Ma'lumot topilmadi",
+                "info": "_TOTAL_ tadan _START_ dan _END_ gacha bo'lgan yozuvlar",
+                "infoEmpty": "Yozuvlar mavjud emas",
+                "infoFiltered": "(_MAX_ ta yozuvdan filtrlangan)",
+                "search": "Qidirish:",
+                "paginate": {
+                    "first": "Birinchi",
+                    "last": "Oxirgi",
+                    "next": "Keyingi",
+                    "previous": "Oldingi"
+                }
+            },
+            "dom": 'lrtip'
+        });
+
+        $('#loanTable .filters input').on('keyup change', function () {
+            var index = $(this).parent().index();
+            table.column(index).search(this.value).draw();
+        });
+    });
+</script>
+{% endblock %}

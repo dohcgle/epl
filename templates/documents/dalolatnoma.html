@@ -1,0 +1,268 @@
+{% load humanize %}
+<!DOCTYPE html>
+<html lang="uz">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Garov qiymatini kelishish dalolatnomasi</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 1cm 1.5cm;
+        }
+
+        body {
+            font-family: "Times New Roman", Times, serif;
+            font-size: 10pt;
+            line-height: 1.15;
+            text-align: justify;
+        }
+
+        .header {
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        .doc-number {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        p {
+            text-indent: 1cm;
+            margin-bottom: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            margin-bottom: 20px;
+            font-size: 10pt;
+        }
+
+        th,
+        td {
+            border: 1px solid black;
+            padding: 5px;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        th {
+            background-color: #f0f0f0;
+            font-weight: bold;
+        }
+
+        .signatures-box {
+            margin-top: 40px;
+            page-break-inside: avoid;
+        }
+
+        .signature-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 20px;
+        }
+
+        .role-title {
+            width: 40%;
+            font-weight: bold;
+        }
+
+        .signer-name {
+            width: 40%;
+            text-align: right;
+            font-weight: bold;
+            border-bottom: 1px solid black;
+        }
+
+        .footer-note {
+            font-size: 10pt;
+            margin-top: 30px;
+            font-style: italic;
+        }
+
+        /* Django template o'zgaruvchilari uchun rang */
+        .var {
+            color: #900000;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header">
+        GAROV PREDMETI QIYMATINI KELISHISH №1 SONLI DALOLATNOMASI
+    </div>
+
+    <div class="doc-number">
+        <div>Toshkent shahri</div>
+        <div>Sana: <span class="var">{{ loan.shartnoma_sanasi|date:"d.m.Y"|default:"______________" }}</span> y.</div>
+    </div>
+
+    <p>
+        «PULLOL BUSINESS MIKROMOLIYA TASHKILOTI» MChJning (1-tomon) vakili bo‘lgan
+        <span class="var">{{ loan.filial_nomi }}</span>
+        boshlig‘i <strong><span class="var">{{ loan.filial_boshligi }}</span></strong>,
+        O‘zbekiston Respublikasi fuqarosi <strong><span class="var">{{ loan.qarz_oluvchi_fish }}</span></strong>
+        (2-tomon) va
+        garovga beruvchi O‘zbekiston Respublikasi fuqarosi
+        <strong><span class="var">{{ loan.garov_egasi_fish }}</span></strong> (3-tomon)
+        o‘rtalarida,
+        <span class="var">{{ loan.shartnoma_sanasi|date:"d.m.Y" }}</span> y.dagi
+        № <span class="var">{{ loan.shartnoma_raqami }}</span>-BR-sonli Mikroqarz shartnomasiga muvofiq
+        1-tomon 2-tomonga berilgan mikroqarz bo‘yicha ta’minot sifatida taqdim etilgan,
+        3-tomonga mulk huquqi asosida tegishli bo‘lgan mulkning garov qiymatini kelishish muzokaralari o‘tkazildi.
+    </p>
+
+    {% if is_avto %}
+    <p>
+        Garov predmeti sifatida <strong><span class="var">{{ loan.avto_nomi }}</span></strong>, 3-tomonga egalik huquqi
+        tegishli bo‘lgan,
+        quyidagi tafsilotlarga ega avtotransport vositasi taqdim etiladi:
+    </p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Nomi</th>
+                <th>Kuzov turi va kuzov raqami*</th>
+                <th>Dvigatel va shassi raqami*</th>
+                <th>Ishlab chiqarilgan yili va rangi**</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><span class="var">{{ loan.avto_nomi }}</span></td>
+                <td><span class="var">{{ loan.avto_kuzov_turi }}</span>, <span class="var">{{ loan.avto_kuzov }}</span>
+                </td>
+                <td><span class="var">{{ loan.avto_dvigatel }}</span>, <span class="var">{{ loan.avto_shassi }}</span>
+                </td>
+                <td><span class="var">{{ loan.avto_yil }}</span>, <span class="var">{{ loan.avto_rang }}</span></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div style="font-size: 10pt; margin-left: 1cm;">
+        -* avtotransport egasi: <span class="var">{{ loan.garov_egasi_fish }}</span><br>
+        -* texnik pasport: <span class="var">{{ loan.avto_texpasport }}</span><br>
+        -* ro‘yxatdan o‘tgan manzili/garaj manzili: <span class="var">{{ loan.avto_manzil }}</span><br>
+        -* davlat raqami: <span class="var">{{ loan.avto_raqam }}</span>
+    </div>
+
+    <p>
+        Tomonlar o‘rtasida o‘tkazilgan muzokaralar natijalariga ko‘ra, 2-tomon ta’minot sifatida quyidagi tafsilotlarga
+        ega bo‘lgan garov predmetini taqdim etadi,
+        1-tomon esa ushbu garov predmetini <span class="var">{{ loan.shartnoma_sanasi|date:"d F Y" }}</span> y.dan
+        №<span class="var">{{ loan.id }}</span>-BR mikroqarz
+        shartnomasi bo‘yicha berilgan mikroqarz bo‘yicha
+        <strong><span class="var">{{ loan.avto_bahosi|intcomma }}</span>
+            (<span class="var">{{ loan.avto_bahosi_soz }}</span>) so‘m</strong> bo‘lgan kelishilgan garov
+        qiymatida qabul qiladi:
+    </p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Nomi</th>
+                <th>Kuzov turi va kuzov raqami*</th>
+                <th>Dvigatel va shassi raqami*</th>
+                <th>Ishlab chiqarilgan yili va rangi*</th>
+                <th>Kelishilgan garov qiymati, so‘m</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><span class="var">{{ loan.avto_nomi }}</span></td>
+                <td><span class="var">{{ loan.avto_kuzov_turi }}</span>, <span class="var">{{ loan.avto_kuzov }}</span>
+                </td>
+                <td><span class="var">{{ loan.avto_dvigatel }}</span>, <span class="var">{{ loan.avto_shassi }}</span>
+                </td>
+                <td><span class="var">{{ loan.avto_yil }}</span>, <span class="var">{{ loan.avto_rang }}</span></td>
+                <td><span class="var">{{ loan.avto_bahosi|intcomma }}</span><br>
+                    (<span class="var">{{ loan.avto_bahosi_soz }}</span>)</td>
+            </tr>
+        </tbody>
+    </table>
+    {% elif is_kochmas %}
+    <p>
+        Garov predmeti sifatida <strong><span class="var">{{ loan.mulk_turi }}</span></strong>, 3-tomonga egalik huquqi
+        tegishli bo‘lgan,
+        quyidagi tafsilotlarga ega ko'chmas mulk taqdim etiladi:
+    </p>
+    <p>Manzil: <span class="var">{{ loan.mulk_manzili }}</span></p>
+
+    <p>
+        Kelishilgan qiymati: <strong><span class="var">{{ loan.mulk_bahosi|intcomma }}</span></strong> so‘m.
+    </p>
+    {% endif %}
+
+    <p>
+        Shu bilan birga, garov predmetining kelishilgan garov qiymati deganda ushbu mulk garov sifatida taqdim
+        etilgan/qabul qilingan qiymati tushuniladi.
+    </p>
+
+    <p>
+        Shunday qilib, garov predmetining kelishilgan garov qiymati
+        <strong>
+            {% if is_avto %}
+            <span class="var">{{ loan.avto_bahosi|intcomma }}</span>
+            (<span class="var">{{ loan.avto_bahosi_soz }}</span>)
+            {% else %}
+            <span class="var">{{ loan.mulk_bahosi|intcomma }}</span>
+            {% endif %}
+            so‘mni
+        </strong>
+        tashkil etadi.
+    </p>
+
+    <table class="requisites">
+        <thead>
+            <tr>
+                <th>1-tomondan</th>
+                <th>2-tomondan</th>
+                <th>3-tomondan</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    «PULLOL BUSINESS MIKROMOLIYA TASHKILOTI» MChJ <br>
+                    <strong><span class="var">{{ loan.filial_nomi }}</span> boshlig‘i</strong><br><br>
+                    <div style="height: 40px; border-bottom: 1px solid black; margin-bottom: 5px;"></div>
+                    <strong><span class="var">{{ loan.filial_boshligi }}</span></strong>
+                </td>
+                <td>
+                    O‘zbekiston Respublikasi fuqarosi<br>
+                    <strong>Qarz oluvchi</strong><br><br>
+                    <div style="height: 40px; border-bottom: 1px solid black; margin-bottom: 5px;"></div>
+                    <strong>
+                        <span class="var">{{ loan.qarz_oluvchi_name_short|default:loan.qarz_oluvchi_fish }}</span>
+                    </strong>
+                </td>
+                <td>
+                    O‘zbekiston Respublikasi fuqarosi<br>
+                    <strong>Garovga beruvchi</strong><br><br>
+                    <div style="height: 40px; border-bottom: 1px solid black; margin-bottom: 5px;"></div>
+                    <strong>
+                        <span class="var">{{ loan.garov_egasi_name_short|default:loan.garov_egasi_fish }}</span>
+                    </strong>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="footer-note">
+        № 202602386000102 06.01.2026 sanasidan xususiy faoliyat ko‘rsatuvchi notarius tomonidan BUXORO VILOYATI BUXORO
+        SHAHRI ASHXOBOD KO‘CHASI 1/3-UY SHARIPOV ZAFAR JO‘RABOYEVICH berilgan ishonchnomaga asosan.
+    </div>
+
+</body>
+
+</html>

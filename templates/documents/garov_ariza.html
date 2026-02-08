@@ -1,0 +1,129 @@
+{% load humanize %}
+<!DOCTYPE html>
+<html lang="uz">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Garov Arizasi</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+
+            @bottom-center {
+                content: "";
+            }
+        }
+
+        body {
+            font-family: "Times New Roman", Times, serif;
+            font-size: 11pt;
+            line-height: 1.5;
+        }
+
+        .header-right {
+            text-align: right;
+            margin-bottom: 40px;
+            font-weight: bold;
+            line-height: 1.2;
+        }
+
+        h3 {
+            text-align: center;
+            text-transform: uppercase;
+            margin-bottom: 30px;
+        }
+
+        p {
+            text-align: justify;
+            text-indent: 1cm;
+            margin-bottom: 15px;
+        }
+
+        .signatures-box {
+            margin-top: 100px;
+            width: 100%;
+        }
+
+        .footer-date {
+            margin-top: 40px;
+            font-weight: bold;
+        }
+
+        /* Django template o'zgaruvchilari uchun rang */
+        .var {
+            color: #900000;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header-right">
+        «PULLOL BUSINESS MIKROMOLIYA TASHKILOTI» MChJ<br>
+        <span class="var">{{ loan.filial_nomi }}</span> boshlig‘i<br>
+        <span class="var">{{ loan.filial_boshligi }}</span>ga<br>
+        Fuqaro <span class="var">{{ loan.garov_egasi_fish }}</span>dan
+    </div>
+
+    <h3>ARIZA</h3>
+
+    <p>
+        Men, <strong><span class="var">{{ loan.garov_egasi_fish }}</span></strong>, fuqaro <strong>
+            <span class="var">{{ loan.qarz_oluvchi_fish }}</span></strong>ning
+        Sizning tashkilotingizdan olayotgan <span class="var">{{ loan.kredit_muddat_oy }}</span> oy muddatga,
+        <strong><span class="var">{{ loan.kredit_miqdori|intcomma }}</span> 
+            (<span class="var">{{ loan.kredit_miqdori_soz }}</span>)
+            so‘m</strong> miqdordagi mikroqarzi
+        qaytarilishini ta’minlash maqsadida, o‘zimga mulk huquqi asosida tegishli bo‘lgan quyidagi mol-mulkni garovga
+        qo‘yishga rozilik beraman.
+    </p>
+
+    {% if is_avto %}
+    <p>
+        <strong>Avtotransport vositasi ma’lumotlari:</strong><br>
+        Nomi va rusumi: <span class="var">{{ loan.avto_nomi }}</span><br>
+        Davlat raqam belgisi: <span class="var">{{ loan.avto_raqam }}</span><br>
+        Ishlab chiqarilgan yili: <span class="var">{{ loan.avto_yil }}</span><br>
+        Kuzov raqami: <span class="var">{{ loan.avto_kuzov }}</span><br>
+        Dvigatel raqami: <span class="var">{{ loan.avto_dvigatel }}</span>
+    </p>
+    {% elif is_kochmas %}
+    <p>
+        <strong>Ko‘chmas mulk ma’lumotlari:</strong><br>
+        Manzili: <span class="var">{{ loan.mulk_manzili }}</span><br>
+        Mulk turi: <span class="var">{{ loan.mulk_turi }}</span><br>
+        Umumiy maydoni: <span class="var">{{ loan.mulk_umumiy_maydoni }}</span><br>
+        Kadastr raqami: <span class="var">{{ loan.mulk_kadastr_raqami }}</span>
+    </p>
+    {% endif %}
+
+    <p>
+        Ushbu mol-mulk hozirgi kunda hibsda, taqiqda yo‘q, uchinchi shaxslarga o‘tkazilmagan va nizoda emasligini
+        tasdiqlayman.
+    </p>
+
+    <table style="width: 100%; border: none; margin-top: 50px;">
+        <tr>
+            <td style="border: none; width: 50%; text-align: left; vertical-align: top;">
+                <strong>Garovga qo‘yuvchi:</strong>
+            </td>
+            <td style="border: none; width: 50%; text-align: right; vertical-align: top;">
+                <div style="height: 50px; display: flex; flex-direction: column; justify-content: flex-end;">
+                    <strong><span class="var">{{ loan.garov_egasi_fish }}</span></strong>
+                    <br>
+                </div>
+                <div style="border-top: 1px solid black; width: 100%;"></div>
+                <div style="text-align: center; font-size: 10pt;">(Imzo)</div>
+            </td>
+        </tr>
+    </table>
+
+    <div class="footer-date">
+        Sana: <span class="var">{{ loan.created_at|date:"d.m.Y" }}</span> y.
+    </div>
+
+</body>
+
+</html>

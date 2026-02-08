@@ -1,0 +1,486 @@
+{% load humanize %}
+<!DOCTYPE html>
+<html lang="uz">
+
+<head>
+    <meta charset="UTF-8">
+    <style>
+        @page {
+            size: A4;
+            margin: 0.5cm 1.2cm;
+        }
+
+        body {
+            font-family: "Times New Roman", Times, serif;
+            font-size: 9pt;
+            line-height: 1.15;
+            text-align: justify;
+        }
+
+        h3 {
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 4px;
+            text-transform: uppercase;
+        }
+
+        .header-section {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 4px;
+            font-weight: bold;
+        }
+
+        p {
+            margin: 0;
+            text-indent: 0.8cm;
+        }
+
+        .section-title {
+            text-align: center;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-top: 12px;
+            margin-bottom: 2px;
+        }
+
+        .subsection {
+            margin-bottom: 1px;
+            text-indent: 0.8cm;
+        }
+
+        .bold {
+            font-weight: bold;
+        }
+
+        table.requisites {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 3px;
+            font-size: 9pt;
+        }
+
+        table.requisites td {
+            width: 50%;
+            vertical-align: top;
+            padding: 5px;
+            border: 1px solid #000;
+        }
+
+        table.requisites th {
+            text-align: center;
+            font-weight: bold;
+            border: 1px solid #000;
+            padding: 5px;
+            background-color: #f0f0f0;
+        }
+
+        .signature-block {
+            margin-top: 30px;
+        }
+
+        /* Django template o'zgaruvchilari uchun rang */
+        .var {
+            color: #900000;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h3>Mikroqarz shartnoma №<span class="var">{{ loan.shartnoma_raqami }}</span></h3>
+
+    <div class="header-section">
+        <div>Toshkent shahri</div>
+        <div><span class="var">{{ loan.shartnoma_sanasi|date:"d.m.Y" }}</span> y.</div>
+    </div>
+
+    <p>
+        «PULLOL BUSINESS MIKROMOLIYA TASHKILOTI» MChJ, bundan buyon «Mikromoliya tashkiloti» deb nomlanuvchi,
+        ishonchnoma asosida harakat qiluvchi <span class="var">{{ loan.filial_nomi }}</span> boshlig‘i
+        <span class="bold"><span class="var">{{ loan.filial_boshligi }}</span></span> bir tomondan va
+        o‘z manfaati yo‘lida hamda o‘z nomidan harakat qiluvchi O‘zbekiston Respublikasi fuqarosi
+        <span class="bold"><span class="var">{{ loan.qarz_oluvchi_fish }}</span></span> (pasport raqami <span
+            class="var">{{ loan.qarz_oluvchi_pasport_seriya }}</span>,
+        <span class="var">{{ loan.qarz_oluvchi_pasport_berilgan }}</span>), bundan buyon «Qarz oluvchi» deb nomlanuvchi,
+        boshqa tomondan, birgalikda “Tomonlar” yoki alohida “Tomon” deb nomlanuvchilar,
+        Qarz oluvchi tomonidan <span class="var">{{ loan.shartnoma_sanasi|date:"d.m.Y" }}</span> yil, mikroqarz olish
+        uchun ariza berilganligini hisobga olib,
+        ushbu Mikroqarz shartnomasini (bundan keyin – «Shartnoma») quyidagilar haqida tuzdilar:
+    </p>
+
+    <div class="section-title">1. SHARTNOMA PREDMETI</div>
+    <p>
+        1.1. Mikromoliya tashkiloti Qarz oluvchiga umumiy miqdori
+        <span class="bold">
+            <span class="var">{{ loan.kredit_miqdori|intcomma }}</span>
+        </span>
+        (<span class="var">{{ loan.kredit_miqdori_soz }}</span>) bo‘lgan mikroqarzni
+        <span class="var">{{ loan.shartnoma_sanasi|date:"d.m.Y" }}</span> y. dan boshlab
+        <span class="bold">
+            <span class="var">{{ loan.kredit_muddat_oy }}</span> oy
+        </span>
+        muddatga
+        naqd pul va/yoki o'tkazmasi shaklida ajratadi.
+    </p>
+    <p>
+        1.2. Qarz oluvchi to‘lovlilik, muddatlilik va ta’minlanganlik tamoyillariga amal qilgan holda mikroqarzdan
+        foydalanish majburiyatini o‘z zimmasiga oladi.
+    </p>
+
+    <div class="section-title">2. MIKROQARZ BERISH VA QAYTARISH TARTIBI</div>
+    <p>2.1. Ushbu Shartnomaning 1.1.-bandida ko‘rsatilgan summa miqdoridagi mikroqarz Mikromoliya tashkiloti kassasidan
+        naqd pul shaklida va/yoki plastik kartaga o‘tkazish yo‘li bilan beriladi.</p>
+    <p>2.2. Mikroqarz berish ushbu Shartnoma tuzilgan va Qarz oluvchi tomonidan ushbu shartnomaning 3-bo‘limiga muvofiq
+        garov ta’minoti ta’minlangandan so‘ng 10 kalendar kundan kechiktirmay amalga oshiriladi.</p>
+    <p>2.3. Mikroqarz Qarz oluvchi tomonidan ushbu Shartnomaning ajralmas qismi hisoblanadigan 1-ilovasida ko‘rsatilgan
+        to‘lov jadvalida (bundan keyin - To‘lov jadvali) belgilangan miqdor, tartib va muddatlarda qaytariladi.</p>
+    <p>2.4. Mikromoliya tashkiloti, mikroqarz berilgan vaqtdan boshlab, mikroqarz miqdorining qoldiq summasiga
+        <span class="bold"><span class="var">{{ loan.foiz_stavkasi }}</span>%</span> (<span class="var">{{
+            loan.foiz_stavkasi_soz }}</span>) foiz yillik va yiliga 365/366
+        kunlik hisobidan foizlar hisoblaydi. To‘lov jadvaliga muvofiq asosiy qarz bo‘yicha navbatdagi to‘lov buzilgan
+        hollarda, foiz stavkasi oshiriladi va Mikromoliya tashkiloti mikroqarzning muddati o‘tgan asosiy qarz summasiga
+        yillik 105 (bir yuz besh) foiz miqdorida foizlar hisoblaydi.
+    </p>
+    <p>2.4.1 Qarz oluvchining hisob raqamlaridan shartnomaning 4.1.2 bandida ko‘rsatilgan tartibda yechib olingan pul
+        mablag‘lari yechib olinganidan so‘ng mijoz tomonidan kredit qarzdorligini so‘ndirish uchun bank kassalari orqali
+        to‘langan pul mablag‘lari yoki mijoz tomonidan kredit qarzdorligini so‘ndirish uchun bank kassalari orqali
+        to‘langandan so‘ng qarz oluvchining hisob raqamlaridan shartnomaning 4.1.2 bandida ko‘rsatilgan tartibda yechib
+        olingan pul mablag‘larining bir oylik kredit to‘lovini so‘ndirishga yo‘naltirilgan miqdoridan ortiqcha qismi
+        qarz oluvchining to‘lov amalga oshirilgan kundan boshlab 3 bank ish kuni ichida yo‘llagan arizasiga asosan qarz
+        oluvchiga qaytarilishi mumkin. 2.5. Foizlar To‘lov jadvaliga muvofiq asosiy qarzni qaytarish uchun belgilangan
+        sanada to‘lanadi. 2.5.1 Qarz oluvchi tomonidan shartnomaning 2.4 bandida ko‘rsatilgan muddatda ortiqcha
+        to‘langan pul mablag‘larini qaytarish to‘g‘risida ariza berilmagan taqdirda to‘langan ortiqcha pul mablag‘lari
+        mijozning asosiy qarzdorligini so‘ndirishga yo‘naltiriladi.</p>
+    <p>2.6 Qarz oluvchi tomonidan to‘lov jadvalida ko‘rsatilgan muddatdan oldin hamda to‘lov jadvalida ko‘rsatilgan
+        oylik kredit qarzdorligini so‘ndirish miqdoridan ko‘p miqdorda to‘lovni amalga oshirib, to‘langan pul
+        mablag‘larini asosiy kredit qarzdorligini so‘ndirishga yo‘naltirilishini so‘ralganda qarz oluvchining kredit
+        qarzdorligini so‘ndirish uchun to‘lagan pul mablag‘laridan kredit qarzdorligi to‘langan oy uchun to‘lov jadvali
+        bo‘yicha so‘ndirilishi lozim bo‘lgan foiz qarzdorligi summasi, to‘lov jadvalida foiz qarzdorligi so‘ndirilishi
+        ko‘rsatilgan muddatga qadar tashkilotning hisob raqamida saqlanib to‘lov jadvalida ko‘rsatilgan sanada oylik
+        foiz qarzdorligini so‘ndirishga yo‘naltiriladi. 2.6.1. Qarz oluvchi tomonidan olingan mikroqarzni va undan
+        foydalanganlik uchun foizlarni qaytarish bo‘yicha muddati o‘tgan qarzdorlik hosil bo‘lganda Qarz oluvchi
+        tomonidan ko‘rsatilgan qarzdorlikni to‘lash hisobiga to‘lanadigan summalar quyidagi tartibda hisobga olinadi:
+    </p>
+    <p>- jarima sanksiyalarni to‘lash; - to‘lov muddati o‘tgan foizlarni to‘lash; - to‘lov muddati o‘tgan asosiy qarzni
+        to‘lash; - muddatli qarz bo‘yicha hisoblangan foizlarni to‘lash; - muddatli asosiy qarzni to‘lash; - Mikromoliya
+        tashkilotning boshqa zararlarini qoplash.</p>
+    <p>2.7. Qarz oluvchi Mikromoliya tashkilotining mikroqarz bo‘yicha asosiy summasi, hisoblangan foizlarni, penya va
+        boshqa moliyaviy talablarini ham naqd pul shaklida, ham naqdsiz shaklda qaytarib beradi.</p>
+    <p>2.8. Qarz oluvchi mikroqarz miqdorini muddatidan oldin qaytarish, shuningdek, bu haqda Mikromoliya tashkilotini
+        albatta ogohlantirgan holda ulardan aniq foydalangan muddat uchun hisoblangan foizlarni to‘lash huquqiga ega.
+    </p>
+    <p>2.9. Qarz oluvchi jismoniy shaxslarning kreditlar (mikroqarzlar) bo‘yicha qarz yukini hisoblash tartibi, qarz
+        yukining ruxsat etilgan miqdori, shuningdek qarz yuki o‘sishini cheklash to‘g‘risidagi Nizomga muvofiq
+        (O‘zbekiston Respublikasi Adliya vazirligi tomonidan 19.12.2019 y. 3205-son bilan ro‘yxatga olingan Markaziy
+        bank Boshqaruvining 28.09.2019 y. 24/5-son qarori bilan tasdiqlangan), qarz yuki ko‘rsatkichi har bir qarz
+        oluvchiga qarz beruvchi tomonidan mikroqarz ajratishda uning summasi va qarz oluvchining amaldagi kredit
+        (mikroqarz) shartnomalari bo‘yicha asosiy qarz qoldig‘i yig‘indisi bazaviy hisoblash miqdorining 50 baravaridan
+        oshganda hisoblanadi.</p>
+
+    <div class="section-title">3. MIKROQARZ TA’MINOTI BO‘YICHA</div>
+    <p>3.1. Ushbu Shartnoma bo‘yicha taqdim etilgan Mikroqarz quyidagi garov bilan ta’minlanadi:</p>
+
+    {% if is_avto %}
+    <p>3.1.1. Mikromoliya tashkiloti, Qarz oluvchi va <span class="bold">
+            <span class="var">{{ loan.garov_egasi_fish }}</span></span>
+        (<span class="var">{{ loan.shartnoma_sanasi|date:"d.m.Y" }}</span>y. sanasidagi reestr raqami №<span
+            class="var">{{ loan.shartnoma_raqami }}</span> bo‘lgan Ishonchnomaga asosan) tomonidan
+        <span class="var">{{ loan.shartnoma_sanasi|date:"d.m.Y" }}</span>da imzolangan 1-sonli garov predmeti qiymatini
+        tasdiqlash dalolatnomasiga muvofiq
+        <span class="bold"><span class="var">{{ loan.avto_rang }}</span></span> rangli, ishlab chiqarilgan yili – <span
+            class="var">{{ loan.avto_yil }}</span> yil,
+        dvigatel raqami <span class="var">{{ loan.avto_dvigatel }}</span>,
+        shassi - <span class="var">{{ loan.avto_shassi }}</span>,
+        kuzov turi - <span class="var">{{ loan.avto_kuzov_turi }}</span>,
+        kuzov raqami <span class="var">{{ loan.avto_kuzov }}</span>,
+        davlat raqam belgisi <span class="bold"><span class="var">{{ loan.avto_raqam }}</span></span> bo‘lgan
+        <span class="bold"><span class="var">{{ loan.avto_nomi }}</span></span> rusumli avtomashinasi (bundan keyin
+        “Garov predmeti”),
+        egalik huquqiga ega <span class="bold"><span class="var">{{ loan.garov_egasi_fish }}</span></span>ga tegishli va
+        kelishilgan garov
+        qiymati
+        <span class="var">{{ loan.shartnoma_sanasi|date:"d.m.Y" }}</span>da imzolangan 1-sonli Garov predmeti qiymatini
+        tasdiqlash dalolatnomasiga muvofiq
+        <span class="bold"><span class="var">{{ loan.avto_bahosi|intcomma }}</span></span>
+        (<span class="var">{{ loan.avto_bahosi_soz }}</span>) so‘mni tashkil qiladi.
+        Garovning aniq shartlari tegishli notarial rasmiylashtirilgan garov shartnomasi bilan belgilanadi.
+    </p>
+    {% elif is_kochmas %}
+    <p>3.1.1. Mikromoliya tashkiloti, Qarz oluvchi va <span class="bold">
+            <span class="var">{{ loan.garov_egasi_fish }}</span></span> tomonidan
+        <span class="var">{{ loan.shartnoma_sanasi|date:"d.m.Y" }}</span>da imzolangan 1-sonli Garov predmeti qiymatini
+        tasdiqlash dalolatnomasiga muvofiq
+        <span class="bold"><span class="var">{{ loan.mulk_manzili }}</span></span> manzilida joylashgan, yer uchastkasi
+        maydoni - <span class="var">{{
+            loan.mulk_umumiy_maydoni }}</span>,
+        yashash maydoni - <span class="var">{{ loan.mulk_yashash_maydoni }}</span> bo‘lgan,
+        <span class="bold"><span class="var">{{ loan.mulk_turi }}</span></span> ko‘rinishidagi ko‘chmas mulk (bundan
+        keyin “Garov predmeti”),
+        egalik huquqiga ko‘ra <span class="bold"><span class="var">{{ loan.garov_egasi_fish }}</span></span>ga tegishli
+        va kelishilgan garov
+        qiymati
+        <span class="var">{{ loan.shartnoma_sanasi|date:"d.m.Y" }}</span>da imzolangan 1-sonli Garov predmeti qiymatini
+        tasdiqlash dalolatnomasiga muvofiq
+        <span class="bold"><span class="var">{{ loan.mulk_bahosi|intcomma }}</span></span>
+        (<span class="var">{{ loan.mulk_bahosi_soz }}</span>) so‘mni tashkil qiladi.
+        Garovning aniq shartlari tegishli tarzda notarial tasdiqlangan garov shartnomasi bilan belgilangan.
+    </p>
+    {% endif %}
+
+    <p>3.2. Qonun hujjatlariga muvofiq rasmiylashtirilgan, “Garov predmeti” hisoblangan notarial tasdiqlangan garov
+        shartnomasi, shu jumladan “Garov predmeti”ga ta’qiq qo‘yilganligini tasdiqlovchi hujjat Qarz oluvchi tomonidan
+        ushbu shartnoma tuzilgandan so‘ng 10 bank kuni mobaynida Mikromoliya tashkilotiga taqdim etilishi lozim. Garov
+        shartnomasi belgilangan muddatda taqdim etilmagan hollarda, Mikromoliya tashkiloti Qarz oluvchining manziliga
+        yozma bildirishnoma yuborish orqali mikroqarz berishni rad etish va / yoki ushbu shartnomani bir tomonlama bekor
+        qilish huquqiga egadir. Bunda ushbu shartnoma Qarz oluvchi tomonidan talabnoma olingan vaqtda yoki talabnoma
+        pochta xizmati orqali yuborilgandan keyin uchinchi kuni bekor qilingan hisoblanadi.</p>
+    <p>3.3. Asosiy qarzni, foizlar yoki ushbu shartnoma bo‘yicha belgilangan muddatdan kechiktirilganligi bo‘yicha
+        penyalarni qaytarish muddati kechiktirilishi yuzaga kelganda va/yoki ushbu shartnoma bo‘yicha boshqa
+        majburiyatlar buzilishi holatlarida Mikromoliya tashkiloti O‘zbekiston Respublikasining amaldagi qonunchiligiga
+        muvofiq qarzni undirish uchun qaytarib olinmaydigan va muqarrar tartibda undirishni garov ob’ektiga qaratish
+        huquqiga ega bo‘ladi.</p>
+    <p>3.4. O‘zbekiston Respublikasi "Garov to‘g‘risida" gi Qonunining 27-moddasiga muvofiq Garov predmeti
+        sug‘urtalanmaydi. Lekin Mikromoliya tashkiloti Qarz oluvchidan Mikromoliya tashkiloti foydasiga Garov ob’ektini
+        ushbu Shartnomaning to‘liq amal qilish muddatiga har xil xavflardan sug‘urta qilishni talab qilish huquqiga
+        ega. Bunda, sug‘urta xavflari ro‘yxati, shuningdek, sug‘urta kompaniyasi Mikromoliya tashkilotining xohishiga
+        ko‘ra belgilanadi. Sug‘urta hodisasi yuz berganda Foyda oluvchi Mikromoliya tashkiloti bo‘lishi kerak.</p>
+
+    <div class="section-title">4. MIKROMOLIYA TASHKILOTINING HUQUQ VA MAJBURIYATLARI</div>
+    <p>4.1. Mikromoliya tashkiloti quyidagi huquqlarga ega:</p>
+    <p>4.1.1. Ushbu Shartnomada ko‘rsatilgan asoslar bo‘yicha Qarz oluvchiga Shartnomada ko‘zda tutilgan mikroqarz
+        summasini berilishini to‘liq yoki qisman rad etish.</p>
+    <p>4.1.2 “Mikromoliya Tashkiloti” qarz oluvchining nomidagi barcha plastik kartalaridan, hozirgi kunda mavjud va
+        bundan so‘ng ochiladigan barcha hisob raqamlaridan (talab qilib olguncha, depozit jamg‘arib boriladigan plastik
+        va boshqa istalgan hisob raqamlaridan) kredit to‘lovini kredit qaytarish jadvaliga asosan oyning kredit
+        qarzdorligi qaytarilishi ko‘rsatilgan kuni akseptsiz tarzda yechib olish huquqiga ega.</p>
+    <p>4.1.2.1. Mikroqarz bo‘yicha qolgan barcha qarzdorlik, foiz to‘lovlarining muddatidan oldin qaytarilishini talab
+        qilish, shuningdek, quyidagi holatlardan biri yuzaga kelganda undirishni garov ta’minotiga qaratish:</p>
+    <p>a) ta’minotisiz qarzdorlik yuzaga kelganda;</p>
+    <p>b) mikroqarz summasiga hisoblanadigan asosiy qarz bo‘yicha muddati o‘tgan qarzdorlik va/yoki foizlarning yuzaga
+        kelishi;</p>
+    <p>c) Qarz oluvchini qonun hujjatlarida belgilangan tartibda to‘lov qobiliyatiga ega emas, muomalaga layoqatli emas
+        yoki muomalaga layoqati cheklangan deb e’lon qilish;</p>
+    <p>d) Mikromoliya tashkilotiga ushbu Shartnomaning 3.1.-bandida ko‘zda tutilgan hisobotlar, axborotlar va boshqa
+        ma’lumotlarni o‘z vaqtida taqdim etmaslik, shuningdek, moliya-xo‘jalik faoliyat va daromad to‘g‘risidagi
+        hisobotning ishonchsizligi holatlari aniqlanganda;</p>
+    <p>e) Qarz oluvchi tomonidan ushbu shartnoma shartlariga amal qilmaslik;</p>
+    <p>f) Qarz oluvchi mikroqarz summasini olish uchun Mikromoliya tashkilotiga mikroqarz taqdim etilishi to‘g‘risida
+        ijobiy qaror qabul qilinishi uchun muhim hisoblangan masalalar bo‘yicha yolg‘on yoki to‘liq bo‘lmagan
+        ma’lumotlarni taqdim etganligi aniqlanganda.</p>
+    <p>4.1.3. Ushbu shartnomaning amal qilish jarayonida Qarz oluvchining moliyaviy holatini tekshirish va Qarz oluvchi
+        tomonidan o‘z zimmasiga olgan majburiyatlarning bajarilishini nazorat qilish.</p>
+    <p>4.1.4. Qarz oluvchi tomonidan yoki ushbu Shartnoma bo‘yicha uchinchi shaxs tomonidan ta’minot sifatida garovga
+        qo‘yilgan mol-mulkning tegishli holatdaligi va ulardan foydalanish bo‘yicha tekshiruvlar o‘tkazish.</p>
+    <p>4.1.5. Garovga qo‘yuvchi tomonidan garovga qo‘yilgan mol-mulk buzilgan yoki belgilangan maqsadda foydalanish
+        uchun yaroqsiz holga kelganda, bu esa Mikromoliya tashkilotining ushbu Shartnoma bo‘yicha moliyaviy talablarini
+        qondirishga qodir bo‘lgan bozor qiymatiga ma’lum darajada ta’sir ko‘rsatganda, yoki uchinchi shaxsning (kafil)
+        moliyaviy holatining yomonlashuvi sababli ushbu Shartnomadan kelib chiqqan majburiyatlar bo‘yicha javob berish
+        qobiliyatiga ega bo‘lmay qolgan holatlarda Qarz oluvchidan ta’minotning qo‘shimcha turini taqdim etish yoki
+        almashtirishni talab qilish.</p>
+    <p>4.1.6. Qonun hujjatlariga muvofiq, Qarz oluvchi tomonidan ushbu Shartnoma bo‘yicha asosiy qarz, foizlar, penya va
+        boshqa pul majburiyatlarini o‘z vaqtida to‘lamaslik holatlarida Qarz oluvchining bank hisobvaraqlaridagi pul
+        mablag‘larini akseptsiz tartibda yechib olish to‘g‘risida to‘lov talabnomasini berish va bunga Qarz oluvchi
+        qaytarib olinmaydigan va so‘zsiz rozilik bildiradi.</p>
+    <p>4.1.7. Qarz oluvchini oldindan ogohlantirmasdan mikroqarzni qaytarish uchun haqiqatdan ham garov ta’minoti
+        mavjudligini tekshirishni amalga oshirish.</p>
+    <p>4.1.8. Ushbu shartnoma doirasida o‘z majburiyatlarini bajarish uchun uchinchi shaxslarga barcha zarur
+        ma’lumotlarni yetkazish.</p>
+    <p>4.1.9. Istalgan vaqtda Qarz oluvchining avvaldan roziligini olmasdan turib ushbu Shartnoma bo‘yicha uchinchi
+        tomonga da’vo qilish huquqini berish yoki uning foydasiga voz kechish.</p>
+    <p>4.1.10. Qarz oluvchi taqdim etilgan mikroqarzdan Shartnoma tuzilgan kundan boshlab 1 (bir) oy davomida
+        foydalanmagan holatlarda, bu haqda Qarz oluvchini yozma ravishda xabardor qilib, Shartnoma bir tomonlama bekor
+        qilish. Yozma xabarni jo‘natish sanasi uni taqdim etish yoki pochta orqali jo‘natish sanasi hisoblanadi.</p>
+    <p>4.1.11. Oldingi mikroqarz to‘liq to‘lanmagunga qadar yangi mikroqarz berishni rad etish.</p>
+
+    <div class="section-title">5. QARZ OLUVCHINING HUQUQ VA MAJBURIYATLARI</div>
+    <p>5.1. Qarz oluvchi quyidagi huquqlarga ega:</p>
+    <p>5.1.1. Ushbu shartnomada nazarda tutilgan shartlar bo‘yicha mikroqarz olish, shuningdek, Mikromoliya tashkiloti
+        tomonidan ko‘rsatiladigan pullik xizmatlardan foydalanish.</p>
+    <p>5.1.2. Shartnoma tuzilgan kundan boshlab 2 (ikki) hafta mobaynida Mikromoliya tashkilotiga bu haqda yozma
+        xabarnoma yo‘llash orqali mikroqarzning foydalanilmagan summasidan voz kechish.</p>
+    <p>5.1.3. Mikroqarz xizmatlari ko‘rsatish qoidalari bilan tanishish.</p>
+    <p>5.1.4. O‘z huquq va majburiyatlari, shu jumladan mikroqarz xizmatlari ko‘rsatish bilan bog‘liq barcha xarajatlar
+        haqida aniq va to‘liq ma’lumot olish.</p>
+    <p>5.1.5. Shartnoma bo‘yicha Mikromoliya tashkilotining majburiyatlarini bajarmaslik yoki tegishli darajada
+        bajarmaslik natijasida yuzaga kelgan zararlarni qoplashni talab qilish.</p>
+    <p>5.2. Qarz oluvchining majburiyatlari:</p>
+    <p>5.2.1. Mikromoliya tashkilotining birinchi talabi bilan zarur hujjatlar, shuningdek mikroqarzdan foydalanishning
+        butun davri davomida uning moliyaviy holati va to‘lash qobiliyatiga tegishli bo‘lgan ma’lumotlarni taqdim etish.
+    </p>
+    <p>5.2.2. Ushbu shartnomada nazarda tutilgan hollarda garov ta’minotini almashtirish yoki qo‘shimcha ta’minot turini
+        taqdim etish bo‘yicha Mikromoliya tashkiloti talablarini bajarish.</p>
+    <p>5.2.3. To‘lov jadvaliga muvofiq mikroqarz, shuningdek hisoblangan foizlar to‘lovlarini amalga oshirish.</p>
+    <p>5.2.4. Mikromoliya tashkiloti vakillariga o’zlarining moliyaviy holati, yashash joyini tekshirishga, Mikromoliya
+        tashkiloti foydasiga garovga qo‘yilgan mol-mulk saqlanishini tekshirishga ruxsat berish, shuningdek Qarz oluvchi
+        ob’ektlaridan istalganiga tashrif buyurish va har qanday bino, inshoot, mol-mulk, asbob-uskunalar, tovarlar va
+        xizmatlar, shuningdek ularning mikroqarz mablag‘lari hisobiga moliyalashtirilgan hujjatlarni ko‘zdan kechirish
+        va Mikromoliya tashkiloti tomonidan ushbu huquqni amalga oshirishga to‘sqinlik qilmaslik majburiyatini oladi.
+    </p>
+    <p>5.2.5. Qarz oluvchining moliyaviy ahvoli yomonlashuvi va ushbu shartnoma bo‘yicha Qarz oluvchining Mikromoliya
+        tashkiloti oldidagi majburiyatlarining bajarilmasligi va/yoki tegishli darajada bajarilmaslik xavfi yuzaga
+        kelishiga olib keluvchi hech qanday majburiyat va choralarni o‘z zimmasiga olmaslik;</p>
+    <p>5.2.6. Quyidagi holatlarda Mikromoliya tashkilotning birinchi talabi bilan mikroqarz qaytarilishi bo‘yicha
+        qo‘shimcha garov ta’minotini taqdim etish:
+        <br>- Qarz oluvchining moliyaviy holatining yomonlashuvi;
+        <br>- Garov ob’ekti va/yoki uning bir qismining yo‘q qilinishi, qiymatining pasayishi, qisman yoki to‘liq
+        yo‘qotilishi;
+        <br>- qarz qaytarilmaslik xavfini ko‘paytiruvchi boshqa omillarning paydo bo‘lishi;
+    </p>
+    <p>5.2.7. Sud qarori asosida Qarz oluvchi – jismoniy shaxsning muomalaga layoqatsizligi yoki muomalaga layoqati
+        cheklangan yoxud to‘lash qobiliyatiga ega emasligi (bankrotligi) tan olinganda, uning vasiysi yoki homiysi
+        mikroqarzning asosiy summa bo‘yicha qarzdorlikni mikroqarzdan aniq foydalanish muddati uchun foizlar bilan
+        kechiktirmasdan to‘liq to‘lashi shart.</p>
+    <p>5.2.8. Mikromoliya tashkilotining mikroqarz umumiy summasi va hisoblangan foizlarni muddatidan oldin qaytarish
+        to‘g‘risidagi talabini kechiktirmasdan bajarish.</p>
+    <p>5.2.9. Mikromoliya tashkilotining talabi bo‘yicha Mikromoliya tashkiloti ko‘rgan, shu jumladan mikroqarz bo‘yicha
+        (asosiy qarz, foizlar va boshqalar) qarzdorlikni majburiy va/yoki muddatidan oldin qaytarish bo‘yicha qabul
+        qilingan choralar bilan bog‘liq bo‘lgan barcha xarajatlari va zararlarni qoplash, shuningdek ushbu shartnoma
+        doirasida undiruvni taqdim etilgan garov ta’minotiga qaratish.</p>
+
+    <div class="section-title">6. TOMONLARNING JAVOBGARLIGI</div>
+    <p>6.1. Mikromoliya tashkiloti tomonidan Qarz oluvchiga pul mablag‘larini ajratib berish bo‘yicha o‘z zimmasiga
+        olgan majburiyatlarning Shartnomaning 1.1.-bandida keltirilgan summa va muddatlarda bajarilmaslik yoki tegishli
+        tarzda bajarilmaslik holatlarida Mikromoliya tashkiloti muddatidan o‘tgan har bir kalendar kun uchun
+        kechiktirilgan to‘lov summasining 0,1% miqdorida, biroq ushbu Shartnomaning 1.1.-bandida ko‘rsatilgan mikroqarz
+        miqdori umumiy summasining 50% dan ko‘p bo‘lmagan miqdorda penya ko‘rinishidagi neustoyka to‘lash majburiyatini
+        o‘z zimmasiga oladi.</p>
+    <p>6.2. Jarima sanksiyalarni to‘lash Tomonlarni ushbu Shartnomada ko‘zda tutilgan zimmalaridagi majburiyatlarini
+        bajarishdan ozod qilmaydi.</p>
+    <p>6.3. Tomonlarning ushbu Shartnomada nazarda tutilmagan javobgarligi O‘zbekiston Respublikasining amaldagi
+        qonunchiligiga muvofiq belgilanadi.</p>
+    <p>6.4. Tomonlar O‘zbekiston Respublikasi Fuqarolik kodeksining 325-moddasiga muvofiq aybdor tomondan yetkazilgan
+        zararni neustoykadan tashqari to‘la hajmda undirish huquqiga egadirlar.</p>
+
+    <div class="section-title">7. FORS-MAJOR</div>
+    <p>7.1. Agar Tomonlar ular zimmasidagi majburiyatlarni tegishli darajada bajarishi yengib bo‘lmas kuch (fors-major)
+        oqibatida mumkin bo‘lmay qolgan bo‘lsa, ya'ni aniq vaqt davri davomida aniq sharoitlarda favqulodda va oldini
+        olib bo‘lmaydigan holatlar ekanligini isbotlay olmasalar, Shartnoma bo‘yicha o‘z majburiyatlarini bajarmagan
+        yoki tegishli darajada bajarmagan Tomon uning shartlarini bajarishda javobgar hisoblanadi. Ushbu Shartnoma
+        Tomonlari yengilmas kuch holatlariga quyidagilarni kiritadi: tabiiy ofat (zilzila, suv toshqini, chaqmoq
+        chaqishi, vulqon otilishi, sel kelishi, ko‘chki, sunami va hokazo), Shartnoma bo‘yicha majburiyatlar bajarilish
+        joyida temperatura – harorat, shamol kuchi va yog‘ingarchilik darajasining inson hayotiy faoliyati normasidan
+        ortiq bo‘lishi; hokimiyat va boshqaruv organlari moratoriysi; qonuniy belgilangan tartibda tashkil etilgan ish
+        tashlashlar va majburiyatlarning tegishli darajada bajarilishi uchun Shartnoma Tomonlari tarafidan yengib
+        bo‘lmas kuch sifatida belgilangan boshqa holatlar.</p>
+    <p>7.2. Fors-major holati ta'sirida qolgan Tomon, bunday holatlar yuzaga kelgan kundan boshlab 7 (etti) kalendar
+        kundan kechiktirmasdan boshqa Tomonni xabardor qilishi shart.</p>
+    <p>7.3. Fors-major holati boshlanganligi to‘g‘risida xabar qilmaslik yoki o‘z vaqtida xabar bermaslik fors-major
+        holati boshlanganda Shartnoma bo‘yicha o‘z majburiyatlarini bajarish imkoniyatiga vaj qilib keltirish huquqiga
+        ega emas.</p>
+    <p>7.4. Fors-major holati boshlanganligini vaj qilib ko‘rsatish huquqidan mahrum etilgan Tomon amaldagi qonun
+        hujjatlariga muvofiq javobgar bo‘ladi.</p>
+
+    <div class="section-title">8. NIZOLARNI HAL QILISH TARTIBI</div>
+    <p>8.1. Ushbu Shartnomadan kelib chiqadigan tomonlar o‘rtasidagi barcha nizolar va undan kelib chiqadigan
+        majburiyatlar, shu jumladan shartnoma bajarilmasligi oqibatida yuzaga kelgan bajarilishi, o‘zgartirilishi, bekor
+        qilinishi, tugatilishi Mikromoliya tashkilot joylashgan yerdagi taalluqli sudda yoki «CONSILIO» Mas'uliyati
+        cheklangan jamiyat qoshidagi Hakamlik sudida, O‘zbekiston Respublikasining amaldagi qonun hujjatlari va uning
+        reglamentiga muvofiq Hakamlik sudi raisi tomonidan tayinlangan, yakka tartibdagi hakamlik sudyasi tomonidan, sud
+        ishlarini sud majlisi bayonnomasi tuzmasdan ko‘rib chiqilishi kerak bo‘ladi. U yoki bu sudga murojaat qilish
+        huquqi da'vogarda qoladi.</p>
+    <p>Qarzni undirish va garovdagi mol-mulkiga qaratish ham sud tartibida, ham suddan tashqari tartibda, shu jumladan
+        notariusning ijro yozuvini olish yo‘li bilan amalga oshirilishi mumkin.</p>
+    <p>8.2. Mikromoliya tashkiloti sud organlariga murojaat qilganidan keyin Qarz oluvchi tomonidan mikroqarz bo‘yicha
+        muddati o‘tgan qarzdorlikning to‘lanishi Mikromoliya tashkilotning mikroqarz bo‘yicha qarzdorlikni muddatidan
+        avval undirish, shu jumladan undiruvni garovdagi mol-mulkka qaratish yo‘li bilan undirish huquqidan mahrum
+        qilmaydi.</p>
+
+    <div class="section-title">9. SHARTNOMA SHARTLARI VA AMAL QILISH MUDDATI</div>
+    <p>9.1. Ushbu Shartnoma Tomonlar tarafidan imzolangandan keyin kuchga kiradi.</p>
+    <p>9.2. Shartnomaning amal qilish muddati Qarz oluvchi mikroqarzni to‘liq qaytargan, hisoblangan foizlar, penya va
+        boshqa pul majburiyatlarini to‘lagan kunda yakunlanadi.</p>
+    <p>9.3. Ushbu Shartnomaga kiritiladigan barcha o‘zgartirish va qo‘shimchalar, ushbu Shartnomada kelishilgan
+        holatlardan tashqari, ikkala Tomon tarafidan qo‘shimcha bitimni yozma shaklda imzolagan holda amalga oshiriladi.
+    </p>
+
+    <div class="section-title">10. SHAXSIY MA’LUMOTLARNI QAYTA ISHLASH</div>
+    <p>10.1. Ushbu shartnomani tuzish bilan, Qarz oluvchi Mikromoliya tashkilotiga uning shaxsiy ma’lumotlari, shu
+        jumladan, familiyasi, ismi, otasining ismi, pasport ma’lumotlari (shu jumladan, pasport raqami, berilgan vaqti
+        va sanasi, ro‘yxatdan o‘tgan manzili va boshqalar); aloqaga chiqish uchun ma’lumotlar (shu jumladan, telefon
+        raqami, e-mail, pochta manzili va boshqalar); STIR, ushbu shartnoma maqsadiga tegishli bo‘lgan boshqa
+        ma’lumotlarni har qanday maqsadda ishlov berishga rozilik beradi.</p>
+    <p>10.2. Rozilik, shu jumladan shaxsiy ma’lumotlar bilan quyidagi harakatlarni amalga oshirishga beriladi: yig‘ish,
+        tizimlashtirish, to‘plash, saqlash, aniqlashtirish (yangilash, o‘zgartirish), foydalanish; O‘zbekiston
+        Respublikasi qonun hujjatlarida nazarda tutilgan hollar va darajada tarqatish, shu jumladan davlat organlari va
+        boshqa tashkilotlarga taqdim etish, shaxsiy ma’lumotlarning egasizlantirish, blokirovka va yo‘q qilish.</p>
+    <p>10.3. Qarz oluvchi, shuningdek, Mikromoliya tashkiloti shartnoma doirasida olingan ma’lumotlarni kredit byurosi
+        va garov reestri, skoring kompaniyasi, uyali aloqa operatori, sug‘urta kompaniyasi, reklama ishlab
+        chiqaruvchilari va tarqatuvchilari, shuningdek Mikromoliya tashkilotining boshqa hamkorlariga taqdim etishga
+        roziligini bildiradi.</p>
+
+    <div class="section-title">11. BOSHQA SHARTLAR</div>
+    <p>11.1. Ushbu shartnoma kuchga kirganidan keyin, o‘zaro munosabatlarga aloqador barcha yozishmalar yoki
+        kelishuvlar, o‘z kuchini yo‘qotadi.</p>
+    <p>11.2. Ushbu shartnomani bajarish, o‘zgartirish va bekor qilish bilan bog‘liq barcha yozishma va xabarnomalar
+        Tomonlarning ushbu shartnomaning yakuniy qismida ko‘rsatilgan pochta manzillariga yuboriladi.</p>
+    <p>11.3. Ushbu shartnomani bajarish uchun zarur bo‘lgan ismi (nomlanishi), ro‘yxatdan o‘tgan joyi, haqiqiy yashash
+        joyi, manzili (joylashgan yeri), bank rekvizitlari va boshqa ma’lumotlar o‘zgargan holatlarda, Tomonlarning har
+        biri bunday o‘zgarishlar amalga oshgan kundan boshlab 5 (besh) kalendar kun ichida boshqa Tomonni bunday
+        o‘zgarishlar haqida yozma ravishda xabardor qilishi shart.</p>
+    <p>11.4. Ushbu bitimni amalga oshirish bilan, Qarz oluvchi kelishuvning muhimligi va uni tuzishning yuridik
+        oqibatlarini to‘liq tushunib yetishi, shu sababli Shartnomani tuzish yanglishishlar, aldov, zo‘ravonlik,
+        tahdidlar, yomon niyatli bitim yoki murakkab holatlar (tutqinlik) ta’sirida emasligini tasdiqlaydi.</p>
+    <p>11.5. Ushbu shartnomada ko‘zda tutilmagan holatlarda Tomonlar O‘zbekiston Respublikasining amaldagi
+        qonunchiligiga amal qiladilar.</p>
+    <p>11.6. Qarz oluvchi Mikromoliya tashkilotining oldindan yozma roziligini olmasdan turib o‘z majburiyatlari yoki
+        huquqlarini uchinchi shaxslarga o‘tkaza olmaydi.</p>
+    <p>11.7. Ushbu Shartnoma o‘zbek tilida 2 (ikki) nusxada tuzildi va ikkala nusxa ham teng yuridik kuchga ega.</p>
+
+    <div class="section-title">12. TOMONLARNING YURIDIK MANZILLARI VA REKVIZITLARI:</div>
+
+    <table class="requisites">
+        <thead>
+            <tr>
+                <th>«Mikromoliya tashkiloti»</th>
+                <th>«Qarz oluvchi»</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <strong>«PULLOL BUSINESS MIKROMOLIYA TASHKILOTI» MChJ</strong><br>
+                    Manzil: Toshkent shahri, Yakkasaroy tumani, Rakat ko‘chasi, 10-uy, 18-xonadon<br>
+                    h/r: № 20208000405643889001, MFO: №01088<br>
+                    ATB “Kapitalbank” Markaziy amaliyotlar bo‘limi<br>
+                    STIR: 310430149, Tel: (55) 510 02 16<br><br>
+                    <strong><span class="var">{{ loan.filial_nomi }}</span> boshlig‘i</strong><br>
+
+                    <table style="width: 100%; border: none; margin-top: 5px;">
+                        <tr>
+                            <td style="border: none; width: 35%; padding: 0;">
+                                {% if qr_manager %}
+                                <img src="{{ qr_manager }}" alt="QR" style="width: 1.8cm; height: 1.8cm;">
+                                {% endif %}
+                            </td>
+                            <td style="border: none; width: 65%; vertical-align: middle; padding: 0;">
+                                <strong><span class="var">{{ loan.filial_boshligi }}</span></strong>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+                <td>
+                    <strong><span class="var">{{ loan.qarz_oluvchi_fish }}</span></strong><br>
+                    Manzil: <span class="var">{{ loan.qarz_oluvchi_manzil }}</span><br>
+                    Pasport: <span class="var">{{ loan.qarz_oluvchi_pasport_seriya }}</span>,
+                    <span class="var">{{ loan.qarz_oluvchi_pasport_berilgan }}</span><br>
+                    Tel: <span class="var">{{ loan.qarz_oluvchi_telefon }}</span><br>
+
+                    <div style="height: 30px; border-bottom: 1px solid black; margin-top: 10px;"></div>
+                    <div style="text-align: center; font-size: 8pt;">(Imzo)</div>
+                    <div style="text-align: right; margin-top: 5px;">
+                        <strong><span class="var">{{ loan.qarz_oluvchi_fish }}</span></strong>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div style="margin-top: 15px;">
+        Mikroqarz shartnomasini bir nusxasini oldim ________
+    </div>
+
+</body>
+
+</html>                                                                                                                                                                             

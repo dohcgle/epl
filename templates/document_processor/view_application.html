@@ -1,0 +1,289 @@
+{% extends 'base_adminlte.html' %}
+{% load auth_extras %}
+{% load humanize %}
+
+{% block content %}
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark">Ariza № {{ loan.id }}</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Bosh sahifa</a></li>
+                    <li class="breadcrumb-item active">Ariza ko'rish</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="content">
+    <div class="container-fluid">
+        <!-- Status Bar -->
+        <div class="callout callout-info">
+            <h5>Holati:
+                {% if loan.status == 'pending_moderator' %}
+                <span class="badge badge-warning">Moderator Tasdiqi Kutilmoqda</span>
+                {% elif loan.status == 'pending_director' %}
+                <span class="badge badge-primary">Direktor Tasdiqi Kutilmoqda</span>
+                {% elif loan.status == 'completed' %}
+                <span class="badge badge-success">Tasdiqlandi (Yakunlandi)</span>
+                {% elif loan.status == 'rejected' %}
+                <span class="badge badge-danger">Rad Etildi</span>
+                {% endif %}
+            </h5>
+            <p>
+                Operator: <b>{{ loan.created_by.username }}</b> | Vaqt: {{ loan.created_at }} <br>
+                {% if loan.moderator_approved_by %}
+                Moderator: <b>{{ loan.moderator_approved_by.username }}</b> tasdiqladi: {{ loan.moderator_approved_at }}
+                <br>
+                {% endif %}
+                {% if loan.director_approved_by %}
+                Direktor: <b>{{ loan.director_approved_by.username }}</b> tasdiqladi: {{ loan.director_approved_at }}
+                {% endif %}
+            </p>
+        </div>
+
+        <div class="row">
+            <!-- Chap tomon: Ma'lumotlar -->
+            <div class="col-md-9">
+                <div class="card card-primary card-outline">
+                    <div class="card-header">
+                        <h3 class="card-title">Ariza Ma'lumotlari</h3>
+                    </div>
+                    <div class="card-body p-0">
+                        <table class="table table-striped">
+                            <tbody>
+                                <tr>
+                                    <th style="width: 30%">Qarz Oluvchi</th>
+                                    <td>{{ loan.qarz_oluvchi_fish }} ({{ loan.qarz_oluvchi_tugilgan_sana }})</td>
+                                </tr>
+                                <tr>
+                                    <th>Pasport</th>
+                                    <td>{{ loan.qarz_oluvchi_pasport_seriya }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Kredit Summasi</th>
+                                    <td>{{ loan.kredit_miqdori|intcomma }} so'm</td>
+                                </tr>
+                                <tr>
+                                    <th>Muddat va Foiz</th>
+                                    <td>{{ loan.kredit_muddat_oy }} oy / {{ loan.foiz_stavkasi }}%</td>
+                                </tr>
+                                <tr>
+                                    <th>Garov Turi</th>
+                                    <td>{{ loan.get_garov_turi_display }}</td>
+                                </tr>
+
+                                {% if loan.garov_turi == 'avto' %}
+                                <tr>
+                                    <th>Avtomobil</th>
+                                    <td>{{ loan.avto_nomi }} - {{ loan.avto_raqam }} ({{ loan.avto_yil }})</td>
+                                </tr>
+                                <tr>
+                                    <th>Baholangan Qiymati</th>
+                                    <td>{{ loan.avto_bahosi }}</td>
+                                </tr>
+                                {% endif %}
+
+                                {% if loan.garov_turi == 'kochmas_mulk' %}
+                                <tr>
+                                    <th>Ko'chmas Mulk</th>
+                                    <td>{{ loan.mulk_turi }} - {{ loan.mulk_manzili }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Maydoni</th>
+                                    <td>{{ loan.mulk_umumiy_maydoni }} kv.m</td>
+                                </tr>
+                                {% endif %}
+
+                                <tr>
+                                    <th>Sug'urta</th>
+                                    <td>
+                                        {% if loan.sugurta_mavjud %}
+                                        Mavjud ({{ loan.sugurta_kompaniyasi }} - {{ loan.sugurta_summasi }})
+                                        {% else %}
+                                        Yo'q
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="p-3">
+                            <label>To'lov Grafigi:</label>
+                            <pre
+                                style="background: #f4f6f9; padding: 10px; border-radius: 5px;">{{ loan.grafik_matni }}</pre>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hujjatlar Ro'yxati Card (Faqat direktor imzolaganidan keyin) -->
+                {% if loan.status == 'completed' %}
+                <div class="card card-info card-outline mt-3">
+                    <div class="card-header">
+                        <h3 class="card-title">Hujjatlar To'plami</h3>
+                    </div>
+                    <div class="card-body p-0">
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th style="width: 50px;">T/R</th>
+                                    <th>Hujjat nomi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td><a href="{% url 'view_document_pdf' loan.id 'muqova' %}" target="_blank"
+                                            class="text-dark">
+                                            <i class="far fa-file-pdf mr-2 text-danger"></i> Muqova</a></td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td><a href="{% url 'view_document_pdf' loan.id 'anketa' %}" target="_blank"
+                                            class="text-dark">
+                                            <i class="far fa-file-alt mr-2 text-success"></i> Anketa</a></td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td><a href="{% url 'view_document_pdf' loan.id 'mijoz_anketasi' %}" target="_blank"
+                                            class="text-dark">
+                                            <i class="far fa-file-alt mr-2 text-success"></i> Mijoz Anketasi</a></td>
+                                </tr>
+                                <tr>
+                                    <td>4</td>
+                                    <td><a href="{% url 'view_document_pdf' loan.id 'kredit_ariza' %}" target="_blank"
+                                            class="text-dark">
+                                            <i class="far fa-file-alt mr-2 text-success"></i> Kredit Ariza</a></td>
+                                </tr>
+                                <tr>
+                                    <td>5</td>
+                                    <td><a href="{% url 'view_document_pdf' loan.id 'majburiyatnoma' %}" target="_blank"
+                                            class="text-dark">
+                                            <i class="far fa-file-alt mr-2 text-success"></i> Majburiyatnoma</a></td>
+                                </tr>
+                                <tr>
+                                    <td>6</td>
+                                    <td><a href="{% url 'view_document_pdf' loan.id 'garov_ariza' %}" target="_blank"
+                                            class="text-dark">
+                                            <i class="far fa-file-alt mr-2 text-success"></i> Garov Arizasi</a></td>
+                                </tr>
+                                <tr>
+                                    <td>7</td>
+                                    <td><a href="{% url 'view_document_pdf' loan.id 'xulosa' %}" target="_blank"
+                                            class="text-dark">
+                                            <i class="far fa-file-pdf mr-2 text-danger"></i> Xulosa</a></td>
+                                </tr>
+                                <tr>
+                                    <td>8</td>
+                                    <td><a href="{% url 'view_document_pdf' loan.id 'qaror' %}" target="_blank"
+                                            class="text-dark">
+                                            <i class="far fa-file-pdf mr-2 text-danger"></i> Qaror</a></td>
+                                </tr>
+                                <tr>
+                                    <td>9</td>
+                                    <td><a href="{% url 'view_document_pdf' loan.id 'kredit_shartnoma' %}"
+                                            target="_blank" class="text-dark">
+                                            <i class="far fa-file-pdf mr-2 text-danger"></i> Shartnoma</a></td>
+                                </tr>
+                                <tr>
+                                    <td>10</td>
+                                    <td><a href="{% url 'view_document_pdf' loan.id 'grafik' %}" target="_blank"
+                                            class="text-dark">
+                                            <i class="far fa-file-pdf mr-2 text-danger"></i> Grafik</a></td>
+                                </tr>
+                                <tr>
+                                    <td>11</td>
+                                    <td><a href="{% url 'view_document_pdf' loan.id 'dalolatnoma' %}" target="_blank"
+                                            class="text-dark">
+                                            <i class="far fa-file-image mr-2 text-primary"></i> Dalolatnoma</a></td>
+                                </tr>
+                                <tr>
+                                    <td>12</td>
+                                    <td><a href="{% url 'view_document_pdf' loan.id 'buyruq' %}" target="_blank"
+                                            class="text-dark">
+                                            <i class="far fa-file-pdf mr-2 text-danger"></i> Buyruq</a></td>
+                                </tr>
+                                <tr>
+                                    <td>13</td>
+                                    <td><a href="{% url 'view_document_pdf' loan.id 'monitoring_1' %}" target="_blank"
+                                            class="text-dark">
+                                            <i class="far fa-file-image mr-2 text-primary"></i> Monitoring_1</a></td>
+                                </tr>
+                                <tr>
+                                    <td>14</td>
+                                    <td><a href="{% url 'view_document_pdf' loan.id 'monitoring_2' %}" target="_blank"
+                                            class="text-dark">
+                                            <i class="far fa-file-image mr-2 text-primary"></i> Monitoring_2</a></td>
+                                </tr>
+                                <tr>
+                                    <td>15</td>
+                                    <td><a href="{% url 'view_document_pdf' loan.id 'monitoring_3' %}" target="_blank"
+                                            class="text-dark">
+                                            <i class="far fa-file-image mr-2 text-primary"></i> Monitoring_3</a></td>
+                                </tr>
+                                <tr>
+                                    <td>16</td>
+                                    <td><a href="{% url 'view_document_pdf' loan.id 'monitoring_4' %}" target="_blank"
+                                            class="text-dark">
+                                            <i class="far fa-file-image mr-2 text-primary"></i> Monitoring_4</a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                {% endif %}
+
+            </div>
+
+            <!-- O'ng tomon: Harakatlar -->
+            <div class="col-md-3">
+                <div class="card card-warning card-outline">
+                    <div class="card-header">
+                        <h3 class="card-title">Tasdiqlash</h3>
+                    </div>
+                    <div class="card-body">
+                        <p class="text-muted">Ma'lumotlarni diqqat bilan tekshiring.</p>
+
+                        <form method="post" action="{% url 'approve_application' loan.id %}">
+                            {% csrf_token %}
+
+                            {% if request.user|has_group:'Moderator' and loan.status == 'pending_moderator' %}
+                            <button type="submit" name="action" value="approve" class="btn btn-success btn-block mb-2">
+                                <i class="fas fa-check"></i> Tasdiqlash (Moderator)
+                            </button>
+                            <button type="submit" name="action" value="reject" class="btn btn-danger btn-block">
+                                <i class="fas fa-times"></i> Rad Etish
+                            </button>
+
+                            {% elif request.user|has_group:'Director' and loan.status == 'pending_director' %}
+                            <button type="submit" name="action" value="approve" class="btn btn-primary btn-block mb-2">
+                                <i class="fas fa-file-signature"></i> Imzolash va Hujjatlarni Yaratish
+                            </button>
+                            <button type="submit" name="action" value="reject" class="btn btn-danger btn-block">
+                                <i class="fas fa-times"></i> Rad Etish
+                            </button>
+
+                            {% elif loan.status == 'completed' %}
+                            <div class="alert alert-success">
+                                <i class="fas fa-check-circle"></i> Hujjatlar tayyor!
+                            </div>
+                            <p class="text-sm text-muted">Hujjatlarni chap tomondagi "Hujjatlar To'plami" bo'limidan
+                                ko'rishingiz mumkin.</p>
+
+                            {% else %}
+                            <div class="alert alert-secondary">
+                                Sizning navbatingiz emas yoki ariza yopilgan.
+                            </div>
+                            {% endif %}
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

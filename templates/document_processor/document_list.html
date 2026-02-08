@@ -1,0 +1,129 @@
+{% extends 'base_adminlte.html' %}
+{% load humanize %}
+
+{% block page_title %}Hujjatlar Ro'yxati{% endblock %}
+
+{% block extra_css %}
+<!-- DataTables -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap4.min.css">
+<style>
+    .filters th {
+        padding: 5px !important;
+    }
+
+    .filters input {
+        width: 100%;
+        padding: 3px;
+        box-sizing: border-box;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Barcha Arizalar Ro'yxati</h3>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+                <table id="loanTable" class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Sana</th>
+                            <th>Qarz Oluvchi</th>
+                            <th>Filial</th>
+                            <th>Kredit Miqdori</th>
+                            <th>Xolati</th>
+                            <th>Hujjatlar</th>
+                        </tr>
+                        <tr class="filters">
+                            <th></th>
+                            <th><input type="text" placeholder="Sana bo'yicha"></th>
+                            <th><input type="text" placeholder="FISH bo'yicha"></th>
+                            <th><input type="text" placeholder="Filial bo'yicha"></th>
+                            <th><input type="text" placeholder="Summa bo'yicha"></th>
+                            <th><input type="text" placeholder="Status bo'yicha"></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for doc in documents %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ doc.created_at|date:"d.m.Y H:i" }}</td>
+                            <td>{{ doc.qarz_oluvchi_fish }}</td>
+                            <td>{{ doc.filial_nomi }}</td>
+                            <td>{{ doc.kredit_miqdori|intcomma }} so'm</td>
+                            <td>
+                                {% if doc.status == 'completed' %}
+                                <span class="badge badge-success">Yakunlandi</span>
+                                {% elif doc.status == 'rejected' %}
+                                <span class="badge badge-danger">Rad etildi</span>
+                                {% elif doc.status == 'pending_director' %}
+                                <span class="badge badge-primary">Direktor Tasdiqlashi Kutilmoqda</span>
+                                {% else %}
+                                <span class="badge badge-warning">Moderator Tasdiqlashi Kutilmoqda</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <div class="btn-group">
+                                    <a href="{% url 'view_application' doc.id %}" class="btn btn-sm btn-info"
+                                        title="Ko'rish">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+
+                                </div>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="7" class="text-center">Hozircha hech qanday ariza yaratilmagan.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<!-- DataTables -->
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap4.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // DataTables-ni ishga tushirish
+        var table = $('#loanTable').DataTable({
+            "order": [[1, "desc"]], // Sana bo'yicha (2-ustun) teskari tartibda
+            "language": {
+                "lengthMenu": "Har bir sahifada _MENU_ ta yozuv ko'rsatilsin",
+                "zeroRecords": "Ma'lumot topilmadi",
+                "info": "_TOTAL_ tadan _START_ dan _END_ gacha bo'lgan yozuvlar",
+                "infoEmpty": "Yozuvlar mavjud emas",
+                "infoFiltered": "(_MAX_ ta yozuvdan filtrlangan)",
+                "search": "Qidirish:",
+                "paginate": {
+                    "first": "Birinchi",
+                    "last": "Oxirgi",
+                    "next": "Keyingi",
+                    "previous": "Oldingi"
+                }
+            },
+            "dom": 'lrtip' // Standart qidiruv qatorini olib tashlash (bizda har bir ustun uchun bor)
+        });
+
+        // Ustunlar bo'yicha filtrlash
+        $('#loanTable .filters input').on('keyup change', function () {
+            var index = $(this).parent().index();
+            table.column(index).search(this.value).draw();
+        });
+    });
+</script>
+{% endblock %}

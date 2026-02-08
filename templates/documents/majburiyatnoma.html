@@ -1,0 +1,107 @@
+{% load humanize %}
+<!DOCTYPE html>
+<html lang="uz">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Majburiyatnoma</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+
+            @bottom-center {
+                content: "";
+            }
+        }
+
+        body {
+            font-family: "Times New Roman", Times, serif;
+            font-size: 11pt;
+            line-height: 1.5;
+        }
+
+        .header-right {
+            text-align: right;
+            margin-bottom: 40px;
+            font-weight: bold;
+            line-height: 1.2;
+        }
+
+        h3 {
+            text-align: center;
+            text-transform: uppercase;
+            margin-bottom: 30px;
+        }
+
+        p {
+            text-align: justify;
+            text-indent: 1cm;
+            margin-bottom: 15px;
+        }
+
+        .signatures-box {
+            margin-top: 100px;
+            width: 100%;
+        }
+
+        .footer-date {
+            margin-top: 40px;
+            font-weight: bold;
+        }
+
+        /* Django template o'zgaruvchilari uchun rang */
+        .var {
+            color: #900000;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header-right">
+        «PULLOL BUSINESS MIKROMOLIYA TASHKILOTI» MChJ<br>
+        <span class="var">{{ loan.filial_nomi }}</span> boshlig‘i<br>
+        <span class="var">{{ loan.filial_boshligi }}</span>ga<br>
+        Fuqaro <span class="var">{{ loan.qarz_oluvchi_fish }}</span>dan
+    </div>
+
+    <h3>MAJBURIYATNOMA</h3>
+
+    <p>
+        Men, <strong><span class="var">{{ loan.qarz_oluvchi_fish }}</span></strong>, «PULLOL BUSINESS MIKROMOLIYA
+        TASHKILOTI» MChJ bilan
+        imzolangan mikroqarz shartnomasiga asosan, olgan mikroqarz mablag‘ini va unga hisoblangan foizlarni o‘z vaqtida,
+        shartnomadagi to‘lov grafigiga qat’iy rioya qilgan holda to‘lash majburiyatini olaman.
+    </p>
+
+    <p>
+        Shuningdek, o‘zimning moliyaviy holatim o‘zgargan taqdirda, doimiy yashash manzilim yoki telefon raqamim
+        o‘zgarsa, bu haqda Mikroqarz tashkilotini 3 (uch) ish kuni ichida yozma ravishda xabardor qilishga va’da
+        beraman.
+    </p>
+
+    <table style="width: 100%; border: none; margin-top: 50px;">
+        <tr>
+            <td style="border: none; width: 50%; text-align: left; vertical-align: top;">
+                <strong>Majburiyat oluvchi:</strong>
+            </td>
+            <td style="border: none; width: 50%; text-align: right; vertical-align: top;">
+                <div style="height: 50px; display: flex; flex-direction: column; justify-content: flex-end;">
+                    <strong><span class="var">{{ loan.qarz_oluvchi_fish }}</span></strong>
+                    <br>
+                </div>
+                <div style="border-top: 1px solid black; width: 100%;"></div>
+                <div style="text-align: center; font-size: 10pt;">(Imzo)</div>
+            </td>
+        </tr>
+    </table>
+
+    <div class="footer-date">
+        Sana: <span class="var">{{ loan.created_at|date:"d.m.Y" }}</span> y.
+    </div>
+
+</body>
+
+</html>
