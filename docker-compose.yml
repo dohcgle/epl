@@ -13,6 +13,11 @@ services:
     environment:
       - DEBUG=1
       - ALLOWED_HOSTS=localhost,127.0.0.1,web
+      - POSTGRES_DB=epl_db
+      - POSTGRES_USER=epl_user
+      - POSTGRES_PASSWORD=epl_password
+      - POSTGRES_HOST=db
+      - POSTGRES_PORT=5432
     depends_on:
       - db
 

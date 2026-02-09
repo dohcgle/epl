@@ -80,8 +80,8 @@ if os.environ.get('POSTGRES_DB'):
             'NAME': os.environ.get('POSTGRES_DB'),
             'USER': os.environ.get('POSTGRES_USER'),
             'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
-            'HOST': 'db',
-            'PORT': '5432',
+            'HOST': os.environ.get('POSTGRES_HOST', 'db'),
+            'PORT': os.environ.get('POSTGRES_PORT', '5432'),
         }
     }
 
