@@ -1,0 +1,56 @@
+# Byte-compiled / optimized files
+__pycache__/
+*.py[cod]
+# C extensions
+*.so
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+
+# Django-specific files
+*.log
+*.pot
+*.tif
+*.tiff
+*.jpg
+*.jpeg
+*.gif
+*.png
+*.bmp
+*.svg
+*.scss
+*.sass
+*.less
+
+# Database
+db.sqlite3
+local_settings.py
+
+# Static and media files (adjust as needed)
+# It is a common practice to ignore the collected static files
+# and the user-uploaded media files
+/static/
+/media/
+
+# IDE-specific files and OS files
+.DS_Store
+.vscode/
+
+# Python packaging
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
