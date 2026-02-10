@@ -89,47 +89,142 @@ def parse_pasted_schedule(text):
     """
     Parses tab-separated text copied from Excel.
     """
+    import re
     schedule = []
     total_p = 0
     total_i = 0
     grand_total = 0
 
-    lines = text.strip().split('\n')
+    # Satrlarga ajratish
+    import re
+    schedule = []
+    total_p = 0
+    total_i = 0
+    grand_total = 0
+
+    # Satrlarga ajratish
+    lines = [l.strip() for l in text.strip().splitlines() if l.strip()]
+    
+    # Sana patterni (dd.mm.yyyy yoki d.m.yyyy)
+    date_pattern = re.compile(r'(\d{1,2}[./]\d{1,2}[./]\d{2,4})')
+
     for line in lines:
-        parts = line.strip().split('\t')
-        if len(parts) < 2:
-            parts = line.split() 
-
-        def clean_num(s):
-            return s.replace(' ', '').replace(',', '.')
-
         try:
-            if not parts[0].strip().isdigit():
+            # 1. Qatorda sana bormi?
+            date_match = date_pattern.search(line)
+            if not date_match:
+                continue 
+
+            date_str = date_match.group(1)
+            
+            # 2. Ustunlarga ajratish strategiyasi
+            # A) Tab bo'yicha
+            parts = [p.strip() for p in line.split('\t') if p.strip()]
+            
+            # B) Agar parts kam bo'lsa (tab yo'q), 2 yoki undan ortiq bo'shliq bo'yicha
+            if len(parts) < 3:
+                parts = [p.strip() for p in re.split(r'\s{2,}', line) if p.strip()]
+            
+            # C) Agar hali ham kam bo'lsa, va sana bor bo'lsa, demak raqamlar orasida tab/katta bo'shliq yo'q.
+            # Bu holda qiyin, lekin harakat qilamiz.
+            if len(parts) < 3:
+                 # Oxirgi chora: oddiy split, lekin bu xavfli (1 000 000 ni 3 bo'lak qiladi)
+                 # Shuning uchun bu yerni o'zgartirmaymiz, faqat yuqoridagi 2 metodga tayanamiz.
+                 # Lekin shuni e'tiborga olish kerakki, Exceldan olinganda 1 000 000 odatda "1 000 000" (quote ichida) yoki shunchaki text bo'ladi.
+                 pass
+
+            # Sana qaysi partda?
+            date_index = -1
+            for i, p in enumerate(parts):
+                if date_str in p:
+                    date_index = i
+                    break
+            
+            if date_index == -1:
+                # Agar sana split qilingan bo'lsa (kamdan kam holat), qaytadan qidiramiz
                 continue
 
-            num = parts[0]
-            date = parts[1]
-            if len(parts) >= 6:
-                balance_str = parts[2]
-                principal_str = parts[3]
-                interest_str = parts[4]
-                total_str = parts[5]
+            # 3. Ma'lumotlarni olish
+            # Tartib raqami
+            num = parts[date_index - 1] if date_index > 0 else str(len(schedule) + 1)
+            if not num.replace('.', '').isdigit():
+                 num = str(len(schedule) + 1)
+
+            # Summalar (sanadan keyingi ustunlar)
+            amounts = parts[date_index + 1:]
+            
+            # Agar summalar kam bo'lsa (masalan "Jami" ustuni qolib ketgan bo'lsa)
+            # Bizga kamida 4 ta ustun kerak: Qoldiq, Asosiy, Foiz, Jami
+            
+            def clean_amount(s):
+                # Bo'shliqlarni olib tashlash
+                s = s.replace(' ', '').replace("'", "").strip()
                 
-                total_p += float(clean_num(principal_str))
-                total_i += float(clean_num(interest_str))
+                # Agar hech narsa bo'lmasa -> 0
+                if not s:
+                    return "0"
+
+                # 1. Minglik ajratuvchilar (multiple nuqta yoki vergul)
+                if s.count(',') > 1: s = s.replace(',', '')
+                if s.count('.') > 1: s = s.replace('.', '')
                 
-                schedule.append({
-                    'num': num,
-                    'date': date,
-                    'balance': balance_str,
-                    'principal': principal_str,
-                    'interest': interest_str,
-                    'total': total_str
-                })
+                # 2. Aralash belgilar (. va ,)
+                if ',' in s and '.' in s:
+                    if s.rfind(',') < s.rfind('.'): # 1,200.00 (vergul minglik)
+                        s = s.replace(',', '')
+                    else: # 1.200,00 (nuqta minglik)
+                        s = s.replace('.', '').replace(',', '.')
+                
+                # 3. Yagona belgi qolganda
+                elif ',' in s:
+                    # Agar faqat vergul bo'lsa (1200,00 yoki 1,200)
+                    # Odatda 3 ta digitdan keyin bo'lmasa bu decimal.
+                    # Lekin float(s) uchun nuqta kerak
+                    s = s.replace(',', '.')
+                
+                return s
+
+            balance_str = amounts[0] if len(amounts) > 0 else "0"
+            principal_str = amounts[1] if len(amounts) > 1 else "0"
+            interest_str = amounts[2] if len(amounts) > 2 else "0"
+            total_str = amounts[3] if len(amounts) > 3 else "0"
+            
+            # Agar Jami bo'sh bo'lsa, lekin Asosiy va Foiz bor bo'lsa, hisoblaymiz
+            p_val = 0
+            i_val = 0
+            t_val = 0
+            
+            try: p_val = float(clean_amount(principal_str))
+            except: pass
+            
+            try: i_val = float(clean_amount(interest_str))
+            except: pass
+            
+            try: t_val = float(clean_amount(total_str))
+            except: pass
+            
+            # Agar total 0 bo'lsa, o'zimiz hisoblaymiz
+            if t_val == 0 and (p_val > 0 or i_val > 0):
+                t_val = p_val + i_val
+                # Formatlash uchun stringga o'tkazamiz
+                total_str = "{:,.2f}".format(t_val) # Vergul minglik, nuqta decimal
+
+            total_p += p_val
+            total_i += i_val
+
+            schedule.append({
+                'num': num,
+                'date': date_str,
+                'balance': balance_str,
+                'principal': principal_str,
+                'interest': interest_str,
+                'total': total_str # Original string yoki hisoblangan
+            })
         except Exception:
             continue
-            
+
     grand_total = total_p + total_i
+    
     return schedule, "{:,.2f}".format(total_p).replace(",", " "), "{:,.2f}".format(total_i).replace(",", " "), "{:,.2f}".format(grand_total).replace(",", " ")
 
 # --- VIEWS ---

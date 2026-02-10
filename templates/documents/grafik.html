@@ -8,81 +8,89 @@
     <style>
         @page {
             size: A4;
-            margin: 1cm 1.5cm;
+            margin: 0.5cm 1cm;
+            /* Marginlarni kamaytirdik */
         }
 
         body {
             font-family: "Times New Roman", Times, serif;
-            font-size: 10pt;
-            line-height: 1.15;
+            font-size: 9pt;
+            /* Fontni kichiklashtirdik */
+            line-height: 1.1;
             text-align: justify;
         }
 
         .header {
             text-align: right;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
+            font-size: 9pt;
         }
 
         h3 {
             text-align: center;
-            margin-bottom: 10px;
+            margin-bottom: 5px;
             text-transform: uppercase;
+            font-size: 11pt;
         }
 
-        table {
+        /* Jadval stillari */
+        .schedule-table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 15px;
-            margin-bottom: 20px;
-            font-size: 10pt;
+            font-family: "Times New Roman", Times, serif;
+            font-size: 8pt;
+            /* Jadval ichidagi font yanada kichikroq */
+            margin-bottom: 10px;
         }
 
-        th,
-        td {
-            border: 1px solid black;
-            padding: 5px;
-            text-align: center;
-            vertical-align: middle;
+        .schedule-table th,
+        .schedule-table td {
+            border: 1px solid #000;
+            padding: 2px 4px;
+            /* Paddinglarni kamaytirdik */
+            text-align: right;
         }
 
-        th {
-            background-color: #f0f0f0;
+        .schedule-table th {
+            background-color: #f2f2f2;
             font-weight: bold;
+            text-align: center;
+        }
+
+        .schedule-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .text-center {
+            text-align: center !important;
         }
 
         .note {
-            font-size: 9pt;
+            font-size: 8pt;
             font-style: italic;
             text-align: justify;
+            margin-top: 5px;
+            margin-bottom: 15px;
+        }
+
+        /* Imzo qismi */
+        .requisites {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 9pt;
             margin-top: 10px;
         }
 
-        .signatures-box {
-            margin-top: 40px;
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .signer-col {
-            width: 48%;
+        .requisites th,
+        .requisites td {
+            border: 1px solid black;
+            padding: 5px;
+            text-align: center;
             vertical-align: top;
         }
 
-        .signer-title {
-            font-weight: bold;
-            text-align: center;
-            margin-bottom: 10px;
-            text-decoration: underline;
-        }
-
-        .signer-details {
-            margin-bottom: 5px;
-        }
-
-        .qr-code {
-            text-align: center;
-            margin-top: 10px;
+        .requisites th {
+            background-color: #f0f0f0;
         }
 
         /* Django template o'zgaruvchilari uchun rang */
@@ -102,10 +110,37 @@
 
     <h3>TO‘LOV JADVALI</h3>
 
-    <!-- Exceldan kelgan jadval -->
-    {% autoescape off %}
-    <span class="var">{{ loan.grafik_matni }}</span>
-    {% endautoescape %}
+    <!-- Jadval -->
+    <table class="schedule-table">
+        <thead>
+            <tr>
+                <th style="width: 5%;">№</th>
+                <th style="width: 15%;">Sana</th>
+                <th style="width: 20%;">Qoldiq</th>
+                <th style="width: 20%;">Asosiy qarz</th>
+                <th style="width: 20%;">Foiz</th>
+                <th style="width: 20%;">Jami to'lov</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in schedule %}
+            <tr>
+                <td class="text-center">{{ item.num }}</td>
+                <td class="text-center">{{ item.date }}</td>
+                <td>{{ item.balance }}</td>
+                <td>{{ item.principal }}</td>
+                <td>{{ item.interest }}</td>
+                <td>{{ item.total }}</td>
+            </tr>
+            {% endfor %}
+            <tr style="font-weight: bold; background-color: #e0e0e0;">
+                <td colspan="3" style="text-align: right; font-weight: bold;">JAMI:</td>
+                <td>{{ total_principal }}</td>
+                <td>{{ total_interest }}</td>
+                <td>{{ grand_total }}</td>
+            </tr>
+        </tbody>
+    </table>
 
     <div class="note">
         *Mikroqarz bo‘yicha to‘lovlar to‘lov jadvalida ko‘rsatilmagan sanalarda to‘langan taqdirda, to‘lov summasi
@@ -116,14 +151,14 @@
     <table class="requisites">
         <thead>
             <tr>
-                <th>«Mikromoliya tashkiloti»</th>
-                <th>«Qarz oluvchi»</th>
+                <th style="width: 50%">«Mikromoliya tashkiloti»</th>
+                <th style="width: 50%">«Qarz oluvchi»</th>
             </tr>
         </thead>
         <tbody>
             <tr>
                 <td style="text-align: left;">
-                    <strong>«PULLOL BUSINESS MIKROMOLIYA TASHKILOTI» MChJ</strong><br><br>
+                    <strong>«PULLOL BUSINESS MIKROMOLIYA TASHKILOTI» MChJ</strong><br>
                     Manzil: Toshkent shahri, Yakkasaroy tumani, Rakat ko‘chasi, 10-uy, 18-xonadon<br>
                     h/r: 20208000405643889001<br>
                     MFO: 01088, ATB “Kapitalbank” Markaziy amaliyotlar bo‘limi<br>
@@ -131,28 +166,25 @@
                     Tel: (55) 510 02 16, (97) 714 14 17, (97) 706 96 65<br><br>
                     <strong><span class="var">{{ loan.filial_nomi }}</span> boshlig‘i</strong><br><br>
 
-                    <table style="width: 100%; border: none;">
-                        <tr>
-                            <td style="border: none; width: 40%; padding: 0;">
-                                {% if qr_manager %}
-                                <img src="{{ qr_manager }}" alt="QR" style="width: 2.2cm; height: 2.2cm;">
-                                {% endif %}
-                            </td>
-                            <td style="border: none; width: 60%; vertical-align: middle; padding: 0; text-align: left;">
-                                <strong><span class="var">{{ loan.filial_boshligi }}</span></strong>
-                            </td>
-                        </tr>
-                    </table>
+                    <div style="display: flex; align-items: center;">
+                        <div style="width: 80px;">
+                            {% if qr_manager %}
+                            <img src="{{ qr_manager }}" alt="QR" style="width: 2cm; height: 2cm;">
+                            {% endif %}
+                        </div>
+                        <div>
+                            <strong><span class="var">{{ loan.filial_boshligi }}</span></strong>
+                        </div>
+                    </div>
                 </td>
                 <td style="text-align: left;">
-                    <strong><span class="var">{{ loan.qarz_oluvchi_fish }}</span></strong><br><br>
+                    <strong><span class="var">{{ loan.qarz_oluvchi_fish }}</span></strong><br>
                     Manzil: <span class="var">{{ loan.qarz_oluvchi_manzil }}</span><br>
-                    Pasport seriyasi: <span class="var">{{ loan.qarz_oluvchi_pasport_seriya }}</span>,
-                    <span class="var">{{ loan.qarz_oluvchi_pasport_berilgan }}</span><br>
+                    Pasport: <span class="var">{{ loan.qarz_oluvchi_pasport_seriya }}</span><br>
                     Tel: <span class="var">{{ loan.qarz_oluvchi_telefon }}</span><br><br>
 
                     {% if loan.kontakt_1_fish %}
-                    <div style="font-size: 8pt;">
+                    <div style="font-size: 8pt; margin-bottom: 2px;">
                         <span class="var">{{ loan.kontakt_1_telefon }}</span> (<span class="var">{{
                             loan.kontakt_1_qarindoshlik|upper }}</span> - <span class="var">{{ loan.kontakt_1_fish
                             }}</span>)
@@ -166,9 +198,9 @@
                     </div>
                     {% endif %}
                     <br>
-                    <div style="height: 40px; border-bottom: 1px solid black; margin-bottom: 5px;"></div>
+                    <div style="height: 30px; border-bottom: 1px solid black; margin-bottom: 5px;"></div>
                     <div style="text-align: center;">(Imzo)</div>
-                    <div style="text-align: right; margin-top: 10px;">
+                    <div style="text-align: right; margin-top: 5px;">
                         <strong><span class="var">{{ loan.qarz_oluvchi_fish }}</span></strong>
                     </div>
                 </td>
