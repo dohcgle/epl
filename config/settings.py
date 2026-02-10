@@ -15,6 +15,11 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
+CSRF_TRUSTED_ORIGINS = [
+    'http://epl.pullol.uz',
+    'https://epl.pullol.uz',
+]
+
 # Application definition
 
 INSTALLED_APPS = [
