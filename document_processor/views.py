@@ -265,7 +265,7 @@ def approve_application(request, loan_id):
             
     return redirect('dashboard')
 
-@login_required
+
 def view_document_pdf(request, loan_id, doc_type):
     """
     Generates and returns a specific document as PDF for inline viewing.
@@ -319,10 +319,12 @@ def view_document_pdf(request, loan_id, doc_type):
     # 1.5 QR Codes for Signatures (Placeholder for now)
     try:
         from .utils import generate_qr_code
-        context['qr_obidov'] = generate_qr_code("A.Obidov Imzosi Tasdiqlangan")
-        context['qr_akramov'] = generate_qr_code("R.Akramov Imzosi Tasdiqlangan")
-        context['qr_eshbekov'] = generate_qr_code("S.Eshbekov Imzosi Tasdiqlangan")
-        context['qr_manager'] = generate_qr_code(f"{loan.filial_boshligi} Imzosi Tasdiqlangan")
+        doc_url = f"https://epl.pullol.uz/loans/view/{loan.id}/doc/{doc_type}/"
+        
+        context['qr_obidov'] = generate_qr_code(doc_url)
+        context['qr_akramov'] = generate_qr_code(doc_url)
+        context['qr_eshbekov'] = generate_qr_code(doc_url)
+        context['qr_manager'] = generate_qr_code(doc_url)
     except Exception as e:
         print(f"QR Code Error: {e}")
         context['qr_obidov'] = ""

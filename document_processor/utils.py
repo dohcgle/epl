@@ -57,7 +57,7 @@ def generate_qr_code(data):
     Generates a QR code base64 string for embedding in HTML.
     """
     qr = qrcode.QRCode(
-        version=1,
+        version=None,
         error_correction=qrcode.constants.ERROR_CORRECT_L,
         box_size=10,
         border=1,
