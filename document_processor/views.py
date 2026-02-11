@@ -280,6 +280,17 @@ def create_loan_application(request):
                 if data.get('avto_bahosi') and not data.get('avto_bahosi_soz'):
                      data['avto_bahosi_soz'] = number_to_text_uz(cleaner(data.get('avto_bahosi')))
 
+                # --- YANGI MAYDONLAR FIX ---
+                if data.get('filial_boshligi_inisiali'):
+                    data['filial_boshligi_inisiali'] = data['filial_boshligi_inisiali'].upper()
+                
+                if not data.get('direktor_fish'):
+                    data['direktor_fish'] = "OBIDOV ABDULLA SHOKIR O'G'LI"
+                
+                if not data.get('direktor_fish_inisiali'):
+                    data['direktor_fish_inisiali'] = "A.SH.OBIDOV"
+                # ---------------------------
+
                 loan = LoanAgreement.objects.create(
                     created_by=request.user,
                     status='pending_moderator',

@@ -227,7 +227,9 @@
             <tr>
                 <th>1-tomondan</th>
                 <th>2-tomondan</th>
+                {% if garov_boshqa_shaxs %}
                 <th>3-tomondan</th>
+                {% endif %}
             </tr>
         </thead>
         <tbody>
@@ -246,6 +248,7 @@
                         <span class="var">{{ loan.qarz_oluvchi_name_short|default:loan.qarz_oluvchi_fish }}</span>
                     </strong>
                 </td>
+                {% if garov_boshqa_shaxs %}
                 <td>
                     O‘zbekiston Respublikasi fuqarosi<br>
                     <strong>Garovga beruvchi</strong><br><br>
@@ -254,6 +257,7 @@
                         <span class="var">{{ loan.garov_egasi_name_short|default:loan.garov_egasi_fish }}</span>
                     </strong>
                 </td>
+                {% endif %}
             </tr>
         </tbody>
     </table>

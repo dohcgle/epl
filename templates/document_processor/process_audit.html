@@ -524,14 +524,28 @@
                                     {{ form.filial_nomi }}
                                 </div>
                                 <div class="col-md-6 form-group">
-                                    {{ form.filial_boshligi.label_tag }}
-                                    {{ form.filial_boshligi }}
+                                    {{ form.ishonchnoma_sanasi.label_tag }}
+                                    {{ form.ishonchnoma_sanasi }}
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-6 form-group">
-                                    {{ form.ishonchnoma_sanasi.label_tag }}
-                                    {{ form.ishonchnoma_sanasi }}
+                                    {{ form.filial_boshligi.label_tag }}
+                                    {{ form.filial_boshligi }}
+                                </div>
+                                <div class="col-md-6 form-group">
+                                    {{ form.filial_boshligi_inisiali.label_tag }}
+                                    {{ form.filial_boshligi_inisiali }}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 form-group">
+                                    {{ form.direktor_fish.label_tag }}
+                                    {{ form.direktor_fish }}
+                                </div>
+                                <div class="col-md-6 form-group">
+                                    {{ form.direktor_fish_inisiali.label_tag }}
+                                    {{ form.direktor_fish_inisiali }}
                                 </div>
                             </div>
                         </div>
@@ -791,6 +805,7 @@
         textToUpperCase('#id_avto_dvigatel');
         textToUpperCase('#id_avto_rang');
         textToUpperCase('#id_avto_texpasport');
+        textToUpperCase('#id_filial_boshligi_inisiali');
 
         applyDateMask('#id_avto_texpasport_sana');
 
@@ -1134,8 +1149,23 @@
                 }
 
                 // Tashkilot
-                const officials = ["A. Otabekov", "M. Gapparov", "S. Rahimov", "B. Ikromov", "J. Sobirov", "F. Karimov"];
-                $('#id_filial_boshligi').val(getRandomItem(officials));
+                console.log("Filial boshlig'i test rejimi ishladi");
+                const tFirstNames = ["BOBUR", "ANVAR", "SARDOR", "JAHONGIR", "OLIM", "KARIM", "JAMSHID", "SHERZOD", "AZIZ", "FARHOD"];
+                const tLastNames = ["ALIYEV", "VALIYEV", "KARIMOV", "RAHIMOV", "NORTOYEV", "ESHPULATOV", "TURDIEV", "SOBIROV", "SHARIPOV"];
+                const tMiddleNames = ["ADHAMOVICH", "BOTIROVICH", "SHOKIROVICH", "OLIMOVICH", "KARIMOVICH", "AZIZOVICH"];
+
+                let tbName = getRandomItem(tFirstNames);
+                let tbLName = getRandomItem(tLastNames);
+                let tbMName = getRandomItem(tMiddleNames);
+
+                // Full Name: TAYLAKOV ULUGBEK NODIROVICH
+                let tbFull = `${tbLName} ${tbName} ${tbMName}`;
+                $('#id_filial_boshligi').val(tbFull).trigger('input');
+
+                // Initials: U.N.TAYLAKOV
+                let tbInitial = `${tbName.charAt(0)}.${tbMName.charAt(0)}.${tbLName}`;
+                $('#id_filial_boshligi_inisiali').val(tbInitial).trigger('input');
+
                 $('#id_ishonchnoma_sanasi').val("01.01.2025").trigger('input');
 
                 // Grafik

@@ -161,20 +161,26 @@ class LoanAgreement(models.Model):
     # --- TASHKILOT (MCHJ) MA'LUMOTLARI ---
     FILIAL_CHOICES = [
         ('Buxoro filiali', 'Buxoro filiali'),
-        ('Samarqand filiali', 'Samarqand filiali'),
-        ('Toshkent filiali', 'Toshkent filiali'),
-        ('Andijon filiali', 'Andijon filiali'),
-        ('Farg\'ona filiali', 'Farg\'ona filiali'),
-        ('Namangan filiali', 'Namangan filiali'),
-        ('Qashqadaryo filiali', 'Qashqadaryo filiali'),
-        ('Surxondaryo filiali', 'Surxondaryo filiali'),
-        ('Jizzax filiali', 'Jizzax filiali'),
-        ('Navoiy filiali', 'Navoiy filiali'),
+        # ('Samarqand filiali', 'Samarqand filiali'),
+        ('Toshkent shahar filiali', 'Toshkent shahar filiali'),
+        # ('Andijon filiali', 'Andijon filiali'),
+        # ('Farg\'ona filiali', 'Farg\'ona filiali'),
+        # ('Namangan filiali', 'Namangan filiali'),
+        # ('Qashqadaryo filiali', 'Qashqadaryo filiali'),
+        # ('Surxondaryo filiali', 'Surxondaryo filiali'),
+        # ('Jizzax filiali', 'Jizzax filiali'),
+        # ('Navoiy filiali', 'Navoiy filiali'),
         ('Xorazm filiali', 'Xorazm filiali'),
+        ("To'rtko'l filiali", "To'rtko'l filiali"),
     ]
     
     filial_nomi = models.CharField("Filial nomi", max_length=50, choices=FILIAL_CHOICES, default='Buxoro filiali', blank=True)
     filial_boshligi = models.CharField("Filial boshlig'i F.I.Sh", max_length=100, blank=True)
+    filial_boshligi_inisiali = models.CharField("Filial boshlig'i F.I.Sh (Inisiali)", max_length=100, blank=True)
+    
+    direktor_fish = models.CharField("Direktor F.I.Sh", max_length=255, default="OBIDOV ABDULLA SHOKIR O'G'LI", blank=True)
+    direktor_fish_inisiali = models.CharField("Direktor F.I.Sh (Inisiali)", max_length=100, default="A.SH.OBIDOV", blank=True)
+    
     ishonchnoma_sanasi = models.DateField("Ishonchnoma sanasi", null=True, blank=True)
 
     # --- GRAFIK (Exceldan nusxa) ---

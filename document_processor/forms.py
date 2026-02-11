@@ -141,6 +141,11 @@ class UmumiyMalumotForm(forms.Form):
     
     filial_nomi = forms.ChoiceField(label="Filial nomi", choices=FILIAL_CHOICES, initial='Buxoro filiali')
     filial_boshligi = forms.CharField(label="Filial boshlig'i F.I.Sh", initial="IKROMOV B.A.", required=False)
+    filial_boshligi_inisiali = forms.CharField(label="Filial boshlig'i F.I.Sh (Inisiali)", initial="B.A.IKROMOV", required=False, widget=forms.TextInput(attrs={'style': 'text-transform:uppercase', 'oninput': 'this.value = this.value.toUpperCase()'}))
+    
+    direktor_fish = forms.CharField(label="Direktor F.I.Sh", initial="OBIDOV ABDULLA SHOKIR O'G'LI", required=False, widget=forms.TextInput(attrs={'readonly': 'readonly'}))
+    direktor_fish_inisiali = forms.CharField(label="Direktor F.I.Sh (Inisiali)", initial="A.SH.OBIDOV", required=False, widget=forms.TextInput(attrs={'readonly': 'readonly'}))
+    
     ishonchnoma_sanasi = forms.DateField(label="Ishonchnoma sanasi", widget=forms.DateInput(attrs={'class': 'date-mask', 'placeholder': 'dd.mm.yyyy'}), input_formats=['%d.%m.%Y'], required=False)
 
     # --- GRAFIK (Exceldan nusxa) ---

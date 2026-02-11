@@ -109,28 +109,28 @@
     </div>
 
     <div class="doc-number">
-        DIREKTORINING 
-        <span class="var">{{ loan.shartnoma_sanasi|date:"d.m.Y" }}</span> y.dagi 
+        DIREKTORINING
+        <span class="var">{{ loan.shartnoma_sanasi|date:"d.m.Y" }}</span> y.dagi
         № <span class="var">{{ loan.shartnoma_raqami }}</span>-sonli BUYRUG‘I
     </div>
 
     <p>
-        Men, <strong><span class="var">{{ loan.filial_boshligi }}</span></strong> «PULLOL BUSINESS MIKROMOLIYA
+        Men, <strong><span class="var">{{ loan.direktor_fish_inisiali }}</span></strong> «PULLOL BUSINESS MIKROMOLIYA
         TASHKILOTI» MChJ direktori,
         jismoniy shaxs <strong><span class="var">{{ loan.qarz_oluvchi_fish }}</span></strong>ga quyidagi shartlarda
         mikroqarz berishni buyuraman:
     </p>
 
     <div class="list-item">
-        1. Mikroqarz summasi: <strong><span class="var">{{ loan.kredit_miqdori|intcomma }}</span> 
+        1. Mikroqarz summasi: <strong><span class="var">{{ loan.kredit_miqdori|intcomma }}</span>
             (<span class="var">{{ loan.kredit_miqdori_soz }}</span>) so‘m.</strong>
     </div>
     <div class="list-item">
         2. Mikroqarz muddati: <strong><span class="var">{{ loan.kredit_muddat_oy }}</span> oy.</strong>
     </div>
     <div class="list-item">
-        3. Mikroqarzdan foydalanganlik uchun foiz stavkasi: <strong>yillik 
-            <span class="var">{{ loan.foiz_stavkasi }}</span>% 
+        3. Mikroqarzdan foydalanganlik uchun foiz stavkasi: <strong>yillik
+            <span class="var">{{ loan.foiz_stavkasi }}</span>%
             (<span class="var">{{ loan.foiz_stavkasi_soz }}</span>) foiz.</strong>
     </div>
     <div class="list-item">
@@ -140,7 +140,7 @@
 
     {% if is_avto %}
     <p>
-        5. <strong><span class="var">{{ loan.garov_egasi_fish }}</span></strong>ga tegishli 
+        5. <strong><span class="var">{{ loan.garov_egasi_fish }}</span></strong>ga tegishli
         <strong><span class="var">{{ loan.avto_nomi }}</span></strong> ko‘rinishidagi
         transport vositasini quyidagi ma’lumotlarga muvofiq garovga qabul qilinsin:
     </p>
@@ -158,13 +158,13 @@
         <tbody>
             <tr>
                 <td><span class="var">{{ loan.avto_nomi }}</span></td>
-                <td><span class="var">{{ loan.avto_kuzov_turi }}</span>, 
+                <td><span class="var">{{ loan.avto_kuzov_turi }}</span>,
                     <span class="var">{{ loan.avto_kuzov }}</span>
                 </td>
-                <td><span class="var">{{ loan.avto_dvigatel }}</span>, 
+                <td><span class="var">{{ loan.avto_dvigatel }}</span>,
                     <span class="var">{{ loan.avto_shassi }}</span>
                 </td>
-                <td><span class="var">{{ loan.avto_yil }}</span>, 
+                <td><span class="var">{{ loan.avto_yil }}</span>,
                     <span class="var">{{ loan.avto_rang }}</span>
                 </td>
                 <td><span class="var">{{ loan.avto_bahosi|intcomma }}</span><br>
@@ -182,7 +182,7 @@
 
     {% elif is_kochmas %}
     <p>
-        5. <strong><span class="var">{{ loan.garov_egasi_fish }}</span></strong>ga tegishli 
+        5. <strong><span class="var">{{ loan.garov_egasi_fish }}</span></strong>ga tegishli
         <strong><span class="var">{{ loan.mulk_turi }}</span></strong> ko‘rinishidagi
         ko‘chmas mulkni quyidagi ma’lumotlarga muvofiq garovga qabul qilinsin:
     </p>
@@ -202,7 +202,7 @@
                 {% endif %}
             </td>
             <td style="border: none; width: 20%; text-align: right; vertical-align: middle;">
-                <strong><span class="var">{{ loan.filial_boshligi }}</span></strong>
+                <strong><span class="var">{{ loan.direktor_fish_inisiali }}</span></strong>
             </td>
         </tr>
     </table>
