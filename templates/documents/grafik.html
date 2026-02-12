@@ -104,8 +104,8 @@
 <body>
 
     <div class="header">
-        <span class="var">{{ loan.shartnoma_sanasi|date:"d.m.Y" }}</span> y.dagi №<span class="var">{{
-            loan.shartnoma_raqami }}</span>-BR mikroqarz shartnomasiga 1-sonli ilova
+        <span class="var">{{ loan.shartnoma_sanasi|date:"d.m.Y" }}</span> y.dagi
+        № <span class="var">{{ loan.shartnoma_raqami }}</span>-BR mikroqarz shartnomasiga 1-sonli ilova
     </div>
 
     <h3>TO‘LOV JADVALI</h3>
@@ -184,18 +184,16 @@
                     Tel: <span class="var">{{ loan.qarz_oluvchi_telefon }}</span><br><br>
 
                     {% if loan.kontakt_1_fish %}
-                    <div style="font-size: 8pt; margin-bottom: 2px;">
-                        <span class="var">{{ loan.kontakt_1_telefon }}</span> (<span class="var">{{
-                            loan.kontakt_1_qarindoshlik|upper }}</span> - <span class="var">{{ loan.kontakt_1_fish
-                            }}</span>)
-                    </div>
+                    <span class="var">{{ loan.get_kontakt_1_qarindoshlik_display }}</span>: 
+                    <span class="var">{{ loan.kontakt_1_telefon }}</span><br>
                     {% endif %}
                     {% if loan.kontakt_2_fish %}
-                    <div style="font-size: 8pt;">
-                        <span class="var">{{ loan.kontakt_2_telefon }}</span> (<span class="var">{{
-                            loan.kontakt_2_qarindoshlik|upper }}</span> - <span class="var">{{ loan.kontakt_2_fish
-                            }}</span>)
-                    </div>
+                    <span class="var">{{ loan.get_kontakt_2_qarindoshlik_display }}</span>: 
+                    <span class="var">{{ loan.kontakt_2_telefon }}</span><br>
+                    {% endif %}
+                    {% if loan.kontakt_3_fish %}
+                    <span class="var">{{ loan.get_kontakt_3_qarindoshlik_display }}</span>: 
+                    <span class="var">{{ loan.kontakt_3_telefon }}</span><br>
                     {% endif %}
                     <br>
                     <div style="height: 30px; border-bottom: 1px solid black; margin-bottom: 5px;"></div>

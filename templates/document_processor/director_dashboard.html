@@ -79,9 +79,35 @@
                             </td>
                             <td>{{ loan.created_at|date:"d.m.Y H:i" }}</td>
                             <td>
-                                <a href="{% url 'view_application' loan.id %}" class="btn btn-primary btn-sm">
-                                    <i class="fas fa-eye"></i> Ko'rish
-                                </a>
+                                <div class="btn-group">
+                                    <a href="{% url 'view_application' loan.id %}" class="btn btn-sm btn-info"
+                                        title="Ko'rish">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    {% if loan.status != 'completed' %}
+                                    <a href="{% url 'edit_loan' loan.id %}" class="btn btn-sm btn-warning"
+                                        title="Tahrirlash">
+                                        <i class="fas fa-pen"></i>
+                                    </a>
+                                    {% endif %}
+                                    <a href="{% url 'delete_loan' loan.id %}" class="btn btn-sm btn-danger"
+                                        title="O'chirish"
+                                        onclick="return confirm('Haqiqatan ham o\'chirmoqchimisiz?');">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+
+                                    {% if loan.status == 'pending_director' %}
+                                    <form action="{% url 'approve_application' loan.id %}" method="post"
+                                        style="display:inline;"
+                                        onsubmit="return confirm('Haqiqatan ham rad etmoqchimisiz?');">
+                                        {% csrf_token %}
+                                        <button type="submit" name="action" value="reject" class="btn btn-sm btn-danger"
+                                            title="Rad Etish">
+                                            <i class="fas fa-times-circle"></i>
+                                        </button>
+                                    </form>
+                                    {% endif %}
+                                </div>
                             </td>
                         </tr>
                         {% endfor %}

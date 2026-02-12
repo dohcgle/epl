@@ -37,7 +37,7 @@
                             <th>Filial</th>
                             <th>Kredit Miqdori</th>
                             <th>Xolati</th>
-                            <th>Hujjatlar</th>
+                            <th>Amallar</th>
                         </tr>
                         <tr class="filters">
                             <th></th>
@@ -74,7 +74,17 @@
                                         title="Ko'rish">
                                         <i class="fas fa-eye"></i>
                                     </a>
-
+                                    {% if doc.status != 'completed' %}
+                                    <a href="{% url 'edit_loan' doc.id %}" class="btn btn-sm btn-warning"
+                                        title="Tahrirlash">
+                                        <i class="fas fa-pen"></i>
+                                    </a>
+                                    {% endif %}
+                                    <a href="{% url 'delete_loan' doc.id %}" class="btn btn-sm btn-danger"
+                                        title="O'chirish"
+                                        onclick="return confirm('Haqiqatan ham o\'chirmoqchimisiz?');">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
                                 </div>
                             </td>
                         </tr>

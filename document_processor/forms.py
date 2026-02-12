@@ -1,4 +1,5 @@
 from django import forms
+from .models import LoanAgreement
 
 class UmumiyMalumotForm(forms.Form):
     # --- SHAXSIY MA'LUMOTLAR (Qarz oluvchi) ---
@@ -16,29 +17,18 @@ class UmumiyMalumotForm(forms.Form):
     qarz_oluvchi_telefon = forms.CharField(label="Telefon raqami", initial="+998", required=False)
 
     # --- KONTAKT SHAXSLAR ---
-    QARINDOSHLIK_CHOICES = [
-        ('', 'Tanlang...'),
-        ('turmush_ortogi', "Turmush o'rtog'i"),
-        ('ota', 'Ota'),
-        ('ona', 'Ona'),
-        ('aka', 'Aka'),
-        ('uka', 'Uka'),
-        ('opa', 'Opa'),
-        ('singil', 'Singil'),
-        ('boshqa', 'Boshqa'),
-    ]
-
+    # --- KONTAKT SHAXSLAR ---
     kontakt_1_fish = forms.CharField(label="1-kontakt F.I.Sh", required=False)
     kontakt_1_telefon = forms.CharField(label="1-kontakt Telefoni", initial="+998", required=False)
-    kontakt_1_qarindoshlik = forms.ChoiceField(label="1-kontakt Qarindoshligi", choices=QARINDOSHLIK_CHOICES, required=False)
+    kontakt_1_qarindoshlik = forms.ChoiceField(label="1-kontakt Qarindoshligi", choices=[('', 'Tanlang...')] + LoanAgreement.QARINDOSHLIK_CHOICES, required=False)
 
     kontakt_2_fish = forms.CharField(label="2-kontakt F.I.Sh", required=False)
     kontakt_2_telefon = forms.CharField(label="2-kontakt Telefoni", initial="+998", required=False)
-    kontakt_2_qarindoshlik = forms.ChoiceField(label="2-kontakt Qarindoshligi", choices=QARINDOSHLIK_CHOICES, required=False)
+    kontakt_2_qarindoshlik = forms.ChoiceField(label="2-kontakt Qarindoshligi", choices=[('', 'Tanlang...')] + LoanAgreement.QARINDOSHLIK_CHOICES, required=False)
 
     kontakt_3_fish = forms.CharField(label="3-kontakt F.I.Sh", required=False)
     kontakt_3_telefon = forms.CharField(label="3-kontakt Telefoni", initial="+998", required=False)
-    kontakt_3_qarindoshlik = forms.ChoiceField(label="3-kontakt Qarindoshligi", choices=QARINDOSHLIK_CHOICES, required=False)
+    kontakt_3_qarindoshlik = forms.ChoiceField(label="3-kontakt Qarindoshligi", choices=[('', 'Tanlang...')] + LoanAgreement.QARINDOSHLIK_CHOICES, required=False)
 
     # --- KREDIT MA'LUMOTLARI ---
     shartnoma_raqami = forms.CharField(label="Kredit shartnomasi raqami", max_length=50, required=False)

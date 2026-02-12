@@ -205,14 +205,22 @@
         <tbody>
             <tr>
                 <td><span class="var">{{ loan.avto_nomi }}</span></td>
-                <td>kuzov turi - <span class="var">{{ loan.avto_kuzov_turi }}</span>, kuzov raqami <span class="var">{{
-                        loan.avto_kuzov }}</span></td>
-                <td>dvigatel raqami <span class="var">{{ loan.avto_dvigatel }}</span>, shassi raqami - <span
-                        class="var">{{ loan.avto_shassi }}</span></td>
-                <td>rangi - <span class="var">{{ loan.avto_rang }}</span>, ishlab chiqarilgan yili - <span
-                        class="var">{{ loan.avto_yil }}</span></td>
-                <td><span class="var">{{ loan.avto_bahosi|intcomma }}</span> (<span class="var">{{
-                        loan.avto_bahosi_soz|default:loan.avto_bahosi }}</span>)</td>
+                <td>
+                    Kuzov turi: <span class="var">{{ loan.avto_kuzov_turi }}</span>, 
+                    Kuzov raqami: <span class="var">{{ loan.avto_kuzov }}</span>
+                </td>
+                <td>
+                    Dvigatel raqami: <span class="var">{{ loan.avto_dvigatel }}</span>, 
+                    Shassi raqami: <span class="var">{{ loan.avto_shassi }}</span>
+                </td>
+                <td>
+                    Rangi: <span class="var">{{ loan.avto_rang }}</span>, 
+                    Yili: <span class="var">{{ loan.avto_yil }}</span>
+                </td>
+                <td>
+                    <span class="var">{{ loan.avto_bahosi|intcomma }}</span>
+                    (<span class="var">{{ loan.avto_bahosi_soz|default:loan.avto_bahosi }}</span>)
+                </td>
             </tr>
         </tbody>
     </table>

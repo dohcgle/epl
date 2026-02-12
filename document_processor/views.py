@@ -12,7 +12,8 @@ from dateutil.relativedelta import relativedelta
 from django.views.generic import ListView, CreateView, View
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.utils import timezone
-from django.db.models import Q
+from django.db.models import Q, Count, Sum
+from django.db.models.functions import TruncMonth
 from .models import ProcessedDocument, LoanAgreement
 
 # --- HELPER FUNCTIONS ---
@@ -115,7 +116,26 @@ def parse_pasted_schedule(text):
             if not date_match:
                 continue 
 
-            date_str = date_match.group(1)
+            original_date_str = date_match.group(1)
+            date_str = original_date_str
+            
+            # --- Date Normalization ---
+            # Agar sana '/' bilan kelsa (masalan 2/16/2026 -> 16.02.2026)
+            if '/' in date_str:
+                try:
+                    parts = [int(p) for p in date_str.split('/')]
+                    if len(parts) == 3:
+                        if parts[0] > 12: # DD/MM/YYYY (16/02/2026)
+                            d, m, y = parts[0], parts[1], parts[2]
+                        else: # MM/DD/YYYY (02/16/2026 - US Format)
+                            m, d, y = parts[0], parts[1], parts[2]
+                            # Xavfsizlik uchun: agar 2-qism > 12 bo'lsa, aniq M/D/Y
+                            # Agar 1-qism > 12 bo'lsa, aniq D/M/Y (yuqorida tekshirildi)
+                        
+                        date_str = f"{d:02d}.{m:02d}.{y}"
+                except:
+                    pass
+            # --------------------------
             
             # 2. Ustunlarga ajratish strategiyasi
             # A) Tab bo'yicha
@@ -136,7 +156,7 @@ def parse_pasted_schedule(text):
             # Sana qaysi partda?
             date_index = -1
             for i, p in enumerate(parts):
-                if date_str in p:
+                if original_date_str in p:
                     date_index = i
                     break
             
@@ -230,14 +250,145 @@ def parse_pasted_schedule(text):
 # --- VIEWS ---
 
 @login_required
+@login_required
+@login_required
 def dashboard_view(request):
-    if is_director(request.user):
-        return redirect('director_dashboard')
-    elif is_moderator(request.user):
-        return redirect('moderator_dashboard')
+    user = request.user
+    
+    # 1. Base QuerySet
+    if is_operator(user) and not (is_director(user) or is_moderator(user)):
+        loans = LoanAgreement.objects.filter(created_by=user, is_deleted=False)
     else:
-        # Operator
-        return redirect('process_audit')
+        loans = LoanAgreement.objects.filter(is_deleted=False)
+
+    # 2. Key Metrics (Info Boxes)
+    total_docs = loans.count()
+    raw_amount = loans.aggregate(Sum('kredit_miqdori'))['kredit_miqdori__sum'] or 0
+    total_amount = raw_amount / 1000  # Show in ming so'm
+    pending_count = loans.filter(status__in=['pending_moderator', 'pending_director']).count()
+    completed_count = loans.filter(status='completed').count()
+    rejected_count = loans.filter(status='rejected').count()
+
+    # 3. Charts Data
+
+    # A) Age Distribution (Qarz oluvchi yoshi)
+    # Calculate age in python for simplicity
+    today = date.today()
+    age_groups = {
+        '18-25': 0,
+        '26-35': 0,
+        '36-50': 0,
+        '50+': 0
+    }
+    
+    # Fetch dates only to minimize memory
+    birth_dates = loans.values_list('qarz_oluvchi_tugilgan_sana', flat=True)
+    
+    for bdate in birth_dates:
+        if bdate:
+            age = relativedelta(today, bdate).years
+            if 18 <= age <= 25:
+                age_groups['18-25'] += 1
+            elif 26 <= age <= 35:
+                age_groups['26-35'] += 1
+            elif 36 <= age <= 50:
+                age_groups['36-50'] += 1
+            elif age > 50:
+                age_groups['50+'] += 1
+
+    age_labels = list(age_groups.keys())
+    age_data = list(age_groups.values())
+
+    # B) Credit Duration (Kredit muddati)
+    duration_stats = loans.values('kredit_muddat_oy').annotate(count=Count('id')).order_by('kredit_muddat_oy')
+    duration_labels = []
+    duration_data = []
+    for entry in duration_stats:
+        if entry['kredit_muddat_oy']:
+            duration_labels.append(f"{entry['kredit_muddat_oy']} oy")
+            duration_data.append(entry['count'])
+
+    # C) Payment Schedule (Grafik usuli)
+    schedule_stats = loans.values('grafik').annotate(count=Count('id'))
+    schedule_labels = []
+    schedule_data = []
+    grafik_map = dict(LoanAgreement.GRAFIK_CHOICES)
+    for entry in schedule_stats:
+        schedule_labels.append(grafik_map.get(entry['grafik'], entry['grafik']))
+        schedule_data.append(entry['count'])
+
+    # D) Collateral Type (Garov turi)
+    collateral_stats = loans.values('garov_turi').annotate(count=Count('id'))
+    collateral_labels = []
+    collateral_data = []
+    garov_map = dict(LoanAgreement.GAROV_TURI_CHOICES)
+    for entry in collateral_stats:
+        collateral_labels.append(garov_map.get(entry['garov_turi'], entry['garov_turi']))
+        collateral_data.append(entry['count'])
+
+    # E) Credit Type (Kredit turi)
+    credit_type_stats = loans.values('kredit_turi').annotate(count=Count('id'))
+    credit_type_labels = []
+    credit_type_data = []
+    kredit_map = dict(LoanAgreement.KREDIT_TURI_CHOICES)
+    for entry in credit_type_stats:
+        credit_type_labels.append(kredit_map.get(entry['kredit_turi'], entry['kredit_turi']))
+        credit_type_data.append(entry['count'])
+
+    # F) Collateral Owner (Garov egasi)
+    owner_stats = loans.values('garov_egasi').annotate(count=Count('id'))
+    owner_labels = []
+    owner_data = []
+    owner_map = dict(LoanAgreement.GAROV_EGASI_CHOICES)
+    for entry in owner_stats:
+        owner_labels.append(owner_map.get(entry['garov_egasi'], entry['garov_egasi']))
+        owner_data.append(entry['count'])
+
+    # G) Branch Distribution (Filial)
+    branch_stats = loans.values('filial_nomi').annotate(count=Count('id'))
+    branch_labels = []
+    branch_data = []
+    # Filial choices is list of tuples, handle it
+    filial_map = dict(LoanAgreement.FILIAL_CHOICES)
+    for entry in branch_stats:
+        branch_labels.append(filial_map.get(entry['filial_nomi'], entry['filial_nomi']))
+        branch_data.append(entry['count'])
+
+    # 4. Recent Docs
+    recent_docs = loans.order_by('-created_at')[:5]
+
+    context = {
+        'total_docs': total_docs,
+        'total_amount': total_amount,
+        'pending_count': pending_count,
+        'completed_count': completed_count,
+        'rejected_count': rejected_count,
+        'recent_docs': recent_docs,
+        
+        # Charts Context
+        'age_labels': age_labels,
+        'age_data': age_data,
+        
+        'duration_labels': duration_labels,
+        'duration_data': duration_data,
+        
+        'schedule_labels': schedule_labels,
+        'schedule_data': schedule_data,
+        
+        'collateral_labels': collateral_labels,
+        'collateral_data': collateral_data,
+        
+        'credit_type_labels': credit_type_labels,
+        'credit_type_data': credit_type_data,
+        
+        'owner_labels': owner_labels,
+        'owner_data': owner_data,
+        
+        'branch_labels': branch_labels,
+        'branch_data': branch_data,
+    }
+
+    return render(request, 'document_processor/dashboard.html', context)
 
 @login_required
 def create_loan_application(request):
@@ -312,14 +463,14 @@ process_audit_file = create_loan_application
 @login_required
 @user_passes_test(is_moderator)
 def moderator_dashboard(request):
-    loans = LoanAgreement.objects.all().order_by('-created_at')
+    loans = LoanAgreement.objects.filter(is_deleted=False).order_by('-created_at')
     return render(request, 'document_processor/moderator_dashboard.html', {'loans': loans})
 
 @login_required
 @user_passes_test(is_director)
 def director_dashboard(request):
     # Direktorga tegishli barcha arizalar
-    loans = LoanAgreement.objects.all().order_by('-created_at')
+    loans = LoanAgreement.objects.filter(is_deleted=False).order_by('-created_at')
     return render(request, 'document_processor/director_dashboard.html', {'loans': loans})
 
 @login_required
@@ -346,7 +497,7 @@ def approve_application(request, loan_id):
         if action == 'reject':
             loan.status = 'rejected'
             loan.save()
-            return redirect('dashboard')
+            return redirect('director_dashboard')
 
         if is_moderator(user) and loan.status == 'pending_moderator':
             loan.status = 'pending_director'
@@ -370,6 +521,96 @@ def approve_application(request, loan_id):
             return redirect('director_dashboard')
             
     return redirect('dashboard')
+
+
+@login_required
+def delete_loan(request, loan_id):
+    """
+    Soft delete loan application.
+    """
+    loan = get_object_or_404(LoanAgreement, id=loan_id)
+    loan.is_deleted = True
+    loan.save()
+    return redirect('dashboard')
+
+@login_required
+def edit_loan(request, loan_id):
+    """
+    Edit loan application. 
+    Locked if status is 'completed'.
+    """
+    loan = get_object_or_404(LoanAgreement, id=loan_id)
+    
+    # Check if locked
+    if loan.status == 'completed':
+        # You might want to show a message or redirect
+        return redirect('view_application', loan_id=loan.id)
+
+    if request.method == 'POST':
+        form = UmumiyMalumotForm(request.POST)
+        if form.is_valid():
+            try:
+                from .utils import number_to_text_uz, cleaner
+                data = form.cleaned_data
+                
+                # Update fields manually or iterate
+                # Better approach: Iterate over form data and set attributes
+                 # --- FIX: Bo'sh stringlarni None ga o'zgartirish ---
+                integer_fields = [
+                    'qarz_oluvchi_daromad', 
+                    'qarz_oluvchi_xarajatlar', 
+                    'qarz_oluvchi_tahminiy_tolov',
+                    'qarz_oluvchi_jshshir',
+                    'kredit_miqdori',
+                    'avto_yil',
+                    'avto_bahosi',
+                    'mulk_bahosi',
+                    'tilla_bahosi',
+                    'sugurta_summasi'
+                ]
+                
+                for field, value in data.items():
+                    if field in integer_fields and value == '':
+                        setattr(loan, field, None)
+                    else:
+                        setattr(loan, field, value)
+
+                if not loan.kredit_miqdori_soz: # Or always update if changed? Let's check logic
+                    loan.kredit_miqdori_soz = number_to_text_uz(cleaner(loan.kredit_miqdori))
+                if not loan.foiz_stavkasi_soz:
+                    loan.foiz_stavkasi_soz = number_to_text_uz(cleaner(loan.foiz_stavkasi))
+                
+                 # Handle avto_bahosi_soz if present (now in model)
+                if loan.avto_bahosi and not loan.avto_bahosi_soz:
+                     loan.avto_bahosi_soz = number_to_text_uz(cleaner(loan.avto_bahosi))
+                
+                # If editing a rejected loan, maybe reset status to pending_moderator?
+                # Usually yes, so moderator can check again.
+                if loan.status == 'rejected':
+                    loan.status = 'pending_moderator'
+                    loan.moderator_approved_at = None
+                    loan.moderator_approved_by = None
+                    loan.director_approved_at = None
+                    loan.director_approved_by = None
+                
+                loan.save()
+                return redirect('dashboard')
+            except Exception as e:
+                print(f"Error editing loan: {e}")
+        else:
+             return render(request, 'document_processor/process_audit.html', {'form': form, 'edit_mode': True, 'loan': loan})
+
+    else:
+        # Pre-populate form
+        initial_data = {}
+        for field in LoanAgreement._meta.get_fields():
+            if field.concrete and not field.many_to_many and not field.one_to_many:
+                val = getattr(loan, field.name)
+                initial_data[field.name] = val
+        
+        form = UmumiyMalumotForm(initial=initial_data)
+
+    return render(request, 'document_processor/process_audit.html', {'form': form, 'edit_mode': True, 'loan': loan})
 
 
 def view_document_pdf(request, loan_id, doc_type):
@@ -638,14 +879,14 @@ def document_list_view(request):
     
     if is_director(user):
         # Direktor hamma narsani ko'ra oladi
-        loans = LoanAgreement.objects.all().order_by('-created_at')
+        loans = LoanAgreement.objects.filter(is_deleted=False).order_by('-created_at')
     elif is_moderator(user):
         # Moderator hamma narsani ko'ra oladi (yoki faqat pending_moderator dan keyingilarni)
         # Hozircha hamma narsani ko'rsatamiz
-        loans = LoanAgreement.objects.all().order_by('-created_at')
+        loans = LoanAgreement.objects.filter(is_deleted=False).order_by('-created_at')
     else:
         # Operator o'zi kiritgan arizalarni ko'radi
-        loans = LoanAgreement.objects.filter(created_by=user).order_by('-created_at')
+        loans = LoanAgreement.objects.filter(created_by=user, is_deleted=False).order_by('-created_at')
         
     return render(request, 'document_processor/document_list.html', {'documents': loans})
 
@@ -658,8 +899,8 @@ class DocumentListView(ListView):
     def get_queryset(self):
         user = self.request.user
         if is_director(user) or is_moderator(user):
-            return LoanAgreement.objects.all().order_by('-created_at')
-        return LoanAgreement.objects.filter(created_by=user).order_by('-created_at')
+            return LoanAgreement.objects.filter(is_deleted=False).order_by('-created_at')
+        return LoanAgreement.objects.filter(created_by=user, is_deleted=False).order_by('-created_at')
 
 
 class DocumentUploadView(CreateView):

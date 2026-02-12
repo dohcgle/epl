@@ -37,6 +37,7 @@
                             <th>Kredit Miqdori</th>
                             <th>Garov Turi</th>
                             <th>Operator</th>
+                            <th>Xolati</th>
                             <th>Sanasi</th>
                             <th>Amallar</th>
                         </tr>
@@ -46,6 +47,7 @@
                             <th><input type="text" placeholder="Summa bo'yicha"></th>
                             <th><input type="text" placeholder="Garov bo'yicha"></th>
                             <th><input type="text" placeholder="Operator bo'yicha"></th>
+                            <th><input type="text" placeholder="Status bo'yicha"></th>
                             <th><input type="text" placeholder="Sana bo'yicha"></th>
                             <th></th>
                         </tr>
@@ -66,11 +68,36 @@
                                 {% endif %}
                             </td>
                             <td>{{ loan.created_by.username }}</td>
+                            <td>
+                                {% if loan.status == 'completed' %}
+                                <span class="badge badge-success">Imzolangan</span>
+                                {% elif loan.status == 'rejected' %}
+                                <span class="badge badge-danger">Rad Etilgan</span>
+                                {% elif loan.status == 'pending_director' %}
+                                <span class="badge badge-primary">Direktor Tasdiqi Kutilmoqda</span>
+                                {% else %}
+                                <span class="badge badge-warning">Moderator Tasdiqi Kutilmoqda</span>
+                                {% endif %}
+                            </td>
                             <td>{{ loan.created_at|date:"d.m.Y H:i" }}</td>
                             <td>
-                                <a href="{% url 'view_application' loan.id %}" class="btn btn-primary btn-sm">
-                                    <i class="fas fa-eye"></i> Ko'rish
-                                </a>
+                                <div class="btn-group">
+                                    <a href="{% url 'view_application' loan.id %}" class="btn btn-sm btn-info"
+                                        title="Ko'rish">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    {% if loan.status != 'completed' %}
+                                    <a href="{% url 'edit_loan' loan.id %}" class="btn btn-sm btn-warning"
+                                        title="Tahrirlash">
+                                        <i class="fas fa-pen"></i>
+                                    </a>
+                                    {% endif %}
+                                    <a href="{% url 'delete_loan' loan.id %}" class="btn btn-sm btn-danger"
+                                        title="O'chirish"
+                                        onclick="return confirm('Haqiqatan ham o\'chirmoqchimisiz?');">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                </div>
                             </td>
                         </tr>
                         {% endfor %}
@@ -95,7 +122,7 @@
 <script>
     $(document).ready(function () {
         var table = $('#loanTable').DataTable({
-            "order": [[5, "desc"]],
+            "order": [[6, "desc"]],
             "language": {
                 "lengthMenu": "Har bir sahifada _MENU_ ta yozuv ko'rsatilsin",
                 "zeroRecords": "Ma'lumot topilmadi",

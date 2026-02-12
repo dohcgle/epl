@@ -1,4 +1,6 @@
 {% extends 'base_adminlte.html' %}
+{% load humanize %}
+{% load auth_extras %}
 
 {% block page_title %}Boshqaruv Paneli{% endblock %}
 
@@ -9,7 +11,7 @@
         <div class="small-box bg-info">
             <div class="inner">
                 <h3>{{ total_docs }}</h3>
-                <p>Jami Hujjatlar</p>
+                <p>Jami Arizalar</p>
             </div>
             <div class="icon">
                 <i class="fas fa-file-invoice"></i>
@@ -37,7 +39,7 @@
         <div class="small-box bg-success">
             <div class="inner">
                 <h3>{{ completed_count }}</h3>
-                <p>Muvaffaqiyatli</p>
+                <p>Muvaffaqiyatli (Tasdiqlangan)</p>
             </div>
             <div class="icon">
                 <i class="fas fa-check-circle"></i>
@@ -46,29 +48,116 @@
                     class="fas fa-arrow-circle-right"></i></a>
         </div>
     </div>
-    <!-- Rad etildi -->
+    <!-- Jami Summa -->
     <div class="col-lg-3 col-6">
         <div class="small-box bg-danger">
             <div class="inner">
-                <h3>{{ rejected_count }}</h3>
-                <p>Rad Etilgan</p>
+                <h3>{{ total_amount|intcomma }} <sup style="font-size: 20px">ming so'm</sup></h3>
+                <p>Jami Kredit Summasi</p>
             </div>
             <div class="icon">
-                <i class="fas fa-ban"></i>
+                <i class="fas fa-chart-line"></i>
             </div>
-            <a href="{% url 'document_list' %}" class="small-box-footer">Sababini ko'rish <i
-                    class="fas fa-arrow-circle-right"></i></a>
+            <a href="#" class="small-box-footer">Batafsil <i class="fas fa-arrow-circle-right"></i></a>
         </div>
     </div>
 </div>
 
-<!-- Main row -->
+<!-- Charts Row 1: Age & Duration -->
+<div class="row">
+    <div class="col-md-6">
+        <div class="card card-primary">
+            <div class="card-header">
+                <h3 class="card-title">Qarz Oluvchi Yoshi (Ulush)</h3>
+            </div>
+            <div class="card-body">
+                <canvas id="ageChart"
+                    style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card card-info">
+            <div class="card-header">
+                <h3 class="card-title">Kredit Muddati (Oy)</h3>
+            </div>
+            <div class="card-body">
+                <canvas id="durationChart"
+                    style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Charts Row 2: Distributions -->
+<div class="row">
+    <div class="col-md-4">
+        <div class="card card-danger">
+            <div class="card-header">
+                <h3 class="card-title">To'lov Grafigi</h3>
+            </div>
+            <div class="card-body">
+                <canvas id="scheduleChart"
+                    style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card card-success">
+            <div class="card-header">
+                <h3 class="card-title">Kredit Turi</h3>
+            </div>
+            <div class="card-body">
+                <canvas id="creditTypeChart"
+                    style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card card-warning">
+            <div class="card-header">
+                <h3 class="card-title">Garov Egasi</h3>
+            </div>
+            <div class="card-body">
+                <canvas id="ownerChart"
+                    style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Charts Row 3: Collateral & Branch -->
+<div class="row">
+    <div class="col-md-4">
+        <div class="card card-secondary">
+            <div class="card-header">
+                <h3 class="card-title">Garov Turi</h3>
+            </div>
+            <div class="card-body">
+                <canvas id="collateralChart"
+                    style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <div class="card card-dark">
+            <div class="card-header">
+                <h3 class="card-title">Filiallar Kesimida</h3>
+            </div>
+            <div class="card-body">
+                <canvas id="branchChart"
+                    style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Loans Table -->
 <div class="row">
     <div class="col-md-12">
         <div class="card">
             <div class="card-header border-transparent">
                 <h3 class="card-title">So'nggi Hujjatlar</h3>
-
                 <div class="card-tools">
                     <button type="button" class="btn btn-tool" data-card-widget="collapse">
                         <i class="fas fa-minus"></i>
@@ -78,60 +167,175 @@
                     </button>
                 </div>
             </div>
-            <!-- /.card-header -->
-            {% load humanize %}
-            <div class="table-responsive">
-                <table class="table m-0">
-                    <thead>
-                        <tr>
-                            <th>Sana</th>
-                            <th>Qarz Oluvchi</th>
-                            <th>Garov Turi</th>
-                            <th>Kredit Summasi</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for doc in recent_docs %}
-                        <tr>
-                            <td>{{ doc.created_at|date:"d.m.Y H:i" }}</td>
-                            <td>{{ doc.borrower_name|default:"-" }}</td>
-                            <td>
-                                {% if doc.collateral_name %}
-                                <span class="badge badge-info">{{ doc.collateral_name }}</span>
-                                {% else %}
-                                -
-                                {% endif %}
-                            </td>
-                            <td>{{ doc.credit_amount|intcomma|default:"-" }} so'm</td>
-                            <td>
-                                {% if doc.status == 'completed' %}
-                                <span class="badge badge-success">Yakunlandi</span>
-                                {% elif doc.status == 'rejected' %}
-                                <span class="badge badge-danger">Rad etildi</span>
-                                {% else %}
-                                <span class="badge badge-warning">Jarayonda</span>
-                                {% endif %}
-                            </td>
-                        </tr>
-                        {% empty %}
-                        <tr>
-                            <td colspan="5" class="text-center">Hujjatlar mavjud emas</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table m-0">
+                        <thead>
+                            <tr>
+                                <th>Sana</th>
+                                <th>Qarz Oluvchi</th>
+                                <th>Garov Turi</th>
+                                <th>Kredit Summasi</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for doc in recent_docs %}
+                            <tr>
+                                <td>{{ doc.created_at|date:"d.m.Y H:i" }}</td>
+                                <td>{{ doc.qarz_oluvchi_fish }}</td>
+                                <td>
+                                    <span class="badge badge-info">{{ doc.get_garov_turi_display }}</span>
+                                </td>
+                                <td>{{ doc.kredit_miqdori|intcomma }} so'm</td>
+                                <td>
+                                    {% if doc.status == 'completed' %}
+                                    <span class="badge badge-success">Yakunlandi</span>
+                                    {% elif doc.status == 'rejected' %}
+                                    <span class="badge badge-danger">Rad etildi</span>
+                                    {% else %}
+                                    <span class="badge badge-warning">Kutilmoqda</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="5" class="text-center">Hujjatlar mavjud emas</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
             </div>
-            <!-- /.table-responsive -->
+            <div class="card-footer clearfix">
+                {% if request.user|has_group:"Operator" %}
+                <a href="{% url 'create_loan' %}" class="btn btn-sm btn-info float-left">Yangi Hujjat Yaratish</a>
+                {% endif %}
+                <a href="{% url 'document_list' %}" class="btn btn-sm btn-secondary float-right">Barcha Hujjatlarni
+                    Ko'rish</a>
+            </div>
         </div>
-        <!-- /.card-body -->
-        <div class="card-footer clearfix">
-            <a href="{% url 'process_audit' %}" class="btn btn-sm btn-info float-left">Yangi Hujjat Yaratish</a>
-            <a href="{% url 'document_list' %}" class="btn btn-sm btn-secondary float-right">Barcha Hujjatlarni
-                Ko'rish</a>
-        </div>
-        <!-- /.card-footer -->
     </div>
 </div>
-</div>
+{% endblock %}
+
+{% block extra_js %}
+<!-- ChartJS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
+
+<script>
+    $(function () {
+        // Shared Options
+        var pieOptions = {
+            maintainAspectRatio: false,
+            responsive: true,
+        }
+        var barOptions = {
+            maintainAspectRatio: false,
+            responsive: true,
+            scales: {
+                yAxes: [{
+                    ticks: { beginAtZero: true, stepSize: 1 }
+                }]
+            },
+            legend: { display: false }
+        }
+
+        // 1. Age Chart (Bar)
+        new Chart($('#ageChart').get(0).getContext('2d'), {
+            type: 'bar',
+            data: {
+                labels: {{ age_labels| safe }},
+        datasets: [{
+            label: 'Soni',
+            backgroundColor: '#007bff',
+            borderColor: '#007bff',
+            data: {{ age_data| safe }}
+                }]
+            },
+        options: barOptions
+        })
+
+    // 2. Duration Chart (Bar)
+    new Chart($('#durationChart').get(0).getContext('2d'), {
+        type: 'bar',
+        data: {
+            labels: {{ duration_labels| safe }},
+        datasets: [{
+            label: 'Soni',
+            backgroundColor: '#17a2b8',
+            borderColor: '#17a2b8',
+            data: {{ duration_data| safe }}
+                }]
+            },
+        options: barOptions
+        })
+
+    // 3. Schedule Chart (Donut)
+    new Chart($('#scheduleChart').get(0).getContext('2d'), {
+        type: 'doughnut',
+        data: {
+            labels: {{ schedule_labels| safe }},
+        datasets: [{
+            data: {{ schedule_data| safe }},
+        backgroundColor: ['#f56954', '#00a65a'],
+                }]
+            },
+        options: pieOptions
+        })
+
+    // 4. Credit Type Chart (Pie)
+    new Chart($('#creditTypeChart').get(0).getContext('2d'), {
+        type: 'pie',
+        data: {
+            labels: {{ credit_type_labels| safe }},
+        datasets: [{
+            data: {{ credit_type_data| safe }},
+        backgroundColor: ['#f39c12', '#00c0ef'],
+                }]
+            },
+        options: pieOptions
+        })
+
+    // 5. Owner Chart (Pie)
+    new Chart($('#ownerChart').get(0).getContext('2d'), {
+        type: 'pie',
+        data: {
+            labels: {{ owner_labels| safe }},
+        datasets: [{
+            data: {{ owner_data| safe }},
+        backgroundColor: ['#3c8dbc', '#d2d6de'],
+                }]
+            },
+        options: pieOptions
+        })
+
+    // 6. Collateral Chart (Pie) -> Existing one
+    new Chart($('#collateralChart').get(0).getContext('2d'), {
+        type: 'pie',
+        data: {
+            labels: {{ collateral_labels| safe }},
+        datasets: [{
+            data: {{ collateral_data| safe }},
+        backgroundColor: ['#605ca8', '#ff851b', '#D81B60'],
+                }]
+            },
+        options: pieOptions
+        })
+
+    // 7. Branch Chart (Bar - Horizontal sometimes better but Bar is fine)
+    new Chart($('#branchChart').get(0).getContext('2d'), {
+        type: 'bar',
+        data: {
+            labels: {{ branch_labels| safe }},
+        datasets: [{
+            label: 'Arizalar Soni',
+            backgroundColor: '#343a40',
+            data: {{ branch_data| safe }}
+                }]
+            },
+        options: barOptions
+        })
+    })
+</script>
 {% endblock %}

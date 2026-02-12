@@ -3,8 +3,9 @@ from django.contrib.auth import views as auth_views
 from .views import (
     dashboard_view, DocumentListView, DocumentUploadView, ApproveDocumentView, 
     process_audit_file, generate_documents,
+    process_audit_file, generate_documents,
     create_loan_application, moderator_dashboard, director_dashboard, view_application, approve_application,
-    profile_view, view_document_pdf
+    profile_view, view_document_pdf, delete_loan, edit_loan
 )
 
 urlpatterns = [
@@ -22,6 +23,8 @@ urlpatterns = [
     path('loans/view/<int:loan_id>/', view_application, name='view_application'),
     path('loans/view/<int:loan_id>/doc/<str:doc_type>/', view_document_pdf, name='view_document_pdf'),
     path('loans/approve/<int:loan_id>/', approve_application, name='approve_application'),
+    path('loans/delete/<int:loan_id>/', delete_loan, name='delete_loan'),
+    path('loans/edit/<int:loan_id>/', edit_loan, name='edit_loan'),
     
     # User Profile & Auth
     path('profile/', profile_view, name='profile'),

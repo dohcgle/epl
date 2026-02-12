@@ -61,18 +61,28 @@ class LoanAgreement(models.Model):
     qarz_oluvchi_jshshir = models.BigIntegerField("JSHSHIR", blank=True, null=True)
     qarz_oluvchi_telefon = models.CharField("Telefon raqami", max_length=20, blank=True)
     
+    QARINDOSHLIK_CHOICES = [
+        ('turmush_ortogi', "Turmush o'rtog'i"),
+        ('ota', 'Ota'),
+        ('ona', 'Ona'),
+        ('aka', 'Aka'),
+        ('uka', 'Uka'),
+        ('opa', 'Opa'),
+        ('singil', 'Singil')        
+    ]
+
     # --- BOG'LANISH UCHUN SHAXSLAR ---
     kontakt_1_fish = models.CharField("1-kontakt F.I.Sh", max_length=255, blank=True)
     kontakt_1_telefon = models.CharField("1-kontakt Telefoni", max_length=20, blank=True)
-    kontakt_1_qarindoshlik = models.CharField("1-kontakt Qarindoshligi", max_length=50, blank=True)
+    kontakt_1_qarindoshlik = models.CharField("1-kontakt Qarindoshligi", max_length=50, choices=QARINDOSHLIK_CHOICES, blank=True)
     
     kontakt_2_fish = models.CharField("2-kontakt F.I.Sh", max_length=255, blank=True)
     kontakt_2_telefon = models.CharField("2-kontakt Telefoni", max_length=20, blank=True)
-    kontakt_2_qarindoshlik = models.CharField("2-kontakt Qarindoshligi", max_length=50, blank=True)
+    kontakt_2_qarindoshlik = models.CharField("2-kontakt Qarindoshligi", max_length=50, choices=QARINDOSHLIK_CHOICES, blank=True)
     
     kontakt_3_fish = models.CharField("3-kontakt F.I.Sh", max_length=255, blank=True)
     kontakt_3_telefon = models.CharField("3-kontakt Telefoni", max_length=20, blank=True)
-    kontakt_3_qarindoshlik = models.CharField("3-kontakt Qarindoshligi", max_length=50, blank=True)
+    kontakt_3_qarindoshlik = models.CharField("3-kontakt Qarindoshligi", max_length=50, choices=QARINDOSHLIK_CHOICES, blank=True)
 
     # --- KREDIT MA'LUMOTLARI ---
     shartnoma_raqami = models.CharField("Kredit shartnomasi raqami", max_length=50, blank=True)
@@ -200,6 +210,7 @@ class LoanAgreement(models.Model):
         ('rejected', 'Rad Etildi'),
     ]
     
+    is_deleted = models.BooleanField("O'chirilgan", default=False)
     status = models.CharField("Holati", max_length=20, choices=STATUS_CHOICES, default='pending_moderator')
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='created_loans', verbose_name="Kiritdi (Operator)")
     

@@ -137,8 +137,8 @@
     <p>2.3. Mikroqarz Qarz oluvchi tomonidan ushbu Shartnomaning ajralmas qismi hisoblanadigan 1-ilovasida ko‘rsatilgan
         to‘lov jadvalida (bundan keyin - To‘lov jadvali) belgilangan miqdor, tartib va muddatlarda qaytariladi.</p>
     <p>2.4. Mikromoliya tashkiloti, mikroqarz berilgan vaqtdan boshlab, mikroqarz miqdorining qoldiq summasiga
-        <span class="bold"><span class="var">{{ loan.foiz_stavkasi }}</span>%</span> (<span class="var">{{
-            loan.foiz_stavkasi_soz }}</span>) foiz yillik va yiliga 365/366
+        <span class="bold"><span class="var">{{ loan.foiz_stavkasi }}</span>%</span>
+        (<span class="var">{{ loan.foiz_stavkasi_soz }}</span>) foiz yillik va yiliga 365/366
         kunlik hisobidan foizlar hisoblaydi. To‘lov jadvaliga muvofiq asosiy qarz bo‘yicha navbatdagi to‘lov buzilgan
         hollarda, foiz stavkasi oshiriladi va Mikromoliya tashkiloti mikroqarzning muddati o‘tgan asosiy qarz summasiga
         yillik 105 (bir yuz besh) foiz miqdorida foizlar hisoblaydi.
@@ -464,8 +464,23 @@
                     <strong><span class="var">{{ loan.qarz_oluvchi_fish }}</span></strong><br>
                     Manzil: <span class="var">{{ loan.qarz_oluvchi_manzil }}</span><br>
                     Pasport: <span class="var">{{ loan.qarz_oluvchi_pasport_seriya }}</span>,
+
                     <span class="var">{{ loan.qarz_oluvchi_pasport_berilgan }}</span><br>
                     Tel: <span class="var">{{ loan.qarz_oluvchi_telefon }}</span><br>
+
+                    {% if loan.kontakt_1_fish %}
+                    <span class="var">{{ loan.get_kontakt_1_qarindoshlik_display }}</span>:
+                    <span class="var">{{ loan.kontakt_1_telefon }}</span><br>
+                    {% endif %}
+                    {% if loan.kontakt_2_fish %}
+                    <span class="var">{{ loan.get_kontakt_2_qarindoshlik_display }}</span>:
+                    <span class="var">{{ loan.kontakt_2_telefon }}</span><br>
+                    {% endif %}
+                    {% if loan.kontakt_3_fish %}
+                    <span class="var">{{ loan.get_kontakt_3_qarindoshlik_display }}</span>:
+                    <span class="var">{{ loan.kontakt_3_telefon }}</span><br>
+                    {% endif %}
+
 
                     <div style="height: 30px; border-bottom: 1px solid black; margin-top: 10px;"></div>
                     <div style="text-align: center; font-size: 8pt;">(Imzo)</div>
@@ -483,4 +498,4 @@
 
 </body>
 
-</html>                                                                                                                                                                             
+</html>
