@@ -127,16 +127,17 @@ class UmumiyMalumotForm(forms.Form):
     # --- TASHKILOT (MCHJ) MA'LUMOTLARI ---
     FILIAL_CHOICES = [
         ('Buxoro filiali', 'Buxoro filiali'),
-        ('Samarqand filiali', 'Samarqand filiali'),
-        ('Toshkent filiali', 'Toshkent filiali'),
-        ('Andijon filiali', 'Andijon filiali'),
-        ('Farg\'ona filiali', 'Farg\'ona filiali'),
-        ('Namangan filiali', 'Namangan filiali'),
-        ('Qashqadaryo filiali', 'Qashqadaryo filiali'),
-        ('Surxondaryo filiali', 'Surxondaryo filiali'),
-        ('Jizzax filiali', 'Jizzax filiali'),
+        #('Samarqand filiali', 'Samarqand filiali'),
+        ('Toshkent shahar filiali', 'Toshkent shahar filiali'),
+        #('Andijon filiali', 'Andijon filiali'),
+        #('Farg\'ona filiali', 'Farg\'ona filiali'),
+        #('Namangan filiali', 'Namangan filiali'),
+        #('Qashqadaryo filiali', 'Qashqadaryo filiali'),
+        #('Surxondaryo filiali', 'Surxondaryo filiali'),
+        #('Jizzax filiali', 'Jizzax filiali'),
         ('Navoiy filiali', 'Navoiy filiali'),
         ('Xorazm filiali', 'Xorazm filiali'),
+        ("Tortko'l filiali", "Tortko'l filiali"),
     ]
     
     filial_nomi = forms.ChoiceField(label="Filial nomi", choices=FILIAL_CHOICES, initial='Buxoro filiali')

@@ -161,15 +161,15 @@ class LoanAgreement(models.Model):
     # --- TASHKILOT (MCHJ) MA'LUMOTLARI ---
     FILIAL_CHOICES = [
         ('Buxoro filiali', 'Buxoro filiali'),
-        # ('Samarqand filiali', 'Samarqand filiali'),
+        ('Samarqand filiali', 'Samarqand filiali'),
         ('Toshkent shahar filiali', 'Toshkent shahar filiali'),
-        # ('Andijon filiali', 'Andijon filiali'),
-        # ('Farg\'ona filiali', 'Farg\'ona filiali'),
-        # ('Namangan filiali', 'Namangan filiali'),
-        # ('Qashqadaryo filiali', 'Qashqadaryo filiali'),
-        # ('Surxondaryo filiali', 'Surxondaryo filiali'),
-        # ('Jizzax filiali', 'Jizzax filiali'),
-        # ('Navoiy filiali', 'Navoiy filiali'),
+        ('Andijon filiali', 'Andijon filiali'),
+        ('Farg\'ona filiali', 'Farg\'ona filiali'),
+        ('Namangan filiali', 'Namangan filiali'),
+        ('Qashqadaryo filiali', 'Qashqadaryo filiali'),
+        ('Surxondaryo filiali', 'Surxondaryo filiali'),
+        ('Jizzax filiali', 'Jizzax filiali'),
+        ('Navoiy filiali', 'Navoiy filiali'),
         ('Xorazm filiali', 'Xorazm filiali'),
         ("To'rtko'l filiali", "To'rtko'l filiali"),
     ]
