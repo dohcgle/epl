@@ -562,7 +562,7 @@
                         </div>
 
                         <!-- MONITORING -->
-                        <div class="form-section">
+                        <div class="form-section d-none">
                             <h4>7. Monitoring Sanalari</h4>
                             <div class="row">
                                 <div class="col-md-3 form-group">
@@ -701,7 +701,9 @@
                     mask: "99.99.9999",
                     placeholder: "dd.mm.yyyy",
                     alias: "datetime",
-                    inputFormat: "dd.mm.yyyy"
+                    inputFormat: "dd.mm.yyyy",
+                    clearIncomplete: true,
+                    removeMaskOnSubmit: true
                 });
             }
         }
@@ -711,7 +713,9 @@
             mask: "99.99.9999",
             placeholder: "dd.mm.yyyy",
             alias: "datetime",
-            inputFormat: "dd.mm.yyyy"
+            inputFormat: "dd.mm.yyyy",
+            clearIncomplete: true,
+            removeMaskOnSubmit: true
         });
 
         // ==========================================
@@ -726,7 +730,9 @@
                 mask: "+\\9\\98 99 999-99-99",
                 placeholder: "_",
                 showMaskOnHover: false,
-                showMaskOnFocus: true
+                showMaskOnFocus: true,
+                clearIncomplete: true,
+                removeMaskOnSubmit: true
             });
         }
 
@@ -744,7 +750,9 @@
                     mask: "+\\9\\98 99 999-99-99",
                     placeholder: "_",
                     showMaskOnHover: false,
-                    showMaskOnFocus: true
+                    showMaskOnFocus: true,
+                    clearIncomplete: true,
+                    removeMaskOnSubmit: true
                 });
             }
         });
@@ -944,21 +952,27 @@
                 else if (type === 'tilla') $('#tab-tilla').addClass('active');
             }
 
-            // 2. Maydonlarni ko'rsatish/yashirish
-            $avtoFields.hide();
-            $kochmasFields.hide();
-            $tillaFields.hide();
-            // Sug'urta va Owner tablari alohida, ular garov turini o'zgartirmaydi, shunchaki o'zini ko'rsatadi
-            // Lekin UI da joylashuv qanday? process_audit.html da hammasi bitta konteynerda (col-md-9 ichida).
-            // Shuning uchun hammasini yashirib, keragini ochamiz.
-            $sugurtaFields.hide();
-            $('#owner-fields').hide();
+            // 2. Maydonlarni ko'rsatish/yashirish va Disabled qilish
+            // Avval hammasini yashiramiz va disabled qilamiz
+            $avtoFields.hide().find(':input').prop('disabled', true);
+            $kochmasFields.hide().find(':input').prop('disabled', true);
+            $tillaFields.hide().find(':input').prop('disabled', true);
 
-            if (type === 'avto') $avtoFields.show();
-            else if (type === 'kochmas_mulk') $kochmasFields.show();
-            else if (type === 'tilla') $tillaFields.show();
-            else if (type === 'sugurta') $sugurtaFields.show();
-            else if (type === 'owner') $('#owner-fields').show();
+            // Sug'urta va Owner tablari alohida, ular garov turini o'zgartirmaydi
+            $sugurtaFields.hide(); // Bularni disabled qilish toggleSugurtaInputs da bajariladi
+            $('#owner-fields').hide(); // Bularni disabled qilish toggleOwnerInputs da bajariladi
+
+            if (type === 'avto') {
+                $avtoFields.show().find(':input').prop('disabled', false);
+            } else if (type === 'kochmas_mulk') {
+                $kochmasFields.show().find(':input').prop('disabled', false);
+            } else if (type === 'tilla') {
+                $tillaFields.show().find(':input').prop('disabled', false);
+            } else if (type === 'sugurta') {
+                $sugurtaFields.show();
+            } else if (type === 'owner') {
+                $('#owner-fields').show();
+            }
         };
 
         // Init based on current select value
@@ -1179,6 +1193,90 @@
                 $('#id_monitoring_sana_4').val("01.02.2027").trigger('input');
             }
         });
+    });
+
+    // ==========================================
+    // FRONTEND VALIDATION & ENTER KEY FIX
+    // ==========================================
+
+    // 1. Prevent Form Submission on Enter Key
+    $(document).on('keydown', ':input:not(textarea):not(:submit)', function (event) {
+        if (event.key === 'Enter' || event.keyCode === 13) {
+            event.preventDefault();
+            return false;
+        }
+    });
+
+    // 2. Validate Required Fields on Submit
+    $('form').on('submit', function (e) {
+        let isValid = true;
+        let firstErrorField = null;
+
+        // Helper function to check and show error
+        function checkField(selector, message) {
+            const $field = $(selector);
+            // Check if field exists and is visible (not hidden by logic)
+            if ($field.length > 0 && $field.is(':visible')) {
+                const val = $field.val();
+                if (!val || val.trim() === '') {
+                    $field.addClass('is-invalid'); // AdminLTE/Bootstrap error class
+                    if (!firstErrorField) firstErrorField = $field;
+                    isValid = false;
+                } else {
+                    $field.removeClass('is-invalid');
+                }
+            }
+        }
+
+        // --- 1. QARZ OLUVCHI MA'LUMOTLARI ---
+        checkField('#id_qarz_oluvchi_fish', "Qarz oluvchi F.I.Sh kiritilmagan!");
+        checkField('#id_qarz_oluvchi_pasport_seriya', "Pasport seriyasi kiritilmagan!");
+        checkField('#id_qarz_oluvchi_jshshir', "JSHSHIR kiritilmagan!");
+        checkField('#id_qarz_oluvchi_tugilgan_sana', "Tug'ilgan sana kiritilmagan!");
+        checkField('#id_qarz_oluvchi_pasport_berilgan', "Pasport berilgan joy kiritilmagan!");
+        checkField('#id_qarz_oluvchi_manzil', "Doimiy yashash manzili kiritilmagan!");
+
+        // Phone validation (custom check)
+        const $phone = $('#id_qarz_oluvchi_telefon');
+        if ($phone.is(':visible')) {
+            const phoneVal = $phone.val().replace(/[^0-9]/g, ''); // Remove all non-digits
+            // +998 90 123-45-67 -> 998901234567 (12 digits)
+            if (phoneVal.length < 12) {
+                $phone.addClass('is-invalid');
+                if (!firstErrorField) firstErrorField = $phone;
+                isValid = false;
+                // Custom message if checkField wasn't used, but we want to be consistent:
+                // We can't use checkField easily here because value is "filled" but invalid.
+            } else {
+                $phone.removeClass('is-invalid');
+            }
+        }
+
+        // --- COLLATERAL SPECIFIC FIELDS ---
+        const garovTuri = $('#id_garov_turi').val();
+
+        if (garovTuri === 'avto') {
+            checkField('#id_avto_nomi', "Avtomobil nomi kiritilmagan!");
+            checkField('#id_avto_raqam', "Avtomobil davlat raqami kiritilmagan!");
+            checkField('#id_avto_bahosi', "Avtomobil bahosi kiritilmagan!");
+        } else if (garovTuri === 'kochmas_mulk') {
+            checkField('#id_mulk_manzili', "Ko'chmas mulk manzili kiritilmagan!");
+            checkField('#id_mulk_bahosi', "Ko'chmas mulk bahosi kiritilmagan!");
+        } else if (garovTuri === 'tilla') {
+            checkField('#id_tilla_nomi', "Tilla buyumlar nomi kiritilmagan!");
+            checkField('#id_tilla_bahosi', "Tilla buyumlar bahosi kiritilmagan!");
+        }
+
+        if (!isValid) {
+            e.preventDefault();
+            alert("Iltimos, barcha majburiy maydonlarni to'ldiring!");
+            if (firstErrorField) {
+                $('html, body').animate({
+                    scrollTop: firstErrorField.offset().top - 100
+                }, 500);
+                firstErrorField.focus();
+            }
+        }
     });
 </script>
 {% endblock %}

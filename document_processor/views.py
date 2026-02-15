@@ -527,7 +527,11 @@ def approve_application(request, loan_id):
 def delete_loan(request, loan_id):
     """
     Soft delete loan application.
+    Only Directors or Superusers can delete.
     """
+    if not (is_director(request.user) or request.user.is_superuser):
+        return redirect('dashboard')
+
     loan = get_object_or_404(LoanAgreement, id=loan_id)
     loan.is_deleted = True
     loan.save()
