@@ -119,6 +119,8 @@ TIME_ZONE = 'Asia/Tashkent'
 
 USE_I18N = True
 
+USE_L10N = False
+
 USE_TZ = True
 
 
@@ -138,3 +140,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/accounts/login/?next=/'
+
+DATE_INPUT_FORMATS = [
+    '%d.%m.%Y',  # '25.10.2006'
+    '%Y-%m-%d',  # '2006-10-25'
+    '%d/%m/%Y',  # '25/10/2006'
+    '%d/%m/%y',  # '25/10/06'
+]

@@ -27,9 +27,10 @@ class LoanAgreementAdmin(admin.ModelAdmin):
         ("Garov Asosiy", {
             'fields': ('garov_turi', 'sugurta_mavjud', 'uchinchi_shaxs_mavjud', 'garov_egasi')
         }),
-        ("Garov Egasi (Agar uchinchi shaxs bo'lsa)", {
+        ("Garov Egasi va Ishonchnoma", {
             'classes': ('collapse',),
-            'fields': ('garov_egasi_fish', 'garov_egasi_pasport', 'garov_egasi_manzil')
+            'fields': ('garov_egasi_fish', 'garov_egasi_inisiali', 'garov_egasi_pasport', 'garov_egasi_manzil', 
+                       'ishonchnoma_notarius_fish', 'ishonchnoma_notarius_manzil', 'ishonchnoma_reestr_raqami', 'ishonchnoma_reestr_sanasi')
         }),
         ("Avtomobil Ma'lumotlari", {
             'classes': ('collapse',),
@@ -48,7 +49,7 @@ class LoanAgreementAdmin(admin.ModelAdmin):
             'fields': ('sugurta_kompaniyasi', 'sugurta_polisi', 'sugurta_sanasi', 'sugurta_summasi', 'sugurta_summasi_soz')
         }),
         ("Qo'shimcha", {
-            'fields': ('filial_boshligi', 'ishonchnoma_sanasi', 'grafik_matni')
+            'fields': ('filial_boshligi', 'grafik_matni')
         }),
         ("Monitoring", {
             'fields': ('monitoring_sana_1', 'monitoring_sana_2', 'monitoring_sana_3', 'monitoring_sana_4')

@@ -6,14 +6,20 @@
 {% block extra_css %}
 <style>
     .form-section {
-        border-bottom: 2px solid #eee;
+        background: #fff;
+        border: 1px solid rgba(0, 0, 0, .125);
+        border-radius: 0.25rem;
+        box-shadow: 0 0 1px rgba(0, 0, 0, .125), 0 1px 3px rgba(0, 0, 0, .2);
         margin-bottom: 20px;
-        padding-bottom: 10px;
+        padding: 20px;
     }
 
     .form-section h4 {
         color: #0d6efd;
-        margin-bottom: 15px;
+        border-bottom: 2px solid #0d6efd;
+        padding-bottom: 10px;
+        margin-bottom: 20px;
+        font-weight: 600;
     }
 
     .hidden-field {
@@ -48,7 +54,7 @@
                     <div class="form-section">
                         <h4>1. Qarz Oluvchi Ma'lumotlari</h4>
                         <div class="row">
-                            <div class="col-md-5 form-group">
+                            <div class="col-md-4 form-group">
                                 {{ form.qarz_oluvchi_fish.label_tag }}
                                 {{ form.qarz_oluvchi_fish }}
                                 <small class="form-text text-muted">Masalan: HAMROYEV BOBUR RAVSHANOVICH</small>
@@ -56,12 +62,17 @@
                                 <div class="text-danger">{{ form.qarz_oluvchi_fish.errors }}</div>
                                 {% endif %}
                             </div>
+                            <div class="col-md-2 form-group">
+                                {{ form.qarz_oluvchi_fish_inisiali.label_tag }}
+                                {{ form.qarz_oluvchi_fish_inisiali }}
+                                <small class="form-text text-muted">B.R.HAMROYEV</small>
+                            </div>
                             <div class="col-md-3 form-group">
                                 {{ form.qarz_oluvchi_pasport_seriya.label_tag }}
                                 {{ form.qarz_oluvchi_pasport_seriya }}
                                 <small class="form-text text-muted">Masalan: AD3074652</small>
                             </div>
-                            <div class="col-md-4 form-group">
+                            <div class="col-md-3 form-group">
                                 {{ form.qarz_oluvchi_jshshir.label_tag }}
                                 {{ form.qarz_oluvchi_jshshir }}
                                 <small class="form-text text-muted">14 xonali raqam</small>
@@ -197,94 +208,103 @@
                             </div>
                         </div>
 
-                        <!-- GAROV MA'LUMOTLARI -->
+                        <!-- GRAFIK (Moved from bottom) -->
                         <div class="form-section">
-                            <h4>3. Garov Ma'lumotlari</h4>
+                            <h4>3. Grafik (Exceldan nusxa)</h4>
+                            <div class="form-group">
+                                <label for="id_grafik_matni">{{ form.grafik_matni.label }}:</label>
+                                {{ form.grafik_matni }}
+                                <small class="form-text text-muted">{{ form.grafik_matni.help_text }}</small>
+                            </div>
+                        </div>
+
+                        <!-- GAROV MA'LUMOTLARI -->
+                        <!-- Eski Garov Ma'lumotlari bo'limi o'chirildi -->
+
+                        <!-- YANGI GAROV MA'LUMOTLARI (V4) -->
+                        <div class="form-section">
+                            <h4>4. Garov Ta'minoti</h4>
+
+                            <!-- Hidden Inputs for Backend Compatibility -->
+                            <div class="d-none">
+                                {{ form.garov_turi }}
+                                {{ form.garov_egasi }}
+                                {{ form.uchinchi_shaxs_mavjud }}
+                            </div>
+
+                            <!-- Mode Toggle Buttons -->
+                            <div class="row mb-4">
+                                <div class="col-md-6">
+                                    <button type="button" class="btn btn-lg btn-block" id="btn-self"
+                                        onclick="setNewOwnerType('self')">
+                                        <i class="fas fa-user mr-2"></i> O'zi (Yashil)
+                                    </button>
+                                </div>
+                                <div class="col-md-6">
+                                    <button type="button" class="btn btn-lg btn-block" id="btn-other"
+                                        onclick="setNewOwnerType('other')">
+                                        <i class="fas fa-users mr-2"></i> Boshqa shaxs (Sariq)
+                                    </button>
+                                </div>
+                            </div>
 
                             <div class="row">
-                                <!-- Chap ustun: Garov Turlari (Icons) -->
+                                <!-- Left Column: Collateral Types (Icons) -->
                                 <div class="col-md-3">
-                                    <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist"
+                                    <div class="nav flex-column nav-pills" id="v-pills-tab-new" role="tablist"
                                         aria-orientation="vertical">
-                                        <a class="nav-link active text-center py-3 mb-2 border" id="tab-avto"
-                                            data-toggle="pill" href="#content-avto" role="tab"
-                                            onclick="selectTab('avto')">
+                                        <a class="nav-link text-center py-3 mb-2 border" id="new-tab-garov_egasi"
+                                            href="javascript:void(0)" role="tab" onclick="selectNewTab('garov_egasi')"
+                                            style="display: none;">
+                                            <i class="fas fa-user-tie fa-2x mb-2"></i><br>
+                                            Garov egasi
+                                        </a>
+
+                                        <a class="nav-link text-center py-3 mb-2 border" id="new-tab-ishonchnoma"
+                                            href="javascript:void(0)" role="tab" onclick="selectNewTab('ishonchnoma')"
+                                            style="display: none;">
+                                            <i class="fas fa-file-signature fa-2x mb-2"></i><br>
+                                            Ishonchnoma
+                                        </a>
+
+                                        <a class="nav-link active text-center py-3 mb-2 border" id="new-tab-avto"
+                                            href="javascript:void(0)" role="tab" onclick="selectNewTab('avto')">
                                             <i class="fas fa-car fa-2x mb-2"></i><br>
                                             Avtomobil
                                         </a>
-                                        <a class="nav-link text-center py-3 mb-2 border" id="tab-kochmas"
-                                            data-toggle="pill" href="#content-kochmas" role="tab"
-                                            onclick="selectTab('kochmas_mulk')">
+                                        <a class="nav-link text-center py-3 mb-2 border" id="new-tab-kochmas"
+                                            href="javascript:void(0)" role="tab" onclick="selectNewTab('kochmas')">
                                             <i class="fas fa-building fa-2x mb-2"></i><br>
                                             Ko'chmas Mulk
                                         </a>
-                                        <a class="nav-link text-center py-3 mb-2 border" id="tab-tilla"
-                                            data-toggle="pill" href="#content-tilla" role="tab"
-                                            onclick="selectTab('tilla')">
+                                        <a class="nav-link text-center py-3 mb-2 border" id="new-tab-tilla"
+                                            href="javascript:void(0)" role="tab" onclick="selectNewTab('tilla')">
                                             <i class="fas fa-coins fa-2x mb-2"></i><br>
                                             Tilla Buyumlar
                                         </a>
-                                        <a class="nav-link text-center py-3 mb-2 border" id="tab-sugurta"
-                                            data-toggle="pill" href="#content-sugurta" role="tab"
-                                            onclick="selectTab('sugurta')">
+                                        <a class="nav-link text-center py-3 mb-2 border" id="new-tab-sugurta"
+                                            href="javascript:void(0)" role="tab" onclick="selectNewTab('sugurta')">
                                             <i class="fas fa-shield-alt fa-2x mb-2"></i><br>
                                             Sug'urta
                                         </a>
-                                        <a class="nav-link text-center py-3 mb-2 border" id="tab-owner"
-                                            data-toggle="pill" href="#content-owner" role="tab"
-                                            onclick="selectTab('owner')">
-                                            <i class="fas fa-user-check fa-2x mb-2"></i><br>
-                                            Garov Egasi
-                                        </a>
-                                    </div>
-
-                                    <!-- Yashirin Inputs -->
-                                    <div class="d-none">
-                                        {{ form.garov_turi }}
-                                        {{ form.garov_egasi }}
                                     </div>
                                 </div>
 
-                                <!-- O'ng ustun: Mos maydonlar -->
+                                <!-- Right Column: Fields Container -->
                                 <div class="col-md-9">
-                                    <div class="card card-outline card-primary h-100">
+                                    <div class="card h-100" id="new-content-card">
                                         <div class="card-body">
-                                            <!-- Fields start here -->
 
-                                            <!-- GAROV EGASI -->
-                                            <div id="owner-fields" class="hidden-field">
-                                                <h5 class="text-primary"><i class="fas fa-user-check mr-2"></i> Garov
-                                                    Egasi
-                                                    (Uchinchi shaxs)</h5>
+                                            <!-- Dynamic Header Text -->
+                                            <h5 id="new-card-header" class="mb-4 font-weight-bold"></h5>
 
-                                                <div class="alert alert-light border mb-3">
-                                                    <div class="custom-control custom-checkbox">
-                                                        {{ form.uchinchi_shaxs_mavjud }}
-                                                        <label class="custom-control-label font-weight-bold"
-                                                            for="id_uchinchi_shaxs_mavjud">Garov mulkdori uchinchi
-                                                            shaxsmi?</label>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    {{ form.garov_egasi_fish.label_tag }}
-                                                    {{ form.garov_egasi_fish }}
-                                                </div>
-                                                <div class="form-group">
-                                                    {{ form.garov_egasi_pasport.label_tag }}
-                                                    {{ form.garov_egasi_pasport }}
-                                                </div>
-                                                <div class="form-group">
-                                                    {{ form.garov_egasi_manzil.label_tag }}
-                                                    {{ form.garov_egasi_manzil }}
-                                                </div>
-                                            </div>
+                                            <!-- OTHER PERSON FIELDS removed from here and moved to Ishonchnoma tab -->
 
-                                            <!-- Dinamik Maydonlar -->
-
-                                            <!-- AVTOMOBIL -->
-                                            <div id="avto-fields">
-                                                <h5 class="text-primary"><i class="fas fa-car mr-2"></i> Avtomobil
+                                            <!-- CONTENT PLACEHOLDER (Filled with Old Fields) -->
+                                            <div id="new-content-avto" class="new-tab-content">
+                                                <h5 class="text-secondary"><i class="fas fa-car mr-2"></i> Avtomobil
                                                     Ma'lumotlari</h5>
+
                                                 <div class="row">
                                                     <div class="col-md-6 form-group">
                                                         {{ form.avto_nomi.label_tag }}
@@ -334,7 +354,8 @@
                                                 </div>
                                                 <div class="row">
                                                     <div class="col-md-6 form-group">
-                                                        {{ form.avto_texpasport.label_tag }} {{ form.avto_texpasport }}
+                                                        {{ form.avto_texpasport.label_tag }}
+                                                        {{ form.avto_texpasport }}
                                                     </div>
                                                     <div class="col-md-6 form-group">
                                                         {{ form.avto_texpasport_sana.label_tag }}
@@ -346,11 +367,10 @@
                                                 </div>
                                             </div>
 
-                                            <!-- KO'CHMAS MULK -->
-                                            <div id="kochmas-fields" class="hidden-field">
-                                                <h5 class="text-primary"><i class="fas fa-building mr-2"></i> Ko'chmas
-                                                    Mulk
-                                                    Ma'lumotlari</h5>
+                                            <div id="new-content-kochmas" class="new-tab-content d-none">
+                                                <h5 class="text-secondary"><i class="fas fa-building mr-2"></i>
+                                                    Ko'chmas
+                                                    Mulk</h5>
 
                                                 <div class="form-group">
                                                     {{ form.mulk_manzili.label_tag }}
@@ -400,11 +420,9 @@
                                                 </div>
                                             </div>
 
-                                            <!-- TILLA (Hozircha bo'sh, agar kerak bo'lsa qo'shiladi) -->
-                                            <div id="tilla-fields" class="hidden-field">
-                                                <h5 class="text-primary"><i class="fas fa-coins mr-2"></i> Tilla
-                                                    Buyumlar
-                                                    Ma'lumotlari</h5>
+                                            <div id="new-content-tilla" class="new-tab-content d-none">
+                                                <h5 class="text-secondary"><i class="fas fa-coins mr-2"></i> Tilla
+                                                    Buyumlar</h5>
 
                                                 <div class="form-group">
                                                     {{ form.tilla_nomi.label_tag }}
@@ -438,17 +456,17 @@
                                                 </div>
                                             </div>
 
-                                            <!-- SUG'URTA -->
-                                            <div id="sugurta-fields" class="hidden-field">
-                                                <h5 class="text-primary"><i class="fas fa-shield-alt mr-2"></i> Sug'urta
-                                                    Polisi Sozlamalari</h5>
+                                            <div id="new-content-sugurta" class="new-tab-content d-none">
+                                                <h5 class="text-secondary"><i class="fas fa-shield-alt mr-2"></i>
+                                                    Sug'urta</h5>
 
                                                 <div class="alert alert-light border mb-3">
                                                     <div class="custom-control custom-checkbox">
                                                         {{ form.sugurta_mavjud }}
                                                         <label class="custom-control-label font-weight-bold"
-                                                            for="id_sugurta_mavjud">{{ form.sugurta_mavjud.label
-                                                            }}</label>
+                                                            for="id_sugurta_mavjud">
+                                                            {{ form.sugurta_mavjud.label }}
+                                                        </label>
                                                     </div>
                                                 </div>
 
@@ -479,118 +497,480 @@
                                                 </div>
                                             </div>
 
+                                            <div id="new-content-garov_egasi" class="new-tab-content d-none">
+                                                <h5 class="text-secondary"><i class="fas fa-user-tie mr-2"></i>
+                                                    Garov egasi ma'lumotlari
+                                                </h5>
+                                                <div class="card card-outline card-success mb-3">
+                                                    <div class="card-body p-3">
+                                                        <div class="row">
+                                                            <div class="col-md-6 form-group">
+                                                                {{ form.garov_egasi_fish.label_tag }}
+                                                                {{ form.garov_egasi_fish }}
+                                                            </div>
+                                                            <div class="col-md-6 form-group">
+                                                                {{ form.garov_egasi_inisiali.label_tag }}
+                                                                {{ form.garov_egasi_inisiali }}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
 
+                                                <!-- Group 2: Notarius (Duplicated) -->
+                                                <div id="garov-notarius-block"
+                                                    class="card card-outline card-success mb-3">
+                                                    <div class="card-header p-2">
+                                                        <h6 class="card-title font-weight-bold"
+                                                            style="font-size: 1rem;">
+                                                            Notarius Ma'lumotlari</h6>
+                                                    </div>
+                                                    <div class="card-body p-3">
+                                                        <div class="row">
+                                                            <div class="col-md-6 form-group">
+                                                                {{ form.ishonchnoma_notarius_fish.label_tag }}
+                                                                {{ form.ishonchnoma_notarius_fish }}
+                                                            </div>
+                                                            <div class="col-md-6 form-group">
+                                                                {{ form.ishonchnoma_notarius_manzil.label_tag }}
+                                                                {{ form.ishonchnoma_notarius_manzil }}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Group 3: Reestr (Duplicated) -->
+                                                <div id="garov-reestr-block"
+                                                    class="card card-outline card-success mb-3">
+                                                    <div class="card-header p-2">
+                                                        <h6 class="card-title font-weight-bold"
+                                                            style="font-size: 1rem;">
+                                                            Reestr Ma'lumotlari</h6>
+                                                    </div>
+                                                    <div class="card-body p-3">
+                                                        <div class="row">
+                                                            <div class="col-md-6 form-group">
+                                                                {{ form.ishonchnoma_reestr_raqami.label_tag }}
+                                                                {{ form.ishonchnoma_reestr_raqami }}
+                                                            </div>
+                                                            <div class="col-md-6 form-group">
+                                                                {{ form.ishonchnoma_reestr_sanasi.label_tag }}
+                                                                {{ form.ishonchnoma_reestr_sanasi }}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div id="new-content-ishonchnoma" class="new-tab-content d-none">
+                                                <h5 class="text-secondary"><i class="fas fa-file-signature mr-2"></i>
+                                                    Ishonchnoma ma'lumotlarini kiriting
+                                                </h5>
+
+                                                <!-- Group 1: F.I.Sh (Duplicated) -->
+                                                <div class="card card-outline card-warning mb-3">
+                                                    <div class="card-header p-2">
+                                                        <h6 class="card-title font-weight-bold"
+                                                            style="font-size: 1rem;">Shaxs Ma'lumotlari</h6>
+                                                    </div>
+                                                    <div class="card-body p-3">
+                                                        <div class="row">
+                                                            <div class="col-md-6 form-group">
+                                                                {{ form.garov_egasi_fish.label_tag }}
+                                                                {{ form.garov_egasi_fish }}
+                                                            </div>
+                                                            <div class="col-md-6 form-group">
+                                                                {{ form.garov_egasi_inisiali.label_tag }}
+                                                                {{ form.garov_egasi_inisiali }}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Group 2: Notarius -->
+                                                <div class="card card-outline card-warning mb-3">
+                                                    <div class="card-header p-2">
+                                                        <h6 class="card-title font-weight-bold"
+                                                            style="font-size: 1rem;">
+                                                            Notarius Ma'lumotlari</h6>
+                                                    </div>
+                                                    <div class="card-body p-3">
+                                                        <div class="row">
+                                                            <div class="col-md-6 form-group">
+                                                                {{ form.ishonchnoma_notarius_fish.label_tag }}
+                                                                {{ form.ishonchnoma_notarius_fish }}
+                                                            </div>
+                                                            <div class="col-md-6 form-group">
+                                                                {{ form.ishonchnoma_notarius_manzil.label_tag }}
+                                                                {{ form.ishonchnoma_notarius_manzil }}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Group 3: Reestr -->
+                                                <div class="card card-outline card-warning mb-3">
+                                                    <div class="card-header p-2">
+                                                        <h6 class="card-title font-weight-bold"
+                                                            style="font-size: 1rem;">
+                                                            Reestr Ma'lumotlari</h6>
+                                                    </div>
+                                                    <div class="card-body p-3">
+                                                        <div class="row">
+                                                            <div class="col-md-6 form-group">
+                                                                {{ form.ishonchnoma_reestr_raqami.label_tag }}
+                                                                {{ form.ishonchnoma_reestr_raqami }}
+                                                            </div>
+                                                            <div class="col-md-6 form-group">
+                                                                {{ form.ishonchnoma_reestr_sanasi.label_tag }}
+                                                                {{ form.ishonchnoma_reestr_sanasi }}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
+                            <style>
+                                /* Custom Styles for New Section */
+                                .btn-yellow {
+                                    background-color: #ffc107;
+                                    color: #000;
+                                    border: 1px solid #e0a800;
+                                }
+
+                                .btn-yellow:hover,
+                                .btn-yellow.active {
+                                    background-color: #e0a800;
+                                    color: #000;
+                                }
+
+                                .btn-green {
+                                    background-color: #28a745;
+                                    color: #fff;
+                                    border: 1px solid #1e7e34;
+                                }
+
+                                .btn-green:hover,
+                                .btn-green.active {
+                                    background-color: #218838;
+                                    color: #fff;
+                                }
+
+                                /* Tab Styles */
+                                .nav-pills .nav-link.yellow-active.active {
+                                    background-color: #ffc107;
+                                    color: #000;
+                                }
+
+                                .nav-pills .nav-link.green-active.active {
+                                    background-color: #28a745;
+                                    color: #fff;
+                                }
+
+                                /* Card Styles */
+                                .card-yellow {
+                                    border: 2px solid #ffc107;
+                                    background-color: #fff9e6;
+                                    /* Light yellow bg */
+                                }
+
+                                .card-green {
+                                    border: 2px solid #28a745;
+                                    background-color: #f0fff4;
+                                    /* Light green bg */
+                                }
+
+                                /* Text Colors */
+                                .text-yellow {
+                                    color: #d39e00 !important;
+                                }
+
+                                .text-green {
+                                    color: #28a745 !important;
+                                }
+
+                                /* Uppercase helper */
+                                .text-uppercase {
+                                    text-transform: uppercase;
+                                }
+                            </style>
+
+                            <script>
+                                function selectNewTab(tabName) {
+                                    console.log('Selecting new tab:', tabName);
+                                    // 1. Hide all content panes
+                                    document.querySelectorAll('.new-tab-content').forEach(el => {
+                                        el.style.display = 'none';
+                                        el.classList.remove('d-none'); // Remove conflicting class just in case
+                                    });
+
+                                    // 2. Show selected content pane
+                                    const selectedContent = document.getElementById('new-content-' + tabName);
+                                    if (selectedContent) {
+                                        selectedContent.style.display = 'block';
+                                    } else {
+                                        console.error('Content not found for:', tabName);
+                                    }
+
+                                    // Update Hidden Input for Garov Turi
+                                    const garovTuriMap = {
+                                        'avto': 'avto',
+                                        'kochmas': 'kochmas_mulk',
+                                        'tilla': 'tilla'
+                                    };
+
+                                    // Agar tab garov turi bo'lsa (sug'urta va ishonchnoma emas)
+                                    if (garovTuriMap[tabName]) {
+                                        const hiddenInput = document.getElementById('id_garov_turi');
+                                        if (hiddenInput) {
+                                            hiddenInput.value = garovTuriMap[tabName];
+                                            console.log('Garov turi set to:', hiddenInput.value);
+                                        }
+                                    }
+
+                                    // 3. Update Active Tab Link Styling
+                                    // Remove active class from all tabs
+                                    document.querySelectorAll('#v-pills-tab-new .nav-link').forEach(el => {
+                                        el.classList.remove('active');
+                                    });
+
+                                    // Add active class to clicked tab
+                                    const selectedTab = document.getElementById('new-tab-' + tabName);
+                                    if (selectedTab) selectedTab.classList.add('active');
+                                }
+
+                                function setNewOwnerType(type) {
+                                    console.log('Setting owner type:', type);
+                                    const btnSelf = document.getElementById('btn-self');
+                                    const btnOther = document.getElementById('btn-other');
+                                    const contentCard = document.getElementById('new-content-card');
+                                    const cardHeader = document.getElementById('new-card-header');
+                                    const otherFields = document.getElementById('new-other-fields');
+                                    const ishonchnomaTab = document.getElementById('new-tab-ishonchnoma');
+                                    const garovEgasiTab = document.getElementById('new-tab-garov_egasi');
+                                    const allTabs = document.querySelectorAll('#v-pills-tab-new .nav-link');
+
+                                    // Reset classes
+                                    if (btnSelf) {
+                                        btnSelf.classList.remove('btn-green', 'active');
+                                        btnSelf.classList.add('btn-outline-success');
+                                    }
+
+                                    if (btnOther) {
+                                        btnOther.classList.remove('btn-yellow', 'active');
+                                        btnOther.classList.add('btn-outline-warning');
+                                    }
+
+                                    if (contentCard) contentCard.classList.remove('card-yellow', 'card-green');
+
+                                    // Remove active color classes from tabs
+                                    allTabs.forEach(tab => {
+                                        tab.classList.remove('yellow-active', 'green-active');
+                                    });
+
+                                    if (type === 'self') {
+                                        // 1. Activate "O'zi" -> Green (Swap)
+                                        if (btnSelf) {
+                                            btnSelf.classList.remove('btn-outline-success');
+                                            btnSelf.classList.add('btn-green', 'active');
+                                        }
+
+                                        if (contentCard) contentCard.classList.add('card-green');
+                                        if (cardHeader) {
+                                            cardHeader.innerText = "Garov egasini tanlang (O'zi)";
+                                            cardHeader.className = "mb-4 font-weight-bold text-green";
+                                        }
+
+                                        if (otherFields) otherFields.style.display = 'none';
+                                        if (ishonchnomaTab) ishonchnomaTab.style.display = 'none'; // Hide ishonchnoma tab for Self
+                                        if (garovEgasiTab) garovEgasiTab.style.display = 'block'; // Always show Garov egasi tab
+
+                                        // Hide Notary and Registry in Garov Egasi tab for Self
+                                        const notaryBlock = document.getElementById('garov-notarius-block');
+                                        const reestrBlock = document.getElementById('garov-reestr-block');
+                                        if (notaryBlock) notaryBlock.style.display = 'none';
+                                        if (reestrBlock) reestrBlock.style.display = 'none';
+
+                                        // Set Tab Active Color
+                                        allTabs.forEach(tab => tab.classList.add('green-active'));
+
+                                        // Update Hidden Inputs
+                                        const hiddenEgasi = document.getElementById('id_garov_egasi');
+                                        const hiddenCheckbox = document.getElementById('id_uchinchi_shaxs_mavjud');
+                                        if (hiddenEgasi) hiddenEgasi.value = 'oz';
+                                        if (hiddenCheckbox) hiddenCheckbox.checked = false;
+
+                                    } else {
+                                        // 2. Activate "Boshqa shaxs" -> Yellow (Swap)
+                                        if (btnOther) {
+                                            btnOther.classList.remove('btn-outline-warning');
+                                            btnOther.classList.add('btn-yellow', 'active');
+                                        }
+
+                                        if (contentCard) contentCard.classList.add('card-yellow');
+                                        if (cardHeader) {
+                                            cardHeader.innerText = "Garov egasini tanlang (Boshqa shaxs)";
+                                            cardHeader.className = "mb-4 font-weight-bold text-yellow";
+                                        }
+
+                                        if (otherFields) otherFields.style.display = 'block';
+                                        if (ishonchnomaTab) ishonchnomaTab.style.display = 'block'; // Show ishonchnoma for Other
+                                        if (otherFields) otherFields.style.display = 'block';
+                                        if (ishonchnomaTab) ishonchnomaTab.style.display = 'block'; // Show ishonchnoma for Other
+                                        if (garovEgasiTab) garovEgasiTab.style.display = 'none'; // Hide Garov egasi tab for Other (User Request)
+
+                                        // Show Notary and Registry in Garov Egasi tab for Other
+                                        const notaryBlock = document.getElementById('garov-notarius-block');
+                                        const reestrBlock = document.getElementById('garov-reestr-block');
+                                        if (notaryBlock) notaryBlock.style.display = 'block';
+                                        if (reestrBlock) reestrBlock.style.display = 'block';
+
+                                        // Set Tab Active Color
+                                        allTabs.forEach(tab => tab.classList.add('yellow-active'));
+
+                                        // Update Hidden Inputs
+                                        const hiddenEgasi = document.getElementById('id_garov_egasi');
+                                        const hiddenCheckbox = document.getElementById('id_uchinchi_shaxs_mavjud');
+                                        if (hiddenEgasi) hiddenEgasi.value = 'boshqa';
+                                        if (hiddenCheckbox) hiddenCheckbox.checked = true;
+
+                                        // Auto-select Ishonchnoma tab
+                                        selectNewTab('ishonchnoma');
+                                    }
+                                }
+
+                                // Initialize inside window load to ensure it runs
+                                window.addEventListener('load', function () {
+                                    console.log('Window loaded, initializing collateral tabs...');
+                                    setTimeout(function () {
+                                        setNewOwnerType('self');
+                                        // Also ensure first tab is active
+                                        selectNewTab('avto');
+
+                                        // Sync Garov Egasi fields between tabs
+                                        const fishInputs = document.querySelectorAll('input[name="garov_egasi_fish"]');
+                                        const initialsInputs = document.querySelectorAll('input[name="garov_egasi_inisiali"]');
+
+                                        function syncInputs(name) {
+                                            const inputs = document.querySelectorAll(`input[name="${name}"]`);
+                                            inputs.forEach(input => {
+                                                input.addEventListener('input', function () {
+                                                    const val = this.value;
+                                                    inputs.forEach(other => {
+                                                        if (other !== this) other.value = val;
+                                                    });
+                                                });
+                                            });
+                                        }
+
+                                        syncInputs("garov_egasi_fish");
+                                        syncInputs("garov_egasi_inisiali");
+                                        syncInputs("ishonchnoma_notarius_fish");
+                                        syncInputs("ishonchnoma_notarius_manzil");
+                                        syncInputs("ishonchnoma_reestr_raqami");
+                                        syncInputs("ishonchnoma_reestr_sanasi");
+
+                                    }, 500);
+                                });
+                            </script>
+
+                            <!-- MOLIYAVIY HOLAT -->
+                            <div class="form-section">
+                                <h4>5. Mijozning Moliyaviy Holati (Eski)</h4>
+                                <div class="form-group">
+                                    {{ form.qarz_oluvchi_ish_joyi.label_tag }}
+                                    {{ form.qarz_oluvchi_ish_joyi }}
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4 form-group">
+                                        {{ form.qarz_oluvchi_daromad.label_tag }}
+                                        {{ form.qarz_oluvchi_daromad }}
+                                    </div>
+                                    <div class="col-md-4 form-group">
+                                        {{ form.qarz_oluvchi_xarajatlar.label_tag }}
+                                        {{ form.qarz_oluvchi_xarajatlar }}
+                                    </div>
+                                    <div class="col-md-4 form-group">
+                                        {{ form.qarz_oluvchi_tahminiy_tolov.label_tag }}
+                                        {{ form.qarz_oluvchi_tahminiy_tolov }}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    {{ form.qarz_oluvchi_majburiyatlar.label_tag }}
+                                    {{ form.qarz_oluvchi_majburiyatlar }}
+                                    <small class="form-text text-muted">Mavjud kreditlar bank nomi, qoldiq summasi
+                                        va oylik
+                                        to'lovi bilan.</small>
+                                </div>
+                            </div>
+
+                            <!-- TASHKILOT -->
+                            <div class="form-section">
+                                <h4>6. Tashkilot Ma'lumotlari</h4>
+                                <!-- Group 1: Filial -->
+                                <div class="row">
+                                    <div class="col-md-4 form-group">
+                                        {{ form.filial_nomi.label_tag }}
+                                        {{ form.filial_nomi }}
+                                    </div>
+                                    <div class="col-md-4 form-group">
+                                        {{ form.filial_boshligi.label_tag }}
+                                        {{ form.filial_boshligi }}
+                                    </div>
+                                    <div class="col-md-4 form-group">
+                                        {{ form.filial_boshligi_inisiali.label_tag }}
+                                        {{ form.filial_boshligi_inisiali }}
+                                    </div>
+                                </div>
+                                <!-- Group 2: Direktor -->
+                                <div class="row">
+                                    <div class="col-md-6 form-group">
+                                        {{ form.direktor_fish.label_tag }}
+                                        {{ form.direktor_fish }}
+                                    </div>
+                                    <div class="col-md-6 form-group">
+                                        {{ form.direktor_fish_inisiali.label_tag }}
+                                        {{ form.direktor_fish_inisiali }}
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                            <!-- MONITORING -->
+                            <div class="form-section d-none">
+                                <h4>7. Monitoring Sanalari</h4>
+                                <div class="row">
+                                    <div class="col-md-3 form-group">
+                                        {{ form.monitoring_sana_1.label_tag }}
+                                        {{ form.monitoring_sana_1 }}
+                                    </div>
+                                    <div class="col-md-3 form-group">
+                                        {{ form.monitoring_sana_2.label_tag }}
+                                        {{ form.monitoring_sana_2 }}
+                                    </div>
+                                    <div class="col-md-3 form-group">
+                                        {{ form.monitoring_sana_3.label_tag }}
+                                        {{ form.monitoring_sana_3 }}
+                                    </div>
+                                    <div class="col-md-3 form-group">
+                                        {{ form.monitoring_sana_4.label_tag }}
+                                        {{ form.monitoring_sana_4 }}
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
+                        <!-- /.card-body -->
 
-                        <!-- MOLIYAVIY HOLAT -->
-                        <div class="form-section">
-                            <h4>4. Mijozning Moliyaviy Holati</h4>
-                            <div class="form-group">
-                                {{ form.qarz_oluvchi_ish_joyi.label_tag }}
-                                {{ form.qarz_oluvchi_ish_joyi }}
-                            </div>
-                            <div class="row">
-                                <div class="col-md-4 form-group">
-                                    {{ form.qarz_oluvchi_daromad.label_tag }}
-                                    {{ form.qarz_oluvchi_daromad }}
-                                </div>
-                                <div class="col-md-4 form-group">
-                                    {{ form.qarz_oluvchi_xarajatlar.label_tag }}
-                                    {{ form.qarz_oluvchi_xarajatlar }}
-                                </div>
-                                <div class="col-md-4 form-group">
-                                    {{ form.qarz_oluvchi_tahminiy_tolov.label_tag }}
-                                    {{ form.qarz_oluvchi_tahminiy_tolov }}
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                {{ form.qarz_oluvchi_majburiyatlar.label_tag }}
-                                {{ form.qarz_oluvchi_majburiyatlar }}
-                                <small class="form-text text-muted">Mavjud kreditlar bank nomi, qoldiq summasi va oylik
-                                    to'lovi bilan.</small>
-                            </div>
+                        <div class="card-footer">
+                            <button type="submit" class="btn btn-success">Saqlash va Yuborish</button>
+                            <a href="{% url 'dashboard' %}" class="btn btn-secondary">Bekor qilish</a>
                         </div>
-
-                        <!-- TASHKILOT -->
-                        <div class="form-section">
-                            <h4>5. Tashkilot Ma'lumotlari</h4>
-                            <div class="row">
-                                <div class="col-md-6 form-group">
-                                    {{ form.filial_nomi.label_tag }}
-                                    {{ form.filial_nomi }}
-                                </div>
-                                <div class="col-md-6 form-group">
-                                    {{ form.ishonchnoma_sanasi.label_tag }}
-                                    {{ form.ishonchnoma_sanasi }}
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6 form-group">
-                                    {{ form.filial_boshligi.label_tag }}
-                                    {{ form.filial_boshligi }}
-                                </div>
-                                <div class="col-md-6 form-group">
-                                    {{ form.filial_boshligi_inisiali.label_tag }}
-                                    {{ form.filial_boshligi_inisiali }}
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6 form-group">
-                                    {{ form.direktor_fish.label_tag }}
-                                    {{ form.direktor_fish }}
-                                </div>
-                                <div class="col-md-6 form-group">
-                                    {{ form.direktor_fish_inisiali.label_tag }}
-                                    {{ form.direktor_fish_inisiali }}
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- GRAFIK -->
-                        <div class="form-section">
-                            <h4>6. Grafik (Exceldan nusxa)</h4>
-                            <div class="form-group">
-                                <label for="id_grafik_matni">{{ form.grafik_matni.label }}:</label>
-                                {{ form.grafik_matni }}
-                                <small class="form-text text-muted">{{ form.grafik_matni.help_text }}</small>
-                            </div>
-                        </div>
-
-                        <!-- MONITORING -->
-                        <div class="form-section d-none">
-                            <h4>7. Monitoring Sanalari</h4>
-                            <div class="row">
-                                <div class="col-md-3 form-group">
-                                    {{ form.monitoring_sana_1.label_tag }}
-                                    {{ form.monitoring_sana_1 }}
-                                </div>
-                                <div class="col-md-3 form-group">
-                                    {{ form.monitoring_sana_2.label_tag }}
-                                    {{ form.monitoring_sana_2 }}
-                                </div>
-                                <div class="col-md-3 form-group">
-                                    {{ form.monitoring_sana_3.label_tag }}
-                                    {{ form.monitoring_sana_3 }}
-                                </div>
-                                <div class="col-md-3 form-group">
-                                    {{ form.monitoring_sana_4.label_tag }}
-                                    {{ form.monitoring_sana_4 }}
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                    <!-- /.card-body -->
-
-                    <div class="card-footer">
-                        <button type="submit" class="btn btn-success">Saqlash va Yuborish</button>
-                        <a href="{% url 'dashboard' %}" class="btn btn-secondary">Bekor qilish</a>
-                    </div>
             </form>
         </div>
     </div>
@@ -694,6 +1074,7 @@
         }
 
         // Sana maskasi (DD.MM.YYYY)
+        // Sana maskasi (DD.MM.YYYY)
         function applyDateMask(selector) {
             const $el = $(selector);
             if ($el.length) {
@@ -703,7 +1084,7 @@
                     alias: "datetime",
                     inputFormat: "dd.mm.yyyy",
                     clearIncomplete: true,
-                    removeMaskOnSubmit: true
+                    removeMaskOnSubmit: false
                 });
             }
         }
@@ -715,13 +1096,49 @@
             alias: "datetime",
             inputFormat: "dd.mm.yyyy",
             clearIncomplete: true,
-            removeMaskOnSubmit: true
+            removeMaskOnSubmit: false
         });
 
         // ==========================================
         // 1. SHAXSIY MA'LUMOTLAR
         // ==========================================
         textToUpperCase('#id_qarz_oluvchi_fish');
+        textToUpperCase('#id_qarz_oluvchi_fish_inisiali');
+
+        // Auto-fill Initials from Full Name
+        // Format: HAMROYEV BOBUR RAVSHANOVICH -> B.R.HAMROYEV
+        const fishInput = document.getElementById('id_qarz_oluvchi_fish');
+        const initialsInput = document.getElementById('id_qarz_oluvchi_fish_inisiali');
+
+        if (fishInput && initialsInput) {
+            fishInput.addEventListener('input', function () {
+                const fullName = this.value.trim().toUpperCase();
+                if (fullName) {
+                    const parts = fullName.split(/\s+/);
+                    if (parts.length >= 2) {
+                        // parts[0] = Surname (HAMROYEV)
+                        // parts[1] = Firstname (BOBUR)
+                        // parts[2] = Middlename (RAVSHANOVICH) - optional
+
+                        let surname = parts[0];
+                        let firstname = parts[1];
+                        let middlename = parts.length > 2 ? parts[2] : "";
+
+                        let initialText = "";
+                        if (firstname) initialText += firstname.charAt(0) + ".";
+                        if (middlename) initialText += middlename.charAt(0) + ".";
+                        initialText += surname;
+
+                        initialsInput.value = initialText;
+                    } else {
+                        // Fallback if only surname entered
+                        initialsInput.value = fullName;
+                    }
+                } else {
+                    initialsInput.value = "";
+                }
+            });
+        }
 
         // Telefon raqami maskasi
         const phoneSelector = '#id_qarz_oluvchi_telefon';
@@ -1058,6 +1475,10 @@
                 $('#id_qarz_oluvchi_pasport_berilgan').val(`${region} VILOYATI IIB tomonidan ${getRandomInt(10, 28)}.${getRandomInt(10, 12)}.${getRandomInt(2015, 2024)} yilda berilgan`);
                 $('#id_qarz_oluvchi_manzil').val(`${region} shahar, ${getRandomItem(streets)} ko'chasi, ${getRandomInt(1, 100)}-uy`);
 
+                // Auto-fill Initials in Test Mode
+                let initials = `${fName.charAt(0)}.${mName.charAt(0)}.${lName}`;
+                $('#id_qarz_oluvchi_fish_inisiali').val(initials).trigger('input');
+
                 // 4. Moliyaviy Holat
                 const jobs = ["O'QITUVCHI", "SHIFOKOR", "DASTURCHI", "HAYDOVCHI", "TADBIRKOR", "MUHANDIS"];
                 $('#id_qarz_oluvchi_ish_joyi').val(`${getRandomItem(jobs)}`);
@@ -1142,26 +1563,34 @@
                     $('#id_tilla_bahosi').val(getRandomInt(5, 20) * 1000000).trigger('input');
                 }
 
-                // SUG'URTA
-                $('#id_sugurta_mavjud').prop('checked', true).trigger('change');
-                $('#id_sugurta_kompaniyasi').val("O'ZBEKINVEST SUG'URTA KOMPANIYASI");
-                $('#id_sugurta_polisi').val(getRandomInt(1000000, 9999999));
-                $('#id_sugurta_sanasi').val("01.02.2026").trigger('input');
-                $('#id_sugurta_summasi').val(getRandomInt(100, 200) * 1000000).trigger('input');
+                // SUG'URTA - TEST MODE DA O'CHIRILGAN
+                $('#id_sugurta_mavjud').prop('checked', false).trigger('change');
+                $('#id_sugurta_kompaniyasi').val("");
+                $('#id_sugurta_polisi').val("");
+                $('#id_sugurta_sanasi').val("");
+                $('#id_sugurta_summasi').val("");
 
-                // Garov Egasi (Uchinchi shaxs)
-                // Random 30% check
-                if (Math.random() > 0.7) {
-                    $('#id_uchinchi_shaxs_mavjud').prop('checked', true).trigger('change');
-                    let ownerFName = getRandomItem(firstNames);
-                    let ownerLName = getRandomItem(lastNames);
-                    let ownerMName = getRandomItem(middleNames);
-                    $('#id_garov_egasi_fish').val(`${ownerLName} ${ownerFName} ${ownerMName}`).trigger('input');
-                    $('#id_garov_egasi_pasport').val("AB" + getRandomInt(1000000, 9999999)).trigger('input');
-                    $('#id_garov_egasi_manzil').val(`${getRandomItem(regions)} shahar, ${getRandomItem(streets)} ko'chasi`);
-                } else {
-                    $('#id_uchinchi_shaxs_mavjud').prop('checked', false).trigger('change');
-                }
+                // Garov Egasi (Uchinchi shaxs) - TEST REJIMIDA DOIM TO'LDIRILSIN
+                setNewOwnerType('other');
+
+                let ownerFName = getRandomItem(firstNames);
+                let ownerLName = getRandomItem(lastNames);
+                let ownerMName = getRandomItem(middleNames);
+
+                // Eski fieldlar (agar qolsa)
+                $('#id_garov_egasi_fish').val(`${ownerLName} ${ownerFName} ${ownerMName}`).trigger('input');
+                $('#id_garov_egasi_pasport').val("AB" + getRandomInt(1000000, 9999999)).trigger('input');
+                $('#id_garov_egasi_manzil').val(`${getRandomItem(regions)} shahar, ${getRandomItem(streets)} ko'chasi`);
+
+                // Yangi (V4) Ishonchnoma fieldlari
+                $('#id_garov_egasi_fish').val(`${ownerLName} ${ownerFName} ${ownerMName}`).trigger('input');
+                $('#id_garov_egasi_inisiali').val(`${ownerFName.charAt(0)}.${ownerMName.charAt(0)}.${ownerLName}`).trigger('input');
+
+                $('#id_ishonchnoma_notarius_fish').val(`${getRandomItem(lastNames)} ${getRandomItem(firstNames)} ${getRandomItem(middleNames)}`).trigger('input');
+                $('#id_ishonchnoma_notarius_manzil').val(`${getRandomItem(regions)} shahar NOTARIAL IDORASI`);
+
+                $('#id_ishonchnoma_reestr_raqami').val(getRandomInt(1000, 9999));
+                $('#id_ishonchnoma_reestr_sanasi').val(`${getRandomInt(10, 28)}.${getRandomInt(1, 12)}.2024`).trigger('input');
 
                 // Tashkilot
                 console.log("Filial boshlig'i test rejimi ishladi");
@@ -1181,7 +1610,7 @@
                 let tbInitial = `${tbName.charAt(0)}.${tbMName.charAt(0)}.${tbLName}`;
                 $('#id_filial_boshligi_inisiali').val(tbInitial).trigger('input');
 
-                $('#id_ishonchnoma_sanasi').val("01.01.2025").trigger('input');
+
 
                 // Grafik
                 $('#id_grafik_matni').val("Grafik matni namuna uchun yozildi...");
@@ -1235,37 +1664,84 @@
         checkField('#id_qarz_oluvchi_tugilgan_sana', "Tug'ilgan sana kiritilmagan!");
         checkField('#id_qarz_oluvchi_pasport_berilgan', "Pasport berilgan joy kiritilmagan!");
         checkField('#id_qarz_oluvchi_manzil', "Doimiy yashash manzili kiritilmagan!");
+        checkField('#id_qarz_oluvchi_ish_joyi', "Ish joyi va lavozimi kiritilmagan!");
+        checkField('#id_qarz_oluvchi_daromad', "Oylik daromad kiritilmagan!");
+        checkField('#id_qarz_oluvchi_xarajatlar', "Oylik xarajatlar kiritilmagan!");
+        checkField('#id_qarz_oluvchi_majburiyatlar', "Majburiyatlar kiritilmagan!");
+        checkField('#id_qarz_oluvchi_tahminiy_tolov', "Tahminiy to'lov kiritilmagan!");
 
         // Phone validation (custom check)
         const $phone = $('#id_qarz_oluvchi_telefon');
         if ($phone.is(':visible')) {
-            const phoneVal = $phone.val().replace(/[^0-9]/g, ''); // Remove all non-digits
-            // +998 90 123-45-67 -> 998901234567 (12 digits)
+            const phoneVal = $phone.val().replace(/[^0-9]/g, '');
             if (phoneVal.length < 12) {
                 $phone.addClass('is-invalid');
                 if (!firstErrorField) firstErrorField = $phone;
                 isValid = false;
-                // Custom message if checkField wasn't used, but we want to be consistent:
-                // We can't use checkField easily here because value is "filled" but invalid.
             } else {
                 $phone.removeClass('is-invalid');
             }
         }
 
-        // --- COLLATERAL SPECIFIC FIELDS ---
-        const garovTuri = $('#id_garov_turi').val();
+        // --- 2. KREDIT MA'LUMOTLARI ---
+        checkField('#id_shartnoma_raqami', "Kredit shartnomasi raqami kiritilmagan!");
+        checkField('#id_shartnoma_sanasi', "Shartnoma sanasi kiritilmagan!");
+        checkField('#id_kredit_miqdori', "Kredit miqdori kiritilmagan!");
+        checkField('#id_kredit_muddat_oy', "Kredit muddati kiritilmagan!");
+        checkField('#id_foiz_stavkasi', "Foiz stavkasi kiritilmagan!");
+        checkField('#id_grafik_matni', "Grafik jadvali kiritilmagan!");
 
+        // --- 3. GAROV MA'LUMOTLARI ---
+        const garovTuri = $('#id_garov_turi').val();
         if (garovTuri === 'avto') {
-            checkField('#id_avto_nomi', "Avtomobil nomi kiritilmagan!");
-            checkField('#id_avto_raqam', "Avtomobil davlat raqami kiritilmagan!");
-            checkField('#id_avto_bahosi', "Avtomobil bahosi kiritilmagan!");
+            checkField('#id_avto_nomi', "Avtomobil modeli kiritilmagan!");
+            checkField('#id_avto_raqam', "Davlat raqami kiritilmagan!");
+            checkField('#id_avto_kuzov_turi', "Kuzov turi kiritilmagan!");
+            checkField('#id_avto_kuzov', "Kuzov raqami kiritilmagan!");
+            checkField('#id_avto_dvigatel', "Dvigatel raqami kiritilmagan!");
+            checkField('#id_avto_yil', "Ishlab chiqarilgan yili kiritilmagan!");
+            checkField('#id_avto_rang', "Rangi kiritilmagan!");
+            checkField('#id_avto_bahosi', "Baholangan qiymati kiritilmagan!");
+            checkField('#id_avto_yurgan', "Yurgan masofasi kiritilmagan!");
+            checkField('#id_avto_texpasport', "Texpasport seriyasi kiritilmagan!");
+            checkField('#id_avto_texpasport_sana', "Texpasport sanasi kiritilmagan!");
+            checkField('#id_avto_manzil', "Garaj manzili kiritilmagan!");
         } else if (garovTuri === 'kochmas_mulk') {
             checkField('#id_mulk_manzili', "Ko'chmas mulk manzili kiritilmagan!");
-            checkField('#id_mulk_bahosi', "Ko'chmas mulk bahosi kiritilmagan!");
+            checkField('#id_mulk_turi', "Ko'chmas mulk turi kiritilmagan!");
+            checkField('#id_mulk_umumiy_maydoni', "Umumiy maydoni kiritilmagan!");
+            checkField('#id_mulk_bahosi', "Garov qiymati kiritilmagan!");
+            checkField('#id_mulk_dalolatnoma_raqami', "Dalolatnoma raqami kiritilmagan!");
+            checkField('#id_mulk_dalolatnoma_sanasi', "Dalolatnoma sanasi kiritilmagan!");
         } else if (garovTuri === 'tilla') {
             checkField('#id_tilla_nomi', "Tilla buyumlar nomi kiritilmagan!");
-            checkField('#id_tilla_bahosi', "Tilla buyumlar bahosi kiritilmagan!");
+            checkField('#id_tilla_probi', "Probsi kiritilmagan!");
+            checkField('#id_tilla_vazni', "Vazni kiritilmagan!");
+            checkField('#id_tilla_soni', "Soni kiritilmagan!");
+            checkField('#id_tilla_bahosi', "Baholangan qiymati kiritilmagan!");
         }
+
+        // --- 4. ISHONCHNOMA (Agar uchinchi shaxs bo'lsa) ---
+        // --- 4. ISHONCHNOMA (Agar uchinchi shaxs bo'lsa) ---
+        // Validate ONLY if "Boshqa shaxs" is selected
+        const garovEgasiType = $('#id_garov_egasi').val(); // 'oz' or 'boshqa'
+
+        if (garovEgasiType === 'boshqa') {
+            checkField('#id_garov_egasi_fish', "Garov egasi F.I.Sh kiritilmagan!");
+            checkField('#id_garov_egasi_inisiali', "Garov egasining inisiali kiritilmagan!");
+            checkField('#id_garov_egasi_pasport', "Garov egasi pasport ma'lumotlari kiritilmagan!");
+            checkField('#id_garov_egasi_manzil', "Garov egasi manzili kiritilmagan!");
+
+            checkField('#id_ishonchnoma_notarius_fish', "Notarius F.I.Sh kiritilmagan!");
+            checkField('#id_ishonchnoma_notarius_manzil', "Notarius manzili kiritilmagan!");
+            checkField('#id_ishonchnoma_reestr_raqami', "Reestr raqami kiritilmagan!");
+            checkField('#id_ishonchnoma_reestr_sanasi', "Reestr sanasi kiritilmagan!");
+        }
+
+        // --- 5. TASHKILOT ---
+        checkField('#id_filial_boshligi', "Filial boshlig'i F.I.Sh kiritilmagan!");
+        checkField('#id_filial_boshligi_inisiali', "Filial boshlig'i inisiali kiritilmagan!");
+
 
         if (!isValid) {
             e.preventDefault();

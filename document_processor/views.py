@@ -396,6 +396,7 @@ def create_loan_application(request):
     Operator uchun: Yangi ariza kiritish
     """
     if request.method == 'POST':
+        print("POST DATA:", request.POST)
         form = UmumiyMalumotForm(request.POST)
         if form.is_valid():
             try:
@@ -430,6 +431,14 @@ def create_loan_application(request):
                 # Handle avto_bahosi_soz if present (now in model)
                 if data.get('avto_bahosi') and not data.get('avto_bahosi_soz'):
                      data['avto_bahosi_soz'] = number_to_text_uz(cleaner(data.get('avto_bahosi')))
+                
+                # Handling integer fields for the model (ensuring they are ints or None)
+                for field in integer_fields:
+                    if field in data and data[field] is not None:
+                        try:
+                            data[field] = int(float(str(data[field]).replace(' ', '')))
+                        except:
+                            data[field] = None
 
                 # --- YANGI MAYDONLAR FIX ---
                 if data.get('filial_boshligi_inisiali'):
@@ -447,10 +456,15 @@ def create_loan_application(request):
                     status='pending_moderator',
                     **data
                 )
+                print(f"Loan created successfully: {loan.id}")
                 return redirect('dashboard') # Yoki success page
             except Exception as e:
+                import traceback
                 print(f"Error creating loan: {e}")
+                print(traceback.format_exc())
         else:
+            print("Form is invalid!")
+            print(form.errors)
             return render(request, 'document_processor/process_audit.html', {'form': form})
     else:
         form = UmumiyMalumotForm()

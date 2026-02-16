@@ -106,11 +106,13 @@
         <div>Sana: <span class="var">{{ loan.shartnoma_sanasi|date:"d.m.Y"|default:"______________" }}</span> y.</div>
     </div>
 
+    {% if garov_boshqa_shaxs %}
     <p>
         «PULLOL BUSINESS MIKROMOLIYA TASHKILOTI» MChJning (1-tomon) vakili bo‘lgan
         <span class="var">{{ loan.filial_nomi }}</span>
         boshlig‘i <strong><span class="var">{{ loan.filial_boshligi }}</span></strong>,
-        O‘zbekiston Respublikasi fuqarosi <strong><span class="var">{{ loan.qarz_oluvchi_fish }}</span></strong>
+        O‘zbekiston Respublikasi fuqarosi <strong><span class="var">{{ loan.qarz_oluvchi_fish }}</span>
+        </strong>
         (2-tomon) va
         garovga beruvchi O‘zbekiston Respublikasi fuqarosi
         <strong><span class="var">{{ loan.garov_egasi_fish }}</span></strong> (3-tomon)
@@ -120,10 +122,31 @@
         1-tomon 2-tomonga berilgan mikroqarz bo‘yicha ta’minot sifatida taqdim etilgan,
         3-tomonga mulk huquqi asosida tegishli bo‘lgan mulkning garov qiymatini kelishish muzokaralari o‘tkazildi.
     </p>
+    {% else %}
+    <p>
+        «PULLOL BUSINESS MIKROMOLIYA TASHKILOTI» MChJning (1-tomon) vakili bo‘lgan
+        <span class="var">{{ loan.filial_nomi }}</span>
+        boshlig‘i <strong><span class="var">{{ loan.filial_boshligi }}</span></strong>,
+        O‘zbekiston Respublikasi fuqarosi va garovga beruvchi <strong>
+            <span class="var">
+                {{ loan.qarz_oluvchi_fish }}
+            </span>
+        </strong>
+        (2-tomon) o‘rtalarida,
+        <span class="var">{{ loan.shartnoma_sanasi|date:"d.m.Y" }}</span> y.dan
+        № <span class="var">{{ loan.shartnoma_raqami }}</span>-BR-sonli Mikroqarz shartnomasiga muvofiq
+        1-tomon 2-tomonga berilgan mikroqarz bo‘yicha ta’minot sifatida taqdim etilgan,
+        2-tomonga mulk huquqi asosida tegishli bo‘lgan mulkning garov qiymatini kelishish muzokaralari o‘tkazildi.
+    </p>
+    {% endif %}
 
     {% if is_avto %}
     <p>
-        Garov predmeti sifatida <strong><span class="var">{{ loan.avto_nomi }}</span></strong>, 3-tomonga egalik huquqi
+        Garov predmeti sifatida 
+        <strong>
+            <span class="var">{{ loan.avto_nomi }}</span>
+        </strong>, 
+        {% if garov_boshqa_shaxs %}3-tomonga{% else %}2-tomonga{% endif %} egalik huquqi
         tegishli bo‘lgan,
         quyidagi tafsilotlarga ega avtotransport vositasi taqdim etiladi:
     </p>
@@ -150,7 +173,8 @@
     </table>
 
     <div style="font-size: 10pt; margin-left: 1cm;">
-        -* avtotransport egasi: <span class="var">{{ loan.garov_egasi_fish }}</span><br>
+        -* avtotransport egasi: <span class="var">{% if garov_boshqa_shaxs %}{{ loan.garov_egasi_fish }}{% else %}
+            {{loan.qarz_oluvchi_fish }}{% endif %}</span><br>
         -* texnik pasport: <span class="var">{{ loan.avto_texpasport }}</span><br>
         -* ro‘yxatdan o‘tgan manzili/garaj manzili: <span class="var">{{ loan.avto_manzil }}</span><br>
         -* davlat raqami: <span class="var">{{ loan.avto_raqam }}</span>
@@ -190,9 +214,11 @@
             </tr>
         </tbody>
     </table>
-    {% elif is_kochmas %}
+    {% endif %}
+    {% if is_kochmas %}
     <p>
-        Garov predmeti sifatida <strong><span class="var">{{ loan.mulk_turi }}</span></strong>, 3-tomonga egalik huquqi
+        Garov predmeti sifatida <strong><span class="var">{{ loan.mulk_turi }}</span></strong>, 
+        {% if garov_boshqa_shaxs %}3-tomonga{% else %}2-tomonga{% endif %} egalik huquqi
         tegishli bo‘lgan,
         quyidagi tafsilotlarga ega ko'chmas mulk taqdim etiladi:
     </p>
@@ -242,7 +268,10 @@
                 </td>
                 <td>
                     O‘zbekiston Respublikasi fuqarosi<br>
-                    <strong>Qarz oluvchi</strong><br><br>
+                    <strong>
+                        {% if garov_boshqa_shaxs %}Qarz oluvchi{% else %}Qarz oluvchi va Garovga beruvchi
+                        {% endif %}
+                    </strong><br><br>
                     <div style="height: 40px; border-bottom: 1px solid black; margin-bottom: 5px;"></div>
                     <strong>
                         <span class="var">{{ loan.qarz_oluvchi_name_short|default:loan.qarz_oluvchi_fish }}</span>

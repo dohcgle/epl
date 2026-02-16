@@ -49,6 +49,7 @@ class DocumentTemplate(models.Model):
 class LoanAgreement(models.Model):
     # --- SHAXSIY MA'LUMOTLAR (Qarz oluvchi) ---
     qarz_oluvchi_fish = models.CharField("Qarz oluvchi F.I.Sh", max_length=255)
+    qarz_oluvchi_fish_inisiali = models.CharField("Qarz oluvchi F.I.Sh (Inisiali)", max_length=100, blank=True)
     qarz_oluvchi_pasport_seriya = models.CharField("Pasport seriyasi va raqami", max_length=20)
     qarz_oluvchi_pasport_berilgan = models.TextField("Kim tomonidan va qachon berilgan")
     qarz_oluvchi_manzil = models.TextField("Doimiy yashash manzili")
@@ -121,10 +122,18 @@ class LoanAgreement(models.Model):
     uchinchi_shaxs_mavjud = models.BooleanField("Garov mulkdori uchinchi shaxsmi?", default=False)
     garov_egasi = models.CharField("Garov mulkdori", max_length=10, choices=GAROV_EGASI_CHOICES, default='oz')
 
-    # --- UCHINCHI SHAXS MA'LUMOTLARI ---
+    # --- GAROV EGASI VA ISHONCHNOMA MA'LUMOTLARI ---
+    # Garov egasi (Shaxs)
     garov_egasi_fish = models.CharField("Garov egasi F.I.Sh", max_length=255, blank=True)
+    garov_egasi_inisiali = models.CharField("Garov egasining inisiali", max_length=100, blank=True)
     garov_egasi_pasport = models.TextField("Garov egasi pasport ma'lumotlari", blank=True)
     garov_egasi_manzil = models.TextField("Garov egasi manzili", blank=True)
+
+    # Ishonchnoma (Notarius va Reestr)
+    ishonchnoma_notarius_fish = models.CharField("Notarius F.I.Sh", max_length=255, blank=True)
+    ishonchnoma_notarius_manzil = models.CharField("Notarius manzili", max_length=255, blank=True)
+    ishonchnoma_reestr_raqami = models.CharField("Reestr raqami", max_length=100, blank=True)
+    ishonchnoma_reestr_sanasi = models.DateField("Reestr sanasi", null=True, blank=True)
 
     # --- AVTOMOBIL MA'LUMOTLARI ---
     avto_nomi = models.CharField("Avtomobil modeli", max_length=100, blank=True)
@@ -191,7 +200,7 @@ class LoanAgreement(models.Model):
     direktor_fish = models.CharField("Direktor F.I.Sh", max_length=255, default="OBIDOV ABDULLA SHOKIR O'G'LI", blank=True)
     direktor_fish_inisiali = models.CharField("Direktor F.I.Sh (Inisiali)", max_length=100, default="A.SH.OBIDOV", blank=True)
     
-    ishonchnoma_sanasi = models.DateField("Ishonchnoma sanasi", null=True, blank=True)
+
 
     # --- GRAFIK (Exceldan nusxa) ---
     grafik_matni = models.TextField("Grafik jadvali (Exceldan)", blank=True)
