@@ -1,0 +1,303 @@
+{% load humanize %}
+<!DOCTYPE html>
+<html lang="uz">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Kredit Qo'mitasi Qarori</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 0.6cm 1.2cm;
+        }
+
+        body {
+            font-family: "Times New Roman", Times, serif;
+            font-size: 10pt;
+            line-height: 1.1;
+            color: #000;
+            background: #fff;
+        }
+
+        .header {
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 2px;
+        }
+
+        .sub-header {
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 9pt;
+        }
+
+        .doc-title {
+            text-align: center;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 3px;
+        }
+
+        .doc-number {
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .date-place {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+
+        .section-title {
+            text-align: center;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-top: 10px;
+            margin-bottom: 5px;
+        }
+
+        p {
+            text-align: justify;
+            text-indent: 1cm;
+            margin-bottom: 5px;
+        }
+
+        .list-item {
+            margin-left: 1cm;
+            text-align: justify;
+            margin-bottom: 3px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 5px;
+            margin-bottom: 5px;
+            font-size: 8.5pt;
+        }
+
+        th,
+        td {
+            border: 1px solid black;
+            padding: 3px;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        td {
+            text-align: left;
+        }
+
+        .signer-table {
+            width: 100%;
+            border: none;
+            margin-top: 10px;
+            page-break-inside: avoid;
+        }
+
+        .signer-table td {
+            border: none;
+            padding: 3px;
+            vertical-align: middle;
+        }
+
+        /* Sahifa bo'linishi qoidasi */
+        .ta-minot-section {
+            page-break-before: auto;
+        }
+
+        .var {
+            color: #6b0000;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header">«PULLOL BUSINESS MIKROMOLIYA TASHKILOTI» MChJ</div>
+    <div class="sub-header">mikromoliya tashkiloti</div>
+
+    <div class="doc-title">Kredit qo‘mitasining yig‘ilishi</div>
+    <div class="doc-number">№ <span class="var">{{ loan.id }}</span> protokolidan ko‘chirma</div>
+
+    <div class="date-place">
+        <div>Toshkent shahri</div>
+        <div>
+            <span class="var">{{ loan.shartnoma_sanasi|date:"d.m.Y" }}</span>
+            y.
+        </div>
+    </div>
+
+    <div class="section-title">KUN TARTIBI:</div>
+    <div class="list-item">
+        1. <strong><span class="var">{{ loan.qarz_oluvchi_fish }}</span></strong>ga mikroqarz berish masalasini ko‘rib
+        chiqish to‘g‘risida.
+    </div>
+
+    <p style="text-indent: 0; margin-top: 20px;">
+        <strong>Birinchi masala yuzasidan:</strong> «PULLOL BUSINESS MIKROMOLIYA TASHKILOTI» MChJ mikromoliya tashkiloti
+        kredit bo‘yicha mas'ul xodimi
+        <strong><span class="var">{{ loan.qarz_oluvchi_fish }}</span></strong>ga
+        <strong><span class="var">{{ loan.kredit_miqdori|intcomma }}</span>
+            (<span class="var">{{ loan.kredit_miqdori_soz }}</span>) so‘m</strong> miqdorida,
+        muddati <strong><span class="var">{{ loan.kredit_muddat_oy }}</span></strong> oyga va
+        yillik <strong><span class="var">{{ loan.foiz_stavkasi }}</span>%
+            (<span class="var">{{ loan.foiz_stavkasi_soz }}</span>)</strong> foiz miqdorida mikroqarz berish bo‘yicha
+        <strong><span class="var">{{ loan.qarz_oluvchi_fish }}</span></strong>ning kredit arizasi va «PULLOL BUSINESS
+        MIKROMOLIYA TASHKILOTI» MChJning xulosasi bilan ishtirokchilarni tanishtirdi.
+    </p>
+
+    <p style="text-indent: 0; font-weight: bold; margin-bottom: 5px;">Mikroqarz ta’minoti:</p>
+    {% if loan.garov_turi == 'avto' %}
+    <div class="list-item">
+        1. Egalik huquqi <strong><span class="var">{{ loan.garov_egasi_fish }}</span></strong>ga tegishli bo‘lgan
+        garovga olingan avtomobil markasi
+        <strong><span class="var">{{ loan.avto_nomi }}</span></strong>,
+        rangi - <strong>
+            <span class="var">
+                {{ loan.avto_rang }}
+            </span>
+        </strong>,
+        ishlab chiqarilgan yili - <strong><span class="var">{{ loan.avto_yil }}</span></strong>,
+        davlat raqam belgisi <strong><span class="var">{{ loan.avto_raqam }}</span></strong>,
+        kuzov turi - <strong><span class="var">{{ loan.avto_kuzov_turi }}</span></strong>,
+        kuzov raqami <strong><span class="var">{{ loan.avto_kuzov }}</span></strong>,
+        dvigatel raqami <strong><span class="var">{{ loan.avto_dvigatel }}</span></strong>,
+        shassi raqami - <strong><span class="var">{{ loan.avto_shassi }}</span></strong>.
+    </div>
+    {% elif loan.garov_turi == 'kochmas_mulk' %}
+    <div class="list-item">
+        1. Egalik huquqi <strong><span class="var">{{ loan.garov_egasi_fish }}</span></strong>ga tegishli bo‘lgan
+        ko‘chmas mulk:
+        <strong><span class="var">{{ loan.mulk_turi }}</span></strong>,
+        manzil: <strong><span class="var">{{ loan.mulk_manzili }}</span></strong>.
+    </div>
+    {% endif %}
+
+    {% if loan.sugurta_mavjud %}
+    <div class="list-item">
+        2. <strong>«<span class="var">{{ loan.sugurta_kompaniyasi }}</span>»</strong> sug‘urta kompaniyasi tomonidan
+        mikroqarz to‘lamaslik xavfini
+        <strong><span class="var">{{ loan.sugurta_summasi|intcomma }}</span>
+            (<span class="var">{{ loan.sugurta_summasi_soz }}</span>) so‘m</strong> miqdorida sug‘urta qilish.
+    </div>
+    {% endif %}
+
+    <p style="text-indent: 0; margin-top: 15px;">
+        Masala yuzasidan berilgan ma’lumotlarni muhokama qilib, Kredit qo‘mitasi a’zolariga taqdim etilgan zarur
+        hujjatlarni o‘rganib, majlisda ishtirok etgan Kredit qo‘mitasi a’zolarining taklif va mulohazalarini inobatga
+        olgan holda «PULLOL BUSINESS MIKROMOLIYA TASHKILOTI» MChJ kredit qo‘mitasi
+    </p>
+
+    <div class="section-title">QAROR QILADI:</div>
+    <p style="text-indent: 0;">
+        <strong><span class="var">{{ loan.qarz_oluvchi_fish }}</span></strong>ga quyidagi shartlarda mikroqarz berish
+        masalasi ma’qullansin:
+    </p>
+
+    <div class="list-item">1. Mikroqarz summasi: <strong>
+            <span class="var">{{ loan.kredit_miqdori|intcomma }}</span>
+            (<span class="var">{{ loan.kredit_miqdori_soz }}</span>) so‘m.</strong>
+    </div>
+    <div class="list-item">2. Mikroqarz muddati: <strong>
+            <span class="var">{{ loan.kredit_muddat_oy }}</span>
+            oy.</strong>
+    </div>
+    <div class="list-item">3. Mikroqarzdan foydalanganlik uchun foiz stavkasi: yillik <strong>
+            <span class="var">{{ loan.foiz_stavkasi }}</span>%
+            (<span class="var">{{ loan.foiz_stavkasi_soz }}</span>) foiz.</strong>
+    </div>
+    <div class="list-item">4. Mikroqarz bo‘yicha asosiy qarz va foizlarni to‘lash: - mikroqarz shartnomasi bo‘yicha har
+        oy <strong>{{ loan.get_grafik_display }}</strong> to‘lovlari amalga oshiriladi.</div>
+
+    <div class="ta-minot-section">
+        <div class="list-item">5. Mikroqarz bo‘yicha ta’minot:</div>
+        {% if loan.garov_turi == 'avto' %}
+        <div class="list-item" style="text-indent: 0; margin-left: 1.5cm;">
+            1. Garov - <strong><span class="var">{{ loan.garov_egasi_fish }}</span></strong>ga mulk huquqi asosida
+            tegishli
+            avtotransport vositasi <strong><span class="var">{{ loan.avto_nomi }}</span></strong>, quyidagi
+            tafsilotlarga
+            muvofiq:
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Nomi</th>
+                    <th>Kuzov turi va kuzov raqami*</th>
+                    <th>Dvigatel va shassi raqami*</th>
+                    <th>Ishlab chiqarilgan yili va rangi*</th>
+                    <th>Kelishilgan garov qiymati, so‘m</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><span class="var">{{ loan.avto_nomi }}</span></td>
+                    <td>kuzov turi - <span class="var">{{ loan.avto_kuzov_turi }}</span>,
+                        kuzov raqami <span class="var">{{ loan.avto_kuzov }}</span>
+                    </td>
+                    <td>dvigatel raqami <span class="var">{{ loan.avto_dvigatel }}</span>,
+                        shassi raqami - <span class="var">{{ loan.avto_shassi }}</span>
+                    </td>
+                    <td>rangi - <span class="var">{{ loan.avto_rang }}</span>,
+                        ishlab chiqarilgan yili - <span class="var">{{ loan.avto_yil }}</span>
+                    </td>
+                    <td><span class="var">{{ loan.avto_bahosi|intcomma }}</span> <br>
+                        (<span class="var">{{ loan.avto_bahosi_soz }}</span>)
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="list-item" style="text-indent: 0; margin-left: 1.5cm; font-size: 9pt;">
+            -* avtotransport egasi: <span class="var">{{ loan.garov_egasi_fish }}</span><br>
+            -* texnik pasport: <span class="var">{{ loan.avto_texpasport }}</span>
+            <span class="var">{{ loan.avto_texpasport_sana|date:"d.m.Y" }}</span> yilda berilgan<br>
+            -* ro‘yxatdan o‘tgan manzili/garaj manzili: <span class="var">{{ loan.avto_manzil }}</span><br>
+            -* davlat raqami: <span class="var">{{ loan.avto_raqam }}</span>
+        </div>
+        {% endif %}
+
+        {% if loan.sugurta_mavjud %}
+        <div class="list-item">{{ loan.garov_turi|yesno:"2,1"|add:loan.sugurta_mavjud|yesno:"6,5" }}.
+            <strong>«<span class="var">{{ loan.sugurta_kompaniyasi }}</span>»</strong> sug‘urta
+            kompaniyasi tomonidan mikroqarz to‘lamaslik xavfini
+            <strong><span class="var">{{ loan.sugurta_summasi|intcomma }}</span>
+                (<span class="var">{{ loan.sugurta_summasi_soz }}</span>) so‘m</strong> miqdorida sug‘urta
+            qilish.
+        </div>
+        {% endif %}
+
+        <div class="list-item">{{ loan.sugurta_mavjud|yesno:"7,6" }}. Boshqa shartlar – garov ta’minlangandan keyin
+            mikroqarz berish.
+        </div>
+
+        <p style="text-indent: 0; font-weight: bold; margin-top: 15px;">Qaror bir ovozdan qabul qilindi.</p>
+
+        <table class="signer-table">
+            <tr>
+                <td style="width: 50%;">«PULLOL BUSINESS MIKROMOLIYA TASHKILOTI» MChJ direktori</td>
+                <td style="width: 25%; text-align: center;">
+                    {% if qr_obidov %}<img src="{{ qr_obidov }}" style="width: 1.5cm;">{% endif %}
+                </td>
+                <td style="width: 25%; font-weight: bold;"><span class="var">{{ loan.direktor_fish_inisiali }}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>Kreditlash bo‘limi boshlig‘i</td>
+                <td style="text-align: center;">
+                    {% if qr_akramov %}<img src="{{ qr_akramov }}" style="width: 1.5cm;">{% endif %}
+                </td>
+                <td style="font-weight: bold;">Akramov R.N.</td>
+            </tr>
+
+        </table>
+    </div>
+
+</body>
+
+</html>

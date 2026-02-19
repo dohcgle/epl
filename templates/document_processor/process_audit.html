@@ -79,12 +79,17 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-6 form-group">
+                            <div class="col-md-4 form-group">
                                 {{ form.qarz_oluvchi_tugilgan_sana.label_tag }}
                                 {{ form.qarz_oluvchi_tugilgan_sana }}
                                 <small class="form-text text-muted">Masalan: 10.02.1994</small>
                             </div>
-                            <div class="col-md-6 form-group">
+                            <div class="col-md-4 form-group">
+                                {{ form.qarz_oluvchi_jinsi.label_tag }}
+                                {{ form.qarz_oluvchi_jinsi }}
+                                <small class="form-text text-muted">Erkak yoki Ayol</small>
+                            </div>
+                            <div class="col-md-4 form-group">
                                 {{ form.qarz_oluvchi_telefon.label_tag }}
                                 {{ form.qarz_oluvchi_telefon }}
                                 <small class="form-text text-muted">+998 90 123-45-67</small>
@@ -193,15 +198,19 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-4 form-group">
+                                <div class="col-md-3 form-group">
                                     {{ form.kredit_muddat_oy.label_tag }}
                                     {{ form.kredit_muddat_oy }}
                                 </div>
-                                <div class="col-md-4 form-group">
+                                <div class="col-md-3 form-group">
+                                    {{ form.kredit_muddat_oy_soz.label_tag }}
+                                    {{ form.kredit_muddat_oy_soz }}
+                                </div>
+                                <div class="col-md-3 form-group">
                                     {{ form.foiz_stavkasi.label_tag }}
                                     {{ form.foiz_stavkasi }}
                                 </div>
-                                <div class="col-md-4 form-group">
+                                <div class="col-md-3 form-group">
                                     {{ form.foiz_stavkasi_soz.label_tag }}
                                     {{ form.foiz_stavkasi_soz }}
                                 </div>
@@ -928,11 +937,15 @@
                                 </div>
                                 <!-- Group 2: Direktor -->
                                 <div class="row">
-                                    <div class="col-md-6 form-group">
+                                    <div class="col-md-4 form-group">
+                                        {{ form.tashkilot_nomi.label_tag }}
+                                        {{ form.tashkilot_nomi }}
+                                    </div>
+                                    <div class="col-md-4 form-group">
                                         {{ form.direktor_fish.label_tag }}
                                         {{ form.direktor_fish }}
                                     </div>
-                                    <div class="col-md-6 form-group">
+                                    <div class="col-md-4 form-group">
                                         {{ form.direktor_fish_inisiali.label_tag }}
                                         {{ form.direktor_fish_inisiali }}
                                     </div>
@@ -1203,10 +1216,24 @@
         applyMoneyMaskAndWords('#id_kredit_miqdori', '#id_kredit_miqdori_soz');
 
         const muddatInput = document.getElementById('id_kredit_muddat_oy');
+        const $muddatSozInput = $('#id_kredit_muddat_oy_soz');
         if (muddatInput) {
             muddatInput.type = "number";
             muddatInput.min = "1";
-            muddatInput.max = "60"; // 60 oy gacha ruxsat beramiz, user 12 degan bo'lsa ham
+            muddatInput.max = "60";
+
+            $(muddatInput).on('input keyup change', function () {
+                let val = $(this).val();
+                if ($muddatSozInput.length) {
+                    let text = numberToWordsUzbek(val);
+                    if (text) text = text.charAt(0).toUpperCase() + text.slice(1);
+                    $muddatSozInput.val(text);
+                }
+            });
+            // Make read-only as requested
+            if ($muddatSozInput.length) {
+                $muddatSozInput.prop('readonly', true);
+            }
         }
 
         const $foizInput = $('#id_foiz_stavkasi');
@@ -1505,7 +1532,7 @@
                 $('#id_shartnoma_raqami').val("K-" + getRandomInt(1000, 9999));
                 $('#id_shartnoma_sanasi').val("01.02.2026").trigger('input');
                 $('#id_kredit_miqdori').val(getRandomInt(50, 500) * 1000000).trigger('input'); // 50 mln - 500 mln
-                $('#id_kredit_muddat_oy').val("12");
+                $('#id_kredit_muddat_oy').val("12").trigger('input');
                 $('#id_foiz_stavkasi').val("24").trigger('input');
 
                 // 3. Garov Turlari (Faqat tanlanganini to'ldiramiz)

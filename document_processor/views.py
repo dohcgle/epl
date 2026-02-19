@@ -425,6 +425,8 @@ def create_loan_application(request):
                 
                 if not data.get('kredit_miqdori_soz'):
                     data['kredit_miqdori_soz'] = number_to_text_uz(cleaner(data.get('kredit_miqdori')))
+                if not data.get('kredit_muddat_oy_soz'):
+                    data['kredit_muddat_oy_soz'] = number_to_text_uz(cleaner(data.get('kredit_muddat_oy')))
                 if not data.get('foiz_stavkasi_soz'):
                     data['foiz_stavkasi_soz'] = number_to_text_uz(cleaner(data.get('foiz_stavkasi')))
                 
@@ -744,7 +746,7 @@ def view_document_pdf(request, loan_id, doc_type):
     template_map = {
         'kredit_shartnoma': 'documents/shartnoma.html',
         'garov_shartnoma': 'documents/garov.html', 
-        'qaror': 'documents/qaror.html',
+        'protokol': 'documents/protokol.html',
         'xulosa': 'documents/xulosa.html',
         'dalolatnoma': 'documents/dalolatnoma.html',
         'grafik': 'documents/grafik.html',
@@ -760,6 +762,7 @@ def view_document_pdf(request, loan_id, doc_type):
         'anketa': 'documents/anketa.html',
         'majburiyatnoma': 'documents/majburiyatnoma.html',
         'garov_ariza': 'documents/garov_ariza.html',
+        'mijoz_ariza': 'documents/mijoz_ariza.html',
     }
     
     template_name = template_map.get(doc_type)
@@ -848,8 +851,9 @@ def generate_loan_docs(request, loan):
         'kredit_ariza', 
         'majburiyatnoma', 
         'garov_ariza', 
+        'mijoz_ariza' if loan.sugurta_mavjud else None,
         'xulosa', 
-        'qaror', 
+        'protokol', 
         'shartnoma', 
         'grafik', 
         'dalolatnoma', 

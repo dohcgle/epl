@@ -179,9 +179,9 @@
                                 </tr>
                                 <tr>
                                     <td>8</td>
-                                    <td><a href="{% url 'view_document_pdf' loan.id 'qaror' %}" target="_blank"
+                                    <td><a href="{% url 'view_document_pdf' loan.id 'protokol' %}" target="_blank"
                                             class="text-dark">
-                                            <i class="far fa-file-pdf mr-2 text-danger"></i> Qaror</a></td>
+                                            <i class="far fa-file-pdf mr-2 text-danger"></i> Protokol</a></td>
                                 </tr>
                                 <tr>
                                     <td>9</td>
@@ -231,6 +231,15 @@
                                             class="text-dark">
                                             <i class="far fa-file-image mr-2 text-primary"></i> Monitoring_4</a></td>
                                 </tr>
+                                {% if loan.sugurta_mavjud %}
+                                <tr>
+                                    <td>17</td>
+                                    <td><a href="{% url 'view_document_pdf' loan.id 'mijoz_ariza' %}" target="_blank"
+                                            class="text-dark">
+                                            <i class="far fa-file-alt mr-2 text-success"></i> Mijoz Arizasi
+                                            (Sug'urta)</a></td>
+                                </tr>
+                                {% endif %}
                             </tbody>
                         </table>
                     </div>

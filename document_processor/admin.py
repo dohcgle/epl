@@ -12,33 +12,60 @@ class DocumentTemplateAdmin(admin.ModelAdmin):
 
 @admin.register(LoanAgreement)
 class LoanAgreementAdmin(admin.ModelAdmin):
-    list_display = ('qarz_oluvchi_fish', 'shartnoma_raqami', 'kredit_miqdori', 'garov_turi', 'created_at')
-    list_filter = ('garov_turi', 'created_at', 'sugurta_mavjud')
-    search_fields = ('qarz_oluvchi_fish', 'shartnoma_raqami', 'qarz_oluvchi_pasport_seriya')
-    readonly_fields = ('created_at', 'updated_at')
+    list_display = ('qarz_oluvchi_fish', 'shartnoma_raqami', 'kredit_miqdori', 'status', 'created_at')
+    list_filter = ('status', 'garov_turi', 'filial_nomi', 'created_at')
+    search_fields = ('qarz_oluvchi_fish', 'shartnoma_raqami', 'qarz_oluvchi_pasport_seriya', 'qarz_oluvchi_jshshir')
+    readonly_fields = ('created_at', 'updated_at', 'moderator_approved_at', 'director_approved_at')
     
     fieldsets = (
         ("Shaxsiy Ma'lumotlar", {
-            'fields': ('qarz_oluvchi_fish', 'qarz_oluvchi_pasport_seriya', 'qarz_oluvchi_pasport_berilgan', 'qarz_oluvchi_manzil', 'qarz_oluvchi_tugilgan_sana')
+            'fields': (
+                'qarz_oluvchi_fish', 'qarz_oluvchi_fish_inisiali', 'qarz_oluvchi_jinsi', 
+                'qarz_oluvchi_tugilgan_sana', 'qarz_oluvchi_jshshir', 'qarz_oluvchi_pasport_seriya', 
+                'qarz_oluvchi_pasport_berilgan', 'qarz_oluvchi_manzil', 'qarz_oluvchi_telefon',
+                'qarz_oluvchi_ish_joyi', 'qarz_oluvchi_daromad', 'qarz_oluvchi_xarajatlar', 
+                'qarz_oluvchi_majburiyatlar', 'qarz_oluvchi_tahminiy_tolov'
+            )
+        }),
+        ("Bog'lanish uchun shaxslar", {
+            'classes': ('collapse',),
+            'fields': (
+                ('kontakt_1_fish', 'kontakt_1_telefon', 'kontakt_1_qarindoshlik'),
+                ('kontakt_2_fish', 'kontakt_2_telefon', 'kontakt_2_qarindoshlik'),
+                ('kontakt_3_fish', 'kontakt_3_telefon', 'kontakt_3_qarindoshlik'),
+            )
         }),
         ("Kredit Ma'lumotlari", {
-            'fields': ('shartnoma_raqami', 'shartnoma_sanasi', 'kredit_miqdori', 'kredit_miqdori_soz', 'kredit_muddat_oy', 'foiz_stavkasi', 'foiz_stavkasi_soz')
+            'fields': (
+                'shartnoma_raqami', 'shartnoma_sanasi', 'kredit_turi', 'grafik',
+                'kredit_miqdori', 'kredit_miqdori_soz', 'kredit_muddat_oy', 
+                'foiz_stavkasi', 'foiz_stavkasi_soz'
+            )
         }),
-        ("Garov Asosiy", {
-            'fields': ('garov_turi', 'sugurta_mavjud', 'uchinchi_shaxs_mavjud', 'garov_egasi')
+        ("Garov Umumiy", {
+            'fields': ('garov_turi', 'garov_egasi', 'uchinchi_shaxs_mavjud', 'sugurta_mavjud')
         }),
         ("Garov Egasi va Ishonchnoma", {
             'classes': ('collapse',),
-            'fields': ('garov_egasi_fish', 'garov_egasi_inisiali', 'garov_egasi_pasport', 'garov_egasi_manzil', 
-                       'ishonchnoma_notarius_fish', 'ishonchnoma_notarius_manzil', 'ishonchnoma_reestr_raqami', 'ishonchnoma_reestr_sanasi')
+            'fields': (
+                'garov_egasi_fish', 'garov_egasi_inisiali', 'garov_egasi_pasport', 'garov_egasi_manzil', 
+                'ishonchnoma_notarius_fish', 'ishonchnoma_notarius_manzil', 'ishonchnoma_reestr_raqami', 'ishonchnoma_reestr_sanasi'
+            )
         }),
         ("Avtomobil Ma'lumotlari", {
             'classes': ('collapse',),
-            'fields': ('avto_nomi', 'avto_raqam', 'avto_kuzov', 'avto_dvigatel', 'avto_yil', 'avto_rang', 'avto_bahosi', 'avto_yurgan', 'avto_texpasport')
+            'fields': (
+                'avto_nomi', 'avto_raqam', 'avto_kuzov_turi', 'avto_kuzov', 'avto_dvigatel', 
+                'avto_shassi', 'avto_yil', 'avto_rang', 'avto_bahosi', 'avto_bahosi_soz', 
+                'avto_yurgan', 'avto_texpasport', 'avto_texpasport_sana', 'avto_manzil'
+            )
         }),
         ("Ko'chmas Mulk Ma'lumotlari", {
             'classes': ('collapse',),
-            'fields': ('mulk_manzili', 'mulk_qurilish_maydoni', 'mulk_umumiy_maydoni', 'mulk_yashash_maydoni', 'mulk_turi', 'mulk_bahosi', 'mulk_bahosi_soz', 'mulk_dalolatnoma_raqami', 'mulk_dalolatnoma_sanasi')
+            'fields': (
+                'mulk_manzili', 'mulk_qurilish_maydoni', 'mulk_umumiy_maydoni', 'mulk_yashash_maydoni', 
+                'mulk_turi', 'mulk_bahosi', 'mulk_bahosi_soz', 'mulk_dalolatnoma_raqami', 'mulk_dalolatnoma_sanasi'
+            )
         }),
         ("Tilla Buyumlar Ma'lumotlari", {
             'classes': ('collapse',),
@@ -48,10 +75,14 @@ class LoanAgreementAdmin(admin.ModelAdmin):
             'classes': ('collapse',),
             'fields': ('sugurta_kompaniyasi', 'sugurta_polisi', 'sugurta_sanasi', 'sugurta_summasi', 'sugurta_summasi_soz')
         }),
-        ("Qo'shimcha", {
-            'fields': ('filial_boshligi', 'grafik_matni')
+        ("Filial va Rahbarlar", {
+            'fields': ('filial_nomi', 'filial_boshligi', 'filial_boshligi_inisiali', 'direktor_fish', 'direktor_fish_inisiali')
         }),
-        ("Monitoring", {
-            'fields': ('monitoring_sana_1', 'monitoring_sana_2', 'monitoring_sana_3', 'monitoring_sana_4')
+        ("Monitoring va Grafik", {
+            'classes': ('collapse',),
+            'fields': ('grafik_matni', 'monitoring_sana_1', 'monitoring_sana_2', 'monitoring_sana_3', 'monitoring_sana_4')
+        }),
+        ("Tizim Ma'lumotlari", {
+            'fields': ('status', 'is_deleted', 'created_by', 'moderator_approved_by', 'moderator_approved_at', 'director_approved_by', 'director_approved_at', 'pdf_file', 'created_at', 'updated_at')
         }),
     )

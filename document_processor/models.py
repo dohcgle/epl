@@ -59,6 +59,13 @@ class LoanAgreement(models.Model):
     qarz_oluvchi_majburiyatlar = models.TextField("Mavjud kredit va qarz majburiyatlari", blank=True)
     qarz_oluvchi_tahminiy_tolov = models.BigIntegerField("Mikroqarz bo‘yicha oylik differensial to‘lovi miqdori (tahminiy)", blank=True, null=True)
     qarz_oluvchi_tugilgan_sana = models.DateField("Tug'ilgan sanasi", null=True, blank=True)
+    
+    JINSI_CHOICES = [
+        ('erkak', 'Erkak'),
+        ('ayol', 'Ayol'),
+    ]
+    qarz_oluvchi_jinsi = models.CharField("Jinsi", max_length=10, choices=JINSI_CHOICES, blank=True, null=True)
+    
     qarz_oluvchi_jshshir = models.BigIntegerField("JSHSHIR", blank=True, null=True)
     qarz_oluvchi_telefon = models.CharField("Telefon raqami", max_length=20, blank=True)
     
@@ -91,6 +98,7 @@ class LoanAgreement(models.Model):
     kredit_miqdori = models.BigIntegerField("Kredit miqdori (raqam bilan)", blank=True, null=True)
     kredit_miqdori_soz = models.CharField("Kredit miqdori (so'z bilan)", max_length=255, blank=True)
     kredit_muddat_oy = models.CharField("Kredit muddati (oy)", max_length=10, blank=True)
+    kredit_muddat_oy_soz = models.CharField("Kredit muddati (so'z bilan)", max_length=255, blank=True)
     foiz_stavkasi = models.CharField("Foiz stavkasi (raqam)", max_length=10, blank=True)
     foiz_stavkasi_soz = models.CharField("Foiz stavkasi (so'z bilan)", max_length=255, blank=True)
     
@@ -193,10 +201,11 @@ class LoanAgreement(models.Model):
         ("To'rtko'l filiali", "To'rtko'l filiali"),
     ]
     
-    filial_nomi = models.CharField("Filial nomi", max_length=50, choices=FILIAL_CHOICES, default='Buxoro filiali', blank=True)
-    filial_boshligi = models.CharField("Filial boshlig'i F.I.Sh", max_length=100, blank=True)
+    filial_nomi = models.CharField("Filial nomi", max_length=100, choices=FILIAL_CHOICES, default='Buxoro filiali')
+    filial_boshligi = models.CharField("Filial boshlig'i F.I.Sh", max_length=255, blank=True)
     filial_boshligi_inisiali = models.CharField("Filial boshlig'i F.I.Sh (Inisiali)", max_length=100, blank=True)
     
+    tashkilot_nomi = models.CharField("Tashkilot nomi", max_length=255, default='«PULLOL BUSINESS MIKROMOLIYA TASHKILOTI» MChJ')
     direktor_fish = models.CharField("Direktor F.I.Sh", max_length=255, default="OBIDOV ABDULLA SHOKIR O'G'LI", blank=True)
     direktor_fish_inisiali = models.CharField("Direktor F.I.Sh (Inisiali)", max_length=100, default="A.SH.OBIDOV", blank=True)
     

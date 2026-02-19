@@ -1,0 +1,191 @@
+{% load humanize %}
+<!DOCTYPE html>
+<html lang="uz">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Mijoz Arizasi (Sug'urta)</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 1.5cm 2cm;
+        }
+
+        body {
+            font-family: "Times New Roman", Times, serif;
+            font-size: 11pt;
+            line-height: 1.3;
+            color: #000;
+        }
+
+        .header {
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            font-size: 12pt;
+        }
+
+        .date-number {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .payer-info {
+            margin-bottom: 15px;
+            border-bottom: 1px double #000;
+            padding-bottom: 5px;
+        }
+
+        p {
+            text-align: justify;
+            text-indent: 1.2cm;
+            margin-bottom: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-size: 10.5pt;
+        }
+
+        table,
+        th,
+        td {
+            border: 1px solid #333;
+        }
+
+        td {
+            padding: 6px 10px;
+            vertical-align: middle;
+        }
+
+        .no-indent {
+            text-indent: 0;
+        }
+
+        .terms-list {
+            padding-left: 20px;
+            margin-bottom: 15px;
+            font-size: 10pt;
+        }
+
+        .terms-list li {
+            margin-bottom: 5px;
+            text-align: justify;
+        }
+
+        .signature-section {
+            margin-top: 40px;
+            width: 100%;
+        }
+
+        .signature-table {
+            width: 100%;
+            border: none !important;
+        }
+
+        .signature-table td {
+            border: none !important;
+            padding: 0;
+        }
+
+        .sign-line {
+            border-bottom: 1px solid #000;
+            width: 180px;
+            display: inline-block;
+        }
+
+        .var {
+            color: #900000;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header">
+        Sug‘urta mukofotini to‘lash uchun<br>
+        PUL O‘TKAZISH TO‘G‘RISIDA ARIZA<br>
+        <span style="font-size: 10pt; text-transform: none;">(«IMPEX INSURANCE» AJ SK foydasiga)</span>
+    </div>
+
+    <div class="date-number">
+        <div>№ <span class="var">{{ loan.id }}</span></div>
+        <div><span class="var">{{ loan.shartnoma_sanasi|date:"d.m.Y" }}</span> y.</div>
+    </div>
+
+    <div class="payer-info">
+        <strong>To‘lovchi (Qarz oluvchi):</strong> <span class="var">{{ loan.qarz_oluvchi_fish }}</span>
+    </div>
+
+    <p>
+        Men, ixtiyoriy ravishda ish yuritib, №01/18-22/2505178-sonli Bosh kelishuv shartlariga muvofiq,
+        <strong><span class="var">{{ loan.shartnoma_sanasi|date:"d.m.Y" }}</span> y. 
+            № <span class="var">{{ loan.shartnoma_raqami }}</span></strong>-sonli Mikroqarz ajratish shartnomasi bo‘yicha Qarz oluvchi
+        sifatida menga nisbatan «PULLOL BUSINESS MIKROMOLIYA TASHKILOTI» MChJ va «IMPEX INSURANCE» AJ sug‘urta
+        kompaniyasi o‘rtasida tuzilgan, garov yoki boshqa turdagi ta’minot bilan ta’minlanmagan qismidagi mikroqarz
+        qaytarilmasligi xavfini sug‘urta qilish uchun sug‘urta polisi rasmiylashtirilayotganligi to‘g‘risida xabardor
+        qilinganimni tasdiqlayman hamda ushbu sug‘urta bo‘yicha sug‘urta mukofoti to‘lovini qabul qilishingizni
+        so‘rayman:
+    </p>
+
+    <table>
+        <tr>
+            <td width="35%" bgcolor="#f9f9f9"><strong>Qabul qiluvchi</strong></td>
+            <td><strong>«PULLOL BUSINESS MIKROMOLIYA TASHKILOTI» MChJ</strong></td>
+        </tr>
+        <tr>
+            <td bgcolor="#f9f9f9"><strong>Bank rekvizitlari</strong></td>
+            <td>
+                h/s: 20208000405643889001; MFO: 01088<br>
+                STIR: 310430149
+            </td>
+        </tr>
+        <tr>
+            <td bgcolor="#f9f9f9"><strong>To‘lov maqsadi</strong></td>
+            <td>Sug‘urta mukofotini to‘lash</td>
+        </tr>
+        <tr>
+            <td bgcolor="#f9f9f9"><strong>Yillik tarif</strong></td>
+            <td>3% (uch foiz)</td>
+        </tr>
+        <tr>
+            <td bgcolor="#f9f9f9"><strong>Sug‘urta polisi raqami</strong></td>
+            <td><span class="var">{{ loan.sugurta_polisi }}</span></td>
+        </tr>
+    </table>
+
+    <p class="no-indent"><strong>Ushbu ariza bilan quyidagilarga rozilik beraman:</strong></p>
+    <ul class="terms-list">
+        <li>Sug‘urta shartnomasini (sug‘urta polisini) tuzish uchun mening hisobimdan yechib olingan to‘lov summasiga
+            e’tirozim yo‘qligiga;</li>
+        <li>Sug‘urtalovchiga ta’minlanmagan qismi bo‘yicha to‘langan sug‘urta tovoni summasi to‘liq undirilmagunga
+            qadar, mening nomimga ochilgan O‘zbekiston Respublikasidagi har qanday bank hisobvaraqlari va bank
+            kartalaridan akseptsiz (tortishuvsiz) tartibda mablag‘larni yechib olish bo‘yicha topshiriq (farmoyish)
+            berishga.</li>
+    </ul>
+
+    <div class="signature-section">
+        <table class="signature-table">
+            <tr>
+                <td width="50%">
+                    <strong>To‘lovchi:</strong><br><br>
+                    <div class="sign-line"></div><br>
+                    <small>(imzo)</small>
+                </td>
+                <td width="50%" align="right" style="vertical-align: bottom;">
+                    <strong><span class="var">{{ loan.qarz_oluvchi_fish }}</span></strong><br>
+                    <small>(F.I.Sh.)</small>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+</body>
+
+</html>

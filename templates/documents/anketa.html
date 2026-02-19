@@ -8,69 +8,92 @@
     <style>
         @page {
             size: A4;
-            margin: 2cm;
-
-            @bottom-center {
-                content: "Sahifa " counter(page) " / " counter(pages);
-                font-size: 10pt;
-            }
+            margin: 1cm 1.5cm;
         }
 
         body {
             font-family: "Times New Roman", Times, serif;
-            font-size: 11pt;
-            line-height: 1.2;
+            font-size: 10pt;
+            line-height: 1.25;
+            color: #000;
         }
 
         .header {
             text-align: center;
             font-weight: bold;
-            margin-bottom: 20px;
+            margin-bottom: 5px;
         }
 
-        h3 {
+        .title {
             text-align: center;
-            text-transform: uppercase;
-            margin-bottom: 20px;
+            font-weight: bold;
+            font-size: 12pt;
+            margin-bottom: 5px;
         }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 15px;
-            margin-bottom: 20px;
-            font-size: 11pt;
+        .date-right {
+            text-align: right;
+            margin-bottom: 10px;
+            font-weight: bold;
         }
 
-        th,
-        td {
+        .question-block {
+            margin-bottom: 10px;
+        }
+
+        .question-text {
+            font-weight: bold;
+            margin-bottom: 3px;
+        }
+
+        .options {
+            margin-left: 20px;
+        }
+
+        .option-item {
+            margin-bottom: 2px;
+        }
+
+        .checkbox {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
             border: 1px solid black;
-            padding: 5px;
-            text-align: left;
-            vertical-align: top;
-        }
-
-        th {
-            background-color: #f0f0f0;
+            margin-right: 5px;
+            vertical-align: middle;
+            text-align: center;
+            line-height: 12px;
+            font-size: 10px;
             font-weight: bold;
-            width: 40%;
         }
 
-        .signatures-box {
-            margin-top: 40px;
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
+        .explanation-line {
+            border-bottom: 1px solid black;
+            margin-top: 15px;
+            height: 20px;
         }
 
-        .footer-date {
+        .definition {
+            font-size: 8.5pt;
+            text-align: justify;
+            margin-top: 20px;
+            font-style: italic;
+            border: 1px solid #ccc;
+            padding: 8px;
+        }
+
+        .declaration {
+            margin-top: 15px;
+            font-weight: bold;
+            text-align: justify;
+        }
+
+        .signature-section {
             margin-top: 30px;
-            font-weight: bold;
         }
 
-        /* Django template o'zgaruvchilari uchun rang */
         .var {
-            color: #900000;
+            color: #6b0000;
             font-weight: bold;
         }
     </style>
@@ -78,66 +101,114 @@
 
 <body>
 
-    <div class="header">
-        «PULLOL BUSINESS MIKROMOLIYA TASHKILOTI» MChJ
+    <div class="header">«PULLOL BUSINESS MIKROMOLIYA TASHKILOTI» MChJ</div>
+    <div class="title">ANKETA</div>
+
+    <div class="date-right">
+        <span class="var">{{ loan.created_at|date:"d.m.Y" }} y.</span>
     </div>
 
-    <h3>ANKETA</h3>
+    <div style="margin-bottom: 15px;">
+        <strong>Mijozning to'liq ismi sharifi:</strong> <span class="var">{{ loan.qarz_oluvchi_fish }}</span>
+    </div>
 
-    <table>
-        <tr>
-            <th colspan="2" style="text-align: center;">MIJOZ MA'LUMOTLARI</th>
-        </tr>
-        <tr>
-            <th>F.I.Sh.:</th>
-            <td><span class="var">{{ loan.qarz_oluvchi_fish }}</span></td>
-        </tr>
-        <tr>
-            <th>Pasport:</th>
-            <td><span class="var">{{ loan.qarz_oluvchi_pasport_seriya }}</span>, <span class="var">{{
-                    loan.qarz_oluvchi_pasport_berilgan }}</span></td>
-        </tr>
-        <tr>
-            <th>Manzil:</th>
-            <td><span class="var">{{ loan.qarz_oluvchi_manzil }}</span></td>
-        </tr>
-        <tr>
-            <th>Telefon:</th>
-            <td><span class="var">{{ loan.qarz_oluvchi_telefon }}</span></td>
-        </tr>
-        <tr>
-            <th>Ish joyi:</th>
-            <td><span class="var">{{ loan.qarz_oluvchi_ish_joyi }}</span></td>
-        </tr>
-    </table>
-
-    <table>
-        <tr>
-            <th colspan="2" style="text-align: center;">KREDIT MA'LUMOTLARI</th>
-        </tr>
-        <tr>
-            <th>Kredit summasi:</th>
-            <td><span class="var">{{ loan.kredit_miqdori|intcomma }}</span> so'm</td>
-        </tr>
-        <tr>
-            <th>Muddati:</th>
-            <td><span class="var">{{ loan.kredit_muddat_oy }}</span> oy</td>
-        </tr>
-        <tr>
-            <th>Foiz stavkasi:</th>
-            <td><span class="var">{{ loan.foiz_stavkasi }}</span>%</td>
-        </tr>
-    </table>
-
-    <div class="signatures-box">
-        <div style="width: 100%;">
-            <strong>Mijoz imzosi:</strong> _______________________ <strong>{{ loan.qarz_oluvchi_fish }}</strong>
+    <div class="question-block">
+        <div class="question-text">1. Siz ommaviy mansabdor shaxsmisiz?</div>
+        <div class="options">
+            <div class="option-item">
+                <div class="checkbox"></div> Ha
+            </div>
+            <div class="option-item">
+                <div class="checkbox"></div> Yo'q
+            </div>
         </div>
     </div>
 
-    <div class="footer-date">
-        Sana: <span class="var">{{ loan.created_at|date:"d.m.Y" }}</span> y.
+    <div class="question-block">
+        <div class="question-text">2. Yaqin qarindoshlaringiz orasida ommaviy mansabdor shaxslar bormi?</div>
+        <div class="options">
+            <div class="option-item">
+                <div class="checkbox"></div> Ha
+            </div>
+            <div class="option-item">
+                <div class="checkbox"></div> Yo'q
+            </div>
+        </div>
     </div>
+
+    <div class="question-block">
+        <div class="question-text">3. Do'stlaringiz yoki yaqinlaringizdan birontasi ommaviy mansabdor shaxsmi?</div>
+        <div class="options">
+            <div class="option-item">
+                <div class="checkbox"></div> Ha
+            </div>
+            <div class="option-item">
+                <div class="checkbox"></div> Yo'q
+            </div>
+        </div>
+    </div>
+
+    <div class="question-block">
+        <div>Yuqoridagi savollardan biriga «Ha» deb javob bergan bo'lsangiz, javobingizni qisqacha tushuntirib bering:
+        </div>
+        <div class="explanation-line"></div>
+    </div>
+
+    <div class="question-block">
+        <div class="question-text">4. Siz bank amaliyotlarini amalga oshirishda uchinchi shaxsning manfaatlarini
+            ifodalaysizmi?</div>
+        <div class="options">
+            <div class="option-item">
+                <div class="checkbox"></div> Ha
+            </div>
+            <div class="option-item">
+                <div class="checkbox"></div> Yo'q
+            </div>
+        </div>
+    </div>
+
+    <div class="question-block">
+        <div class="question-text">5. Agar oldingi savolga «HA» deb javob bergan bo'lsangiz, bank operatsiyalarini
+            bajarish uchun ishonchnomangiz bormi?</div>
+        <div class="options">
+            <div class="option-item">
+                <div class="checkbox"></div> Ha
+            </div>
+            <div class="option-item">
+                <div class="checkbox"></div> Yo'q
+            </div>
+        </div>
+    </div>
+
+    <div class="question-block">
+        <div>Agar oldingi savolga «YO'Q» deb javob bergan bo'lsangiz, javobingizni qisqacha tushuntirib bering:</div>
+        <div class="explanation-line"></div>
+    </div>
+
+    <div class="definition">
+        <strong>Ommaviy mansabdor shaxslar</strong> — doimiy, vaqtincha yoki maxsus vakolatli organ tomonidan
+        tayinlangan yoki saylangan, tashkiliy-maʼmuriy funksiyalarni bajaruvchi hamda xorijiy davlatning qonun
+        chiqaruvchi, ijro etuvchi, maʼmuriy yoki sud organida yoxud xalqaro tashkilotda yuridik ahamiyatga molik
+        harakatlarni amalga oshirishga vakolatli shaxslar, shuningdek xorijiy davlatlar korxonalarining yuqori martabali
+        rahbarlari, taniqli siyosatchilar va xorijiy davlatlar siyosiy partiyalarining taniqli a'zolari.
+    </div>
+
+    <div class="declaration">
+        Anketadagi barcha ma'lumotlar to'g'ri, agar o'zgarishlar bo'lsa, men bu haqida xabardor qilish majburiyatini o'z
+        zimmamga olaman.
+    </div>
+
+    <table style="width: 100%; margin-top: 40px; border: none;">
+        <tr>
+            <td style="border: none; width: 60%;">
+                <strong>{{ loan.qarz_oluvchi_fish }}</strong>
+            </td>
+            <td style="border: none; text-align: right;">
+                _______________________
+                <div style="font-size: 8pt; text-align: center; margin-right: 40px;">(imzo)</div>
+            </td>
+        </tr>
+    </table>
 
 </body>
 

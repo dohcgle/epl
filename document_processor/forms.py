@@ -14,6 +14,7 @@ class UmumiyMalumotForm(forms.Form):
     qarz_oluvchi_majburiyatlar = forms.CharField(label="Mavjud kredit va qarz majburiyatlari", widget=forms.Textarea(attrs={'rows': 2}), required=False)
     qarz_oluvchi_tahminiy_tolov = forms.IntegerField(label="Mikroqarz bo‘yicha oylik differensial to‘lovi miqdori (tahminiy)", required=False)
     qarz_oluvchi_tugilgan_sana = forms.DateField(label="Tug'ilgan sanasi", widget=forms.DateInput(attrs={'class': 'date-mask', 'placeholder': 'dd.mm.yyyy'}), input_formats=['%d.%m.%Y'], required=False)
+    qarz_oluvchi_jinsi = forms.ChoiceField(label="Jinsi", choices=[('', 'Tanlang...')] + LoanAgreement.JINSI_CHOICES, required=False)
     qarz_oluvchi_jshshir = forms.CharField(label="JSHSHIR", max_length=14, required=False)
     qarz_oluvchi_telefon = forms.CharField(label="Telefon raqami", required=False)
 
@@ -37,6 +38,7 @@ class UmumiyMalumotForm(forms.Form):
     kredit_miqdori = forms.IntegerField(label="Kredit miqdori (raqam bilan)", required=False)
     kredit_miqdori_soz = forms.CharField(label="Kredit miqdori (so'z bilan)", widget=forms.TextInput(attrs={'readonly': 'readonly'}), required=False)
     kredit_muddat_oy = forms.CharField(label="Kredit muddati (oy)", required=False)
+    kredit_muddat_oy_soz = forms.CharField(label="Kredit muddati (so'z bilan)", widget=forms.TextInput(attrs={'readonly': 'readonly'}), required=False)
     foiz_stavkasi = forms.CharField(label="Foiz stavkasi (raqam)", required=False)
     foiz_stavkasi_soz = forms.CharField(label="Foiz stavkasi (so'z bilan)", widget=forms.TextInput(attrs={'readonly': 'readonly'}), required=False)
     
@@ -142,6 +144,7 @@ class UmumiyMalumotForm(forms.Form):
     filial_boshligi = forms.CharField(label="Filial boshlig'i F.I.Sh", initial="IKROMOV B.A.", required=False)
     filial_boshligi_inisiali = forms.CharField(label="Filial boshlig'i F.I.Sh (Inisiali)", initial="B.A.IKROMOV", required=False, widget=forms.TextInput(attrs={'style': 'text-transform:uppercase', 'oninput': 'this.value = this.value.toUpperCase(); this.setCustomValidity("")'}))
     
+    tashkilot_nomi = forms.CharField(label="Tashkilot nomi", initial='«PULLOL BUSINESS MIKROMOLIYA TASHKILOTI» MChJ', required=False, widget=forms.TextInput(attrs={'readonly': 'readonly'}))
     direktor_fish = forms.CharField(label="Direktor F.I.Sh", initial="OBIDOV ABDULLA SHOKIR O'G'LI", required=False, widget=forms.TextInput(attrs={'readonly': 'readonly'}))
     direktor_fish_inisiali = forms.CharField(label="Direktor F.I.Sh (Inisiali)", initial="A.SH.OBIDOV", required=False, widget=forms.TextInput(attrs={'readonly': 'readonly'}))
     

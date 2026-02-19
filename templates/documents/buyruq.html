@@ -191,6 +191,15 @@
     <p>Kelishilgan qiymati: <strong><span class="var">{{ loan.mulk_bahosi|intcomma }}</span></strong> so‘m.</p>
     {% endif %}
 
+    {% if is_sugurta %}
+    <div class="list-item" style="margin-top: 15px;">
+        6. <strong>«<span class="var">{{ loan.sugurta_kompaniyasi }}</span>» АJ</strong> sug‘urta kompaniyasi bilan
+        Mikroqarz to'lamaslik xavfini <strong><span class="var">{{ loan.sugurta_summasi|intcomma }}</span> (<span
+                class="var">{{ loan.sugurta_summasi_soz }}</span>) so'm</strong> miqdoriga sug’urta qilish shartnomasi
+        tuzilsin.
+    </div>
+    {% endif %}
+
     <table class="requisites" style="margin-top: 40px; border: none;">
         <tr>
             <td style="border: none; width: 60%; text-align: left;">

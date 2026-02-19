@@ -8,109 +8,173 @@
     <style>
         @page {
             size: A4;
-            margin: 2cm;
-
-            @bottom-center {
-                content: "";
-            }
+            margin: 1.5cm 2cm;
         }
 
         body {
             font-family: "Times New Roman", Times, serif;
             font-size: 11pt;
-            line-height: 1.5;
+            line-height: 1.3;
+            color: #000;
         }
 
-        .header-right {
-            text-align: right;
-            margin-bottom: 40px;
-            font-weight: bold;
-            line-height: 1.2;
-        }
-
-        h3 {
-            text-align: center;
-            text-transform: uppercase;
+        .header-table {
+            width: 100%;
+            border: none;
             margin-bottom: 30px;
         }
 
-        p {
+        .header-table td {
+            border: none;
+            vertical-align: top;
+            padding: 0;
+        }
+
+        .title {
+            text-align: center;
+            font-weight: bold;
+            font-size: 14pt;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        .content-section {
             text-align: justify;
-            text-indent: 1cm;
             margin-bottom: 15px;
         }
 
-        .signatures-box {
-            margin-top: 100px;
-            width: 100%;
+        .indented {
+            text-indent: 1.25cm;
         }
 
-        .footer-date {
-            margin-top: 40px;
-            font-weight: bold;
+        .list-item {
+            margin-left: 20px;
+            margin-bottom: 5px;
         }
 
-        /* Django template o'zgaruvchilari uchun rang */
         .var {
-            color: #900000;
+            color: #6b0000;
             font-weight: bold;
+        }
+
+        .footer-table {
+            width: 100%;
+            border: none;
+            margin-top: 40px;
+        }
+
+        .footer-table td {
+            border: none;
+            vertical-align: top;
+        }
+
+        .underline {
+            border-bottom: 1px solid black;
+            display: inline-block;
+            min-width: 150px;
+        }
+
+        .center-text {
+            text-align: center;
         }
     </style>
 </head>
 
 <body>
 
-    <div class="header-right">
-        «PULLOL BUSINESS MIKROMOLIYA TASHKILOTI» MChJ<br>
-        <span class="var">{{ loan.filial_nomi }}</span> boshlig‘i<br>
-        <span class="var">{{ loan.filial_boshligi }}</span>ga<br>
-        Fuqaro <span class="var">{{ loan.qarz_oluvchi_fish }}</span>dan
-    </div>
-
-    <h3>ARIZA</h3>
-
-    <p>
-        Men, <span class="var">{{ loan.qarz_oluvchi_fish }}</span> 
-        (Pasport: <span class="var">{{ loan.qarz_oluvchi_pasport_seriya }}</span>, 
-        <span class="var">{{ loan.qarz_oluvchi_pasport_berilgan }}</span>), 
-        Sizdan menga <span class="var">{{ loan.kredit_muddat_oy }}</span> oy muddatga, 
-        <strong><span class="var">{{ loan.kredit_miqdori|intcomma }}</span> 
-            (<span class="var">{{ loan.kredit_miqdori_soz }}</span>)
-        so‘m</strong> miqdorida, yillik <span class="var">{{ loan.foiz_stavkasi }}</span>% ustama haqi to‘lash sharti bilan 
-        <span class="var">{{ loan.get_kredit_turi_display|lower }}</span> ajratishingizni
-        so‘rayman.
-    </p>
-
-    <p>
-        Ushbu <span class="var">{{ loan.get_kredit_turi_display|lower }}</span>ni o‘z ehtiyojlarim uchun ishlatishni
-        hamda o‘z vaqtida, shartnomada ko‘rsatilgan grafik asosida qaytarishni o‘z zimmamga olaman.
-    </p>
-
-    <p>
-        Mening daromadlarim va to‘lov qobiliyatim ushbu 
-        <span class="var">{{ loan.get_kredit_turi_display|lower }}</span>ni qoplash uchun yetarli
-        ekanligini ma’lum qilaman.
-    </p>
-
-    <table style="width: 100%; border: none; margin-top: 50px;">
+    <table class="header-table">
         <tr>
-            <td style="border: none; width: 50%; text-align: left; vertical-align: top;">
-                <strong>Ariza beruvchi:</strong>
-            </td>
-            <td style="border: none; width: 50%; text-align: right; vertical-align: top;">
-                <div style="height: 50px; display: flex; flex-direction: column; justify-content: flex-end;">
-                    <strong><span class="var">{{ loan.qarz_oluvchi_fish }}</span></strong>
-                    <br>
+            <td style="width: 40%;"></td>
+            <td style="width: 60%; font-weight: bold; text-align: right;">
+                «PULLOL BUSINESS MIKROMOLIYA TASHKILOTI» MChJning<br>
+                Direktori {{ loan.direktor_fish_inisiali }}ga<br><br>
+                <div style="font-weight: normal; text-align: left; padding-left: 20px; text-indent: -10px;">
+                    {{ loan.qarz_oluvchi_manzil }}-da
+                    yashovchi O‘zbekiston Respublikasi fuqarosi <span class="var">{{ loan.qarz_oluvchi_fish
+                        }}</span>dan.
                 </div>
-                <div style="border-top: 1px solid black; width: 100%;"></div>
-                <div style="text-align: center; font-size: 10pt;">(Imzo)</div>
             </td>
         </tr>
     </table>
 
-    <div class="footer-date">
-        Sana: <span class="var">{{ loan.created_at|date:"d.m.Y" }}</span> y.
+    <div class="title">Mikroqarz olish uchun Ariza</div>
+
+    <div class="content-section">
+        <strong>Tug'ilgan kuni:</strong> <span class="var">{{ loan.qarz_oluvchi_tugilgan_sana|date:"d.m.Y" }}
+            yil</span><br>
+        <strong>Pasport seriyasi:</strong> <span class="var">{{ loan.qarz_oluvchi_pasport_seriya }} {{
+            loan.qarz_oluvchi_pasport_berilgan }}</span><br>
+        <strong>Asosiy ish joyi:</strong> <span class="var">{{ loan.qarz_oluvchi_ish_joyi }}</span><br>
+        <strong>Lavozimi:</strong> <span class="var">{{ loan.qarz_oluvchi_ish_joyi }}</span><br>
+        <strong>O’rtacha oylik daromadi:</strong> <span class="var">{{ loan.qarz_oluvchi_daromad|intcomma }}
+            so'm.</span>
     </div>
+
+    <div class="content-section">
+        Menga quyidagi shartlarda mikroqarz berishingizni so’rayman:
+    </div>
+
+    <div class="list-item">- <strong>Mikroqarz summasi:</strong> <span class="var">{{ loan.kredit_miqdori|intcomma }}
+            ({{ loan.kredit_miqdori_soz }})
+            so'm.</span></div>
+    <div class="list-item">- <strong>Mikroqarz muddati:</strong> <span class="var">{{ loan.kredit_muddat_oy }}
+            oy.</span></div>
+    <div class="list-item">- <strong>Mikroqarz stavkasi:</strong> yillik <span class="var">{{ loan.foiz_stavkasi }}% ({{
+            loan.foiz_stavkasi_soz }}) foiz.</span>
+    </div>
+    <div class="list-item">- <strong>Mikroqarz bo'yicha asosiy qarz va foizlarni to'lash:</strong> mikroqarz shartnomasi
+        bo'yicha har oy {{ loan.get_grafik_display|lower }} to'lovlari amalga oshiriladi.</div>
+
+    <div class="content-section" style="margin-top: 15px;">
+        <strong>Mikroqarz ta’minoti:</strong><br>
+        1. Egalik huquqi <span class="var">{{ loan.garov_egasi_fish }}</span>ga tegishli bo'lgan garovga olingan
+        avtomobil markasi <span class="var">{{ loan.avto_nomi }}</span>, rangi - <span class="var">{{ loan.avto_rang
+            }}</span>,
+        ishlab chiqarilgan yili - <span class="var">{{ loan.avto_yil }}</span>, davlat raqam belgisi <span
+            class="var">{{ loan.avto_raqam }}</span>,
+        kuzov turi - <span class="var">{{ loan.avto_kuzov_turi }}</span>, kuzov raqami <span class="var">{{
+            loan.avto_kuzov }}</span>,
+        dvigatel raqami <span class="var">{{ loan.avto_dvigatel }}</span>, shassi raqami - <span class="var">{{
+            loan.avto_shassi }}.</span><br>
+        2. «AO СК "IMPEX INSURANCE"» AJ sug‘urta kompaniyasi tomonidan Mikroqarz to'lamaslik xavfini <span
+            class="var">{{ loan.sugurta_summasi|intcomma }} ({{ loan.sugurta_summasi_soz }}) so'm</span> miqdoriga
+        sug’urta qilish.
+    </div>
+
+    <div class="content-section">
+        Mazkur ariza bilan «PULLOL BUSINESS MIKROMOLIYA TASHKILOTI» MChJga men va soʻralayotgan mikroqarz boʻyicha
+        barcha zarur maʼlumotlarni quyida ko’rsatilgan tashkilotlarga taqdim etish va olishga roziligimni bildirib,
+        ushbu amaliyotlarni o’tkazish uchun huquq beraman:
+    </div>
+    <div class="list-item">□ O‘zbekiston Respublikasi Markaziy banki huzuridagi kredit axborotining davlat reestri;
+    </div>
+    <div class="list-item">□ Kredit-axborot tahliliy markazi «O‘zbekiston Respublikasi kredit byurosi» MChJ;</div>
+    <div class="list-item">□ Garov reestri taqdim etilgan garov mulki haqida.</div>
+
+    <div class="content-section" style="margin-top: 15px;">
+        <strong>Ariza berilgan sana:</strong> <span class="var">{{ loan.created_at|date:"d.m.Y" }} y.</span><br>
+        Ariza berilgan kuniga barcha ma'lumotlar ishonchligini tasdiqlab, ushbu arizani imzolayman.
+    </div>
+
+    <table class="footer-table">
+        <tr>
+            <td style="width: 50%;">
+                <strong>{{ loan.qarz_oluvchi_fish }}</strong>
+            </td>
+            <td style="width: 50%; text-align: right;">
+                <span class="underline"></span><br>
+                <span style="font-size: 9pt; margin-right: 50px;">(imzo)</span>
+            </td>
+        </tr>
+        <tr>
+            <td style="padding-top: 20px;">
+                <strong>Direktor</strong>
+            </td>
+            <td style="padding-top: 20px; text-align: right;">
+                <strong>{{ loan.direktor_fish_inisiali }}</strong>
+            </td>
+        </tr>
+    </table>
 
 </body>
 

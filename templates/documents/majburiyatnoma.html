@@ -9,50 +9,48 @@
         @page {
             size: A4;
             margin: 2cm;
-
-            @bottom-center {
-                content: "";
-            }
         }
 
         body {
             font-family: "Times New Roman", Times, serif;
-            font-size: 11pt;
+            font-size: 12pt;
             line-height: 1.5;
+            color: #000;
         }
 
-        .header-right {
-            text-align: right;
-            margin-bottom: 40px;
-            font-weight: bold;
-            line-height: 1.2;
-        }
-
-        h3 {
+        .title {
             text-align: center;
-            text-transform: uppercase;
+            font-weight: bold;
+            font-size: 16pt;
             margin-bottom: 30px;
+            text-transform: uppercase;
         }
 
-        p {
+        .content-section {
             text-align: justify;
-            text-indent: 1cm;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
+            text-indent: 1.25cm;
         }
 
-        .signatures-box {
-            margin-top: 100px;
+        .var {
+            color: #6b0000;
+            font-weight: bold;
+        }
+
+        .signature-table {
             width: 100%;
+            border: none;
+            margin-top: 50px;
+        }
+
+        .signature-table td {
+            border: none;
+            vertical-align: top;
+            padding: 10px 0;
         }
 
         .footer-date {
             margin-top: 40px;
-            font-weight: bold;
-        }
-
-        /* Django template o'zgaruvchilari uchun rang */
-        .var {
-            color: #900000;
             font-weight: bold;
         }
     </style>
@@ -60,46 +58,36 @@
 
 <body>
 
-    <div class="header-right">
-        «PULLOL BUSINESS MIKROMOLIYA TASHKILOTI» MChJ<br>
-        <span class="var">{{ loan.filial_nomi }}</span> boshlig‘i<br>
-        <span class="var">{{ loan.filial_boshligi }}</span>ga<br>
-        Fuqaro <span class="var">{{ loan.qarz_oluvchi_fish }}</span>dan
+    <div class="title">MAJBURIYATNOMA</div>
+
+    <div class="content-section">
+        Men, fuqaro <strong><span class="var">{{ loan.qarz_oluvchi_fish }}</span></strong> «PULLOL BUSINESS
+        MIKROMOLIYA TASHKILOTI» MChJ bilan <span class="var">{{ loan.shartnoma_sanasi|date:"d.m.Y" }}</span> sanasidagi
+        <span class="var">№
+            {{ loan.shartnoma_raqami }}-sonli</span> shartnomaning garov ta'minoti sifatida taqdim etilayotgan mulk
+        <span class="var">{{ loan.avto_nomi }}</span> rusumli avtotransport vositasini qonunga xilof ravishda
+        o‘zlashtirmaslikka, yashirmaslikka,
+        nobud qilmaslikka yoki unga shikast yetkazmaslik majburiyatini olaman.
     </div>
 
-    <h3>MAJBURIYATNOMA</h3>
+    <div class="content-section">
+        Ushbu majburiyatlarimni bajarmagan taqdirimda O'zbekiston Respublikasi Jinoyat kodeksining 233-moddasi talablari
+        asosida javobgarlik to'g'risida ogohlantirildim.
+    </div>
 
-    <p>
-        Men, <strong><span class="var">{{ loan.qarz_oluvchi_fish }}</span></strong>, «PULLOL BUSINESS MIKROMOLIYA
-        TASHKILOTI» MChJ bilan
-        imzolangan mikroqarz shartnomasiga asosan, olgan mikroqarz mablag‘ini va unga hisoblangan foizlarni o‘z vaqtida,
-        shartnomadagi to‘lov grafigiga qat’iy rioya qilgan holda to‘lash majburiyatini olaman.
-    </p>
-
-    <p>
-        Shuningdek, o‘zimning moliyaviy holatim o‘zgargan taqdirda, doimiy yashash manzilim yoki telefon raqamim
-        o‘zgarsa, bu haqda Mikroqarz tashkilotini 3 (uch) ish kuni ichida yozma ravishda xabardor qilishga va’da
-        beraman.
-    </p>
-
-    <table style="width: 100%; border: none; margin-top: 50px;">
+    <table class="signature-table">
         <tr>
-            <td style="border: none; width: 50%; text-align: left; vertical-align: top;">
-                <strong>Majburiyat oluvchi:</strong>
+            <td style="width: 60%;">
+                <strong><span class="var">{{ loan.qarz_oluvchi_fish }}</span></strong>
             </td>
-            <td style="border: none; width: 50%; text-align: right; vertical-align: top;">
-                <div style="height: 50px; display: flex; flex-direction: column; justify-content: flex-end;">
-                    <strong><span class="var">{{ loan.qarz_oluvchi_fish }}</span></strong>
-                    <br>
-                </div>
-                <div style="border-top: 1px solid black; width: 100%;"></div>
-                <div style="text-align: center; font-size: 10pt;">(Imzo)</div>
+            <td style="width: 40%; text-align: right;">
+                Imzo: _________________
             </td>
         </tr>
     </table>
 
     <div class="footer-date">
-        Sana: <span class="var">{{ loan.created_at|date:"d.m.Y" }}</span> y.
+        Sana: <span class="var">{{ loan.shartnoma_sanasi|date:"d.m.Y" }}</span> y.
     </div>
 
 </body>
