@@ -1,0 +1,5 @@
+Quyidagi hujjatlar eng asosiy:
+
+1. kredit_ariza
+2. protokol.html
+3. shartnoma.html

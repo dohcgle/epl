@@ -159,16 +159,17 @@ class LoanAgreement(models.Model):
     avto_texpasport_sana = models.DateField("Texpasport berilgan sanasi", null=True, blank=True)
     avto_manzil = models.CharField("Avto ro'yxatdan o'tgan manzili", max_length=255, blank=True)
 
-    # --- KO'CHMAS MULK MA'LUMOTLARI ---
+    # --- KO'ChMAS MULK MA'LUMOTLARI ---
     mulk_manzili = models.TextField("Ko'chmas mulk manzili", blank=True)
-    mulk_qurilish_maydoni = models.CharField("Qurilish osti maydoni", max_length=50, blank=True)
-    mulk_umumiy_maydoni = models.CharField("Umumiy maydoni", max_length=50, blank=True)
-    mulk_yashash_maydoni = models.CharField("Yashash maydoni", max_length=50, blank=True)
+    mulk_qurilish_maydoni = models.FloatField("Qurilish osti maydoni", blank=True, null=True)
+    mulk_umumiy_maydoni = models.FloatField("Umumiy maydoni", blank=True, null=True)
+    mulk_yashash_maydoni = models.FloatField("Yashash maydoni", blank=True, null=True)
     mulk_turi = models.CharField("Ko'chmas mulk turi", max_length=100, blank=True)
+    mulk_reestr_raqami = models.CharField("Reestr raqami", max_length=50, blank=True)
+    mulk_kadastr_raqami = models.CharField("Kadastr raqami", max_length=100, blank=True)
+    mulk_egasi = models.CharField("Ko'chmas mulk egasi", max_length=255, blank=True)
     mulk_bahosi = models.BigIntegerField("Kelishilgan garov qiymati (raqam)", blank=True, null=True)
     mulk_bahosi_soz = models.CharField("Kelishilgan garov qiymati (so'z bilan)", max_length=255, blank=True)
-    mulk_dalolatnoma_raqami = models.CharField("Baholash dalolatnoma raqami", max_length=50, blank=True)
-    mulk_dalolatnoma_sanasi = models.DateField("Baholash dalolatnoma sanasi", null=True, blank=True)
 
     # --- TILLA BUYUMLAR MA'LUMOTLARI ---
     tilla_nomi = models.TextField("Tilla buyumlar nomi", blank=True)

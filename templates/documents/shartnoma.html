@@ -124,7 +124,7 @@
         (<span class="var">{{ loan.kredit_miqdori_soz }}</span>) bo‘lgan mikroqarzni
         <span class="var">{{ loan.shartnoma_sanasi|date:"d.m.Y" }}</span> y. dan boshlab
         <span class="bold">
-            <span class="var">{{ loan.kredit_muddat_oy }}</span> oy
+            <span class="var">{{ loan.kredit_muddat_oy }} ({{ loan.kredit_muddat_oy_soz }})</span> oy
         </span>
         muddatga
         naqd pul va/yoki o'tkazmasi shaklida ajratadi.
@@ -145,7 +145,7 @@
         <span class="var">{{ loan.foiz_stavkasi }}</span>% (<span class="var">{{ loan.foiz_stavkasi_soz }}</span>) foiz
         yillik va yiliga 365/366 kunlik hisobidan foizlar hisoblaydi. To‘lov jadvaliga muvofiq asosiy qarz bo‘yicha
         navbatdagi to‘lov buzilgan hollarda, foiz stavkasi oshiriladi va Mikromoliya tashkiloti mikroqarzning muddati
-        o‘tgan asosiy qarz summasiga yillik 105 (bir yuz besh) foiz miqdorida foizlar hisoblaydi.
+        o‘tgan asosiy qarz summasiga yillik 155 (bir yuz ellik besh) foiz miqdorida foizlar hisoblaydi.
     </p>
     <p>2.4.1 Qarz oluvchining hisob raqamlaridan shartnomaning 4.1.2 bandida ko‘rsatilgan tartibda yechib olingan pul
         mablag‘lari yechib olinganidan so‘ng mijoz tomonidan kredit qarzdorligini so‘ndirish uchun bank kassalariga
@@ -222,8 +222,8 @@
         <span class="var">{{ loan.created_at|date:"d.m.Y" }}</span> y. da imzolangan 1-sonli Garov predmeti qiymatini
         tasdiqlash dalolatnomasiga muvofiq
         <span class="bold"><span class="var">{{ loan.mulk_manzili }}</span></span> manzilida joylashgan, yer uchastkasi
-        maydoni - <span class="var">{{ loan.mulk_umumiy_maydoni }}</span>, yashash maydoni - <span class="var">{{
-            loan.mulk_yashash_maydoni }}</span> bo‘lgan,
+        maydoni - <span class="var">{{ loan.mulk_umumiy_maydoni }}</span>, 
+        yashash maydoni - <span class="var">{{ loan.mulk_yashash_maydoni }}</span> bo‘lgan,
         <span class="bold"><span class="var">{{ loan.mulk_turi }}</span></span> ko‘rinishidagi ko‘chmas mulk (bundan
         keyin “Garov predmeti”), egalik huquqiga ko‘ra <span class="bold">
             <span class="var">{{ loan.garov_egasi_fish }}</span></span> ga tegishli va kelishilgan garov qiymati
@@ -490,7 +490,7 @@
                     Manzil: <span class="var">{{ loan.qarz_oluvchi_manzil }}</span><br>
                     Pasport: <span class="var">{{ loan.qarz_oluvchi_pasport_seriya }}</span>,
                     <span class="var">{{ loan.qarz_oluvchi_pasport_berilgan }}</span><br>
-                    Tel: <span class="var">{{ loan.qarz_oluvchi_telefon }}</span>
+                    Tel: <span class="var">Mijoz: {{ loan.qarz_oluvchi_telefon }}</span>
                     {% if loan.qarz_oluvchi_telefon_2 %}
                     , <span class="var">{{ loan.qarz_oluvchi_telefon_2 }}</span>
                     {% endif %}<br>

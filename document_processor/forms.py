@@ -99,15 +99,16 @@ class UmumiyMalumotForm(forms.Form):
     avto_manzil = forms.CharField(label="Roʻyxatdan oʻtgan manzili/garaj manzili", widget=forms.Textarea(attrs={'rows': 2}), required=False)
 
     # --- KO'CHMAS MULK MA'LUMOTLARI ---
-    mulk_manzili = forms.CharField(label="Ko'chmas mulk manzili", widget=forms.Textarea(attrs={'rows': 2}), required=False)
-    mulk_qurilish_maydoni = forms.CharField(label="Qurilish osti maydoni", required=False)
-    mulk_umumiy_maydoni = forms.CharField(label="Umumiy maydoni", required=False)
-    mulk_yashash_maydoni = forms.CharField(label="Yashash maydoni", required=False)
-    mulk_turi = forms.CharField(label="Ko'chmas mulk turi (masalan: Yakka tartibdagi turarjoy)", required=False)
+    mulk_turi = forms.CharField(label="Nomi", required=False, widget=forms.TextInput(attrs={'style': 'text-transform:uppercase', 'oninput': 'this.value = this.value.toUpperCase()'}))
+    mulk_qurilish_maydoni = forms.FloatField(label="Qurilish osti maydoni", required=False)
+    mulk_umumiy_maydoni = forms.FloatField(label="Umumiy maydon", required=False)
+    mulk_yashash_maydoni = forms.FloatField(label="Yashash maydon", required=False)
+    mulk_egasi = forms.CharField(label="Ko'chmas mulk egasi", required=False, widget=forms.TextInput(attrs={'style': 'text-transform:uppercase', 'oninput': 'this.value = this.value.toUpperCase()'}))
+    mulk_reestr_raqami = forms.CharField(label="Reestr raqami", required=False, widget=forms.TextInput(attrs={'style': 'text-transform:uppercase', 'oninput': 'this.value = this.value.toUpperCase()'}))
+    mulk_kadastr_raqami = forms.CharField(label="Kadastr raqami", required=False)
+    mulk_manzili = forms.CharField(label="Manzil", widget=forms.Textarea(attrs={'rows': 2, 'style': 'text-transform:uppercase', 'oninput': 'this.value = this.value.toUpperCase()'}), required=False)
     mulk_bahosi = forms.IntegerField(label="Kelishilgan garov qiymati (raqam)", required=False)
-    mulk_bahosi_soz = forms.CharField(label="Kelishilgan garov qiymati (so'z bilan)", required=False)
-    mulk_dalolatnoma_raqami = forms.CharField(label="Baholash dalolatnoma raqami", initial="1", required=False)
-    mulk_dalolatnoma_sanasi = forms.DateField(label="Baholash dalolatnoma sanasi", widget=forms.DateInput(attrs={'class': 'date-mask', 'placeholder': 'dd.mm.yyyy'}), input_formats=['%d.%m.%Y'], required=False)
+    mulk_bahosi_soz = forms.CharField(label="Kelishilgan garov qiymati (so'z bilan)", widget=forms.TextInput(attrs={'readonly': 'readonly'}), required=False)
 
     # --- TILLA BUYUMLAR MA'LUMOTLARI ---
     tilla_nomi = forms.CharField(label="Tilla buyumlar nomi", widget=forms.Textarea(attrs={'rows': 2}), required=False)

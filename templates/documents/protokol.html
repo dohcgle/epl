@@ -278,24 +278,52 @@
 
         <p style="text-indent: 0; font-weight: bold; margin-top: 15px;">Qaror bir ovozdan qabul qilindi.</p>
 
-        <table class="signer-table">
-            <tr>
-                <td style="width: 50%;">«PULLOL BUSINESS MIKROMOLIYA TASHKILOTI» MChJ direktori</td>
-                <td style="width: 25%; text-align: center;">
-                    {% if qr_obidov %}<img src="{{ qr_obidov }}" style="width: 1.5cm;">{% endif %}
-                </td>
-                <td style="width: 25%; font-weight: bold;"><span class="var">{{ loan.direktor_fish_inisiali }}</span>
-                </td>
-            </tr>
-            <tr>
-                <td>Kreditlash bo‘limi boshlig‘i</td>
-                <td style="text-align: center;">
-                    {% if qr_akramov %}<img src="{{ qr_akramov }}" style="width: 1.5cm;">{% endif %}
-                </td>
-                <td style="font-weight: bold;">Akramov R.N.</td>
-            </tr>
+        <table class="footer-table">
+        <tr>
+            <td style="width: 35%;" class="bold">Kredit bo'limi menejeri</td>
+            <td style="width: 30%; text-align: center;">
+                {% if qr_manager %}
+                <img src="{{ qr_manager }}" class="qr-code">
+                {% endif %}
+            </td>
+            <td style="width: 35%; text-align: right;" class="bold">S.O.Eshbekov</td>
+        </tr>
+        <tr style="height: 15px;">
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td class="bold">Kreditlash bo’limi boshlig’i</td>
+            <td style="text-align: center;">
+                {% if qr_akramov %}
+                <img src="{{ qr_akramov }}" class="qr-code">
+                {% endif %}
+            </td>
+            <td style="text-align: right;" class="bold">R.N.Akramov</td>
+        </tr>
+        <tr style="height: 15px;">
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
 
-        </table>
+        <tr style="height: 15px;">
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td class="bold">Direktor</td>
+            <td style="text-align: center;">
+                {% if qr_obidov %}
+                <img src="{{ qr_obidov }}" class="qr-code">
+                {% endif %}
+            </td>
+            <td style="text-align: right;" class="bold">{{ loan.direktor_fish_inisiali }}</td>
+        </tr>
+    </table>
+    
     </div>
 
 </body>

@@ -378,15 +378,20 @@
 
                                             <div id="new-content-kochmas" class="new-tab-content d-none">
                                                 <h5 class="text-secondary"><i class="fas fa-building mr-2"></i>
-                                                    Ko'chmas
-                                                    Mulk</h5>
+                                                    Ko'chmas Mulk Ma'lumotlari</h5>
 
-                                                <div class="form-group">
-                                                    {{ form.mulk_manzili.label_tag }}
-                                                    {{ form.mulk_manzili }}
+                                                <div class="row">
+                                                    <div class="col-md-12 form-group">
+                                                        {{ form.mulk_turi.label_tag }}
+                                                        {{ form.mulk_turi }}
+                                                    </div>
                                                 </div>
 
                                                 <div class="row">
+                                                    <div class="col-md-4 form-group">
+                                                        {{ form.mulk_qurilish_maydoni.label_tag }}
+                                                        {{ form.mulk_qurilish_maydoni }}
+                                                    </div>
                                                     <div class="col-md-4 form-group">
                                                         {{ form.mulk_umumiy_maydoni.label_tag }}
                                                         {{ form.mulk_umumiy_maydoni }}
@@ -395,15 +400,28 @@
                                                         {{ form.mulk_yashash_maydoni.label_tag }}
                                                         {{ form.mulk_yashash_maydoni }}
                                                     </div>
-                                                    <div class="col-md-4 form-group">
-                                                        {{ form.mulk_qurilish_maydoni.label_tag }}
-                                                        {{ form.mulk_qurilish_maydoni }}
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col-md-6 form-group">
+                                                        {{ form.mulk_egasi.label_tag }}
+                                                        {{ form.mulk_egasi }}
+                                                    </div>
+                                                    <div class="col-md-6 form-group">
+                                                        {{ form.mulk_reestr_raqami.label_tag }}
+                                                        {{ form.mulk_reestr_raqami }}
                                                     </div>
                                                 </div>
 
-                                                <div class="form-group">
-                                                    {{ form.mulk_turi.label_tag }}
-                                                    {{ form.mulk_turi }}
+                                                <div class="row">
+                                                    <div class="col-md-6 form-group">
+                                                        {{ form.mulk_kadastr_raqami.label_tag }}
+                                                        {{ form.mulk_kadastr_raqami }}
+                                                    </div>
+                                                    <div class="col-md-6 form-group">
+                                                        {{ form.mulk_manzili.label_tag }}
+                                                        {{ form.mulk_manzili }}
+                                                    </div>
                                                 </div>
 
                                                 <div class="row">
@@ -414,17 +432,6 @@
                                                     <div class="col-md-6 form-group">
                                                         {{ form.mulk_bahosi_soz.label_tag }}
                                                         {{ form.mulk_bahosi_soz }}
-                                                    </div>
-                                                </div>
-
-                                                <div class="row">
-                                                    <div class="col-md-6 form-group">
-                                                        {{ form.mulk_dalolatnoma_raqami.label_tag }}
-                                                        {{ form.mulk_dalolatnoma_raqami }}
-                                                    </div>
-                                                    <div class="col-md-6 form-group">
-                                                        {{ form.mulk_dalolatnoma_sanasi.label_tag }}
-                                                        {{ form.mulk_dalolatnoma_sanasi }}
                                                     </div>
                                                 </div>
                                             </div>
@@ -1067,7 +1074,7 @@
             if ($amount.length) {
                 $amount.inputmask({
                     alias: "numeric",
-                    groupSeparator: " ",
+                    groupSeparator: ",",
                     autoGroup: true,
                     digits: 0,
                     rightAlign: false,
@@ -1301,8 +1308,8 @@
         // 5. KO'CHMAS MULK MA'LUMOTLARI
         // ==========================================
         // Maydonlar: 45,2 ko'rinishida (float, comma)
-        const areaInputs = ['#id_mulk_umumiy_maydoni', '#id_mulk_yashash_maydoni', '#id_mulk_qurilish_maydoni'];
-        areaInputs.forEach(sel => {
+        const areaFields = ['#id_mulk_umumiy_maydoni', '#id_mulk_yashash_maydoni', '#id_mulk_qurilish_maydoni'];
+        areaFields.forEach(sel => {
             $(sel).inputmask({
                 alias: "numeric",
                 digits: 2,
@@ -1313,11 +1320,14 @@
             });
         });
 
+        // Uppercase fields
+        textToUpperCase('#id_mulk_turi');
+        textToUpperCase('#id_mulk_egasi');
+        textToUpperCase('#id_mulk_reestr_raqami');
+        textToUpperCase('#id_mulk_manzili');
+
         // Bahosi va so'z bilan
         applyMoneyMaskAndWords('#id_mulk_bahosi', '#id_mulk_bahosi_soz');
-
-        // Dalolatnoma sanasi
-        applyDateMask('#id_mulk_dalolatnoma_sanasi');
 
         // ==========================================
         // 5. TILLA BUYUMLAR MA'LUMOTLARI
@@ -1572,14 +1582,15 @@
                     let mulkStreet = getRandomItem(streets);
                     let area = getRandomInt(40, 120);
 
-                    $('#id_mulk_manzili').val(`${mulkRegion} shahar, ${mulkStreet} ko'chasi, ${getRandomInt(1, 100)}-uy`);
+                    $('#id_mulk_manzili').val(`${mulkRegion} shahar, ${mulkStreet} ko'chasi, ${getRandomInt(1, 100)}-uy`).trigger('input');
                     $('#id_mulk_umumiy_maydoni').val(area).trigger('input');
                     $('#id_mulk_yashash_maydoni').val((area * 0.7).toFixed(1)).trigger('input');
                     $('#id_mulk_qurilish_maydoni').val(area).trigger('input');
-                    $('#id_mulk_turi').val("XONADON");
+                    $('#id_mulk_turi').val("YAKKA TARTIBDAGI TURAR JOY").trigger('input');
+                    $('#id_mulk_egasi').val(getRandomItem(lastNames) + " " + getRandomItem(firstNames)).trigger('input');
+                    $('#id_mulk_reestr_raqami').val(getRandomInt(100000, 999999)).trigger('input');
+                    $('#id_mulk_kadastr_raqami').val(getRandomInt(10, 99) + ":" + getRandomInt(10, 99) + ":" + getRandomInt(100, 999) + ":" + getRandomInt(100, 999)).trigger('input');
                     $('#id_mulk_bahosi').val(area * 5000000).trigger('input'); // ~5 mln so'm per kv
-                    $('#id_mulk_dalolatnoma_raqami').val("D-" + getRandomInt(100, 999));
-                    $('#id_mulk_dalolatnoma_sanasi').val("15.01.2026").trigger('input');
                 }
                 else if (currentGarovType === 'tilla') {
                     // TILLA

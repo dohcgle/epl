@@ -38,7 +38,7 @@ class LoanAgreementAdmin(admin.ModelAdmin):
         ("Kredit Ma'lumotlari", {
             'fields': (
                 'shartnoma_raqami', 'shartnoma_sanasi', 'kredit_turi', 'grafik',
-                'kredit_miqdori', 'kredit_miqdori_soz', 'kredit_muddat_oy', 
+                'kredit_miqdori', 'kredit_miqdori_soz', 'kredit_muddat_oy', 'kredit_muddat_oy_soz',
                 'foiz_stavkasi', 'foiz_stavkasi_soz'
             )
         }),
@@ -63,8 +63,9 @@ class LoanAgreementAdmin(admin.ModelAdmin):
         ("Ko'chmas Mulk Ma'lumotlari", {
             'classes': ('collapse',),
             'fields': (
-                'mulk_manzili', 'mulk_qurilish_maydoni', 'mulk_umumiy_maydoni', 'mulk_yashash_maydoni', 
-                'mulk_turi', 'mulk_bahosi', 'mulk_bahosi_soz', 'mulk_dalolatnoma_raqami', 'mulk_dalolatnoma_sanasi'
+                'mulk_egasi', 'mulk_reestr_raqami', 'mulk_kadastr_raqami', 'mulk_manzili', 
+                'mulk_qurilish_maydoni', 'mulk_umumiy_maydoni', 'mulk_yashash_maydoni', 
+                'mulk_turi', 'mulk_bahosi', 'mulk_bahosi_soz'
             )
         }),
         ("Tilla Buyumlar Ma'lumotlari", {
@@ -76,7 +77,7 @@ class LoanAgreementAdmin(admin.ModelAdmin):
             'fields': ('sugurta_kompaniyasi', 'sugurta_polisi', 'sugurta_sanasi', 'sugurta_summasi', 'sugurta_summasi_soz')
         }),
         ("Filial va Rahbarlar", {
-            'fields': ('filial_nomi', 'filial_boshligi', 'filial_boshligi_inisiali', 'direktor_fish', 'direktor_fish_inisiali')
+            'fields': ('filial_nomi', 'filial_boshligi', 'filial_boshligi_inisiali', 'tashkilot_nomi', 'direktor_fish', 'direktor_fish_inisiali')
         }),
         ("Monitoring va Grafik", {
             'classes': ('collapse',),
