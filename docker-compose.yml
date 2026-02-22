@@ -2,6 +2,7 @@ version: '3.8'
 
 services:
   web:
+    restart: always
     build: .
     command: gunicorn --bind 0.0.0.0:8000 --timeout 300 config.wsgi:application
     volumes:
@@ -22,6 +23,7 @@ services:
       - db
 
   nginx:
+    restart: always
     image: nginx:alpine
     volumes:
       - ./nginx:/etc/nginx/conf.d
@@ -33,6 +35,7 @@ services:
       - web
 
   db:
+    restart: always
     image: postgres:15
     volumes:
       - postgres_data:/var/lib/postgresql/data
