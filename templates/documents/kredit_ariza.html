@@ -13,15 +13,15 @@
 
         body {
             font-family: "Times New Roman", Times, serif;
-            font-size: 11pt;
-            line-height: 1.3;
+            font-size: 10.5pt;
+            line-height: 1.15;
             color: #000;
         }
 
         .header-table {
             width: 100%;
             border: none;
-            margin-bottom: 30px;
+            margin-bottom: 15px;
         }
 
         .header-table td {
@@ -33,14 +33,14 @@
         .title {
             text-align: center;
             font-weight: bold;
-            font-size: 14pt;
-            margin-bottom: 20px;
+            font-size: 13pt;
+            margin-bottom: 15px;
             text-transform: uppercase;
         }
 
         .content-section {
             text-align: justify;
-            margin-bottom: 15px;
+            margin-bottom: 8px;
         }
 
         .indented {
@@ -48,8 +48,8 @@
         }
 
         .list-item {
-            margin-left: 20px;
-            margin-bottom: 5px;
+            margin-left: 15px;
+            margin-bottom: 3px;
         }
 
         .var {
@@ -60,7 +60,7 @@
         .footer-table {
             width: 100%;
             border: none;
-            margin-top: 40px;
+            margin-top: 20px;
         }
 
         .footer-table td {
@@ -85,13 +85,13 @@
     <table class="header-table">
         <tr>
             <td style="width: 40%;"></td>
-            <td style="width: 60%; font-weight: bold; text-align: right;">
-                «PULLOL BUSINESS MIKROMOLIYA TASHKILOTI» MChJning<br>
-                Direktori {{ loan.direktor_fish_inisiali }}ga<br><br>
-                <div style="font-weight: normal; text-align: left; padding-left: 20px; text-indent: -10px;">
-                    {{ loan.qarz_oluvchi_manzil }}-da
-                    yashovchi O‘zbekiston Respublikasi fuqarosi
-                    <span class="var">{{ loan.qarz_oluvchi_fish }}</span>dan.
+            <td style="width: 60%; font-weight: bold; text-align: right; line-height: 1.4;">
+                «PULLOL BUSINESS MIKROMOLIYA TASHKILOTI»<br>
+                MChJning<br>
+                Direktori <span class="var">{{ loan.direktor_fish_inisiali|upper }}</span>ga<br><br>
+                <div style="font-weight: normal; text-align: left; padding-left: 40px; line-height: 1.4;">
+                    <span class="var">{{ loan.qarz_oluvchi_manzil|upper }}</span>-da yashovchi
+                    O‘zbekiston Respublikasi fuqarosi <span class="var">{{ loan.qarz_oluvchi_fish|upper }}</span>dan.
                 </div>
             </td>
         </tr>
@@ -100,7 +100,7 @@
     <div class="title">Mikroqarz olish uchun Ariza</div>
 
     <div class="content-section">
-        <strong>Tug'ilgan kuni:</strong> <span class="var">{{ loan.qarz_oluvchi_tugilgan_sana|date:"d.m.Y" }}
+        <strong>Tug‘ilgan kuni:</strong> <span class="var">{{ loan.qarz_oluvchi_tugilgan_sana|date:"d.m.Y" }}
             yil</span><br>
         <strong>Pasport seriyasi:</strong>
         <span class="var">{{ loan.qarz_oluvchi_pasport_seriya }}
@@ -108,12 +108,12 @@
         </span><br>
         <strong>Asosiy ish joyi:</strong> <span class="var">{{ loan.qarz_oluvchi_ish_joyi }}</span><br>
         <strong>Lavozimi:</strong> <span class="var">{{ loan.qarz_oluvchi_ish_joyi }}</span><br>
-        <strong>O’rtacha oylik daromadi:</strong>
+        <strong>O‘rtacha oylik daromadi:</strong>
         <span class="var">{{ loan.qarz_oluvchi_daromad|intcomma }} so'm.</span>
     </div>
 
     <div class="content-section">
-        Menga quyidagi shartlarda mikroqarz berishingizni so’rayman:
+        Menga quyidagi shartlarda mikroqarz berishingizni so‘rayman:
     </div>
 
     <div class="list-item">- <strong>Mikroqarz summasi:</strong>
@@ -130,12 +130,12 @@
             ({{ loan.foiz_stavkasi_soz }}) foiz.
         </span>
     </div>
-    <div class="list-item">- <strong>Mikroqarz bo'yicha asosiy qarz va foizlarni to'lash:</strong> mikroqarz shartnomasi
-        bo'yicha har oy {{ loan.get_grafik_display|lower }} to'lovlari amalga oshiriladi.</div>
+    <div class="list-item">- <strong>Mikroqarz bo‘yicha asosiy qarz va foizlarni to‘lash:</strong> mikroqarz shartnomasi
+        bo‘yicha har oy {{ loan.get_grafik_display|lower }} to‘lovlari amalga oshiriladi.</div>
 
     <div class="content-section" style="margin-top: 15px;">
         <strong>Mikroqarz ta’minoti:</strong><br>
-        1. Egalik huquqi <span class="var">{{ loan.garov_egasi_fish }}</span>ga tegishli bo'lgan garovga olingan
+        1. Egalik huquqi <span class="var">{{ loan.garov_egasi_fish }}</span>ga tegishli bo‘lgan garovga olingan
         avtomobil markasi <span class="var">{{ loan.avto_nomi }}</span>,
         rangi - <span class="var">{{ loan.avto_rang }}</span>,
         ishlab chiqarilgan yili - <span class="var">{{ loan.avto_yil }}</span>,
@@ -148,21 +148,21 @@
         {% if loan.sugurta_mavjud %}
         <br><br>
         2. <span class="var">{{ loan.sugurta_kompaniyasi }}</span>
-        sug‘urta kompaniyasi tomonidan Mikroqarz to'lamaslik
+        sug‘urta kompaniyasi tomonidan Mikroqarz to‘lamaslik
         xavfini
         <span class="var">
             {{ loan.sugurta_summasi|intcomma }}
             ({{ loan.sugurta_summasi_soz }}) so'm
         </span>
         miqdoriga
-        sug’urta qilish.
+        sug‘urta qilish.
         {% endif %}
     </div>
 
     <div class="content-section">
-        Mazkur ariza bilan «PULLOL BUSINESS MIKROMOLIYA TASHKILOTI» MChJga men va soʻralayotgan mikroqarz boʻyicha
-        barcha zarur maʼlumotlarni quyida ko’rsatilgan tashkilotlarga taqdim etish va olishga roziligimni bildirib,
-        ushbu amaliyotlarni o’tkazish uchun huquq beraman:
+        Mazkur ariza bilan «PULLOL BUSINESS MIKROMOLIYA TASHKILOTI» MChJga men va so‘ralayotgan mikroqarz bo‘yicha
+        barcha zarur maʼlumotlarni quyida ko‘rsatilgan tashkilotlarga taqdim etish va olishga roziligimni bildirib,
+        ushbu amaliyotlarni o‘tkazish uchun huquq beraman:
     </div>
     <div class="list-item">□ O‘zbekiston Respublikasi Markaziy banki huzuridagi kredit axborotining davlat reestri;
     </div>
@@ -177,7 +177,7 @@
     <table class="footer-table">
         <tr>
             <td style="width: 50%;">
-                <strong>{{ loan.qarz_oluvchi_fish }}</strong>
+                <strong>{{ loan.qarz_oluvchi_fish|upper }}</strong>
             </td>
             <td style="width: 50%; text-align: right;">
                 <span class="underline"></span><br>
@@ -185,11 +185,16 @@
             </td>
         </tr>
         <tr>
-            <td style="padding-top: 20px;">
+            <td style="padding-top: 50px; vertical-align: middle;">
                 <strong>Direktor</strong>
             </td>
-            <td style="padding-top: 20px; text-align: right;">
-                <strong>{{ loan.direktor_fish_inisiali }}</strong>
+            <td style="padding-top: 50px; text-align: right; vertical-align: middle;">
+                <div style="display: inline-block; vertical-align: middle;">
+                    {% if qr_obidov %}
+                    <img src="{{ qr_obidov }}" style="width: 1.5cm; margin-right: 15px; vertical-align: middle;">
+                    {% endif %}
+                    <strong style="vertical-align: middle;">{{ loan.direktor_fish_inisiali|upper }}</strong>
+                </div>
             </td>
         </tr>
     </table>
