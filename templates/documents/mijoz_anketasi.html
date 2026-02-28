@@ -108,23 +108,23 @@
         </tr>
         <tr>
             <th>F.I.Sh. (to'liq):</th>
-            <td><span class="var">{{ loan.qarz_oluvchi_fish }}</span></td>
+            <td><span class="var">{{ loan.client.fish }}</span></td>
         </tr>
         <tr>
             <th>Tug'ilgan vaqti (sana):</th>
-            <td><span class="var">{{ loan.qarz_oluvchi_tugilgan_sana|date:"d.m.Y" }} yil</span></td>
+            <td><span class="var">{{ loan.client.tugilgan_sana|date:"d.m.Y" }} yil</span></td>
         </tr>
         <tr>
             <th>Pasport seriyasi va raqami:</th>
-            <td><span class="var">{{ loan.qarz_oluvchi_pasport_seriya }}</span></td>
+            <td><span class="var">{{ loan.client.pasport_seriya }}</span></td>
         </tr>
         <tr>
             <th>Berilgan vaqti/manzili:</th>
-            <td><span class="var">{{ loan.qarz_oluvchi_pasport_berilgan }}</span></td>
+            <td><span class="var">{{ loan.client.pasport_berilgan }}</span></td>
         </tr>
         <tr>
             <th>Doimiy yashash manzili:</th>
-            <td><span class="var">{{ loan.qarz_oluvchi_manzil }}</span></td>
+            <td><span class="var">{{ loan.client.manzil }}</span></td>
         </tr>
         <tr>
             <th>Oila qurganligi:</th>
@@ -136,7 +136,7 @@
         </tr>
         <tr>
             <th>Ish joyi:</th>
-            <td><span class="var">{{ loan.qarz_oluvchi_ish_joyi }}</span></td>
+            <td><span class="var">{{ loan.financial_info.ish_joyi }}</span></td>
         </tr>
     </table>
 
@@ -150,7 +150,7 @@
         </tr>
         <tr>
             <th>Uyali telefon raqami (Asosiy):</th>
-            <td><span class="var">{{ loan.qarz_oluvchi_telefon }}</span></td>
+            <td><span class="var">{{ loan.client.telefon }}</span></td>
         </tr>
         <tr>
             <th>Ish telefoni raqami:</th>
@@ -164,11 +164,11 @@
         </tr>
         <tr>
             <th>Muassasa nomlanishi:</th>
-            <td><span class="var">{{ loan.qarz_oluvchi_ish_joyi }}</span></td>
+            <td><span class="var">{{ loan.financial_info.ish_joyi }}</span></td>
         </tr>
         <tr>
             <th>Lavozimi:</th>
-            <td><span class="var">{{ loan.qarz_oluvchi_ish_joyi }}</span></td>
+            <td><span class="var">{{ loan.financial_info.ish_joyi }}</span></td>
         </tr>
         <tr>
             <th>Ro‘yxatdan o‘tish manzili:</th>
@@ -193,7 +193,7 @@
         </tr>
         <tr>
             <td>ish haqi (asosiy ish)</td>
-            <td style="text-align: right;">{{ loan.qarz_oluvchi_daromad|intcomma }}</td>
+            <td style="text-align: right;">{{ loan.financial_info.daromad|intcomma }}</td>
             <td style="text-align: right;">0</td>
             <td style="text-align: right;">0</td>
             <td>uy-joy va kommunal xizmatlar uchun to'lov</td>
@@ -205,7 +205,7 @@
             <td style="text-align: right;">0</td>
             <td style="text-align: right;">0</td>
             <td>oilaviy xarajatlar</td>
-            <td style="text-align: right;">{{ loan.qarz_oluvchi_xarajatlar|intcomma }}</td>
+            <td style="text-align: right;">{{ loan.financial_info.xarajatlar|intcomma }}</td>
         </tr>
         <tr>
             <td>boshqa daromadlar</td>
@@ -217,20 +217,20 @@
         </tr>
         <tr>
             <th>JAMI</th>
-            <th style="text-align: right;">{{ loan.qarz_oluvchi_daromad|intcomma }}</th>
+            <th style="text-align: right;">{{ loan.financial_info.daromad|intcomma }}</th>
             <th style="text-align: right;">0</th>
             <th style="text-align: right;">0</th>
             <th>JAMI XARAJATLAR</th>
-            <th style="text-align: right;">{{ loan.qarz_oluvchi_xarajatlar|intcomma }}</th>
+            <th style="text-align: right;">{{ loan.financial_info.xarajatlar|intcomma }}</th>
         </tr>
     </table>
 
     <div class="declaration">
-        Men, <span class="var">{{ loan.qarz_oluvchi_fish }}</span>, ushbu anketada ko‘rsatilgan barcha ma'lumotlar
+        Men, <span class="var">{{ loan.client.fish }}</span>, ushbu anketada ko‘rsatilgan barcha ma'lumotlar
         anketa to'ldirilgan sanada to'g'ri va aniq ekanligini tasdiqlayman.
     </div>
     <div class="declaration">
-        Men, <span class="var">{{ loan.qarz_oluvchi_fish }}</span>, quyidagilarni tan olaman va roziman:
+        Men, <span class="var">{{ loan.client.fish }}</span>, quyidagilarni tan olaman va roziman:
     </div>
     <div class="declaration" style="margin-left: 0.5cm;">
         1. Ushbu anketada ko‘rsatilgan har qanday ma’lumot «PULLOL BUSINESS MIKROMOLIYA TASHKILOTI» MChJ, uning
@@ -242,7 +242,7 @@
         MIKROMOLIYA TASHKILOTI» MChJ tomonidan menga mikroqarz berish majburiyatini yuklamaydi.
     </div>
     <div class="declaration">
-        Men, <span class="var">{{ loan.qarz_oluvchi_fish }}</span>, ushbu anketadagi barcha ma'lumotlar anketa
+        Men, <span class="var">{{ loan.client.fish }}</span>, ushbu anketadagi barcha ma'lumotlar anketa
         to'ldirilgan sanada to'g'ri ekanligini tasdiqlayman va ushbu anketaning 1- va 2-bandlarini tan olaman va ularga
         rozilik bildiraman. Mazkur anketaning 4-bo'limida ko'rsatilgan daromadlarim haqidagi ma'lumotlarni qabul
         qilishingizni va moliyaviy tahlilda foydalanishingizni so’rayman.

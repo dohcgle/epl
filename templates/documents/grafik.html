@@ -104,8 +104,8 @@
 <body>
 
     <div class="header">
-        <span class="var">{{ loan.shartnoma_sanasi|date:"d.m.Y" }}</span> y.dagi
-        № <span class="var">{{ loan.shartnoma_raqami }}</span>-BR mikroqarz shartnomasiga 1-sonli ilova
+        <span class="var">{{ loan.details.shartnoma_sanasi|date:"d.m.Y" }}</span> y.dagi
+        № <span class="var">{{ loan.details.shartnoma_raqami }}</span>-BR mikroqarz shartnomasiga 1-sonli ilova
     </div>
 
     <h3>TO‘LOV JADVALI</h3>
@@ -164,7 +164,7 @@
                     MFO: 01088, ATB “Kapitalbank” Markaziy amaliyotlar bo‘limi<br>
                     STIR: 310430149<br>
                     Tel: (55) 510 02 16, (97) 714 14 17, (97) 706 96 65<br><br>
-                    <strong><span class="var">{{ loan.filial_nomi }}</span> boshlig‘i</strong><br><br>
+                    <strong><span class="var">{{ loan.financial_info.filial_nomi }}</span> boshlig‘i</strong><br><br>
 
                     <div style="display: flex; align-items: center;">
                         <div style="width: 80px;">
@@ -173,33 +173,33 @@
                             {% endif %}
                         </div>
                         <div>
-                            <strong><span class="var">{{ loan.filial_boshligi }}</span></strong>
+                            <strong><span class="var">{{ loan.financial_info.filial_boshligi }}</span></strong>
                         </div>
                     </div>
                 </td>
                 <td style="text-align: left;">
-                    <strong><span class="var">{{ loan.qarz_oluvchi_fish }}</span></strong><br>
-                    Manzil: <span class="var">{{ loan.qarz_oluvchi_manzil }}</span><br>
-                    Pasport: <span class="var">{{ loan.qarz_oluvchi_pasport_seriya }}</span><br>
-                    Tel: <span class="var">{{ loan.qarz_oluvchi_telefon }}</span><br><br>
+                    <strong><span class="var">{{ loan.client.fish }}</span></strong><br>
+                    Manzil: <span class="var">{{ loan.client.manzil }}</span><br>
+                    Pasport: <span class="var">{{ loan.client.pasport_seriya }}</span><br>
+                    Tel: <span class="var">{{ loan.client.telefon }}</span><br><br>
 
-                    {% if loan.kontakt_1_fish %}
-                    <span class="var">{{ loan.get_kontakt_1_qarindoshlik_display }}</span>: 
-                    <span class="var">{{ loan.kontakt_1_telefon }}</span><br>
+                    {% if contact_1.fish %}
+                    <span class="var">{{ contact_1.get_qarindoshlik_display }}</span>: 
+                    <span class="var">{{ contact_1.telefon }}</span><br>
                     {% endif %}
-                    {% if loan.kontakt_2_fish %}
-                    <span class="var">{{ loan.get_kontakt_2_qarindoshlik_display }}</span>: 
-                    <span class="var">{{ loan.kontakt_2_telefon }}</span><br>
+                    {% if contact_2.fish %}
+                    <span class="var">{{ contact_2.get_qarindoshlik_display }}</span>: 
+                    <span class="var">{{ contact_2.telefon }}</span><br>
                     {% endif %}
-                    {% if loan.kontakt_3_fish %}
-                    <span class="var">{{ loan.get_kontakt_3_qarindoshlik_display }}</span>: 
-                    <span class="var">{{ loan.kontakt_3_telefon }}</span><br>
+                    {% if contact_3.fish %}
+                    <span class="var">{{ contact_3.get_qarindoshlik_display }}</span>: 
+                    <span class="var">{{ contact_3.telefon }}</span><br>
                     {% endif %}
                     <br>
                     <div style="height: 30px; border-bottom: 1px solid black; margin-bottom: 5px;"></div>
                     <div style="text-align: center;">(Imzo)</div>
                     <div style="text-align: right; margin-top: 5px;">
-                        <strong><span class="var">{{ loan.qarz_oluvchi_fish }}</span></strong>
+                        <strong><span class="var">{{ loan.client.fish }}</span></strong>
                     </div>
                 </td>
             </tr>

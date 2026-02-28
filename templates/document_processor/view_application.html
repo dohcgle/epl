@@ -58,19 +58,19 @@
                             <tbody>
                                 <tr>
                                     <th style="width: 30%">Qarz Oluvchi</th>
-                                    <td>{{ loan.qarz_oluvchi_fish }} ({{ loan.qarz_oluvchi_tugilgan_sana }})</td>
+                                    <td>{{ loan.personal_fish }} ({{ loan.personal_tugilgan_sana }})</td>
                                 </tr>
                                 <tr>
                                     <th>Pasport</th>
-                                    <td>{{ loan.qarz_oluvchi_pasport_seriya }}</td>
+                                    <td>{{ loan.personal_pasport_seriya }}</td>
                                 </tr>
                                 <tr>
                                     <th>Kredit Summasi</th>
-                                    <td>{{ loan.kredit_miqdori|intcomma }} so'm</td>
+                                    <td>{{ loan.loan_miqdori|intcomma }} so'm</td>
                                 </tr>
                                 <tr>
                                     <th>Muddat va Foiz</th>
-                                    <td>{{ loan.kredit_muddat_oy }} oy / {{ loan.foiz_stavkasi }}%</td>
+                                    <td>{{ loan.loan_muddat_oy }} oy / {{ loan.loan_foiz }}%</td>
                                 </tr>
                                 <tr>
                                     <th>Garov Turi</th>
@@ -80,22 +80,22 @@
                                 {% if loan.garov_turi == 'avto' %}
                                 <tr>
                                     <th>Avtomobil</th>
-                                    <td>{{ loan.avto_nomi }} - {{ loan.avto_raqam }} ({{ loan.avto_yil }})</td>
+                                    <td>{{ loan.collateral_avto_nomi }} - {{ loan.collateral_avto_raqam }} ({{ loan.collateral_avto_yil }})</td>
                                 </tr>
                                 <tr>
                                     <th>Baholangan Qiymati</th>
-                                    <td>{{ loan.avto_bahosi }}</td>
+                                    <td>{{ loan.collateral_avto_bahosi }}</td>
                                 </tr>
                                 {% endif %}
 
                                 {% if loan.garov_turi == 'kochmas_mulk' %}
                                 <tr>
                                     <th>Ko'chmas Mulk</th>
-                                    <td>{{ loan.mulk_turi }} - {{ loan.mulk_manzili }}</td>
+                                    <td>{{ loan.collateral_mulk_turi }} - {{ loan.collateral_mulk_manzil }}</td>
                                 </tr>
                                 <tr>
                                     <th>Maydoni</th>
-                                    <td>{{ loan.mulk_umumiy_maydoni }} kv.m</td>
+                                    <td>{{ loan.collateral_mulk_umumiy }} kv.m</td>
                                 </tr>
                                 {% endif %}
 
@@ -103,7 +103,7 @@
                                     <th>Sug'urta</th>
                                     <td>
                                         {% if loan.sugurta_mavjud %}
-                                        Mavjud ({{ loan.sugurta_kompaniyasi }} - {{ loan.sugurta_summasi }})
+                                        Mavjud ({{ loan.collateral_sugurta_kompaniya }} - {{ loan.collateral_sugurta_summa }})
                                         {% else %}
                                         Yo'q
                                         {% endif %}
@@ -115,7 +115,7 @@
                         <div class="p-3">
                             <label>To'lov Grafigi:</label>
                             <pre
-                                style="background: #f4f6f9; padding: 10px; border-radius: 5px;">{{ loan.grafik_matni }}</pre>
+                                style="background: #f4f6f9; padding: 10px; border-radius: 5px;">{{ loan.loan_grafik_matni }}</pre>
                         </div>
                     </div>
                 </div>
@@ -191,7 +191,7 @@
                                 </tr>
                                 <tr>
                                     <td>10</td>
-                                    <td><a href="{% url 'view_document_pdf' loan.id 'grafik' %}" target="_blank"
+                                    <td><a href="{% url 'view_document_pdf' loan.id 'loan_grafik' %}" target="_blank"
                                             class="text-dark">
                                             <i class="far fa-file-pdf mr-2 text-danger"></i> Grafik</a></td>
                                 </tr>

@@ -1,5 +1,8 @@
 Quyidagi hujjatlar eng asosiy:
 
-1. kredit_ariza
-2. protokol.html
+1. protokol.html
+2. xulosa.html
 3. shartnoma.html
+4. grafik.html  
+5. dalolatnoma.html
+6. buyruq.html

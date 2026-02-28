@@ -110,28 +110,28 @@
 
     <div class="doc-number">
         DIREKTORINING
-        <span class="var">{{ loan.shartnoma_sanasi|date:"d.m.Y" }}</span> y.dagi
-        № <span class="var">{{ loan.shartnoma_raqami }}</span>-sonli BUYRUG‘I
+        <span class="var">{{ loan.details.shartnoma_sanasi|date:"d.m.Y" }}</span> y.dagi
+        № <span class="var">{{ loan.details.shartnoma_raqami }}</span>-sonli BUYRUG‘I
     </div>
 
     <p>
-        Men, <strong><span class="var">{{ loan.direktor_fish_inisiali }}</span></strong> «PULLOL BUSINESS MIKROMOLIYA
+        Men, <strong><span class="var">{{ loan.financial_info.direktor_fish_inisiali }}</span></strong> «PULLOL BUSINESS MIKROMOLIYA
         TASHKILOTI» MChJ direktori,
-        jismoniy shaxs <strong><span class="var">{{ loan.qarz_oluvchi_fish }}</span></strong>ga quyidagi shartlarda
+        jismoniy shaxs <strong><span class="var">{{ loan.client.fish }}</span></strong>ga quyidagi shartlarda
         mikroqarz berishni buyuraman:
     </p>
 
     <div class="list-item">
-        1. Mikroqarz summasi: <strong><span class="var">{{ loan.kredit_miqdori|intcomma }}</span>
-            (<span class="var">{{ loan.kredit_miqdori_soz }}</span>) so‘m.</strong>
+        1. Mikroqarz summasi: <strong><span class="var">{{ loan.details.miqdori|intcomma }}</span>
+            (<span class="var">{{ loan.details.miqdori_soz }}</span>) so‘m.</strong>
     </div>
     <div class="list-item">
-        2. Mikroqarz muddati: <strong><span class="var">{{ loan.kredit_muddat_oy }}</span> oy.</strong>
+        2. Mikroqarz muddati: <strong><span class="var">{{ loan.details.muddat_oy }}</span> oy.</strong>
     </div>
     <div class="list-item">
         3. Mikroqarzdan foydalanganlik uchun foiz stavkasi: <strong>yillik
-            <span class="var">{{ loan.foiz_stavkasi }}</span>%
-            (<span class="var">{{ loan.foiz_stavkasi_soz }}</span>) foiz.</strong>
+            <span class="var">{{ loan.details.foiz }}</span>%
+            (<span class="var">{{ loan.details.foiz_soz }}</span>) foiz.</strong>
     </div>
     <div class="list-item">
         4. Mikroqarz bo‘yicha asosiy qarz va foizlarni to‘lash:
@@ -140,8 +140,8 @@
 
     {% if is_avto %}
     <p>
-        5. <strong><span class="var">{{ loan.garov_egasi_fish }}</span></strong>ga tegishli
-        <strong><span class="var">{{ loan.avto_nomi }}</span></strong> ko‘rinishidagi
+        5. <strong><span class="var">{{ collateral.owner_client.fish }}</span></strong>ga tegishli
+        <strong><span class="var">{{ avto.nomi }}</span></strong> ko‘rinishidagi
         transport vositasini quyidagi ma’lumotlarga muvofiq garovga qabul qilinsin:
     </p>
 
@@ -157,45 +157,45 @@
         </thead>
         <tbody>
             <tr>
-                <td><span class="var">{{ loan.avto_nomi }}</span></td>
-                <td><span class="var">{{ loan.avto_kuzov_turi }}</span>,
-                    <span class="var">{{ loan.avto_kuzov }}</span>
+                <td><span class="var">{{ avto.nomi }}</span></td>
+                <td><span class="var">{{ avto.kuzov_turi }}</span>,
+                    <span class="var">{{ avto.kuzov_raqami }}</span>
                 </td>
-                <td><span class="var">{{ loan.avto_dvigatel }}</span>,
-                    <span class="var">{{ loan.avto_shassi }}</span>
+                <td><span class="var">{{ avto.dvigatel }}</span>,
+                    <span class="var">{{ avto.shassi }}</span>
                 </td>
-                <td><span class="var">{{ loan.avto_yil }}</span>,
-                    <span class="var">{{ loan.avto_rang }}</span>
+                <td><span class="var">{{ avto.yil }}</span>,
+                    <span class="var">{{ avto.rang }}</span>
                 </td>
-                <td><span class="var">{{ loan.avto_bahosi|intcomma }}</span><br>
-                    (<span class="var">{{ loan.avto_bahosi_soz }}</span>)</td>
+                <td><span class="var">{{ avto.bahosi|intcomma }}</span><br>
+                    (<span class="var">{{ avto.bahosi_soz }}</span>)</td>
             </tr>
         </tbody>
     </table>
 
     <div class="list-item" style="font-size: 9pt;">
-        -* avtotransport egasi: <strong><span class="var">{{ loan.garov_egasi_fish }}</span></strong><br>
-        -* texnik pasport: <strong><span class="var">{{ loan.avto_texpasport }}</span></strong><br>
-        -* ro‘yxatdan o‘tgan manzili/garaj manzili: <strong><span class="var">{{ loan.avto_manzil }}</span></strong><br>
-        -* davlat raqami: <strong><span class="var">{{ loan.avto_raqam }}</span></strong>
+        -* avtotransport egasi: <strong><span class="var">{{ collateral.owner_client.fish }}</span></strong><br>
+        -* texnik pasport: <strong><span class="var">{{ avto.texpasport }}</span></strong><br>
+        -* ro‘yxatdan o‘tgan manzili/garaj manzili: <strong><span class="var">{{ avto.manzil }}</span></strong><br>
+        -* davlat raqami: <strong><span class="var">{{ avto.davlat_raqami }}</span></strong>
     </div>
 
     {% elif is_kochmas %}
     <p>
-        5. <strong><span class="var">{{ loan.garov_egasi_fish }}</span></strong>ga tegishli
-        <strong><span class="var">{{ loan.mulk_turi }}</span></strong> ko‘rinishidagi
+        5. <strong><span class="var">{{ collateral.owner_client.fish }}</span></strong>ga tegishli
+        <strong><span class="var">{{ mulk.turi }}</span></strong> ko‘rinishidagi
         ko‘chmas mulkni quyidagi ma’lumotlarga muvofiq garovga qabul qilinsin:
     </p>
 
-    <p>Manzil: <span class="var">{{ loan.mulk_manzili }}</span></p>
-    <p>Kelishilgan qiymati: <strong><span class="var">{{ loan.mulk_bahosi|intcomma }}</span></strong> so‘m.</p>
+    <p>Manzil: <span class="var">{{ mulk.manzil }}</span></p>
+    <p>Kelishilgan qiymati: <strong><span class="var">{{ mulk.bahosi|intcomma }}</span></strong> so‘m.</p>
     {% endif %}
 
     {% if is_sugurta %}
     <div class="list-item" style="margin-top: 15px;">
-        6. <strong>«<span class="var">{{ loan.sugurta_kompaniyasi }}</span>» АJ</strong> sug‘urta kompaniyasi bilan
-        Mikroqarz to'lamaslik xavfini <strong><span class="var">{{ loan.sugurta_summasi|intcomma }}</span> (<span
-                class="var">{{ loan.sugurta_summasi_soz }}</span>) so'm</strong> miqdoriga sug’urta qilish shartnomasi
+        6. <strong>«<span class="var">{{ sugurta.kompaniya }}</span>» АJ</strong> sug‘urta kompaniyasi bilan
+        Mikroqarz to'lamaslik xavfini <strong><span class="var">{{ sugurta.summa|intcomma }}</span> (<span
+                class="var">{{ sugurta.summa_soz }}</span>) so'm</strong> miqdoriga sug’urta qilish shartnomasi
         tuzilsin.
     </div>
     {% endif %}
@@ -211,7 +211,7 @@
                 {% endif %}
             </td>
             <td style="border: none; width: 20%; text-align: right; vertical-align: middle;">
-                <strong><span class="var">{{ loan.direktor_fish_inisiali }}</span></strong>
+                <strong><span class="var">{{ loan.financial_info.direktor_fish_inisiali }}</span></strong>
             </td>
         </tr>
     </table>

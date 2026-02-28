@@ -99,9 +99,9 @@
 <body>
 
     <div class="header">
-        <span class="var">{{ loan.shartnoma_sanasi|date:"d.m.Y" }}</span> y.dan
-        № <span class="var">{{ loan.shartnoma_raqami }}</span>-sonli Mikroqarz shartnomasi bo‘yicha garovga
-        qo‘yilgan mol-mulkni tekshirish bo’yicha <span class="var">{{ loan.qarz_oluvchi_fish }}</span> bilan tuzilgan
+        <span class="var">{{ loan.details.shartnoma_sanasi|date:"d.m.Y" }}</span> y.dan
+        № <span class="var">{{ loan.details.shartnoma_raqami }}</span>-sonli Mikroqarz shartnomasi bo‘yicha garovga
+        qo‘yilgan mol-mulkni tekshirish bo’yicha <span class="var">{{ loan.client.fish }}</span> bilan tuzilgan
     </div>
 
     <div class="doc-title">DALOLATNOMA</div>
@@ -112,11 +112,11 @@
     </div>
 
     <p>
-        Men, «PULLOL BUSINESS MIKROMOLIYA TASHKILOTI» MChJ <span class="var">{{ loan.filial_nomi }}</span> boshlig'i
-        <span class="var">{{ loan.filial_boshligi }}</span>, jismoniy
-        shaxs <span class="var">{{ loan.qarz_oluvchi_fish }}</span>
-        <span class="var">{{ loan.shartnoma_sanasi|date:"d.m.Y" }}</span> y.dan
-        № <span class="var">{{ loan.shartnoma_raqami }}</span>-sonli
+        Men, «PULLOL BUSINESS MIKROMOLIYA TASHKILOTI» MChJ <span class="var">{{ loan.financial_info.filial_nomi }}</span> boshlig'i
+        <span class="var">{{ loan.financial_info.filial_boshligi }}</span>, jismoniy
+        shaxs <span class="var">{{ loan.client.fish }}</span>
+        <span class="var">{{ loan.details.shartnoma_sanasi|date:"d.m.Y" }}</span> y.dan
+        № <span class="var">{{ loan.details.shartnoma_raqami }}</span>-sonli
         mikroqarz shartnomasi bo‘yicha garovga qo‘yilgan mol-mulkni ko‘zdan kechirdim.
     </p>
 
@@ -135,37 +135,37 @@
         </thead>
         <tbody>
             <tr>
-                <td><span class="var">{{ loan.avto_nomi }}</span></td>
+                <td><span class="var">{{ avto.nomi }}</span></td>
                 <td>
-                    kuzov turi - <span class="var">{{ loan.avto_kuzov_turi }}</span>,
+                    kuzov turi - <span class="var">{{ avto.kuzov_turi }}</span>,
                     <br>
-                    kuzov raqami - <span class="var">{{ loan.avto_kuzov }}</span>
+                    kuzov raqami - <span class="var">{{ avto.kuzov_raqami }}</span>
                 </td>
                 <td>
-                    dvigatel raqami - <span class="var">{{ loan.avto_dvigatel }}</span>,
+                    dvigatel raqami - <span class="var">{{ avto.dvigatel }}</span>,
                     <br>
-                    shassi raqami - <span class="var">{{ loan.avto_shassi }}</span>
+                    shassi raqami - <span class="var">{{ avto.shassi }}</span>
                 </td>
                 <td>
-                    rangi - <span class="var">{{ loan.avto_rang }}</span>,
+                    rangi - <span class="var">{{ avto.rang }}</span>,
                     <br>
-                    ishlab chiqarilgan yili - <span class="var">{{ loan.avto_yil }}</span>
+                    ishlab chiqarilgan yili - <span class="var">{{ avto.yil }}</span>
                 </td>
             </tr>
         </tbody>
     </table>
 
     <div style="margin-left: 1cm; margin-bottom: 10px;">
-        -* avtotransport egasi: <strong><span class="var">{{ loan.garov_egasi_fish }}</span></strong><br>
-        -* texnik pasport: <strong><span class="var">{{ loan.avto_texpasport }}</span></strong><br>
-        -* ro‘yxatdan o‘tgan manzili/garaj manzili: <strong><span class="var">{{ loan.avto_manzil }}</span></strong><br>
-        -* davlat raqami: <strong><span class="var">{{ loan.avto_raqam }}</span></strong>
+        -* avtotransport egasi: <strong><span class="var">{{ collateral.owner_client.fish }}</span></strong><br>
+        -* texnik pasport: <strong><span class="var">{{ avto.texpasport }}</span></strong><br>
+        -* ro‘yxatdan o‘tgan manzili/garaj manzili: <strong><span class="var">{{ avto.manzil }}</span></strong><br>
+        -* davlat raqami: <strong><span class="var">{{ avto.davlat_raqami }}</span></strong>
     </div>
 
     <p>
         Shu bilan birga, yuqoridagi mulkning kelishilgan garov qiymati
-        <span class="var">{{ loan.avto_bahosi|intcomma }}</span>
-        (<span class="var">{{ loan.avto_bahosi_soz }}</span>) so'm.
+        <span class="var">{{ avto.bahosi|intcomma }}</span>
+        (<span class="var">{{ avto.bahosi_soz }}</span>) so'm.
     </p>
 
     <p>
@@ -176,14 +176,14 @@
     <table class="requisites" style="margin-top: 40px; border: none; width: 100%;">
         <tr>
             <td style="border: none; width: 50%; text-align: left;">
-                <strong><span class="var">{{ loan.filial_nomi }}</span> boshlig‘i</strong><br><br>
+                <strong><span class="var">{{ loan.financial_info.filial_nomi }}</span> boshlig‘i</strong><br><br>
                 <div style="height: 40px; border-bottom: 1px solid black; width: 80%;"></div>
-                <strong><span class="var">{{ loan.filial_boshligi }}</span></strong>
+                <strong><span class="var">{{ loan.financial_info.filial_boshligi }}</span></strong>
             </td>
             <td style="border: none; width: 50%; text-align: left;">
                 <strong>Jismoniy shaxs, qarzdor</strong><br><br>
                 <div style="height: 40px; border-bottom: 1px solid black; width: 80%;"></div>
-                <strong><span class="var">{{ loan.qarz_oluvchi_fish }}</span></strong>
+                <strong><span class="var">{{ loan.client.fish }}</span></strong>
             </td>
         </tr>
     </table>

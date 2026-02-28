@@ -116,17 +116,17 @@
 
     <div class="date-number">
         <div>№ <span class="var">{{ loan.id }}</span></div>
-        <div><span class="var">{{ loan.shartnoma_sanasi|date:"d.m.Y" }}</span> y.</div>
+        <div><span class="var">{{ loan.details.shartnoma_sanasi|date:"d.m.Y" }}</span> y.</div>
     </div>
 
     <div class="payer-info">
-        <strong>To‘lovchi (Qarz oluvchi):</strong> <span class="var">{{ loan.qarz_oluvchi_fish }}</span>
+        <strong>To‘lovchi (Qarz oluvchi):</strong> <span class="var">{{ loan.client.fish }}</span>
     </div>
 
     <p>
         Men, ixtiyoriy ravishda ish yuritib, №01/18-22/2505178-sonli Bosh kelishuv shartlariga muvofiq,
-        <strong><span class="var">{{ loan.shartnoma_sanasi|date:"d.m.Y" }}</span> y. 
-            № <span class="var">{{ loan.shartnoma_raqami }}</span></strong>-sonli Mikroqarz ajratish shartnomasi bo‘yicha Qarz oluvchi
+        <strong><span class="var">{{ loan.details.shartnoma_sanasi|date:"d.m.Y" }}</span> y. 
+            № <span class="var">{{ loan.details.shartnoma_raqami }}</span></strong>-sonli Mikroqarz ajratish shartnomasi bo‘yicha Qarz oluvchi
         sifatida menga nisbatan «PULLOL BUSINESS MIKROMOLIYA TASHKILOTI» MChJ va «IMPEX INSURANCE» AJ sug‘urta
         kompaniyasi o‘rtasida tuzilgan, garov yoki boshqa turdagi ta’minot bilan ta’minlanmagan qismidagi mikroqarz
         qaytarilmasligi xavfini sug‘urta qilish uchun sug‘urta polisi rasmiylashtirilayotganligi to‘g‘risida xabardor
@@ -156,7 +156,7 @@
         </tr>
         <tr>
             <td bgcolor="#f9f9f9"><strong>Sug‘urta polisi raqami</strong></td>
-            <td><span class="var">{{ loan.sugurta_polisi }}</span></td>
+            <td><span class="var">{{ sugurta.polis_raqami }}</span></td>
         </tr>
     </table>
 
@@ -179,7 +179,7 @@
                     <small>(imzo)</small>
                 </td>
                 <td width="50%" align="right" style="vertical-align: bottom;">
-                    <strong><span class="var">{{ loan.qarz_oluvchi_fish }}</span></strong><br>
+                    <strong><span class="var">{{ loan.client.fish }}</span></strong><br>
                     <small>(F.I.Sh.)</small>
                 </td>
             </tr>

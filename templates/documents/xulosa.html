@@ -78,115 +78,175 @@
 
     <div class="center uppercase">
         «PULLOL BUSINESS MIKROMOLIYA TASHKILOTI» MChJ<br>
-        mikromoliya tashkilotining Xulosasi
+        mikromoliya tashkilotining xulosasi
     </div>
 
-    <p class="bold" style="margin-top: 15px;">MIJOZ HAQIDA MA'LUMOTLAR</p>
-    <p>Mijozning to'liq ismi sharifi: <span class="var">{{ loan.qarz_oluvchi_fish }}</span></p>
-    <p>Tug'ilgan sanasi: <span class="var">{{ loan.qarz_oluvchi_tugilgan_sana|date:"d.m.Y" }}</span> yil</p>
-    <p>Pasport seriyasi <span class="var">{{ loan.qarz_oluvchi_pasport_seriya }}</span>
-        <span class="var">{{ loan.qarz_oluvchi_pasport_berilgan }}</span>,
-        amal qilish muddati - <span class="var">21.12.2035 y.</span>
+    <p class="bold center uppercase" style="margin-top: 15px;">MIJOZ HAQIDA MA’LUMOTLAR</p>
+    <p>Mijozning to‘liq ismi sharifi: <span class="var">{{ loan.client.fish }}</span></p>
+    <p>Tug‘ilgan sanasi: <span class="var">{{ loan.client.tugilgan_sana|date:"d.m.Y" }}</span> yil</p>
+    <p>Pasport seriyasi <span class="var">{{ loan.client.pasport_seriya }}</span>
+        <span class="var">{{ loan.client.pasport_berilgan }}</span>,
+        amal qilish muddati — <span class="var">21.12.2035 y.</span>
     </p>
-    <p>Ro‘yxatdan o‘tgan manzili: <span class="var">{{ loan.qarz_oluvchi_manzil }}</span></p>
-    <p>Ish joyi: lavozimi <span class="var">{{ loan.qarz_oluvchi_ish_joyi }}</span></p>
+    <p>Ro‘yxatdan o‘tgan manzili: <span class="var">{{ loan.client.manzil }}</span></p>
+    <p>Ish joyi: lavozimi <span class="var">{{ loan.financial_info.ish_joyi }}</span></p>
 
-    <p class="bold" style="margin-top: 15px;">Mijoz tomonidan so’ralgan mikrokredit shartlari:</p>
-    <p>Mikrokredit summasi: <span class="var">{{ loan.kredit_miqdori|intcomma }} ({{ loan.kredit_miqdori_soz }})</span>
-        so'm.
+    <p class="bold center uppercase" style="margin-top: 15px;">
+        Mijoz tomonidan so‘ralgan
+        <span class="var">
+            {{ loan.details.get_turi_display|lower }}
+        </span> shartlari:</p>
+    <p>
+        <span class="var">{{ loan.details.get_turi_display }}</span> summasi:
+        <span class="var">{{ loan.details.miqdori|intcomma }}
+            ({{ loan.details.miqdori_soz }})
+        </span>
+        so‘m.
     </p>
-    <p>Mikrokredit muddati: <span class="var">{{ loan.kredit_muddat_oy }} ({{ loan.kredit_muddat_oy_soz }})</span> oy.
+    <p><span class="var">{{ loan.details.get_turi_display }}</span> muddati: 
+        <span class="var">
+            {{ loan.details.muddat_oy }} 
+            ({{ loan.details.muddat_oy_soz }})
+        </span> oy.
     </p>
-    <p>Mikrokreditdan foydalanganlik uchun foiz stavkasi: yillik
-        <span class="var">{{ loan.foiz_stavkasi }}% ({{ loan.foiz_stavkasi_soz }})</span> foiz
+    <p><span class="var">{{ loan.details.get_turi_display }}</span>dan foydalanganlik uchun foiz stavkasi: yillik
+        <span class="var">{{ loan.details.foiz }}% ({{ loan.details.foiz_soz }})</span> foiz
     </p>
-    <p>Mikrokredit bo'yicha asosiy qarz va foizlarni to'lash:</p>
-    <p style="padding-left: 20px;">- mikrokredit shartnomasi bo'yicha har oy
-        <span class="var">{{ loan.get_grafik_display|lower }}</span> to'lovlari amalga oshiriladi
+    <p><span class="var">{{ loan.details.get_turi_display }}</span> bo‘yicha asosiy qarz va foizlarni to‘lash:</p>
+    <p style="padding-left: 20px;">- <span class="var">{{ loan.details.get_turi_display|lower }}</span> shartnomasi
+        bo‘yicha har oy
+        <span class="var">{{ loan.details.get_grafik_turi_display|lower }}</span> to‘lovlari amalga oshiriladi
     </p>
     <p style="padding-left: 20px;">
-        Oxirgi yakuniy to'lov mikrokredit shartnomasi
+        Oxirgi yakuniy to‘lov <span class="var">{{ loan.details.get_turi_display|lower }}</span> shartnomasi
         tuzilgan kundan boshlab oxirgi oyning oxirgi kunida amalga oshiriladi
     </p>
 
-    <p class="bold" style="margin-top: 15px;">Mikrokredit ta’minoti:</p>
-    <p>
-        1.
-        {% if loan.garov_turi == 'avto' %}
-        Egalik huquqi <span class="var">{{ loan.garov_egasi_fish }}</span>ga tegishli bo'lgan <span class="var">{{
-            loan.avto_nomi }}</span> rusumli, <span class="var">{{ loan.avto_yil }}</span> yilda ishlab chiqarilgan,
-        davlat raqam belgisi <span class="var">{{ loan.avto_raqam }}</span> bo'lgan avtotransport vositasi.
-        {% elif loan.garov_turi == 'kochmas_mulk' %}
-        Egalik huquqi <span class="var">{{ loan.mulk_egasi|default:loan.garov_egasi_fish }}</span>ga tegishli bo'lgan
-        umumiy yer maydoni - <span class="var">700</span>, qurilish osti maydoni - <span class="var">{{
-            loan.mulk_qurilish_maydoni }}</span>, umumiy foydali maydoni - <span class="var">{{ loan.mulk_umumiy_maydoni
-            }}</span>, yashash maydoni - <span class="var">{{ loan.mulk_yashash_maydoni }}</span> <span class="var">{{
-            loan.mulk_turi }}</span>, <span class="var">{{ loan.mulk_manzili }}</span>
-        {% endif %}
+    <p class="bold center uppercase" style="margin-top: 15px;">
+        <span class="var">
+            {{ loan.details.get_turi_display }}
+        </span> ta’minoti:
     </p>
+    {% if collateral.type == 'avto' %}
+    <p>
+        1. Egalik huquqi <strong><span class="var">{{ collateral.owner_client.fish }}</span></strong>ga
+        tegishli bo‘lgan
+        garovga olingan avtomobil markasi
+        <strong><span class="var">{{ avto.nomi }}</span></strong>,
+        rangi - <strong><span class="var">{{ avto.rang }}</span></strong>,
+        ishlab chiqarilgan yili - <strong><span class="var">{{ avto.yil }}</span></strong>,
+        davlat raqam belgisi <strong><span class="var">{{ avto.davlat_raqami }}</span></strong>,
+        kuzov turi - <strong><span class="var">{{ avto.kuzov_turi }}</span></strong>,
+        kuzov raqami <strong><span class="var">{{ avto.kuzov_raqami }}</span></strong>,
+        dvigatel raqami <strong><span class="var">{{ avto.dvigatel }}</span></strong>,
+        shassi raqami - <strong><span class="var">{{ avto.shassi }}</span></strong>.
+    </p>
+    {% elif collateral.type == 'kochmas' or collateral.type == 'kochmas_mulk' %}
+    <p>
+        1. Egalik huquqi <strong><span class="var">{{ collateral.owner_client.fish }}</span></strong>ga
+        tegishli bo‘lgan
+        garovga olingan ko‘chmas mulk turi -
+        <strong><span class="var">{{ mulk.turi }}</span></strong>,
+        umumiy maydoni - <strong><span class="var">{{ mulk.umumiy_maydon }}</span></strong> kv.m,
+        qurilish osti maydoni - <strong><span class="var">{{ mulk.qurilish_maydon }}</span></strong> kv.m,
+        yashash maydoni - <strong><span class="var">{{ mulk.yashash_maydon }}</span></strong> kv.m,
+        kadastr raqami - <strong><span class="var">{{ mulk.kadastr_raqami }}</span></strong>,
+        manzili - <strong><span class="var">{{ mulk.manzil }}</span></strong>.
+    </p>
+    {% elif collateral.type == 'tilla' %}
+    <p>
+        1. Egalik huquqi <strong><span class="var">{{ collateral.owner_client.fish }}</span></strong>ga
+        tegishli bo‘lgan
+        garovga olingan tilla buyumlar nomi -
+        <strong><span class="var">{{ tilla.nomi }}</span></strong>,
+        probasi - <strong><span class="var">{{ tilla.probi }}</span></strong>,
+        vazni - <strong><span class="var">{{ tilla.vazni }}</span></strong> gr,
+        soni - <strong><span class="var">{{ tilla.soni }}</span></strong> ta.
+    </p>
+    {% endif %}
 
-    <p class="bold" style="margin-top: 15px;">Mijozning moliyaviy holati</p>
+    <p class="bold center uppercase" style="margin-top: 15px;">Mijozning moliyaviy holati</p>
     <p>
-        Anketaga muvofiq <span class="var">{{ loan.qarz_oluvchi_fish_inisiali }}</span>
+        Anketaga muvofiq <span class="var">{{ loan.client.fish_inisiali }}</span>
         ning o‘rtacha oylik daromadi
-        <span class="var">{{ loan.qarz_oluvchi_daromad|intcomma }}</span> so‘mni tashkil etdi.
+        <span class="var">{{ loan.financial_info.daromad|intcomma }}</span> so‘mni tashkil etdi.
     </p>
     <p>
-        Mijozning o'rtacha oylik xarajatlari
-        <span class="var">{{ loan.qarz_oluvchi_xarajatlar|intcomma }}</span> so'mni
-        tashkil etdi
+        Mijozning o‘rtacha oylik xarajatlari
+        <span class="var">{{ loan.financial_info.xarajatlar|intcomma }}</span> so‘mni
+        tashkil etdi.
     </p>
     <p>
-        Mikrokredit shartnomasi bo'yicha birinchi oy uchun to'lov
-        <span class="var">{{ loan.qarz_oluvchi_tahminiy_tolov|intcomma }}</span> so'mni tashkil etadi.
+        <span class="var">{{ loan.details.get_turi_display }}</span> shartnomasi bo‘yicha birinchi oy uchun to‘lov
+        <span class="var">{{ loan.financial_info.tahminiy_tolov|intcomma }}</span> so‘mni tashkil etadi.
     </p>
     <p>
-        Mikrokredit bo‘yicha oylik <span class="var">{{ loan.get_grafik_display|lower }}</span>
+        <span class="var">{{ loan.details.get_turi_display }}</span> bo‘yicha oylik 
+        <span class="var">
+            {{ loan.details.get_grafik_turi_display|lower }}
+        </span>
         to‘lovi miqdori
-        <span class="var">{{ loan.qarz_oluvchi_tahminiy_tolov|intcomma }}</span> so‘mni tashkil etadi.
+        <span class="var">{{ loan.financial_info.tahminiy_tolov|intcomma }}</span> so‘mni tashkil etadi.
     </p>
     <p>
         Mijoz quyidagi majburiyatlarga ega:
-        <span class="var">{{ loan.qarz_oluvchi_majburiyatlar|default:"Mavjud emas" }}</span>.
-        Ayni paytda muddati o'tgan qarzdorligi mavjud emas.
+        <span class="var">{{ loan.financial_info.majburiyatlar|default:"Mavjud emas" }}</span>.
+        Ayni paytda muddati o‘tgan qarzdorligi mavjud emas.
     </p>
 
-    <p class="bold" style="margin-top: 10px;">Mikrokredit bo’yicha ta’minot:</p>
-    {% if loan.garov_turi == 'avto' %}
-    <p>
-        - <span class="var">{{ loan.garov_egasi_fish }}</span> ga mulk huquqi asosida tegishli avtotransport vositasi
-        <span class="var">{{ loan.avto_nomi }}</span>, quyidagi tafsilotlarga muvofiq:
+    <p class="bold center uppercase" style="margin-top: 10px;">
+        <span class="var">
+            {{ loan.details.get_turi_display }}
+        </span> bo‘yicha
+        ta’minot:
     </p>
+    {% if collateral.type == 'avto' %}
+    <p>
+        - <strong><span class="var">{{ collateral.owner_client.fish }}</span></strong>ga mulk huquqi asosida tegishli
+        avtotransport vositasi <strong><span class="var">{{ avto.nomi }}</span></strong>, quyidagi tafsilotlarga
+        muvofiq:
+    </p>
+
     <table class="data-table">
         <thead>
             <tr>
                 <th>Nomi</th>
-                <th>Kuzov raqami</th>
-                <th>Dvigatel raqami</th>
-                <th>Ishlab chiqarilgan yili va rangi</th>
-                <th>Kelishilgan garov qiymati, so'm</th>
+                <th>Kuzov turi va kuzov raqami*</th>
+                <th>Dvigatel va shassi raqami*</th>
+                <th>Ishlab chiqarilgan yili va rangi*</th>
+                <th>Kelishilgan garov qiymati, so‘m</th>
             </tr>
         </thead>
         <tbody>
             <tr>
-                <td><span class="var">{{ loan.avto_nomi }}</span></td>
-                <td><span class="var">{{ loan.avto_kuzov }}</span></td>
-                <td><span class="var">{{ loan.avto_dvigatel }}</span></td>
-                <td><span class="var">{{ loan.avto_yil }}, {{ loan.avto_rang }}</span></td>
-                <td><span class="var">{{ loan.avto_bahosi|intcomma }}</span><br>
-                    <span class="var">({{ loan.avto_bahosi_soz }})</span>
+                <td><span class="var">{{ avto.nomi }}</span></td>
+                <td>kuzov turi - <span class="var">{{ avto.kuzov_turi }}</span>, <br>
+                    kuzov raqami <span class="var">{{ avto.kuzov_raqami }}</span>
+                </td>
+                <td>dvigatel raqami <span class="var">{{ avto.dvigatel }}</span>,<br>
+                    shassi raqami - <span class="var">{{ avto.shassi }}</span>
+                </td>
+                <td>rangi - <span class="var">{{ avto.rang }}</span>,<br>
+                    ishlab chiqarilgan yili - <span class="var">{{ avto.yil }}</span>
+                </td>
+                <td><span class="var">{{ avto.bahosi|intcomma }}</span> <br>
+                    (<span class="var">{{ avto.bahosi_soz }}</span>)
                 </td>
             </tr>
         </tbody>
     </table>
-    <p>-* davlat raqami: <span class="var">{{ loan.avto_raqam }}</span></p>
-    <p>-* texpasport: <span class="var">{{ loan.avto_texpasport }}</span></p>
-    {% elif loan.garov_turi == 'kochmas_mulk' %}
+
+    <p style="font-size: 9pt;">
+        -* avtotransport egasi: <span class="var">{{ collateral.owner_client.fish }}</span><br>
+        -* texnik pasport: <span class="var">{{ avto.texpasport }}</span>
+        <span class="var">{{ avto.texpasport_sana|date:"d.m.Y" }}</span> yilda berilgan<br>
+        -* ro‘yxatdan o‘tgan manzili/garaj manzili: <span class="var">{{ avto.manzil }}</span><br>
+        -* davlat raqami: <span class="var">{{ avto.davlat_raqami }}</span>
+    </p>
+    {% elif collateral.type == 'kochmas' or collateral.type == 'kochmas_mulk' %}
     <p>
-        - <span class="var">{{ loan.mulk_egasi|default:loan.garov_egasi_fish }}</span> ga mulk huquqi asosida tegishli
-        ko'chmas mulk shaklida <span class="var">{{ loan.mulk_turi }}</span>,
-        manzili: <span class="var">{{ loan.mulk_manzili }}</span>,
-        quyidagi tafsilotlarga muvofiq:
+        - <strong><span class="var">{{ collateral.owner_client.fish }}</span></strong>ga mulk huquqi asosida tegishli
+        ko‘chmas mulk <strong><span class="var">{{ mulk.turi }}</span></strong>, quyidagi tafsilotlarga muvofiq:
     </p>
 
     <table class="data-table">
@@ -196,77 +256,139 @@
                 <th>Qurilish osti maydoni, (m2)</th>
                 <th>Umumiy foydali maydoni, (m2)</th>
                 <th>Yashash maydoni, (m2)</th>
-                <th>Kelishilgan garov qiymati, so'm</th>
+                <th>Kelishilgan garov qiymati, so‘m</th>
             </tr>
         </thead>
         <tbody>
             <tr>
-                <td><span class="var">{{ loan.mulk_turi }}</span></td>
-                <td><span class="var">{{ loan.mulk_qurilish_maydoni }}</span></td>
-                <td><span class="var">{{ loan.mulk_umumiy_maydoni }}</span></td>
-                <td><span class="var">{{ loan.mulk_yashash_maydoni }}</span></td>
-                <td><span class="var">{{ loan.mulk_bahosi|intcomma }}</span><br>
-                    <span class="var">({{ loan.mulk_bahosi_soz }})</span>
+                <td><span class="var">{{ mulk.turi }}</span></td>
+                <td><span class="var">{{ mulk.qurilish_maydon|default:"—" }}</span></td>
+                <td><span class="var">{{ mulk.foydalanish_maydon|default:"—" }}</span></td>
+                <td><span class="var">{{ mulk.yashash_maydon|default:"—" }}</span></td>
+                <td><span class="var">{{ mulk.bahosi|intcomma }}</span> <br>
+                    (<span class="var">{{ mulk.bahosi_soz }}</span>)
                 </td>
             </tr>
         </tbody>
     </table>
 
-    <p>-* ko'chmas mulk egasi: <span class="var">{{ loan.mulk_egasi|default:loan.garov_egasi_fish }}</span></p>
-    <p>-* reestr raqami: <span class="var">{{ loan.mulk_reestr_raqami }}</span></p>
-    <p>-* kadastr raqami: <span class="var">{{ loan.mulk_kadastr_raqami }}</span></p>
-    <p>-* manzili: <span class="var">{{ loan.mulk_manzili }}</span></p>
+    <p style="font-size: 9pt;">
+        -* ko‘chmas mulk egasi: <span class="var">{{ collateral.owner_client.fish }}</span><br>
+        -* reestr raqami: <span class="var">{{ mulk.reestr_raqami|default:collateral.reestr_number }}</span><br>
+        -* kadastr raqami: <span class="var">{{ mulk.kadastr_raqami }}</span><br>
+        -* manzili: <span class="var">{{ mulk.manzil }}</span>
+    </p>
+
+    {% elif collateral.type == 'tilla' %}
+    <p>
+        - <strong><span class="var">{{ collateral.owner_client.fish }}</span></strong>ga mulk huquqi asosida tegishli
+        tilla buyumlar <strong><span class="var">{{ tilla.nomi }}</span></strong>, quyidagi tafsilotlarga muvofiq:
+    </p>
+
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Nomi/Tavsifi</th>
+                <th>Probasi</th>
+                <th>Vazni (gr)</th>
+                <th>Soni (dona)</th>
+                <th>Kelishilgan garov qiymati, so‘m</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><span class="var">{{ tilla.nomi }}</span></td>
+                <td><span class="var">{{ tilla.probi }}</span></td>
+                <td><span class="var">{{ tilla.vazni }}</span></td>
+                <td><span class="var">{{ tilla.soni }}</span></td>
+                <td><span class="var">{{ tilla.bahosi|intcomma }}</span> <br>
+                    (<span class="var">{{ tilla.bahosi_soz }}</span>)
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p style="font-size: 9pt;">
+        -* tilla buyumlar egasi: <span class="var">{{ collateral.owner_client.fish }}</span>
+    </p>
     {% endif %}
 
     <div class="page-break" style="height: 0; margin: 0; padding: 0;"></div>
 
     <div class="center uppercase">
         «PULLOL BUSINESS MIKROMOLIYA TASHKILOTI» MChJ<br>
-        mikromoliya tashkilotining Xulosasi
+        mikromoliya tashkilotining xulosasi
     </div>
 
     <p style="margin-top: 15px;">«PULLOL BUSINESS MIKROMOLIYA TASHKILOTI» MChJ kredit qo‘mitasining xulosasiga quyidagi
-        shartlarda <span class="var">{{ loan.qarz_oluvchi_fish }}</span>ga mikrokredit berish masalasi kiritiladi:</p>
+        shartlarda <span class="var">{{ loan.client.fish }}</span>ga 
+        <span class="var">
+            {{ loan.details.get_turi_display|lower }}
+        </span> berish masalasi kiritiladi:</p>
     <p>
-        Mikrokredit summasi:
-        <span class="var">{{ loan.kredit_miqdori|intcomma }} ({{ loan.kredit_miqdori_soz }})</span>
-        so'm.
+        <span class="var">{{ loan.details.get_turi_display }}</span> summasi:
+        <span class="var">{{ loan.details.miqdori|intcomma }} ({{ loan.details.miqdori_soz }})</span>
+        so‘m.
     </p>
     <p>
-        Mikrokredit muddati:
-        <span class="var">{{ loan.kredit_muddat_oy }} ({{ loan.kredit_muddat_oy_soz }})</span> oy.
+        <span class="var">{{ loan.details.get_turi_display }}</span> muddati:
+        <span class="var">{{ loan.details.muddat_oy }} ({{ loan.details.muddat_oy_soz }})</span> oy.
     </p>
     <p>
-        Mikrokreditdan foydalanganlik uchun foiz stavkasi: yillik
-        <span class="var">{{ loan.foiz_stavkasi }}% ({{ loan.foiz_stavkasi_soz }})</span> foiz
+        <span class="var">{{ loan.details.get_turi_display }}</span>dan foydalanganlik uchun foiz stavkasi: yillik
+        <span class="var">{{ loan.details.foiz }}% ({{ loan.details.foiz_soz }})</span> foiz
     </p>
     <p>
-        Mikrokredit bo'yicha asosiy qarz va foizlarni to'lash:
+        <span class="var">{{ loan.details.get_turi_display }}</span> bo‘yicha asosiy qarz va foizlarni to‘lash:
     </p>
     <p style="padding-left: 20px;">
-        - mikrokredit shartnomasi bo'yicha har oy
-        <span class="var">{{ loan.get_grafik_display|lower }}</span> to'lovlari amalga oshiriladi
+        - <span class="var">{{ loan.details.get_turi_display|lower }}</span> shartnomasi bo‘yicha har oy
+        <span class="var">{{ loan.details.get_grafik_turi_display|lower }}</span> to‘lovlari amalga oshiriladi
     </p>
     <p style="padding-left: 20px;">
-        Oxirgi yakuniy to'lov mikrokredit shartnomasi tuzilgan kundan boshlab oxirgi oyning oxirgi kunida amalga
+        Oxirgi yakuniy to‘lov <span class="var">{{ loan.details.get_turi_display|lower }}</span> shartnomasi tuzilgan
+        kundan boshlab oxirgi oyning oxirgi kunida amalga
         oshiriladi
     </p>
-
-    <p class="bold" style="margin-top: 10px;">Mikrokredit ta’minoti:</p>
-    <p>
-        1.
-        {% if loan.garov_turi == 'avto' %}
-        Egalik huquqi <span class="var">{{ loan.garov_egasi_fish }}</span>ga tegishli bo'lgan <span class="var">{{
-            loan.avto_nomi }}</span> rusumli, <span class="var">{{ loan.avto_yil }}</span> yilda ishlab chiqarilgan,
-        davlat raqam belgisi <span class="var">{{ loan.avto_raqam }}</span> bo'lgan avtotransport vositasi.
-        {% elif loan.garov_turi == 'kochmas_mulk' %}
-        Egalik huquqi <span class="var">{{ loan.mulk_egasi|default:loan.garov_egasi_fish }}</span>ga tegishli bo'lgan
-        umumiy yer maydoni - <span class="var">700</span>, qurilish osti maydoni - <span class="var">{{
-            loan.mulk_qurilish_maydoni }}</span>, umumiy foydali maydoni - <span class="var">{{ loan.mulk_umumiy_maydoni
-            }}</span>, yashash maydoni - <span class="var">{{ loan.mulk_yashash_maydoni }}</span> <span class="var">{{
-            loan.mulk_turi }}</span>, <span class="var">{{ loan.mulk_manzili }}</span>
-        {% endif %}
+    <p class="bold" style="margin-top: 10px;"><span class="var">{{ loan.details.get_turi_display }}</span> ta’minoti:
     </p>
+    {% if collateral.type == 'avto' %}
+    <p>
+        1. Egalik huquqi <strong><span class="var">{{ collateral.owner_client.fish }}</span></strong>ga
+        tegishli bo‘lgan
+        garovga olingan avtomobil markasi
+        <strong><span class="var">{{ avto.nomi }}</span></strong>,
+        rangi - <strong><span class="var">{{ avto.rang }}</span></strong>,
+        ishlab chiqarilgan yili - <strong><span class="var">{{ avto.yil }}</span></strong>,
+        davlat raqam belgisi <strong><span class="var">{{ avto.davlat_raqami }}</span></strong>,
+        kuzov turi - <strong><span class="var">{{ avto.kuzov_turi }}</span></strong>,
+        kuzov raqami <strong><span class="var">{{ avto.kuzov_raqami }}</span></strong>,
+        dvigatel raqami <strong><span class="var">{{ avto.dvigatel }}</span></strong>,
+        shassi raqami - <strong><span class="var">{{ avto.shassi }}</span></strong>.
+    </p>
+    {% elif collateral.type == 'kochmas' or collateral.type == 'kochmas_mulk' %}
+    <p>
+        1. Egalik huquqi <strong><span class="var">{{ collateral.owner_client.fish }}</span></strong>ga
+        tegishli bo‘lgan
+        garovga olingan ko‘chmas mulk turi -
+        <strong><span class="var">{{ mulk.turi }}</span></strong>,
+        umumiy maydoni - <strong><span class="var">{{ mulk.umumiy_maydon }}</span></strong> kv.m,
+        qurilish osti maydoni - <strong><span class="var">{{ mulk.qurilish_maydon }}</span></strong> kv.m,
+        yashash maydoni - <strong><span class="var">{{ mulk.yashash_maydon }}</span></strong> kv.m,
+        kadastr raqami - <strong><span class="var">{{ mulk.kadastr_raqami }}</span></strong>,
+        manzili - <strong><span class="var">{{ mulk.manzil }}</span></strong>.
+    </p>
+    {% elif collateral.type == 'tilla' %}
+    <p>
+        1. Egalik huquqi <strong><span class="var">{{ collateral.owner_client.fish }}</span></strong>ga
+        tegishli bo‘lgan
+        garovga olingan tilla buyumlar nomi -
+        <strong><span class="var">{{ tilla.nomi }}</span></strong>,
+        probasi - <strong><span class="var">{{ tilla.probi }}</span></strong>,
+        vazni - <strong><span class="var">{{ tilla.vazni }}</span></strong> gr,
+        soni - <strong><span class="var">{{ tilla.soni }}</span></strong> ta.
+    </p>
+    {% endif %}
 
     <p style="margin-top: 25px;">
         «PULLOL BUSINESS MIKROMOLIYA TASHKILOTI» MChJ mikromoliya tashkilotining xulosasi
@@ -278,11 +400,11 @@
         qo‘mitasi a’zolari «PULLOL BUSINESS MIKROMOLIYA TASHKILOTI» MChJ mikromoliya tashkilotining xulosasi va Mijoz
         tomonidan taqdim etilgan ma’lumotlar bilan tanishdilar:
     </p>
-    <p class="bold">Imzolaganlar ro'yxati:</p>
+    <p class="bold">Imzolaganlar ro‘yxati:</p>
 
     <table class="footer-table">
         <tr>
-            <td style="width: 35%;" class="bold">Kredit bo'limi menejeri</td>
+            <td style="width: 35%;" class="bold">Kredit bo‘limi menejeri</td>
             <td style="width: 30%; text-align: center;">
                 {% if qr_manager %}
                 <img src="{{ qr_manager }}" class="qr-code">
@@ -296,7 +418,7 @@
             <td></td>
         </tr>
         <tr>
-            <td class="bold">Kreditlash bo’limi boshlig’i</td>
+            <td class="bold">Kreditlash bo‘limi boshlig‘i</td>
             <td style="text-align: center;">
                 {% if qr_akramov %}
                 <img src="{{ qr_akramov }}" class="qr-code">
@@ -322,7 +444,7 @@
                 <img src="{{ qr_obidov }}" class="qr-code">
                 {% endif %}
             </td>
-            <td style="text-align: right;" class="bold">{{ loan.direktor_fish_inisiali }}</td>
+            <td style="text-align: right;" class="bold">{{ loan.financial_info.direktor_fish_inisiali }}</td>
         </tr>
     </table>
 

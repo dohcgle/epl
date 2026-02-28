@@ -132,36 +132,36 @@
 
     <div class="client-section">
         <div class="client-name">
-            <span class="var">{{ loan.qarz_oluvchi_fish }}</span>
+            <span class="var">{{ loan.client.fish }}</span>
         </div>
 
         <div class="contract-info">
-            Mikroqarz shartnomasi <span class="var">{{ loan.shartnoma_sanasi|date:"d.m.Y" }}</span> yildagi
-            №<span class="var">{{ loan.shartnoma_raqami }}-sonli</span>
+            Mikroqarz shartnomasi <span class="var">{{ loan.details.shartnoma_sanasi|date:"d.m.Y" }}</span> yildagi
+            №<span class="var">{{ loan.details.shartnoma_raqami }}-sonli</span>
         </div>
 
         <div class="details-box">
             <div class="detail-row">
                 <span>Foiz stavkasi:</span>
-                <span><span class="var">{{ loan.foiz_stavkasi }}</span>%</span>
+                <span><span class="var">{{ loan.details.foiz }}</span>%</span>
             </div>
             <div class="detail-row">
                 <span>Mikroqarz muddati:</span>
-                <span><span class="var">{{ loan.kredit_muddat_oy }}</span> oy</span>
+                <span><span class="var">{{ loan.details.muddat_oy }}</span> oy</span>
             </div>
             <div class="detail-row">
                 <span>Mikroqarz miqdori:</span>
-                <span><span class="var">{{ loan.kredit_miqdori|intcomma }}</span> so'm</span>
+                <span><span class="var">{{ loan.details.miqdori|intcomma }}</span> so'm</span>
             </div>
             <div class="detail-row">
                 <span>Shartnoma raqami:</span>
-                <span>№{{ loan.shartnoma_raqami }}</span>
+                <span>№{{ loan.details.shartnoma_raqami }}</span>
             </div>
         </div>
     </div>
 
     <div class="footer">
-        Toshkent shahar - <span class="var">{{ loan.shartnoma_sanasi|date:"Y" }}</span> y.
+        Toshkent shahar - <span class="var">{{ loan.details.shartnoma_sanasi|date:"Y" }}</span> y.
     </div>
 
 </body>

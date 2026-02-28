@@ -35,8 +35,10 @@
                         <tr>
                             <th>#</th>
                             <th>Qarz Oluvchi</th>
+                            <th>Filial</th>
                             <th>Kredit Miqdori</th>
                             <th>Garov Turi</th>
+                            <th>Garov Egasi</th>
                             <th>Operator</th>
                             <th>Xolati</th>
                             <th>Sanasi</th>
@@ -45,8 +47,10 @@
                         <tr class="filters">
                             <th></th>
                             <th><input type="text" placeholder="FISH bo'yicha"></th>
+                            <th><input type="text" placeholder="Filial bo'yicha"></th>
                             <th><input type="text" placeholder="Summa bo'yicha"></th>
                             <th><input type="text" placeholder="Garov bo'yicha"></th>
+                            <th><input type="text" placeholder="Egasi bo'yicha"></th>
                             <th><input type="text" placeholder="Operator bo'yicha"></th>
                             <th><input type="text" placeholder="Status bo'yicha"></th>
                             <th><input type="text" placeholder="Sana bo'yicha"></th>
@@ -57,17 +61,11 @@
                         {% for loan in loans %}
                         <tr>
                             <td>{{ forloop.counter }}</td>
-                            <td>{{ loan.qarz_oluvchi_fish }}</td>
-                            <td>{{ loan.kredit_miqdori|intcomma }} so'm</td>
-                            <td>
-                                {% if loan.garov_turi == 'avto' %}
-                                <span class="badge badge-info"><i class="fas fa-car"></i> Avtomobil</span>
-                                {% elif loan.garov_turi == 'kochmas_mulk' %}
-                                <span class="badge badge-warning"><i class="fas fa-building"></i> Ko'chmas mulk</span>
-                                {% elif loan.garov_turi == 'tilla' %}
-                                <span class="badge badge-success"><i class="fas fa-coins"></i> Tilla</span>
-                                {% endif %}
-                            </td>
+                            <td>{{ loan.personal_fish }}</td>
+                            <td>{{ loan.financial_filial_nomi }}</td>
+                            <td>{{ loan.loan_miqdori|intcomma }} so'm</td>
+                            <td>{{ loan.garov_turi_html|safe }}</td>
+                            <td>{{ loan.garov_egasi_qisqa }}</td>
                             <td>{{ loan.created_by.username }}</td>
                             <td>
                                 {% if loan.status == 'completed' %}
@@ -125,7 +123,7 @@
 <script>
     $(document).ready(function () {
         var table = $('#loanTable').DataTable({
-            "order": [[6, "desc"]],
+            "order": [[8, "desc"]],
             "language": {
                 "lengthMenu": "Har bir sahifada _MENU_ ta yozuv ko'rsatilsin",
                 "zeroRecords": "Ma'lumot topilmadi",

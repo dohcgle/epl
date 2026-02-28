@@ -35,7 +35,8 @@
                             <th>#</th>
                             <th>Sana</th>
                             <th>Qarz Oluvchi</th>
-                            <th>Filial</th>
+                            <th>Garov turi</th>
+                            <th>Garov egasi</th>
                             <th>Kredit Miqdori</th>
                             <th>Xolati</th>
                             <th>Amallar</th>
@@ -44,7 +45,8 @@
                             <th></th>
                             <th><input type="text" placeholder="Sana bo'yicha"></th>
                             <th><input type="text" placeholder="FISH bo'yicha"></th>
-                            <th><input type="text" placeholder="Filial bo'yicha"></th>
+                            <th><input type="text" placeholder="Garov bo'yicha"></th>
+                            <th><input type="text" placeholder="Egasi bo'yicha"></th>
                             <th><input type="text" placeholder="Summa bo'yicha"></th>
                             <th><input type="text" placeholder="Status bo'yicha"></th>
                             <th></th>
@@ -55,9 +57,10 @@
                         <tr>
                             <td>{{ forloop.counter }}</td>
                             <td>{{ doc.created_at|date:"d.m.Y H:i" }}</td>
-                            <td>{{ doc.qarz_oluvchi_fish }}</td>
-                            <td>{{ doc.filial_nomi }}</td>
-                            <td>{{ doc.kredit_miqdori|intcomma }} so'm</td>
+                            <td>{{ doc.personal_fish }}</td>
+                            <td>{{ doc.garov_turi_html|safe }}</td>
+                            <td>{{ doc.garov_egasi_qisqa }}</td>
+                            <td>{{ doc.loan_miqdori|intcomma }} so'm</td>
                             <td>
                                 {% if doc.status == 'completed' %}
                                 <span class="badge badge-success">Yakunlandi</span>

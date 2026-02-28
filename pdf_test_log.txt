@@ -1,0 +1,17 @@
+Testing PDF generation for Loan ID: 1
+ERROR:
+Traceback (most recent call last):
+  File "<string>", line 16, in <module>
+  File "/home/ulugbek/Projects/epl/document_processor/views.py", line 563, in generate_loan_docs
+    loan.pdf_file.save(filename, ContentFile(zip_buffer.read()), save=True)
+  File "/home/ulugbek/Projects/epl/venv/lib/python3.12/site-packages/django/db/models/fields/files.py", line 99, in save
+    self.name = self.storage.save(name, content, max_length=self.field.max_length)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ulugbek/Projects/epl/venv/lib/python3.12/site-packages/django/core/files/storage/base.py", line 49, in save
+    name = self._save(name, content)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ulugbek/Projects/epl/venv/lib/python3.12/site-packages/django/core/files/storage/filesystem.py", line 100, in _save
+    os.makedirs(directory, exist_ok=True)
+  File "<frozen os>", line 225, in makedirs
+PermissionError: [Errno 13] Permission denied: '/home/ulugbek/Projects/epl/media/loan_docs'
+

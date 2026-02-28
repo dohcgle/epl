@@ -88,10 +88,10 @@
             <td style="width: 60%; font-weight: bold; text-align: right; line-height: 1.4;">
                 «PULLOL BUSINESS MIKROMOLIYA TASHKILOTI»<br>
                 MChJning<br>
-                Direktori <span class="var">{{ loan.direktor_fish_inisiali|upper }}</span>ga<br><br>
+                Direktori <span class="var">{{ loan.financial_info.direktor_fish_inisiali|upper }}</span>ga<br><br>
                 <div style="font-weight: normal; text-align: left; padding-left: 40px; line-height: 1.4;">
-                    <span class="var">{{ loan.qarz_oluvchi_manzil|upper }}</span>-da yashovchi
-                    O‘zbekiston Respublikasi fuqarosi <span class="var">{{ loan.qarz_oluvchi_fish|upper }}</span>dan.
+                    <span class="var">{{ loan.client.manzil|upper }}</span>-da yashovchi
+                    O‘zbekiston Respublikasi fuqarosi <span class="var">{{ loan.client.fish|upper }}</span>dan.
                 </div>
             </td>
         </tr>
@@ -100,16 +100,16 @@
     <div class="title">Mikroqarz olish uchun Ariza</div>
 
     <div class="content-section">
-        <strong>Tug‘ilgan kuni:</strong> <span class="var">{{ loan.qarz_oluvchi_tugilgan_sana|date:"d.m.Y" }}
+        <strong>Tug‘ilgan kuni:</strong> <span class="var">{{ loan.client.tugilgan_sana|date:"d.m.Y" }}
             yil</span><br>
         <strong>Pasport seriyasi:</strong>
-        <span class="var">{{ loan.qarz_oluvchi_pasport_seriya }}
-            {{ loan.qarz_oluvchi_pasport_berilgan }}
+        <span class="var">{{ loan.client.pasport_seriya }}
+            {{ loan.client.pasport_berilgan }}
         </span><br>
-        <strong>Asosiy ish joyi:</strong> <span class="var">{{ loan.qarz_oluvchi_ish_joyi }}</span><br>
-        <strong>Lavozimi:</strong> <span class="var">{{ loan.qarz_oluvchi_ish_joyi }}</span><br>
+        <strong>Asosiy ish joyi:</strong> <span class="var">{{ loan.financial_info.ish_joyi }}</span><br>
+        <strong>Lavozimi:</strong> <span class="var">{{ loan.financial_info.ish_joyi }}</span><br>
         <strong>O‘rtacha oylik daromadi:</strong>
-        <span class="var">{{ loan.qarz_oluvchi_daromad|intcomma }} so'm.</span>
+        <span class="var">{{ loan.financial_info.daromad|intcomma }} so'm.</span>
     </div>
 
     <div class="content-section">
@@ -118,41 +118,41 @@
 
     <div class="list-item">- <strong>Mikroqarz summasi:</strong>
         <span class="var">
-            {{ loan.kredit_miqdori|intcomma }}
-            ({{ loan.kredit_miqdori_soz }}) so'm.
+            {{ loan.details.miqdori|intcomma }}
+            ({{ loan.details.miqdori_soz }}) so'm.
         </span>
     </div>
     <div class="list-item">- <strong>Mikroqarz muddati:</strong>
-        <span class="var">{{ loan.kredit_muddat_oy }} oy.</span>
+        <span class="var">{{ loan.details.muddat_oy }} oy.</span>
     </div>
     <div class="list-item">- <strong>Mikroqarz stavkasi:</strong> yillik
-        <span class="var">{{ loan.foiz_stavkasi }}%
-            ({{ loan.foiz_stavkasi_soz }}) foiz.
+        <span class="var">{{ loan.details.foiz }}%
+            ({{ loan.details.foiz_soz }}) foiz.
         </span>
     </div>
     <div class="list-item">- <strong>Mikroqarz bo‘yicha asosiy qarz va foizlarni to‘lash:</strong> mikroqarz shartnomasi
-        bo‘yicha har oy {{ loan.get_grafik_display|lower }} to‘lovlari amalga oshiriladi.</div>
+        bo‘yicha har oy {{ loan.details.get_grafik_turi_display|lower }} to‘lovlari amalga oshiriladi.</div>
 
     <div class="content-section" style="margin-top: 15px;">
         <strong>Mikroqarz ta’minoti:</strong><br>
-        1. Egalik huquqi <span class="var">{{ loan.garov_egasi_fish }}</span>ga tegishli bo‘lgan garovga olingan
-        avtomobil markasi <span class="var">{{ loan.avto_nomi }}</span>,
-        rangi - <span class="var">{{ loan.avto_rang }}</span>,
-        ishlab chiqarilgan yili - <span class="var">{{ loan.avto_yil }}</span>,
-        davlat raqam belgisi <span class="var">{{ loan.avto_raqam }}</span>,
-        kuzov turi - <span class="var">{{ loan.avto_kuzov_turi }}</span>,
-        kuzov raqami <span class="var">{{ loan.avto_kuzov }}</span>,
-        dvigatel raqami <span class="var">{{ loan.avto_dvigatel }}</span>,
-        shassi raqami - <span class="var">{{ loan.avto_shassi }}.</span><br>
+        1. Egalik huquqi <span class="var">{{ collateral.owner_client.fish }}</span>ga tegishli bo‘lgan garovga olingan
+        avtomobil markasi <span class="var">{{ avto.nomi }}</span>,
+        rangi - <span class="var">{{ avto.rang }}</span>,
+        ishlab chiqarilgan yili - <span class="var">{{ avto.yil }}</span>,
+        davlat raqam belgisi <span class="var">{{ avto.davlat_raqami }}</span>,
+        kuzov turi - <span class="var">{{ avto.kuzov_turi }}</span>,
+        kuzov raqami <span class="var">{{ avto.kuzov_raqami }}</span>,
+        dvigatel raqami <span class="var">{{ avto.dvigatel }}</span>,
+        shassi raqami - <span class="var">{{ avto.shassi }}.</span><br>
 
-        {% if loan.sugurta_mavjud %}
+        {% if is_sugurta_mavjud %}
         <br><br>
-        2. <span class="var">{{ loan.sugurta_kompaniyasi }}</span>
+        2. <span class="var">{{ sugurta.kompaniya }}</span>
         sug‘urta kompaniyasi tomonidan Mikroqarz to‘lamaslik
         xavfini
         <span class="var">
-            {{ loan.sugurta_summasi|intcomma }}
-            ({{ loan.sugurta_summasi_soz }}) so'm
+            {{ sugurta.summa|intcomma }}
+            ({{ sugurta.summa_soz }}) so'm
         </span>
         miqdoriga
         sug‘urta qilish.
@@ -177,7 +177,7 @@
     <table class="footer-table">
         <tr>
             <td style="width: 50%;">
-                <strong>{{ loan.qarz_oluvchi_fish|upper }}</strong>
+                <strong>{{ loan.client.fish|upper }}</strong>
             </td>
             <td style="width: 50%; text-align: right;">
                 <span class="underline"></span><br>
@@ -193,7 +193,7 @@
                     {% if qr_obidov %}
                     <img src="{{ qr_obidov }}" style="width: 1.5cm; margin-right: 15px; vertical-align: middle;">
                     {% endif %}
-                    <strong style="vertical-align: middle;">{{ loan.direktor_fish_inisiali|upper }}</strong>
+                    <strong style="vertical-align: middle;">{{ loan.financial_info.direktor_fish_inisiali|upper }}</strong>
                 </div>
             </td>
         </tr>

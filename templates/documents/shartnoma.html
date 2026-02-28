@@ -94,21 +94,21 @@
 
 <body>
 
-    <h3>MIKROQARZ SHARTNOMASI №<span class="var">{{ loan.shartnoma_raqami }}</span></h3>
+    <h3>MIKROQARZ SHARTNOMASI №<span class="var">{{ loan.details.shartnoma_raqami }}</span></h3>
 
     <div class="header-section">
         <div>Toshkent shahri</div>
-        <div><span class="var">{{ loan.shartnoma_sanasi|date:"d.m.Y" }}</span> y.</div>
+        <div><span class="var">{{ loan.details.shartnoma_sanasi|date:"d.m.Y" }}</span> y.</div>
     </div>
 
     <p>
         «PULLOL BUSINESS MIKROMOLIYA TASHKILOTI» MChJ, bundan buyon «Mikromoliya tashkiloti» deb nomlanuvchi,
-        ishonchnoma asosida harakat qiluvchi <span class="var">{{ loan.filial_nomi }}</span> boshlig‘i
-        <span class="bold"><span class="var">{{ loan.filial_boshligi }}</span></span> bir tomondan va
+        ishonchnoma asosida harakat qiluvchi <span class="var">{{ loan.financial_info.filial_nomi }}</span> boshlig‘i
+        <span class="bold"><span class="var">{{ loan.financial_info.filial_boshligi }}</span></span> bir tomondan va
         o‘z manfaati yo‘lida hamda o‘z nomidan harakat qiluvchi O‘zbekiston Respublikasi fuqarosi
-        <span class="bold"><span class="var">{{ loan.qarz_oluvchi_fish }}</span></span> (pasport ma‘lumotlari: <span
-            class="var">{{ loan.qarz_oluvchi_pasport_seriya }}</span>,
-        <span class="var">{{ loan.qarz_oluvchi_pasport_berilgan }}</span>), bundan buyon «Qarz oluvchi» deb nomlanuvchi,
+        <span class="bold"><span class="var">{{ loan.client.fish }}</span></span> (pasport ma‘lumotlari: <span
+            class="var">{{ loan.client.pasport_seriya }}</span>,
+        <span class="var">{{ loan.client.pasport_berilgan }}</span>), bundan buyon «Qarz oluvchi» deb nomlanuvchi,
         boshqa tomondan, birgalikda “Tomonlar” yoki alohida “Tomon” deb nomlanuvchilar,
         Qarz oluvchi tomonidan <span class="var">{{ loan.created_at|date:"d.m.Y" }}</span> yil, mikroqarz olish
         uchun ariza berilganligini hisobga olib,
@@ -119,14 +119,11 @@
     <p>
         1.1. Mikromoliya tashkiloti Qarz oluvchiga umumiy miqdori
         <span class="bold">
-            <span class="var">{{ loan.kredit_miqdori|intcomma }}</span>
+            <span class="var">{{ loan.details.miqdori|intcomma }}</span>
         </span>
-        (<span class="var">{{ loan.kredit_miqdori_soz }}</span>) bo‘lgan mikroqarzni
-        <span class="var">{{ loan.shartnoma_sanasi|date:"d.m.Y" }}</span> y. dan boshlab
-        <span class="bold">
-            <span class="var">{{ loan.kredit_muddat_oy }} ({{ loan.kredit_muddat_oy_soz }})</span> oy
-        </span>
-        muddatga
+        (<span class="var">{{ loan.details.miqdori_soz }}</span>) bo‘lgan mikroqarzni
+        <span class="var">{{ loan.details.boshlanish_sanasi|date:"d.m.Y" }}</span> yildan
+        <span class="var">{{ loan.details.tugash_sanasi|date:"d.m.Y" }}</span> yilgacha bo‘lgan muddatga
         naqd pul va/yoki o'tkazmasi shaklida ajratadi.
     </p>
     <p>
@@ -142,7 +139,7 @@
     <p>2.3. Mikroqarz Qarz oluvchi tomonidan ushbu Shartnomaning ajralmas qismi hisoblanadigan 1-ilovasida ko‘rsatilgan
         to‘lov jadvalida (bundan keyin - To‘lov jadvali) belgilangan miqdor, tartib va muddatlarda qaytariladi.</p>
     <p>2.4. Mikromoliya tashkiloti, mikroqarz berilgan vaqtdan boshlab, mikroqarz miqdorining qoldiq summasiga
-        <span class="var">{{ loan.foiz_stavkasi }}</span>% (<span class="var">{{ loan.foiz_stavkasi_soz }}</span>) foiz
+        <span class="var">{{ loan.details.foiz }}</span>% (<span class="var">{{ loan.details.foiz_soz }}</span>) foiz
         yillik va yiliga 365/366 kunlik hisobidan foizlar hisoblaydi. To‘lov jadvaliga muvofiq asosiy qarz bo‘yicha
         navbatdagi to‘lov buzilgan hollarda, foiz stavkasi oshiriladi va Mikromoliya tashkiloti mikroqarzning muddati
         o‘tgan asosiy qarz summasiga yillik 155 (bir yuz ellik besh) foiz miqdorida foizlar hisoblaydi.
@@ -192,57 +189,66 @@
     <p>3.1. Ushbu Shartnoma bo‘yicha taqdim etilgan Mikroqarz quyidagi garov bilan ta’minlanadi:</p>
 
     {% if is_avto %}
-    <p>3.1.1. Mikromoliya tashkiloti, Qarz oluvchi va 
-        <span class="bold">
-            <span class="var">{{ loan.garov_egasi_fish }}</span>
+    <p>3.1.1. Mikromoliya tashkiloti va Qarz oluvchi
+        {% if collateral.owner_type != 'borrower' %}
+        va <span class="bold">
+            <span class="var">{{ collateral.owner_client.fish }}</span>
         </span>
-        (<span class="var">{{ loan.created_at|date:"d.m.Y" }}</span> y. sanasidagi reestr raqami 
-        №<span class="var">{{ loan.reestr_raqami|default:loan.shartnoma_raqami }}</span> bo‘lgan Ishonchnomaga asosan) tomonidan
+        (<span class="var">{{ loan.created_at|date:"d.m.Y" }}</span> y. sanasidagi reestr raqami
+        №<span class="var">{{ collateral.reestr_number|default:loan.details.shartnoma_raqami }}</span> bo‘lgan
+        Ishonchnomaga asosan)
+        {% endif %} tomonidan
         <span class="var">{{ loan.created_at|date:"d.m.Y" }}</span> y. da imzolangan 1-sonli garov predmeti qiymatini
         tasdiqlash dalolatnomasiga muvofiq
-        <span class="bold"><span class="var">{{ loan.avto_rang }}</span></span> rangli, ishlab chiqarilgan yili – <span
-            class="var">{{ loan.avto_yil }}</span> yil,
-        dvigatel raqami <span class="var">{{ loan.avto_dvigatel }}</span>, 
-        shassi - <span class="var">{{ loan.avto_shassi }}</span>, 
-        kuzov turi - <span class="var">{{ loan.avto_kuzov_turi }}</span>, 
-        kuzov raqami <span class="var">{{ loan.avto_kuzov }}</span>, 
-        davlat raqam belgisi <span class="bold"><span class="var">{{ loan.avto_raqam }}</span></span> bo‘lgan
-        <span class="bold"><span class="var">{{ loan.avto_nomi }}</span></span> rusumli avtomashinasi (bundan keyin
+        <span class="bold"><span class="var">{{ avto.rang }}</span></span> rangli, ishlab chiqarilgan yili – <span
+            class="var">{{ avto.yil }}</span> yil,
+        dvigatel raqami <span class="var">{{ avto.dvigatel }}</span>,
+        shassi - <span class="var">{{ avto.shassi }}</span>,
+        kuzov turi - <span class="var">{{ avto.kuzov_turi }}</span>,
+        kuzov raqami <span class="var">{{ avto.kuzov_raqami }}</span>,
+        davlat raqam belgisi <span class="bold"><span class="var">{{ avto.davlat_raqami }}</span></span> bo‘lgan
+        <span class="bold"><span class="var">{{ avto.nomi }}</span></span> rusumli avtomashinasi (bundan keyin
         “Garov predmeti”), egalik huquqiga ega <span class="bold">
-            <span class="var">{{ loan.garov_egasi_fish }}</span></span> ga tegishli va kelishilgan garov qiymati
+            <span class="var">{{ collateral.owner_client.fish }}</span></span> ga tegishli va kelishilgan garov qiymati
         <span class="var">{{ loan.created_at|date:"d.m.Y" }}</span> y. da imzolangan 1-sonli Garov predmeti qiymatini
         tasdiqlash dalolatnomasiga muvofiq
-        <span class="bold"><span class="var">{{ loan.avto_bahosi|intcomma }}</span> 
-            (<span class="var">{{ loan.avto_bahosi_soz }}</span>)</span> so‘mni tashkil qiladi. Garovning aniq shartlari tegishli notarial
+        <span class="bold"><span class="var">{{ avto.bahosi|intcomma }}</span>
+            (<span class="var">{{ avto.bahosi_soz }}</span>)</span> so‘mni tashkil qiladi. Garovning aniq shartlari
+        tegishli notarial
         rasmiylashtirilgan garov shartnomasi bilan belgilanadi.
     </p>
     {% elif is_kochmas %}
-    <p>3.1.1. Mikromoliya tashkiloti, Qarz oluvchi va <span class="bold">
-        <span class="var">{{ loan.garov_egasi_fish }}</span></span> tomonidan
+    <p>3.1.1. Mikromoliya tashkiloti va Qarz oluvchi
+        {% if collateral.owner_type != 'borrower' %}
+        va <span class="bold">
+            <span class="var">{{ collateral.owner_client.fish }}</span></span>
+        {% endif %} tomonidan
         <span class="var">{{ loan.created_at|date:"d.m.Y" }}</span> y. da imzolangan 1-sonli Garov predmeti qiymatini
         tasdiqlash dalolatnomasiga muvofiq
-        <span class="bold"><span class="var">{{ loan.mulk_manzili }}</span></span> manzilida joylashgan, yer uchastkasi
-        maydoni - <span class="var">{{ loan.mulk_umumiy_maydoni }}</span>, 
-        yashash maydoni - <span class="var">{{ loan.mulk_yashash_maydoni }}</span> bo‘lgan,
-        <span class="bold"><span class="var">{{ loan.mulk_turi }}</span></span> ko‘rinishidagi ko‘chmas mulk (bundan
+        <span class="bold"><span class="var">{{ mulk.manzil }}</span></span> manzilida joylashgan, yer uchastkasi
+        maydoni - <span class="var">{{ mulk.umumiy_maydon }}</span>,
+        yashash maydoni - <span class="var">{{ mulk.yashash_maydoni }}</span> bo‘lgan,
+        <span class="bold"><span class="var">{{ mulk.turi }}</span></span> ko‘rinishidagi ko‘chmas mulk (bundan
         keyin “Garov predmeti”), egalik huquqiga ko‘ra <span class="bold">
-            <span class="var">{{ loan.garov_egasi_fish }}</span></span> ga tegishli va kelishilgan garov qiymati
+            <span class="var">{{ collateral.owner_client.fish }}</span></span> ga tegishli va kelishilgan garov qiymati
         <span class="var">{{ loan.created_at|date:"d.m.Y" }}</span> y. da imzolangan 1-sonli Garov predmeti qiymatini
         tasdiqlash dalolatnomasiga muvofiq
-        <span class="bold"><span class="var">{{ loan.mulk_bahosi|intcomma }}</span> 
-            (<span class="var">{{ loan.mulk_bahosi_soz }}</span>)</span> so‘mni tashkil qiladi. Garovning aniq shartlari tegishli tarzda
+        <span class="bold"><span class="var">{{ mulk.bahosi|intcomma }}</span>
+            (<span class="var">{{ mulk.bahosi_soz }}</span>)</span> so‘mni tashkil qiladi. Garovning aniq shartlari
+        tegishli tarzda
         notarial tasdiqlangan garov shartnomasi bilan belgilangan.
     </p>
     {% endif %}
 
-    {% if loan.sugurta_mavjud %}
-    <p>3.1.2. «<span class="var">{{ loan.sugurta_kompaniyasi }}</span>» sug‘urta kompaniyasi (keyingi
+    {% if is_sugurta_mavjud %}
+    <p>3.1.2. «<span class="var">{{ sugurta.kompaniya }}</span>» sug‘urta kompaniyasi (keyingi
         o'rinlarda-Sug‘urtalovchi) tomonidan Mikroqarz to'lamaslik xavfini Mikroqarz summasiga nisbatan 140% dan
-        hisoblab <span class="var">{{ loan.sugurta_summasi|intcomma }}</span> 
-        (<span class="var">{{ loan.sugurta_summasi_soz }}</span>) so'm miqdoriga sug’urta qilish. Ushbu shartnoma bo‘yicha Mikroqarz
-        berilgunga qadar Mikromoliya tashkiloti Sug‘urtalovchi 
-        <span class="var">{{ loan.sugurta_summasi|intcomma }}</span>
-         (<span class="var">{{ loan.sugurta_summasi_soz }}</span>) so'm miqdoridagi Mikroqarzni to‘lamaslik
+        hisoblab <span class="var">{{ sugurta.summa|intcomma }}</span>
+        (<span class="var">{{ sugurta.summa_soz }}</span>) so'm miqdoriga sug’urta qilish. Ushbu shartnoma bo‘yicha
+        Mikroqarz
+        berilgunga qadar Mikromoliya tashkiloti Sug‘urtalovchi
+        <span class="var">{{ sugurta.summa|intcomma }}</span>
+        (<span class="var">{{ sugurta.summa_soz }}</span>) so'm miqdoridagi Mikroqarzni to‘lamaslik
         xavfini sug‘urta qilish shartnomasini tuzadi va Sug‘urtalovchi nomiga sug‘urta mukofotini to‘laydi, Qarz oluvchi
         esa Mikromoliya tashkiloti tomonidan sug‘urta mukofotini to‘langan kuni Mikromoliya tashkiloti tomonidan
         to‘langan sug‘urta mukofotini Mikromoliya tashkilotiga to‘laydi.
@@ -477,7 +483,11 @@
                                     {% endif %}
                                 </td>
                                 <td style="border: none; width: 65%; vertical-align: middle; padding: 0;">
-                                    <strong><span class="var">{{ loan.direktor_fish_inisiali }}</span></strong>
+                                    <strong>
+                                        <span class="var">
+                                            {{ loan.financial_info.direktor_fish_inisiali }}
+                                        </span>
+                                    </strong>
                                 </td>
                             </tr>
                         </table>
@@ -486,37 +496,37 @@
 
                 </td>
                 <td style="line-height: 1.6;">
-                    <strong><span class="var">{{ loan.qarz_oluvchi_fish }}</span></strong><br>
-                    Manzil: <span class="var">{{ loan.qarz_oluvchi_manzil }}</span><br>
-                    Pasport: <span class="var">{{ loan.qarz_oluvchi_pasport_seriya }}</span>,
-                    <span class="var">{{ loan.qarz_oluvchi_pasport_berilgan }}.</span><br>
+                    <strong><span class="var">{{ loan.client.fish }}</span></strong><br>
+                    Manzil: <span class="var">{{ loan.client.manzil }}</span><br>
+                    Pasport: <span class="var">{{ loan.client.pasport_seriya }}</span>,
+                    <span class="var">{{ loan.client.pasport_berilgan }}.</span><br>
 
-                    <span class="var">Mijoz: {{ loan.qarz_oluvchi_telefon }}</span>
-                    {% if loan.qarz_oluvchi_telefon_2 %}
-                    , <span class="var">{{ loan.qarz_oluvchi_telefon_2 }}</span>
+                    <span class="var">Tel:</span>
+                    {% if loan.client.telefon %}
+                    <span class="var">{{ loan.client.telefon }}</span>
                     {% endif %}<br>
 
-                    {% if loan.kontakt_1_fish %}
-                    <span class="var">{{ loan.get_kontakt_1_qarindoshlik_display }}</span>:
-                    <span class="var">{{ loan.kontakt_1_telefon }}</span><br>
+                    {% if contact_1.fish %}
+                    <span class="var">{{ contact_1.get_qarindoshlik_display }}</span>:
+                    <span class="var">{{ contact_1.telefon }}</span><br>
                     {% endif %}
 
-                    {% if loan.kontakt_2_fish %}
-                    <span class="var">{{ loan.get_kontakt_2_qarindoshlik_display }}</span>:
-                    <span class="var">{{ loan.kontakt_2_telefon }}</span><br>
+                    {% if contact_2.fish %}
+                    <span class="var">{{ contact_2.get_qarindoshlik_display }}</span>:
+                    <span class="var">{{ contact_2.telefon }}</span><br>
                     {% endif %}
 
-                    {% if loan.kontakt_3_fish %}
-                    <span class="var">{{ loan.get_kontakt_3_qarindoshlik_display }}</span>:
-                    <span class="var">{{ loan.kontakt_3_telefon }}</span><br>
+                    {% if contact_3.fish %}
+                    <span class="var">{{ contact_3.get_qarindoshlik_display }}</span>:
+                    <span class="var">{{ contact_3.telefon }}</span><br>
                     {% endif %}
 
                     <div style="margin-top: 40px; border-bottom: 1px solid #000; width: 80%;"></div>
-                    <div style="font-size: 8pt; text-align: left;">(Imzo)</div>
-                    <div style="text-align: right; margin-top: 5px;">
-                        <strong><span class="var">{{ loan.qarz_oluvchi_fish }}</span></strong>
+                    <div style="font-size: 8pt; text-align: center;">(Imzo)</div>
+                    <div style="text-align: center; margin-top: 5px;">
+                        <strong><span class="var">{{ loan.client.fish }}</span></strong>
                     </div>
-                    
+
                 </td>
             </tr>
         </tbody>

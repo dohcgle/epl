@@ -5,7 +5,7 @@ from .views import (
     process_audit_file, generate_documents,
     process_audit_file, generate_documents,
     create_loan_application, moderator_dashboard, director_dashboard, view_application, approve_application,
-    profile_view, view_document_pdf, delete_loan, edit_loan
+    profile_view, view_document_pdf, delete_loan, edit_loan, create_loan_vue
 )
 
 urlpatterns = [
@@ -18,6 +18,7 @@ urlpatterns = [
     
     # New Workflow URLs
     path('loans/create/', create_loan_application, name='create_loan'),
+    path('loans/create-vue/', create_loan_vue, name='create_loan_vue'),
     path('loans/moderator/', moderator_dashboard, name='moderator_dashboard'),
     path('loans/director/', director_dashboard, name='director_dashboard'),
     path('loans/view/<int:loan_id>/', view_application, name='view_application'),

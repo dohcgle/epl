@@ -67,28 +67,17 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
+import os
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ.get('POSTGRES_DB', 'epl_db'),
+        'USER': os.environ.get('POSTGRES_USER', 'epl_user'),
+        'PASSWORD': os.environ.get('POSTGRES_PASSWORD', 'epl_password'),
+        'HOST': os.environ.get('POSTGRES_HOST', 'localhost'),
+        'PORT': os.environ.get('POSTGRES_PORT', '5432'),
     }
 }
-# For Docker with Postgres (optional, but requested in plan, switching to sqlite for simplicity unless strictly required, 
-# wait, docker compose has postgres. I should use postgres if I want to follow my own plan strictly, but sqlite is easier for file-based tasks. 
-# Re-reading plan: Plan mentions Postgres. I will configure Postgres.)
-
-import os
-if os.environ.get('POSTGRES_DB'):
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': os.environ.get('POSTGRES_DB'),
-            'USER': os.environ.get('POSTGRES_USER'),
-            'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
-            'HOST': os.environ.get('POSTGRES_HOST', 'db'),
-            'PORT': os.environ.get('POSTGRES_PORT', '5432'),
-        }
-    }
 
 
 # Password validation
@@ -129,6 +118,9 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / 'static'
+STATICFILES_DIRS = [
+    BASE_DIR / 'static_dev',  # Rootdagi static papkani static_dev ga o'zgartiramiz, chunki rootdagi 'static' endi collectstatic uchun ishlatiladi
+]
 
 MEDIA_URL = 'media/'
 MEDIA_ROOT = BASE_DIR / 'media'

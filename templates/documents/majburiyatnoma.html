@@ -61,11 +61,11 @@
     <div class="title">MAJBURIYATNOMA</div>
 
     <div class="content-section">
-        Men, fuqaro <strong><span class="var">{{ loan.qarz_oluvchi_fish }}</span></strong> «PULLOL BUSINESS
-        MIKROMOLIYA TASHKILOTI» MChJ bilan <span class="var">{{ loan.shartnoma_sanasi|date:"d.m.Y" }}</span> sanasidagi
+        Men, fuqaro <strong><span class="var">{{ loan.client.fish }}</span></strong> «PULLOL BUSINESS
+        MIKROMOLIYA TASHKILOTI» MChJ bilan <span class="var">{{ loan.details.shartnoma_sanasi|date:"d.m.Y" }}</span> sanasidagi
         <span class="var">№
-            {{ loan.shartnoma_raqami }}-sonli</span> shartnomaning garov ta'minoti sifatida taqdim etilayotgan mulk
-        <span class="var">{{ loan.avto_nomi }}</span> rusumli avtotransport vositasini qonunga xilof ravishda
+            {{ loan.details.shartnoma_raqami }}-sonli</span> shartnomaning garov ta'minoti sifatida taqdim etilayotgan mulk
+        <span class="var">{{ avto.nomi }}</span> rusumli avtotransport vositasini qonunga xilof ravishda
         o‘zlashtirmaslikka, yashirmaslikka,
         nobud qilmaslikka yoki unga shikast yetkazmaslik majburiyatini olaman.
     </div>
@@ -78,7 +78,7 @@
     <table class="signature-table">
         <tr>
             <td style="width: 60%;">
-                <strong><span class="var">{{ loan.qarz_oluvchi_fish }}</span></strong>
+                <strong><span class="var">{{ loan.client.fish }}</span></strong>
             </td>
             <td style="width: 40%; text-align: right;">
                 Imzo: _________________
@@ -87,7 +87,7 @@
     </table>
 
     <div class="footer-date">
-        Sana: <span class="var">{{ loan.shartnoma_sanasi|date:"d.m.Y" }}</span> y.
+        Sana: <span class="var">{{ loan.details.shartnoma_sanasi|date:"d.m.Y" }}</span> y.
     </div>
 
 </body>

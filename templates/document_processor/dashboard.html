@@ -183,11 +183,11 @@
                             {% for doc in recent_docs %}
                             <tr>
                                 <td>{{ doc.created_at|date:"d.m.Y H:i" }}</td>
-                                <td>{{ doc.qarz_oluvchi_fish }}</td>
+                                <td>{{ doc.personal_fish }}</td>
                                 <td>
                                     <span class="badge badge-info">{{ doc.get_garov_turi_display }}</span>
                                 </td>
-                                <td>{{ doc.kredit_miqdori|intcomma }} so'm</td>
+                                <td>{{ doc.loan_miqdori|intcomma }} so'm</td>
                                 <td>
                                     {% if doc.status == 'completed' %}
                                     <span class="badge badge-success">Yakunlandi</span>

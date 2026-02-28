@@ -1,0 +1,18 @@
+http://localhost/loans/create-vue/
+Step === 4 GAROV:
+
+
+Garov egasi - bu radio buladi, faqat bittasi tanlanadi:
+    Qarz oluvchi
+    Boshqa shaxs
+    Bosh ishonchnoma
+
+Garov turlari - bu chekbox buladi, bir nechta tanlash mumkin:
+    Avtomobil formasi
+    Ko'chmas mulk formasi
+    Tilla buyumlar formasi
+    Sug'urta formasi
+
+Garov egasi tanlansa, Garov turlarini taklif qilsin. Garov turiga qarab inputlar paydo bo'lsin.
+
+Mazku Stepni professional qilib ber
