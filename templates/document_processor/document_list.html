@@ -33,22 +33,22 @@
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>Sana</th>
                             <th>Qarz Oluvchi</th>
                             <th>Garov turi</th>
                             <th>Garov egasi</th>
                             <th>Kredit Miqdori</th>
                             <th>Xolati</th>
+                            <th>Sana</th>
                             <th>Amallar</th>
                         </tr>
                         <tr class="filters">
                             <th></th>
-                            <th><input type="text" placeholder="Sana bo'yicha"></th>
                             <th><input type="text" placeholder="FISH bo'yicha"></th>
                             <th><input type="text" placeholder="Garov bo'yicha"></th>
                             <th><input type="text" placeholder="Egasi bo'yicha"></th>
                             <th><input type="text" placeholder="Summa bo'yicha"></th>
                             <th><input type="text" placeholder="Status bo'yicha"></th>
+                            <th><input type="text" placeholder="Sana bo'yicha"></th>
                             <th></th>
                         </tr>
                     </thead>
@@ -56,7 +56,6 @@
                         {% for doc in documents %}
                         <tr>
                             <td>{{ forloop.counter }}</td>
-                            <td>{{ doc.created_at|date:"d.m.Y H:i" }}</td>
                             <td>{{ doc.personal_fish }}</td>
                             <td>{{ doc.garov_turi_html|safe }}</td>
                             <td>{{ doc.garov_egasi_qisqa }}</td>
@@ -72,6 +71,7 @@
                                 <span class="badge badge-warning">Moderator Tasdiqlashi Kutilmoqda</span>
                                 {% endif %}
                             </td>
+                            <td>{{ doc.created_at|date:"d.m.Y H:i" }}</td>
                             <td>
                                 <div class="btn-group">
                                     <a href="{% url 'view_application' doc.id %}" class="btn btn-sm btn-info"
@@ -113,7 +113,7 @@
     $(document).ready(function () {
         // DataTables-ni ishga tushirish
         var table = $('#loanTable').DataTable({
-            "order": [[1, "desc"]], // Sana bo'yicha (2-ustun) teskari tartibda
+            "order": [],
             "language": {
                 "lengthMenu": "Har bir sahifada _MENU_ ta yozuv ko'rsatilsin",
                 "zeroRecords": "Ma'lumot topilmadi",

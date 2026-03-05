@@ -453,19 +453,13 @@
                                 <div v-for="(contact, index) in contacts" :key="index" class="mb-4">
                                     <h6 class="text-primary mt-3">[[ index + 1 ]]-shaxs</h6>
                                     <div class="row">
-                                        <div class="col-md-4 form-group">
-                                            <label>F.I.Sh</label>
-                                            <input type="text" v-model="contact.fish"
-                                                :data-model="'contacts[' + index + '].fish'"
-                                                class="form-control text-uppercase">
-                                        </div>
-                                        <div class="col-md-4 form-group">
+                                        <div class="col-md-6 form-group">
                                             <label>Telefoni</label>
                                             <input type="text" v-model="contact.telefon"
                                                 :data-model="'contacts[' + index + '].telefon'"
                                                 class="form-control phone-mask">
                                         </div>
-                                        <div class="col-md-4 form-group">
+                                        <div class="col-md-6 form-group">
                                             <label>Qarindoshligi</label>
                                             <select v-model="contact.qarindoshlik"
                                                 :data-model="'contacts[' + index + '].qarindoshlik'"
@@ -1249,9 +1243,8 @@
 
             // 2. Kontaktlar
             const contacts = ref([
-                { fish: '', telefon: '', qarindoshlik: '' },
-                { fish: '', telefon: '', qarindoshlik: '' },
-                { fish: '', telefon: '', qarindoshlik: '' }
+                { telefon: '', qarindoshlik: '' },
+                { telefon: '', qarindoshlik: '' }
             ]);
 
             // 3. Kredit Ma'lumotlari
@@ -1663,11 +1656,8 @@
                     personal.value.manzil = getRandomManzil();
                 } else if (step === 2) {
                     const p1 = getRandomNameObj();
-                    const p2 = getRandomNameObj();
-                    const p3 = getRandomNameObj();
-                    contacts.value[0] = { fish: p1.fullName, telefon: '+99890' + Math.floor(1000000 + Math.random() * 9000000), qarindoshlik: p1.gender === 'Erkak' ? 'ota' : 'ona' };
-                    contacts.value[1] = { fish: p2.fullName, telefon: '+99890' + Math.floor(1000000 + Math.random() * 9000000), qarindoshlik: p2.gender === 'Erkak' ? 'aka' : 'opa' };
-                    contacts.value[2] = { fish: p3.fullName, telefon: '+99890' + Math.floor(1000000 + Math.random() * 9000000), qarindoshlik: 'turmush_ortogi' };
+                    contacts.value[0] = { telefon: '+99890' + Math.floor(1000000 + Math.random() * 9000000), qarindoshlik: p1.gender === 'Erkak' ? 'ota' : 'ona' };
+                    contacts.value[1] = { telefon: '+99890' + Math.floor(1000000 + Math.random() * 9000000), qarindoshlik: 'turmush_ortogi' };
                 } else if (step === 3) {
                     const randomRaqam = Math.floor(Math.random() * 300) + 1;
                     const randomOy = Math.floor(Math.random() * 12) + 1;

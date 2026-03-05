@@ -474,7 +474,11 @@
                     Tel: (55) 510 02 17, (97) 714 14 17, (97) 706 96 65<br><br>
 
                     <div style="margin-top: 15px;">
+                        {% if loan.financial_info.filial_nomi %}
+                        <strong><span class="var">{{ loan.financial_info.filial_nomi }}</span> boshlig‘i:</strong><br>
+                        {% else %}
                         <strong>Direktor:</strong><br>
+                        {% endif %}
                         <table style="width: 100%; border: none; margin-top: 5px;">
                             <tr>
                                 <td style="border: none; width: 35%; padding: 0;">
@@ -485,7 +489,11 @@
                                 <td style="border: none; width: 65%; vertical-align: middle; padding: 0;">
                                     <strong>
                                         <span class="var">
+                                            {% if loan.financial_info.filial_boshligi_inisiali %}
+                                            {{ loan.financial_info.filial_boshligi_inisiali }}
+                                            {% else %}
                                             {{ loan.financial_info.direktor_fish_inisiali }}
+                                            {% endif %}
                                         </span>
                                     </strong>
                                 </td>

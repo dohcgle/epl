@@ -67,7 +67,12 @@
 
     <div class="header-right">
         «PULLOL BUSINESS MIKROMOLIYA TASHKILOTI» MChJ<br>
+        {% if loan.financial_info.filial_nomi %}
+        <span class="var">{{ loan.financial_info.filial_nomi }}</span> boshlig‘i
+        <span class="var">{{ loan.financial_info.filial_boshligi_inisiali }}</span>ga<br>
+        {% else %}
         Direktor <span class="var">{{ loan.financial_info.direktor_fish_inisiali }}</span>ga<br>
+        {% endif %}
         <br>
         Fuqaro <span class="var">{{ collateral.owner_client.fish }}</span>dan
     </div>
@@ -78,11 +83,11 @@
         {% if is_avto %}
 
         <strong>
-            <span class="var">{{ loan.client.fish }}</span></strong> tomonidan so‘ralayotgan 
-            <strong><span class="var">{{ loan.details.muddat_oy }}</span></strong> 
-            (<strong><span class="var">{{ loan.details.muddat_oy_soz }}</span></strong>)
-            oy muddatga, 
-            <strong><span class="var">{{ loan.details.miqdori|intcomma }}</span>
+            <span class="var">{{ loan.client.fish }}</span></strong> tomonidan so‘ralayotgan
+        <strong><span class="var">{{ loan.details.muddat_oy }}</span></strong>
+        (<strong><span class="var">{{ loan.details.muddat_oy_soz }}</span></strong>)
+        oy muddatga,
+        <strong><span class="var">{{ loan.details.miqdori|intcomma }}</span>
             (<span class="var">{{ loan.details.miqdori_soz }}</span>)
             so‘m</strong> miqdoridagi mikroqarzning ta’minoti sifatida menga mulk huquqi asosida tegishli bo‘lgan
         <strong><span class="var">{{ avto.davlat_raqami }}</span>,
@@ -133,7 +138,12 @@
         <table style="width: 100%; border: none; border-collapse: collapse;">
             <tr>
                 <td style="border: none; width: 45%; vertical-align: middle;">
+                    {% if loan.financial_info.filial_nomi %}
+                    <strong>«PULLOL BUSINESS MIKROMOLIYA TASHKILOTI» MChJ<br>
+                        <span class="var">{{ loan.financial_info.filial_nomi }}</span> boshlig‘i:</strong>
+                    {% else %}
                     <strong>«PULLOL BUSINESS MIKROMOLIYA TASHKILOTI» MChJ Direkori:</strong>
+                    {% endif %}
                 </td>
                 <td style="border: none; width: 20%; text-align: center; vertical-align: middle;">
                     {% if qr_obidov %}
@@ -142,7 +152,15 @@
                     {% endif %}
                 </td>
                 <td style="border: none; width: 35%; text-align: right; vertical-align: middle;">
-                    <strong><span class="var">{{ loan.financial_info.direktor_fish_inisiali }}</span></strong>
+                    <strong>
+                        <span class="var">
+                            {% if loan.financial_info.filial_nomi %}
+                            {{ loan.financial_info.filial_boshligi_inisiali }}
+                            {% else %}
+                            {{ loan.financial_info.direktor_fish_inisiali }}
+                            {% endif %}
+                        </span>
+                    </strong>
                 </td>
             </tr>
         </table>

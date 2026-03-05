@@ -38,9 +38,9 @@ def dashboard_view(request):
     
     # 1. Base QuerySet
     if is_operator(user) and not (is_director(user) or is_moderator(user)):
-        loans = LoanApplication.objects.filter(created_by=user, is_deleted=False)
+        loans = LoanApplication.objects.filter(created_by=user, is_deleted=False).order_by('-created_at')
     else:
-        loans = LoanApplication.objects.filter(is_deleted=False)
+        loans = LoanApplication.objects.filter(is_deleted=False).order_by('-created_at')
 
     total_docs = loans.count()
     pending_count = loans.filter(status__in=['pending_moderator', 'pending_director']).count()
@@ -389,7 +389,6 @@ def edit_loan(request, loan_id):
         return redirect('view_application', loan_id=loan.id)
     return render(request, 'document_processor/process_audit.html', {'edit_mode': True, 'loan': loan})
 
-@login_required
 def view_document_pdf(request, loan_id, doc_type):
     """
     Generates and returns a specific document as PDF for inline viewing.

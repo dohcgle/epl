@@ -208,12 +208,12 @@
     </table>
 
     <div style="font-size: 10pt; margin-left: 1cm;">
-        -* avtotransport egasi: 
+        -* avtotransport egasi:
         <span class="var">
             {% if garov_boshqa_shaxs %}
-                {{ collateral.owner_client.fish }}
+            {{ collateral.owner_client.fish }}
             {% else %}
-                {{ loan.client.fish }}
+            {{ loan.client.fish }}
             {% endif %}
         </span><br>
         -* texnik pasport: <span class="var">{{ avto.texpasport }}</span><br>
@@ -377,7 +377,23 @@
     </p>
 
     <table class="footer-table">
-        <!-- 1-TOMON: DIREKTOR -->
+        <!-- 1-TOMON: DIREKTOR YOKI FILIAL BOSHILIGI -->
+        {% if loan.financial_info.filial_nomi %}
+        <tr>
+            <td style="width: 35%; font-weight: bold;">
+                1-tomon:<br>
+                <span class="var">{{ loan.financial_info.filial_nomi }}</span> boshlig‘i
+            </td>
+            <td style="width: 30%; text-align: center;">
+                {% if qr_manager %}
+                <img src="{{ qr_manager }}" class="qr-code-small">
+                {% endif %}
+            </td>
+            <td style="width: 35%; text-align: right; font-weight: bold;">
+                <span class="var">{{ loan.financial_info.filial_boshligi }}</span>
+            </td>
+        </tr>
+        {% else %}
         <tr>
             <td style="width: 35%; font-weight: bold;">
                 1-tomon:<br>
@@ -392,21 +408,7 @@
                 <span class="var">{{ loan.financial_info.direktor_fish_inisiali }}</span>
             </td>
         </tr>
-
-        <!-- 2-TOMON: FILIAL BOSHILIGI -->
-        <tr>
-            <td style="font-weight: bold;">
-                <span class="var">{{ loan.financial_info.filial_nomi }}</span> boshlig‘i
-            </td>
-            <td style="text-align: center;">
-                {% if qr_manager %}
-                <img src="{{ qr_manager }}" class="qr-code-small">
-                {% endif %}
-            </td>
-            <td style="text-align: right; font-weight: bold;">
-                <span class="var">{{ loan.financial_info.filial_boshligi }}</span>
-            </td>
-        </tr>
+        {% endif %}
 
         <!-- 3-TOMON: QARZ OLUVCHI -->
         <tr>
