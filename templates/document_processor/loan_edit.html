@@ -1,7 +1,7 @@
 {% extends 'base_adminlte.html' %}
 {% load static %}
 
-{% block page_title %}Yangi Kredit Arizasi{% endblock %}
+{% block page_title %}Arizani Tahrirlash{% endblock %}
 
 {% block extra_css %}
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -375,8 +375,8 @@
             <div class="card card-primary card-outline">
                 <div class="card-header border-0 d-flex justify-content-between align-items-center">
                     <h3 class="card-title m-0">[[ stepTitles[currentStep-1] ]]</h3>
-                    <button @click="fillRandomStep(currentStep)" type="button" class="btn btn-sm btn-outline-secondary">
-                        <i class="fas fa-magic mr-1"></i> Ushbu qadamni random to'ldirish
+                    <!-- <button @click="fillRandomStep(currentStep)" type="button" class="btn btn-sm btn-outline-secondary"> -->
+                    <i class="fas fa-magic mr-1"></i> Random to'ldirishni bekor qilish (Edit rejimi)
                     </button>
                 </div>
 
@@ -465,7 +465,7 @@
                                                 :data-model="'contacts[' + index + '].qarindoshlik'"
                                                 class="form-control">
                                                 <option value="">Tanlang...</option>
-                                                <option v-for="c in kinshipChoices" :key="c.val" :value="c.val">[[
+                                                <option v-for="c in kinshipChoices" :key="c.value" :value="c.value">[[
                                                     c.label ]]</option>
                                             </select>
                                         </div>
@@ -538,14 +538,16 @@
                                     <div class="col-md-6 form-group">
                                         <label>Kredit turi <span class="text-danger">*</span></label>
                                         <select v-model="loan.turi" class="form-control" data-model="loan.turi">
-                                            <option v-for="type in loanTypeChoices" :key="type.val" :value="type.val">[[
+                                            <option v-for="type in loanTypeChoices" :key="type.value"
+                                                :value="type.value">[[
                                                 type.label ]]</option>
                                         </select>
                                     </div>
                                     <div class="col-md-6 form-group">
                                         <label>Grafik turi <span class="text-danger">*</span></label>
                                         <select v-model="loan.grafik" class="form-control" data-model="loan.grafik">
-                                            <option v-for="g in graphChoices" :key="g.val" :value="g.val">[[ g.label ]]
+                                            <option v-for="g in graphChoices" :key="g.value" :value="g.value">[[ g.label
+                                                ]]
                                             </option>
                                         </select>
                                     </div>
@@ -1178,10 +1180,15 @@
                     :disabled="(currentStep === 1 && !isStep1Valid) || (currentStep === 2 && !isStep2Valid) || (currentStep === 3 && !isStep3Valid) || (currentStep === 4 && !isStep4Valid)">
                     Keyingisi <i class="fas fa-arrow-right ml-2"></i>
                 </button>
-                <button v-else @click="submitForm" type="button" class="btn btn-success btn-step ml-auto"
-                    :disabled="!isStep5Valid">
-                    <i class="fas fa-save mr-2"></i> Saqlash
-                </button>
+                <div v-else class="ml-auto d-flex" style="gap: 10px;">
+                    <button @click="showJsonPreview" type="button" class="btn btn-info btn-step shadow-sm">
+                        <i class="fas fa-file-code mr-2"></i> JSONni ko'rish
+                    </button>
+                    <button @click="submitForm" type="button" class="btn btn-success btn-step shadow-sm"
+                        :disabled="!isStep5Valid">
+                        <i class="fas fa-save mr-2"></i> Saqlash
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -1220,186 +1227,64 @@
 {% block extra_js %}
 <script src="{% static 'js/vue.global.js' %}"></script>
 <script>
-    const { createApp, ref, computed, onMounted, watch } = Vue;
+    const { createApp, ref, reactive, computed, onMounted, watch } = Vue;
 
     const app = createApp({
         setup() {
             const currentStep = ref(1);
+            const kinshipChoices = [
+                { value: 'turmush_ortogi', label: "Turmush o'rtog'i" },
+                { value: 'ota', label: 'Ota' },
+                { value: 'ona', label: 'Ona' },
+                { value: 'aka', label: 'Aka' },
+                { value: 'uka', label: 'Uka' },
+                { value: 'opa', label: 'Opa' },
+                { value: 'singil', label: 'Singil' }
+            ];
+            const loanTypeChoices = [
+                { value: 'mikroqarz', label: 'Mikroqarz' },
+                { value: 'iste_mol', label: "Iste'mol krediti" },
+                { value: 'avtokredit', label: 'Avtokredit' }
+            ];
+            const graphChoices = [
+                { value: 'annuitet', label: 'Annuitet' },
+                { value: 'differensial', label: 'Differensial' }
+            ];
+            const propertyTypeChoices = [
+                { value: 'uy', label: 'Uy / Hovli' },
+                { value: 'kvartira', label: 'Kvartira' },
+                { value: 'dala_hovli', label: 'Dala hovli' },
+                { value: 'noturar_joy', label: 'Noturar joy' }
+            ];
+
+            const personal = ref({ fish: '', fish_inisiali: '', pasport_seriya: '', jshshir: '', tugilgan_sana: '', jinsi: '', telefon: '', pasport_berilgan: '', manzil: '' });
+            const contacts = ref([{ telefon: '', qarindoshlik: '' }, { telefon: '', qarindoshlik: '' }]);
+            const loan = ref({ shartnoma_raqami: '', shartnoma_sanasi: '', boshlanish_sanasi: '', tugash_sanasi: '', miqdori: '', miqdori_soz: '', muddat_oy: '', muddat_oy_soz: '', foiz: '', foiz_soz: '', turi: 'mikroqarz', grafik: 'annuitet', grafik_matni: '' });
             const ownerType = ref('borrower');
             const selectedCollaterals = ref([]);
             const sugurtaMavjud = ref(false);
-
-            // 1. Shaxsiy Ma'lumotlar
-            const personal = ref({
-                fish: '',
-                fish_inisiali: '',
-                pasport_seriya: '',
-                jshshir: '',
-                tugilgan_sana: '',
-                jinsi: '',
-                telefon: '',
-                pasport_berilgan: '',
-                manzil: ''
-            });
-
-            // 2. Kontaktlar
-            const contacts = ref([
-                { telefon: '', qarindoshlik: '' },
-                { telefon: '', qarindoshlik: '' }
-            ]);
-
-            // 3. Kredit Ma'lumotlari
-            const loan = ref({
-                shartnoma_raqami: '',
-                shartnoma_sanasi: '',
-                boshlanish_sanasi: '',
-                tugash_sanasi: '',
-                miqdori: '',
-                miqdori_soz: '',
-                muddat_oy: '',
-                muddat_oy_soz: '',
-                foiz: '',
-                foiz_soz: '',
-                turi: '',
-                grafik: '',
-                grafik_matni: ''
-            });
-
-
-            // 4. Garov (Collateral)
             const collateral = ref({
-                // Garov egasi ma'lumotlari
-                owner_fish: '',
-                owner_initials: '',
-                owner_birth_date: '',
-                owner_passport: '',
-                owner_jshshir: '',
-                owner_gender: '',
-                owner_passport_given_by: '',
-                owner_address: '',
-
-                // Ishonchnoma ma'lumotlari
-                notarius_fish: '',
-                notarius_address: '',
-                reestr_number: '',
-                reestr_date: '',
-
-                // --- AVTOMOBIL MA'LUMOTLARI ---
-                avto_nomi: '',
-                avto_kuzov_turi: '',
-                avto_kuzov: '',
-                avto_dvigatel: '',
-                avto_shassi: '',
-                avto_rang: '',
-                avto_yil: null,
-                avto_egasi: '',
-                avto_texpasport: '',
-                avto_texpasport_sana: '',
-                avto_manzil: '',
-                avto_raqam: '',
-                avto_bahosi: '',
-                avto_bahosi_soz: '',
-
-                // --- KO'CHMAS MULK MA'LUMOTLARI ---
-                mulk_turi: '',
-                mulk_umumiy: '',
-                mulk_qurilish: '',
-                mulk_foydalanish: '',
-                mulk_yashash: '',
-                mulk_egasi: '',
-                mulk_reestr_raqami: '',
-                mulk_kadastr: '',
-                mulk_manzil: '',
-                mulk_bahosi: '',
-                mulk_bahosi_soz: '',
-
-                // --- TILLA BUYUMLAR MA'LUMOTLARI ---
-                tilla_nomi: '',
-                tilla_probi: '',
-                tilla_vazni: '',
-                tilla_soni: null,
-                tilla_bahosi: '',
-
-                // --- SUG'URTA MA'LUMOTLARI ---
-                sugurta_kompaniya: '',
-                sugurta_polisi: '',
-                sugurta_sana: '',
-                sugurta_summa: '',
-                sugurta_summa_soz: ''
+                owner_fish: '', owner_initials: '', owner_birth_date: '', owner_passport: '', owner_jshshir: '', owner_gender: '', owner_passport_given_by: '', owner_address: '',
+                notarius_fish: '', notarius_address: '', reestr_number: '', reestr_date: '',
+                avto_nomi: '', avto_kuzov_turi: '', avto_kuzov: '', avto_dvigatel: '', avto_shassi: '', avto_rang: '', avto_yil: null, avto_texpasport: '', avto_texpasport_sana: '', avto_manzil: '', avto_raqam: '', avto_bahosi: '', avto_bahosi_soz: '',
+                mulk_turi: '', mulk_umumiy: '', mulk_qurilish: '', mulk_foydalanish: '', mulk_yashash: '', mulk_reestr_raqami: '', mulk_kadastr: '', mulk_manzil: '', mulk_bahosi: '', mulk_bahosi_soz: '',
+                tilla_nomi: '', tilla_probi: '', tilla_vazni: '', tilla_soni: null, tilla_bahosi: '', tilla_bahosi_soz: '',
+                sugurta_kompaniya: '', sugurta_polisi: '', sugurta_sana: '', sugurta_summa: '', sugurta_summa_soz: ''
             });
 
-            // 5. Moliyaviy va Tashkilot
-            const financial = ref({
-                ish_joyi: '',
-                daromad: '',
-                xarajatlar: '',
-                tahminiy_tolov: '',
-                majburiyatlar: '',
-                filial_nomi: '',
-                filial_boshligi: '',
-                filial_boshligi_inisiali: '',
-                tashkilot_nomi: '',
-                direktor_fish: '',
-                direktor_fish_inisiali: ''
-            });
+            const financial = ref({ ish_joyi: '', daromad: '', xarajatlar: '', tahminiy_tolov: '', majburiyatlar: '', filial_nomi: '', filial_boshligi: '', filial_boshligi_inisiali: '', tashkilot_nomi: '', direktor_fish: '', direktor_fish_inisiali: '' });
 
-            // Tanlovlar (Choices) - Djangodan mustaqil bo'lish uchun
-            const kinshipChoices = [
-                { val: 'turmush_ortogi', label: "Turmush o'rtog'i" },
-                { val: 'ota', label: 'Ota' },
-                { val: 'ona', label: 'Ona' },
-                { val: 'aka', label: 'Aka' },
-                { val: 'uka', label: 'Uka' },
-                { val: 'opa', label: 'Opa' },
-                { val: 'singil', label: 'Singil' }
-            ];
-
-            const loanTypeChoices = [
-                { val: 'mikroqarz', label: 'Mikroqarz' },
-                { val: 'mikrokredit', label: 'Mikrokredit' }
-            ];
-
-            const graphChoices = [
-                { val: 'annuitet', label: 'Annuitet' },
-                { val: 'differensial', label: 'Differensial' }
-            ];
-
-            const propertyTypeChoices = [
-                { val: 'uy', label: 'Uy / Hovli' },
-                { val: 'kvartira', label: 'Kvartira' },
-                { val: 'dala_hovli', label: 'Dala hovli' },
-                { val: 'noturar_joy', label: 'Noturar joy' }
-            ];
-
-            const steps = ["Shaxsiy", "Kontaktlar", "Kredit", "Garov", "Moliyaviy"];
-            const stepTitles = [
-                "Shaxsiy Ma'lumotlar",
-                "Bog'lanish uchun shaxslar",
-                "Kredit Ma'lumotlari & Grafik",
-                "Garov Ta'minoti",
-                "Moliyaviy Holat & Tashkilot"
-            ];
+            const steps = [1, 2, 3, 4, 5];
+            const stepTitles = ["Shaxsiy Ma'lumotlar", "Bog'lanish uchun shaxslar", "Kredit Ma'lumotlari & Grafik", "Garov Ta'minoti", "Moliyaviy Holat & Tashkilot"];
 
             const borrowerFish = computed(() => personal.value.fish);
             const borrowerInitials = computed(() => personal.value.fish_inisiali);
 
-            // Shaxsiy ma'lumotlar barchasi to'ldirilganligini tekshirish
             const isStep1Valid = computed(() => {
                 const p = personal.value;
-                const isPasportSanaValid = p.tugilgan_sana && !p.tugilgan_sana.includes('_');
-                const isJshshirValid = p.jshshir && !p.jshshir.includes('_') && p.jshshir.length > 0;
-                const isTelefonValid = p.telefon && !p.telefon.includes('_') && p.telefon.length > 0;
-                const isPasportSeriyaValid = p.pasport_seriya && !p.pasport_seriya.includes('_') && p.pasport_seriya.length > 0;
-
-                return p.fish.trim() !== '' &&
-                    p.fish_inisiali.trim() !== '' &&
-                    isPasportSeriyaValid &&
-                    isJshshirValid &&
-                    isPasportSanaValid &&
-                    p.jinsi.trim() !== '' &&
-                    isTelefonValid &&
-                    p.pasport_berilgan.trim() !== '' &&
-                    p.manzil.trim() !== '';
+                if (!p.fish || String(p.fish).trim() === '') return false;
+                const jshStr = String(p.jshshir || '').replace(/\s/g, '').replace(/_/g, '');
+                return jshStr.length === 14;
             });
 
             // Bog'lanish uchun shaxslar to'ldirilganligini tekshirish
@@ -1412,22 +1297,11 @@
                 return true;
             });
 
-            // Kredit ma'lumotlari to'ldirilganligini tekshirish
             const isStep3Valid = computed(() => {
                 const l = loan.value;
-                const isSanaValid = l.shartnoma_sanasi && !l.shartnoma_sanasi.includes('_');
-
-                return l.shartnoma_raqami.trim() !== '' &&
-                    isSanaValid &&
-                    l.miqdori && l.miqdori.toString().trim() !== '' &&
-                    l.miqdori_soz.trim() !== '' &&
-                    l.muddat_oy && l.muddat_oy.toString().trim() !== '' &&
-                    l.muddat_oy_soz.trim() !== '' &&
-                    l.foiz && l.foiz.toString().trim() !== '' &&
-                    l.foiz_soz.trim() !== '' &&
-                    l.turi && l.turi.trim() !== '' &&
-                    l.grafik && l.grafik.trim() !== '' &&
-                    l.grafik_matni && l.grafik_matni.trim() !== '';
+                const sNum = String(l.shartnoma_raqami || '').trim();
+                const miqdor = String(l.miqdori || '').replace(/\s/g, '');
+                return sNum !== '' && miqdor !== '' && miqdor !== '0';
             });
 
             // Garov ta'minoti ma'lumotlari to'ldirilganligini tekshirish (faqat Avtomobil majburiy maydonlari uchun)
@@ -1464,114 +1338,6 @@
                 return true;
             });
 
-            // F.I.Sh kiritilganda inisialni avtomatik yasash
-            watch(() => personal.value.fish, (newVal) => {
-                if (newVal) {
-                    const parts = newVal.trim().split(/\s+/);
-                    if (parts.length >= 3) {
-                        // Kiritilgan F.I.Sh dan inisial: Ism_bosh_harfi.Otasining_ismi_bosh_harfi.Familiya
-                        personal.value.fish_inisiali = `${parts[1][0]}.${parts[2][0]}.${parts[0]}`.toUpperCase();
-                    } else if (parts.length === 2) {
-                        // Faqat Familiya va Ism kiritilsa
-                        personal.value.fish_inisiali = `${parts[1][0]}.${parts[0]}`.toUpperCase();
-                    }
-                } else {
-                    personal.value.fish_inisiali = '';
-                }
-            });
-
-            // Normalizatsiya uchun personal.jinsi o'zgarganda 'erkak'/'ayol' ni 'Erkak'/'Ayol' ga o'tkazish
-            watch(() => personal.value.jinsi, (newVal) => {
-                if (newVal === 'erkak') personal.value.jinsi = 'Erkak';
-                if (newVal === 'ayol') personal.value.jinsi = 'Ayol';
-            });
-
-            // Garov egasi F.I.Sh kiritilganda inisialni avtomatik yasash
-            watch(() => collateral.value.owner_fish, (newVal) => {
-                if (newVal) {
-                    const parts = newVal.trim().split(/\s+/);
-                    if (parts.length >= 3) {
-                        collateral.value.owner_initials = `${parts[1][0]}.${parts[2][0]}.${parts[0]}`.toUpperCase();
-                    } else if (parts.length === 2) {
-                        collateral.value.owner_initials = `${parts[1][0]}.${parts[0]}`.toUpperCase();
-                    }
-                } else {
-                    collateral.value.owner_initials = '';
-                }
-            });
-
-            // Raqamlarni o'zbekcha so'zlarga o'tkazish funksiyasi
-            const numberToWordsUz = (num) => {
-                if (!num) return '';
-                const formatNum = parseInt(num.toString().replace(/\s/g, ''), 10);
-                if (isNaN(formatNum)) return '';
-                if (formatNum === 0) return 'NOL';
-
-                const birliklar = ['', "BIR", "IKKI", "UCH", "TO'RT", "BESH", "OLTI", "YETTI", "SAKKIZ", "TO'QQIZ"];
-                const onliklar = ['', "O'N", "YIGIRMA", "O'TTIZ", "QIRQ", "ELLIK", "OLTMISH", "YETMISH", "SAKSON", "TO'QSON"];
-                const darajalar = ['', "MING", "MILLION", "MILLIARD", "TRILLION"];
-
-                let strOutput = '';
-                let index = 0;
-                let qoldiq = formatNum;
-
-                while (qoldiq > 0) {
-                    let chunk = qoldiq % 1000;
-                    let chunkStr = '';
-
-                    let yuz = Math.floor(chunk / 100);
-                    let on = Math.floor((chunk % 100) / 10);
-                    let bir = chunk % 10;
-
-                    if (yuz > 0) chunkStr += birliklar[yuz] + ' YUZ ';
-                    if (on > 0) chunkStr += onliklar[on] + ' ';
-                    if (bir > 0) chunkStr += birliklar[bir] + ' ';
-
-                    if (chunkStr.trim() !== '') {
-                        strOutput = chunkStr + (index > 0 ? darajalar[index] + ' ' : '') + strOutput;
-                    }
-
-                    qoldiq = Math.floor(qoldiq / 1000);
-                    index++;
-                }
-                return strOutput.trim().toUpperCase();
-            };
-
-            // 1. Kredit miqdori (so'z bilan)
-            watch(() => loan.value.miqdori, (newVal) => {
-                loan.value.miqdori_soz = numberToWordsUz(newVal);
-            });
-
-            // 2. Muddat oy (so'z bilan)
-            watch(() => loan.value.muddat_oy, (newVal) => {
-                loan.value.muddat_oy_soz = numberToWordsUz(newVal);
-            });
-
-            // 3. Foiz stavkasi (so'z bilan)
-            watch(() => loan.value.foiz, (newVal) => {
-                loan.value.foiz_soz = numberToWordsUz(newVal);
-            });
-
-            // Avtomobil - Kelishilgan garov qiymati so'z bilan
-            watch(() => collateral.value.avto_bahosi, (newVal) => {
-                collateral.value.avto_bahosi_soz = numberToWordsUz(newVal);
-            });
-
-            // Ko'chmas mulk - Kelishilgan garov qiymati so'z bilan
-            watch(() => collateral.value.mulk_bahosi, (newVal) => {
-                collateral.value.mulk_bahosi_soz = numberToWordsUz(newVal);
-            });
-
-            // Tilla buyumlar - Kelishilgan garov qiymati so'z bilan
-            watch(() => collateral.value.tilla_bahosi, (newVal) => {
-                collateral.value.tilla_bahosi_soz = numberToWordsUz(newVal);
-            });
-
-            // Sug'urta polisi - Polis summasi so'z bilan
-            watch(() => collateral.value.sugurta_summa, (newVal) => {
-                collateral.value.sugurta_summa_soz = numberToWordsUz(newVal);
-            });
-
             const nextStep = () => {
                 if (currentStep.value === 2) {
                     for (let i = 0; i < contacts.value.length; i++) {
@@ -1588,21 +1354,17 @@
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                 }
             };
-            const prevStep = () => {
-                if (currentStep.value > 1) {
-                    currentStep.value--;
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                }
-            };
+            const prevStep = () => { if (currentStep.value > 1) currentStep.value--; window.scrollTo({ top: 0, behavior: 'smooth' }); };
+            const setOwnerType = (type) => { ownerType.value = type; };
 
-            const setOwnerType = (type) => {
-                ownerType.value = type;
+            const showJsonPreview = () => {
+                const fullData = { personal: personal.value, contacts: contacts.value, loan: loan.value, collateral: { ...collateral.value, selected_types: selectedCollaterals.value, owner_type: ownerType.value }, financial: financial.value };
+                document.getElementById('jsonContent').textContent = JSON.stringify(fullData, null, 4);
+                $('#jsonResultModal').modal('show');
             };
 
             const submitForm = async () => {
                 let finalizedCollateral = { ...collateral.value };
-
-                // Qarz oluvchi o'zi garov egasi bo'lsa JSON dagi qiymatlarga qarz oluvchi malumotini klonlash
                 if (ownerType.value === 'borrower') {
                     finalizedCollateral.owner_fish = personal.value.fish;
                     finalizedCollateral.owner_initials = personal.value.fish_inisiali;
@@ -1613,19 +1375,13 @@
                     finalizedCollateral.owner_passport_given_by = personal.value.pasport_berilgan;
                     finalizedCollateral.owner_address = personal.value.manzil;
                 }
-
                 const fullData = {
                     personal: personal.value,
                     contacts: contacts.value,
                     loan: loan.value,
-                    collateral: {
-                        ...finalizedCollateral,
-                        selected_types: selectedCollaterals.value,
-                        owner_type: ownerType.value
-                    },
+                    collateral: { ...finalizedCollateral, selected_types: selectedCollaterals.value, owner_type: ownerType.value },
                     financial: financial.value,
-                    sugurtaMavjud: selectedCollaterals.value.includes('sugurta'),
-                    submitted_at: new Date().toISOString()
+                    sugurtaMavjud: selectedCollaterals.value.includes('sugurta')
                 };
 
                 // VALIDATSIYA: Avtomobil ma'lumotlari
@@ -1643,324 +1399,90 @@
                         }
                     }
                 }
+            }
 
-                // VALIDATSIYA: Moliyaviy va Tashkilot ma'lumotlari
-                const reqFinancial = [
-                    'ish_joyi', 'daromad', 'xarajatlar', 'tahminiy_tolov', 'majburiyatlar',
-                    'filial_nomi', 'filial_boshligi', 'filial_boshligi_inisiali',
-                    'tashkilot_nomi', 'direktor_fish', 'direktor_fish_inisiali'
-                ];
-                for (let field of reqFinancial) {
-                    if (!financial.value[field]) {
-                        alert("Moliyaviy Holat va Tashkilot Ma'lumotlari (5 va 6-qadam) qatorlari to'liq kiritilmagan!");
-                        return;
-                    }
+            // VALIDATSIYA: Moliyaviy va Tashkilot ma'lumotlari
+            const reqFinancial = [
+                'ish_joyi', 'daromad', 'xarajatlar', 'tahminiy_tolov', 'majburiyatlar',
+                'filial_nomi', 'filial_boshligi', 'filial_boshligi_inisiali',
+                'tashkilot_nomi', 'direktor_fish', 'direktor_fish_inisiali'
+            ];
+            for (let field of reqFinancial) {
+                if (!financial.value[field]) {
+                    alert("Moliyaviy Holat va Tashkilot Ma'lumotlari (5 va 6-qadam) qatorlari to'liq kiritilmagan!");
+                    return;
                 }
+            }
 
-                // JSON natijani modalda ko'rsatamiz
-                document.getElementById('jsonContent').textContent = JSON.stringify(fullData, null, 4);
-                $('#jsonResultModal').modal('show');
-
-                // BACKENDGA YUBORISH (POST)
-                try {
-                    const response = await fetch('/loans/create-vue/', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
-                        },
-                        body: JSON.stringify(fullData)
-                    });
-
-                    const data = await response.json();
-
-                    if (response.ok && data.status === 'success') {
-                        alert("Muvaffaqiyatli saqlandi! Ariza ID: " + data.loan_id);
-                        window.location.href = '/documents/';
-                    } else {
-                        alert("Xatolik yuz berdi: " + (data.message || "Noma'lum xato"));
-                        console.error("Backend Error:", data);
-                    }
-                } catch (error) {
-                    alert("Tarmoq xatosi yoki server ishlamayapti!");
-                    console.error("Fetch Error:", error);
-                }
-
-            };
-
-            const fillRandomStep = (step) => {
-                const rand = Math.floor(Math.random() * 1000);
-
-                const famMale = ["ESHMATOV", "TOSHMATOV", "RUSTAMOV", "KARIMOV", "ALIEV", "XASANOV", "PO'LATOV", "RAHMONOV"];
-                const ismMale = ["TOSHMAT", "BOBUR", "AZIZ", "AKBAR", "RUSTAM", "ALISHER", "JASUR", "ABDULLA"];
-                const otaMale = ["TOSHMATOVICH", "KARIMOVICH", "ALIYEVICH", "RAHMONOVICH", "BAXTIYOROVICH"];
-
-                const famFemale = ["ESHMATOVA", "TOSHMATOVA", "RUSTAMOVA", "KARIMOVA", "ALIEVA", "XASANOVA", "PO'LATOVA", "RAHMONOVA"];
-                const ismFemale = ["MALIKA", "NARGIZA", "SHAHNOZA", "NILUFAR", "ZARINA", "GULNOZA", "DILFUZA", "DILDORA"];
-                const otaFemale = ["TOSHMATOVNA", "KARIMOVNA", "ALIYEVNA", "RAHMONOVNA", "BAXTIYOROVNA"];
-
-                const getRandomNameObj = () => {
-                    const isMale = Math.random() < 0.5;
-                    const fam = isMale ? famMale : famFemale;
-                    const ism = isMale ? ismMale : ismFemale;
-                    const ota = isMale ? otaMale : otaFemale;
-                    return {
-                        gender: isMale ? 'Erkak' : 'Ayol',
-                        genderLabel: isMale ? 'Erkak' : 'Ayol',
-                        fullName: `${fam[Math.floor(Math.random() * fam.length)]} ${ism[Math.floor(Math.random() * ism.length)]} ${ota[Math.floor(Math.random() * ota.length)]}`
-                    };
-                };
-
-                const getInitials = (fullName) => {
-                    const parts = fullName.split(' ');
-                    if (parts.length >= 3) return `${parts[1][0]}.${parts[2][0]}.${parts[0]}`;
-                    return fullName;
-                };
-
-                const manzilList = [
-                    "TOSHKENT SHAHRI, YUNUSOBOD TUMANI",
-                    "TOSHKENT SHAHRI, CHILONZOR TUMANI",
-                    "TOSHKENT SHAHRI, OLMAZOR TUMANI",
-                    "SIRDARYO VILOYATI, GULISTON SHAHRI",
-                    "SAMARQAND VILOYATI, SAMARQAND SHAHRI"
-                ];
-                const getRandomManzil = () => `${manzilList[Math.floor(Math.random() * manzilList.length)]}, ${Math.floor(Math.random() * 100)}-UY`;
-
-                if (step === 1) {
-                    const randomPerson = getRandomNameObj();
-                    personal.value.fish = randomPerson.fullName;
-                    personal.value.fish_inisiali = getInitials(randomPerson.fullName);
-                    personal.value.pasport_seriya = 'AD' + String(10000000 + rand).slice(1);
-                    personal.value.jshshir = '3' + Math.floor(1000000000000 + Math.random() * 9000000000000).toString();
-                    personal.value.tugilgan_sana = `15.0${Math.floor(Math.random() * 9) + 1}.198${Math.floor(Math.random() * 9)}`;
-                    personal.value.jinsi = randomPerson.gender;
-                    personal.value.telefon = '+99890' + Math.floor(1000000 + Math.random() * 9000000);
-                    personal.value.pasport_berilgan = getRandomManzil() + " IIB BOSHQARMASI";
-                    personal.value.manzil = getRandomManzil();
-                } else if (step === 2) {
-                    const p1 = getRandomNameObj();
-                    contacts.value[0] = { telefon: '+99890' + Math.floor(1000000 + Math.random() * 9000000), qarindoshlik: p1.gender === 'Erkak' ? 'ota' : 'ona' };
-                    contacts.value[1] = { telefon: '+99890' + Math.floor(1000000 + Math.random() * 9000000), qarindoshlik: 'turmush_ortogi' };
-                } else if (step === 3) {
-                    const randomRaqam = Math.floor(Math.random() * 300) + 1;
-                    const randomOy = Math.floor(Math.random() * 12) + 1;
-                    const randomKun = Math.floor(Math.random() * 28) + 1;
-                    const formattedOy = String(randomOy).padStart(2, '0');
-                    const formattedKun = String(randomKun).padStart(2, '0');
-
-                    const miqdorVal = (Math.floor(Math.random() * 91) + 10) * 1000000;
-                    const muddatlar = [12, 24, 36, 48];
-                    const randomMuddat = muddatlar[Math.floor(Math.random() * muddatlar.length)];
-
-                    loan.value.shartnoma_raqami = randomRaqam.toString();
-                    loan.value.shartnoma_sanasi = `${formattedKun}.${formattedOy}.2026`;
-                    loan.value.boshlanish_sanasi = loan.value.shartnoma_sanasi;
-
-                    const endYear = 2026 + (randomMuddat / 12);
-                    loan.value.tugash_sanasi = `${formattedKun}.${formattedOy}.${endYear}`;
-
-                    loan.value.miqdori = miqdorVal.toLocaleString('uz-UZ').replace(/\u00A0/g, ' ').replace(/,/g, ' ');
-                    loan.value.muddat_oy = randomMuddat.toString();
-                    loan.value.foiz = '55';
-
-                    loan.value.turi = 'mikroqarz';
-                    loan.value.grafik = 'annuitet';
-                    loan.value.grafik_matni = 'HAR OYLIK TO\'LOV';
-                } else if (step === 4) {
-                    if (!ownerType.value) {
-                        ownerType.value = 'other';
-                    }
-                    if (selectedCollaterals.value.length === 0) {
-                        alert("Iltimos, avvalo bironta garov turini tanlang!");
-                        return;
-                    }
-
-                    if (ownerType.value === 'other') {
-                        const randomOwner = getRandomNameObj();
-                        collateral.value.owner_fish = randomOwner.fullName;
-                        collateral.value.owner_initials = getInitials(randomOwner.fullName);
-                        collateral.value.owner_birth_date = `22.03.197${Math.floor(Math.random() * 9)}`;
-                        collateral.value.owner_passport = 'AA' + String(10000000 + rand * 2).slice(1);
-                        collateral.value.owner_jshshir = '3' + Math.floor(1000000000000 + Math.random() * 9000000000000).toString();
-                        collateral.value.owner_gender = randomOwner.genderLabel; // 'Erkak' yoki 'Ayol'
-                        collateral.value.owner_passport_given_by = 'YUNUSOBOD TUMANI IIB';
-                        collateral.value.owner_address = getRandomManzil();
-                    } else if (ownerType.value === 'general_proxy') {
-                        const randomOwner = getRandomNameObj();
-                        collateral.value.owner_fish = randomOwner.fullName;
-                        collateral.value.owner_initials = getInitials(randomOwner.fullName);
-                        collateral.value.owner_birth_date = `12.06.198${Math.floor(Math.random() * 9)}`;
-                        collateral.value.owner_passport = 'AC' + String(10000000 + rand * 3).slice(1);
-                        collateral.value.owner_jshshir = '3' + Math.floor(1000000000000 + Math.random() * 9000000000000).toString();
-                        collateral.value.owner_gender = randomOwner.genderLabel;
-                        collateral.value.owner_passport_given_by = 'SIRDARYO VILOYATI IIB';
-                        collateral.value.owner_address = getRandomManzil();
-
-                        const randomNotarius = getRandomNameObj();
-                        collateral.value.notarius_fish = randomNotarius.fullName;
-                        collateral.value.notarius_address = getRandomManzil() + " NOTARIAL IDORA";
-                        collateral.value.reestr_number = String(2000 + rand);
-                        collateral.value.reestr_date = '20.10.2023';
-                    }
-
-                    if (selectedCollaterals.value.includes('avto')) {
-                        const egasi = ownerType.value === 'borrower' ? personal.value.fish : collateral.value.owner_fish;
-                        collateral.value.avto_nomi = 'CHEVROLET COBALT GS-A/T';
-                        collateral.value.avto_kuzov_turi = 'SEDAN';
-                        collateral.value.avto_raqam = '01E999EA';
-                        collateral.value.avto_kuzov = 'XWB12345678912345';
-                        collateral.value.avto_dvigatel = 'B15D2-87654321';
-                        collateral.value.avto_shassi = 'RAQAMSIZ';
-                        collateral.value.avto_yil = 2021;
-                        collateral.value.avto_rang = 'OQ';
-                        collateral.value.avto_egasi = egasi || "OBIDOV ABDULLA SHOKIR O'G'LI";
-                        collateral.value.avto_bahosi = '145 000 000';
-                        collateral.value.avto_bahosi_soz = "BIR YUZ QIRQ BESH MILLION SO'M";
-                        collateral.value.avto_texpasport = 'ACF159263';
-                        collateral.value.avto_texpasport_sana = '10.09.2023';
-                        collateral.value.avto_manzil = 'TOSHKENT SHAHAR, YUNUSOBOD TUMANI';
-                    }
-
-                    if (selectedCollaterals.value.includes('sugurta')) {
-                        collateral.value.sugurta_kompaniya = 'GROSS INSURANCE MCHJ';
-                        collateral.value.sugurta_polisi = 'GS-' + String(100000 + rand);
-                        collateral.value.sugurta_sana = '12.12.2024';
-                        collateral.value.sugurta_summa = '50 000 000';
-                        collateral.value.sugurta_summa_soz = "ELLIK MILLION SO'M";
-                    }
-
-                    if (selectedCollaterals.value.includes('kochmas')) {
-                        const egasi = ownerType.value === 'borrower' ? personal.value.fish : collateral.value.owner_fish;
-                        collateral.value.mulk_turi = 'uy';
-                        collateral.value.mulk_umumiy = '450';
-                        collateral.value.mulk_qurilish = '150';
-                        collateral.value.mulk_foydalanish = '300';
-                        collateral.value.mulk_yashash = '120';
-                        collateral.value.mulk_egasi = egasi || "OBIDOV ABDULLA SHOKIR O'G'LI";
-                        collateral.value.mulk_reestr_raqami = 'R-' + String(10000 + rand);
-                        collateral.value.mulk_kadastr = '11:05:04:02:03:0014';
-                        collateral.value.mulk_manzil = getRandomManzil();
-                        collateral.value.mulk_bahosi = '450 000 000';
-                        collateral.value.mulk_bahosi_soz = "TO'RT YUZ ELLIK MILLION SO'M";
-                    }
-
-                    if (selectedCollaterals.value.includes('tilla')) {
-                        collateral.value.tilla_nomi = 'TILLA ZANJIR VA UZUK, 585 PROBA';
-                        collateral.value.tilla_probi = '585';
-                        collateral.value.tilla_vazni = '45.5';
-                        collateral.value.tilla_soni = 2;
-                        collateral.value.tilla_bahosi = '35 000 000';
-                        collateral.value.tilla_bahosi_soz = "O'TIZ BESH MILLION SO'M";
-                    }
-                } else if (step === 5) {
-                    const ishJoyiList = [
-                        "O'ZBEKISTON TEMIR YO'LLARI AJ",
-                        "NAVOTIY KON-METALLURGIYA KOMBINATI AJ",
-                        "O'ZAUTO MOTORS AJ",
-                        "O'ZBEKNEFTGAZ AJ",
-                        "O'ZBEKTELEKOM AJ",
-                        "AGROBANK ATB",
-                        "XALQ BANKI ATB",
-                        "ENTER ENGINEERING PTE. LTD."
-                    ];
-                    const filialList = [
-                        "TOSHKENT SHAHAR ASOSIY FILIALI",
-                        "YUNUSOBOD FILIALI",
-                        "CHILONZOR FILIALI",
-                        "SAMARQAND VILOYATI FILIALI",
-                        "FARG'ONA VILOYATI FILIALI",
-                        "BUXORO VILOYATI FILIALI"
-                    ];
-                    const majburiyatList = [
-                        "YO'Q",
-                        "ISTE'MOL KREDITI QOLDIQ: 5 MLN",
-                        "AVTOKREDIT MAVJUD",
-                        "MIKROQARZ QARZDORLIGI: 2 MLN",
-                        "IPOTEKA KREDITI MAVJUD"
-                    ];
-
-                    const randomIsh = ishJoyiList[Math.floor(Math.random() * ishJoyiList.length)];
-                    const randomFilial = filialList[Math.floor(Math.random() * filialList.length)];
-                    const randomMajburiyat = majburiyatList[Math.floor(Math.random() * majburiyatList.length)];
-                    const randomBoshliq = getRandomNameObj();
-
-                    const daromadVal = (Math.floor(Math.random() * 10) + 5) * 1000000;
-                    const xarajatVal = Math.floor(daromadVal * (0.3 + Math.random() * 0.2));
-                    const tolovVal = 1000000 + (Math.floor(Math.random() * 5) * 500000);
-
-                    financial.value.ish_joyi = randomIsh;
-                    financial.value.daromad = daromadVal.toLocaleString('uz-UZ').replace(/,/g, ' ');
-                    financial.value.xarajatlar = xarajatVal.toLocaleString('uz-UZ').replace(/,/g, ' ');
-                    financial.value.tahminiy_tolov = tolovVal.toLocaleString('uz-UZ').replace(/,/g, ' ');
-                    financial.value.majburiyatlar = randomMajburiyat;
-
-                    financial.value.filial_nomi = randomFilial;
-                    financial.value.filial_boshligi = randomBoshliq.fullName;
-                    financial.value.filial_boshligi_inisiali = getInitials(randomBoshliq.fullName);
-
-                    financial.value.tashkilot_nomi = 'EPL MIKROKREDIT TASHKILOTI';
-                    financial.value.direktor_fish = 'OBIDOV ABDULLA SHOKIR O\'G\'LI';
-                    financial.value.direktor_fish_inisiali = 'A.SH.OBIDOV';
-                }
-            };
-
-            onMounted(() => {
-                // Form elementlariga AdminLTE/Bootstrap classlarni qo'shish
-                $('input:not([type="checkbox"]), select, textarea').addClass('form-control');
-
-                // InputMask orqali maskalarni qo'llash
-                $('.phone-mask').inputmask("+\\9\\98 99 999-99-99");
-                $('.jshshir-mask').inputmask("99999999999999");
-                $('.passport-mask').inputmask("AA9999999");
-                $('.date-mask').inputmask("99.99.9999");
-
-                const numericOptions = { alias: "numeric", groupSeparator: " ", autoGroup: true, digits: 0, rightAlign: false };
-                $('.money-mask').inputmask(numericOptions);
-
-                // Inputmask tufayli VueJS xabardor bo'lishi uchun hodisalarni qo'shish
-                // Barcha [data-model] inputlarini qamrab olamiz
-                $('input[data-model], select[data-model], textarea[data-model]').on('input keyup change', function () {
-                    const val = $(this).val();
-                    let modelPath = $(this).attr('data-model');
-
-                    if (!modelPath) return;
-
-                    // Dinamik model yangilash
-                    const parts = modelPath.split('.');
-                    if (parts.length === 2) {
-                        const objName = parts[0];
-                        const propName = parts[1];
-
-                        // contacts[0].telefon kabi holatlar uchun
-                        if (objName.startsWith('contacts[')) {
-                            const match = objName.match(/contacts\[(\d+)\]/);
-                            if (match) {
-                                const idx = parseInt(match[1]);
-                                contacts.value[idx][propName] = val;
-                            }
-                        } else {
-                            // Oddiy obyektlar uchun: personal, loan, collateral, financial
-                            if (objName === 'personal') personal.value[propName] = val;
-                            if (objName === 'loan') loan.value[propName] = val;
-                            if (objName === 'collateral') collateral.value[propName] = val;
-                            if (objName === 'financial') financial.value[propName] = val;
-                        }
-                    }
+            try {
+                const res = await fetch(`/api/loans/update/{{ loan_id }}/`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value },
+                    body: JSON.stringify(fullData)
                 });
-            });
+                const data = await res.json();
+                if (res.ok && data.status === 'success') { alert("Muvaffaqiyatli saqlandi!"); window.location.href = '/documents/'; }
+                else { alert("Xatolik: " + (data.message || "Noma'lum")); }
+            } catch (e) { alert("Tarmoq xatosi!"); }
+        };
 
-            return {
-                currentStep, ownerType, selectedCollaterals, sugurtaMavjud,
-                personal, contacts, loan, collateral, financial,
-                steps, stepTitles,
-                nextStep, prevStep, setOwnerType, submitForm, fillRandomStep,
-                kinshipChoices, loanTypeChoices, graphChoices, propertyTypeChoices,
-                borrowerFish, borrowerInitials, isStep1Valid, isStep2Valid, isStep3Valid, isStep4Valid, isStep5Valid
-            };
-        },
-        delimiters: ['[[', ']]']
+        const fillRandomStep = (step) => { /* Not implemented in edit */ };
+
+        onMounted(() => {
+        try {
+            const data = {{ loan_data_json| safe
+        }};
+    if (data) {
+        if (data.personal) Object.assign(personal.value, data.personal);
+        if (data.contacts) contacts.value = (data.contacts.length >= 2) ? data.contacts : contacts.value;
+        if (data.loan) Object.assign(loan.value, data.loan);
+        if (data.financial) Object.assign(financial.value, data.financial);
+        if (data.collateral) {
+            ownerType.value = data.collateral.owner_type || 'borrower';
+            selectedCollaterals.value = data.collateral.selected_types || [];
+            Object.assign(collateral.value, data.collateral);
+        }
+    }
+        } catch (e) { console.error("Data load error", e); }
+
+    $('input:not([type="checkbox"]), select, textarea').addClass('form-control');
+    $('.phone-mask').inputmask("+\\9\\98 99 999-99-99");
+    $('.jshshir-mask').inputmask("99999999999999");
+    $('.passport-mask').inputmask("AA9999999");
+    $('.date-mask').inputmask("99.99.9999");
+    $('.money-mask').inputmask({ alias: "numeric", groupSeparator: " ", autoGroup: true, digits: 0, rightAlign: false });
+
+    $('input[data-model], select[data-model], textarea[data-model]').on('input keyup change', function () {
+        const val = $(this).val();
+        const modelPath = $(this).attr('data-model');
+        if (!modelPath) return;
+        const parts = modelPath.split('.');
+        if (parts.length === 2) {
+            const objName = parts[0];
+            const propName = parts[1];
+            if (objName.startsWith('contacts[')) {
+                const match = objName.match(/contacts\[(\d+)\]/);
+                if (match) contacts.value[parseInt(match[1])][propName] = val;
+            } else {
+                if (objName === 'personal') personal.value[propName] = val;
+                if (objName === 'loan') loan.value[propName] = val;
+                if (objName === 'collateral') collateral.value[propName] = val;
+                if (objName === 'financial') financial.value[propName] = val;
+            }
+        }
+    });
     });
 
+    return {
+        currentStep, ownerType, selectedCollaterals, sugurtaMavjud,
+        personal, contacts, loan, collateral, financial,
+        steps, stepTitles, kinshipChoices, loanTypeChoices, graphChoices, propertyTypeChoices,
+        nextStep, prevStep, setOwnerType, submitForm, fillRandomStep, showJsonPreview,
+        borrowerFish, borrowerInitials, isStep1Valid, isStep2Valid, isStep3Valid, isStep4Valid, isStep5Valid
+    };
+        },
+    delimiters: ['[[', ']]']
+    });
     app.mount('#app');
 </script>
 {% endblock extra_js %}

@@ -5,7 +5,8 @@ from .views import (
     process_audit_file, generate_documents,
     process_audit_file, generate_documents,
     create_loan_application, moderator_dashboard, director_dashboard, view_application, approve_application,
-    profile_view, view_document_pdf, delete_loan, edit_loan, create_loan_vue
+        profile_view, view_document_pdf, delete_loan, edit_loan, create_loan_vue,
+    get_loan_data_api, edit_loan_vue_api, edit_loan_vue_page
 )
 
 urlpatterns = [
@@ -26,6 +27,9 @@ urlpatterns = [
     path('loans/approve/<int:loan_id>/', approve_application, name='approve_application'),
     path('loans/delete/<int:loan_id>/', delete_loan, name='delete_loan'),
     path('loans/edit/<int:loan_id>/', edit_loan, name='edit_loan'),
+    path('loans/edit-vue/<int:loan_id>/', edit_loan_vue_page, name='edit_loan_vue_page'),
+    path('api/loans/<int:loan_id>/', get_loan_data_api, name='get_loan_data_api'),
+    path('api/loans/update/<int:loan_id>/', edit_loan_vue_api, name='edit_loan_vue_api'),
     
     # User Profile & Auth
     path('profile/', profile_view, name='profile'),

@@ -37,7 +37,48 @@
             </div>
             <!-- /.card-header -->
             <!-- form start -->
-            <form method="post" action="{% url 'create_loan' %}">
+            <form method="post"
+                action="    
+    {% if edit_mode %}
+    // Edit qilinayotgan vaqtda barcha formalarni to'liq ochish 
+    document.addEventListener('DOMContentLoaded', function () {
+        setTimeout(function () {
+            let readonlyInputs = document.querySelectorAll('input[readonly]');
+            readonlyInputs.forEach(input => {
+                input.removeAttribute('readonly');
+                // Orqa fonni tozalash
+                if (input.style.backgroundColor) {
+                    input.style.backgroundColor = '';
+                }
+            });
+            let disabledInputs = document.querySelectorAll('input[disabled], select[disabled], textarea[disabled]');
+            disabledInputs.forEach(input => {
+                input.removeAttribute('disabled');
+            });
+            
+            // Xatolikka olib kelyotgan boshqa disable codlarni blokirovka qilindi JS da
+        }, 1200);
+        
+        let loanData = {{ loan_data_json|safe }};
+        if(loanData) {
+            for (let key in loanData) {
+                let el = document.getElementById('id_' + key);
+                if (el && !el.value && loanData[key] != null) {
+                    if (el.type === 'checkbox') {
+                        el.checked = loanData[key];
+                    } else if (el.tagName === 'SELECT') {
+                        el.value = loanData[key];
+                        // Select2 kabi pluginlar uchun trigger kerak bo'lishi mumkin
+                        $(el).trigger('change');
+                    } else {
+                        el.value = loanData[key];
+                    }
+                }
+            }
+        }
+        
+    });
+    {% endif %}">
                 {% csrf_token %}
                 <div class="card-body">
 
@@ -262,9 +303,9 @@
                                 <div class="col-md-3">
                                     <div class="nav flex-column nav-pills" id="v-pills-tab-new" role="tablist"
                                         aria-orientation="vertical">
-                                        <a class="nav-link text-center py-3 mb-2 border" id="new-tab-collateral_owner_type"
-                                            href="javascript:void(0)" role="tab" onclick="selectNewTab('collateral_owner_type')"
-                                            style="display: none;">
+                                        <a class="nav-link text-center py-3 mb-2 border"
+                                            id="new-tab-collateral_owner_type" href="javascript:void(0)" role="tab"
+                                            onclick="selectNewTab('collateral_owner_type')" style="display: none;">
                                             <i class="fas fa-user-tie fa-2x mb-2"></i><br>
                                             Garov egasi
                                         </a>
@@ -359,7 +400,8 @@
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
-                                                    {{ form.collateral_avto_bahosi.label_tag }} {{ form.collateral_avto_bahosi }}
+                                                    {{ form.collateral_avto_bahosi.label_tag }} {{
+                                                    form.collateral_avto_bahosi }}
                                                 </div>
                                                 <div class="row">
                                                     <div class="col-md-6 form-group">
@@ -1239,7 +1281,7 @@
             });
             // Make read-only as requested
             if ($muddatSozInput.length) {
-                $muddatSozInput.prop('readonly', true);
+                
             }
         }
 
@@ -1408,9 +1450,9 @@
 
             // 2. Maydonlarni ko'rsatish/yashirish va Disabled qilish
             // Avval hammasini yashiramiz va disabled qilamiz
-            $avtoFields.hide().find(':input').prop('disabled', true);
-            $kochmasFields.hide().find(':input').prop('disabled', true);
-            $tillaFields.hide().find(':input').prop('disabled', true);
+            $avtoFields.hide().find(':input').prop('disabled', false);
+            $kochmasFields.hide().find(':input').prop('disabled', false);
+            $tillaFields.hide().find(':input').prop('disabled', false);
 
             // Sug'urta va Owner tablari alohida, ular garov turini o'zgartirmaydi
             $sugurtaFields.hide(); // Bularni disabled qilish toggleSugurtaInputs da bajariladi
@@ -1446,7 +1488,7 @@
             if ($sugurtaCheckbox.is(':checked')) {
                 $sugurtaInputs.prop('disabled', false);
             } else {
-                $sugurtaInputs.prop('disabled', true);
+                $sugurtaInputs.prop('disabled', false);
             }
         }
         toggleSugurtaInputs();
@@ -1460,7 +1502,7 @@
             if ($ownerCheckbox.is(':checked')) {
                 $ownerInputs.prop('disabled', false);
             } else {
-                $ownerInputs.prop('disabled', true);
+                $ownerInputs.prop('disabled', false);
             }
         }
         toggleOwnerInputs();
@@ -1783,7 +1825,7 @@
 
         if (!isValid) {
             e.preventDefault();
-            alert("Iltimos, barcha majburiy maydonlarni to'ldiring!");
+            alert("Iltimos, barcha majburiy majdonlarni to'ldiring!");
             if (firstErrorField) {
                 $('html, body').animate({
                     scrollTop: firstErrorField.offset().top - 100
@@ -1792,5 +1834,47 @@
             }
         }
     });
+
+        
+    {% if edit_mode %}
+    // Edit qilinayotgan vaqtda barcha formalarni to'liq ochish 
+    document.addEventListener('DOMContentLoaded', function () {
+        setTimeout(function () {
+            let readonlyInputs = document.querySelectorAll('input[readonly]');
+            readonlyInputs.forEach(input => {
+                input.removeAttribute('readonly');
+                // Orqa fonni tozalash
+                if (input.style.backgroundColor) {
+                    input.style.backgroundColor = '';
+                }
+            });
+            let disabledInputs = document.querySelectorAll('input[disabled], select[disabled], textarea[disabled]');
+            disabledInputs.forEach(input => {
+                input.removeAttribute('disabled');
+            });
+            
+            // Xatolikka olib kelyotgan boshqa disable codlarni blokirovka qilindi JS da
+        }, 1200);
+        
+        let loanData = {{ loan_data_json|safe }};
+        if(loanData) {
+            for (let key in loanData) {
+                let el = document.getElementById('id_' + key);
+                if (el && !el.value && loanData[key] != null) {
+                    if (el.type === 'checkbox') {
+                        el.checked = loanData[key];
+                    } else if (el.tagName === 'SELECT') {
+                        el.value = loanData[key];
+                        // Select2 kabi pluginlar uchun trigger kerak bo'lishi mumkin
+                        $(el).trigger('change');
+                    } else {
+                        el.value = loanData[key];
+                    }
+                }
+            }
+        }
+        
+    });
+    {% endif %}
 </script>
 {% endblock %}

@@ -80,7 +80,8 @@
                                 {% if loan.garov_turi == 'avto' %}
                                 <tr>
                                     <th>Avtomobil</th>
-                                    <td>{{ loan.collateral_avto_nomi }} - {{ loan.collateral_avto_raqam }} ({{ loan.collateral_avto_yil }})</td>
+                                    <td>{{ loan.collateral_avto_nomi }} - {{ loan.collateral_avto_raqam }} ({{
+                                        loan.collateral_avto_yil }})</td>
                                 </tr>
                                 <tr>
                                     <th>Baholangan Qiymati</th>
@@ -103,7 +104,8 @@
                                     <th>Sug'urta</th>
                                     <td>
                                         {% if loan.sugurta_mavjud %}
-                                        Mavjud ({{ loan.collateral_sugurta_kompaniya }} - {{ loan.collateral_sugurta_summa }})
+                                        Mavjud ({{ loan.collateral_sugurta_kompaniya }} - {{
+                                        loan.collateral_sugurta_summa }})
                                         {% else %}
                                         Yo'q
                                         {% endif %}
@@ -291,6 +293,21 @@
                         </form>
                     </div>
                 </div>
+
+                <!-- Tahrirlash -->
+                {% if request.user|has_group:'Director' %}
+                <div class="card card-primary card-outline mt-3">
+                    <div class="card-header">
+                        <h3 class="card-title">Tahrirlash</h3>
+                    </div>
+                    <div class="card-body">
+                        <p class="text-muted">Ariza ma'lumotlarini o'zgartirish.</p>
+                        <a href="{% url 'edit_loan_vue_page' loan.id %}" class="btn btn-primary btn-block">
+                            <i class="fas fa-edit"></i> Tahrirlash
+                        </a>
+                    </div>
+                </div>
+                {% endif %}
             </div>
         </div>
     </div>
