@@ -8,11 +8,15 @@
     <style>
         @page {
             size: A4;
-            margin: 2cm;
+            margin: 1.5cm;
 
             @bottom-center {
                 content: "";
             }
+        }
+
+        * {
+            box-sizing: border-box;
         }
 
         body {
@@ -21,61 +25,63 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            min-height: 100vh;
+            height: 26.7cm;
+            /* To fit exactly in A4 printable area (29.7cm - 3cm margins) */
             margin: 0;
             padding: 0;
+            overflow: hidden;
         }
 
         .header {
-            margin-top: 30px;
+            margin-top: 20px;
             padding: 0 20px;
         }
 
         .company-name {
-            font-size: 26pt;
+            font-size: 22pt;
             font-weight: bold;
             text-transform: uppercase;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
             color: #1a1a1a;
             letter-spacing: 1px;
         }
 
         .client-section {
-            margin-top: 50px;
-            margin-bottom: 30px;
             flex-grow: 1;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             padding: 0 20px;
+            margin-top: 20px;
+            margin-bottom: 20px;
         }
 
         .client-name {
-            font-size: 42pt;
+            font-size: 32pt;
             font-weight: bold;
             text-transform: uppercase;
-            margin-bottom: 40px;
+            margin-bottom: 30px;
             line-height: 1.2;
             border-bottom: 3px solid #000;
-            padding-bottom: 15px;
+            padding-bottom: 10px;
             color: #000;
         }
 
         .contract-info {
-            font-size: 24pt;
+            font-size: 20pt;
             font-weight: bold;
-            margin-bottom: 60px;
+            margin-bottom: 40px;
             color: #2c3e50;
         }
 
         .details-box {
-            border: 4px solid #2c3e50;
-            padding: 35px;
+            border: 3px solid #2c3e50;
+            padding: 25px;
             margin: 0 auto;
-            width: 90%;
+            width: 85%;
             text-align: left;
-            font-size: 20pt;
+            font-size: 18pt;
             font-weight: bold;
             background-color: #f8f9fa;
             border-radius: 5px;
@@ -83,7 +89,7 @@
         }
 
         .detail-row {
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             display: flex;
             justify-content: space-between;
             padding: 10px 0;
@@ -92,6 +98,8 @@
 
         .detail-row:last-child {
             border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
         }
 
         .detail-row span:first-child {
@@ -104,8 +112,8 @@
         }
 
         .footer {
-            margin-bottom: 30px;
-            font-size: 18pt;
+            margin-bottom: 20px;
+            font-size: 16pt;
             font-weight: bold;
             color: #2c3e50;
             padding: 0 20px;
@@ -153,13 +161,8 @@
                 <span>Mikroqarz miqdori:</span>
                 <span><span class="var">{{ loan.details.miqdori|intcomma }}</span> so'm</span>
             </div>
-            <div class="detail-row">
-                <span>Shartnoma raqami:</span>
-                <span>№{{ loan.details.shartnoma_raqami }}</span>
-            </div>
         </div>
     </div>
-
     <div class="footer">
         Toshkent shahar - <span class="var">{{ loan.details.shartnoma_sanasi|date:"Y" }}</span> y.
     </div>

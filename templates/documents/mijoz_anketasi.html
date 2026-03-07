@@ -8,259 +8,249 @@
     <style>
         @page {
             size: A4;
-            margin: 0.5cm 1.2cm;
+            margin: 1cm;
         }
 
         body {
             font-family: "Times New Roman", Times, serif;
-            font-size: 9pt;
-            line-height: 1.1;
+            font-size: 10pt;
+            line-height: 1.2;
             color: #000;
-            background: #fff;
         }
 
-        .header {
+        .center {
             text-align: center;
             font-weight: bold;
-            text-decoration: underline;
-            margin-bottom: 2px;
         }
 
-        .title {
-            text-align: center;
+        .bold {
             font-weight: bold;
-            font-size: 11pt;
-            margin-bottom: 5px;
+        }
+
+        .var {
+            color: #8b0000;
+            font-weight: bold;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 8px;
+            margin: 8px 0;
+            font-size: 10pt;
+        }
+
+        table,
+        th,
+        td {
+            border: 1px solid #000;
         }
 
         th,
         td {
-            border: 1px solid black;
-            padding: 2px 4px;
+            padding: 4px 6px;
+        }
+
+        td {
+            text-align: left;
             vertical-align: middle;
         }
 
-        th {
-            background-color: #f2f2f2;
-            text-align: left;
-            font-weight: bold;
+        .label-cell {
             width: 40%;
+            font-weight: bold;
+            background-color: #f7f7f7;
         }
 
-        .section-header {
+        .section-title {
             background-color: #d9d9d9;
             font-weight: bold;
             text-align: center;
-            padding: 2px;
+            padding: 5px;
         }
 
-        .var {
-            color: #6b0000;
-            font-weight: bold;
-        }
-
-        .declaration {
+        p {
+            margin: 4px 0;
             text-align: justify;
-            margin-bottom: 4px;
-            font-size: 8.5pt;
         }
 
-        .signature-table {
-            width: 100%;
-            border: none;
-            margin-top: 10px;
-        }
-
-        .signature-table td {
-            border: none;
-            padding: 5px 5px;
-            vertical-align: bottom;
-        }
-
-        .signer-info {
-            border-bottom: 1px solid black;
-            text-align: center;
-            min-height: 15px;
-        }
-
-        .sub-text {
-            font-size: 7.5pt;
-            text-align: center;
-            display: block;
+        .agreement-text {
+            font-size: 9pt;
         }
     </style>
 </head>
 
 <body>
 
-    <div class="header">«PULLOL BUSINESS MIKROMOLIYA TASHKILOTI» MChJ</div>
-    <div class="title">MIJOZ ANKETASI</div>
+    <div class="center" style="font-size: 14pt; margin-bottom: 5px; text-decoration: underline;">
+        MIJOZNING ANKETASI
+    </div>
+    <div style="font-size: 9pt; text-align: center; font-style: italic; margin-bottom: 15px;">
+        Anketa kredit menejeri tomonidan mijozning javoblarini kiritish orqali to'ldiriladi, kerak bo'lganda, Mijoz
+        tomonidan tanlangan javob variantlarini belgilash orqali amalga oshiriladi
+    </div>
 
-    <table>
+    <!-- 1. Mijoz haqida ma'lumotlar -->
+    <div style="font-weight: bold; margin-bottom: 5px; text-align: center; text-transform: uppercase;">1. MIJOZ HAQIDA
+        MA'LUMOTLAR:</div>
+    <table style="border: none; margin-bottom: 15px;">
         <tr>
-            <td colspan="2" class="section-header">1. MIJOZ HAQIDA MA'LUMOT:</td>
+            <td style="border: none; padding: 2px 0; width: 35%;">Mijozning to'liq ismi sharifi:</td>
+            <td style="border: none; padding: 2px 0;" class="var">{{ loan.client.fish }}</td>
         </tr>
         <tr>
-            <th>F.I.Sh. (to'liq):</th>
-            <td><span class="var">{{ loan.client.fish }}</span></td>
+            <td style="border: none; padding: 2px 0;">Tug'ilgan sanasi:</td>
+            <td style="border: none; padding: 2px 0;">
+                <span class="var">{{ loan.client.tugilgan_sana|date:"d.m.Y"}}</span> yil.
+            </td>
         </tr>
         <tr>
-            <th>Tug'ilgan vaqti (sana):</th>
-            <td><span class="var">{{ loan.client.tugilgan_sana|date:"d.m.Y" }} yil</span></td>
+            <td style="border: none; padding: 2px 0;">Pasport seriyasi:</td>
+            <td style="border: none; padding: 2px 0;"><span class="var">{{ loan.client.pasport_seriya }}</span> <span
+                    class="var">{{ loan.client.pasport_berilgan }}</span> yilda berilgan</td>
         </tr>
         <tr>
-            <th>Pasport seriyasi va raqami:</th>
-            <td><span class="var">{{ loan.client.pasport_seriya }}</span></td>
+            <td style="border: none; padding: 2px 0;">Fuqaroligi:</td>
+            <td style="border: none; padding: 2px 0;">O’zbekiston Respublikasi</td>
         </tr>
         <tr>
-            <th>Berilgan vaqti/manzili:</th>
-            <td><span class="var">{{ loan.client.pasport_berilgan }}</span></td>
+            <td style="border: none; padding: 2px 0;">Ro‘yxatdan o‘tgan manzili:</td>
+            <td style="border: none; padding: 2px 0;" class="var">{{ loan.client.manzil }}</td>
         </tr>
         <tr>
-            <th>Doimiy yashash manzili:</th>
-            <td><span class="var">{{ loan.client.manzil }}</span></td>
+            <td style="border: none; padding: 2px 0;">Haqiqatdan yashash joy manzili:</td>
+            <td style="border: none; padding: 2px 0;" class="var">{{ loan.client.manzil }}</td>
         </tr>
         <tr>
-            <th>Oila qurganligi:</th>
-            <td><span class="var">&nbsp;</span></td>
-        </tr>
-        <tr>
-            <th>Ma'lumoti:</th>
-            <td><span class="var">&nbsp;</span></td>
-        </tr>
-        <tr>
-            <th>Ish joyi:</th>
-            <td><span class="var">{{ loan.financial_info.ish_joyi }}</span></td>
+            <td style="border: none; padding: 2px 0;">Ish joyi:</td>
+            <td style="border: none; padding: 2px 0;"><span class="var">{{ loan.financial_info.ish_joyi }}</span></td>
         </tr>
     </table>
 
-    <table>
+    <!-- 2. Aloqa -->
+    <div style="font-weight: bold; margin-bottom: 5px; text-align: center; text-transform: uppercase;">2. MIJOZ BILAN
+        BOG'LANISH UCHUN ALOQA MA'LUMOTLARI:</div>
+    <table style="border: none; margin-bottom: 15px;">
         <tr>
-            <td colspan="2" class="section-header">2. Mijoz bilan bog'lanish uchun aloqa ma'lumotlari:</td>
+            <td style="border: none; padding: 2px 0; width: 35%;">Mijoz:</td>
+            <td style="border: none; padding: 2px 0;" class="var">{{ loan.client.telefon }}</td>
+        </tr>
+        {% with contact1=loan.contacts.all.0 %}
+        <tr>
+            <td style="border: none; padding: 2px 0;">Kontakt 1:</td>
+            <td style="border: none; padding: 2px 0;"><span class="var">{{ contact1.telefon|default:"-" }}</span> 
+                {% if contact1 %}(<span class="var">{{ contact1.qarindoshlik|upper }}</span>)
+                {% endif %}
+            </td>
+        </tr>
+        {% endwith %}
+        {% with contact2=loan.contacts.all.1 %}
+        <tr>
+            <td style="border: none; padding: 2px 0;">Kontakt 2:</td>
+            <td style="border: none; padding: 2px 0;"><span class="var">{{ contact2.telefon|default:"-" }}</span> 
+                {% if contact2 %}(<span class="var">{{ contact2.qarindoshlik|upper }}</span>)
+                {% endif %}
+            </td>
+        </tr>
+        {% endwith %}
+    </table>
+
+    <!-- 3. Ish joyi ma'lumotlari -->
+    <div style="font-weight: bold; margin-bottom: 5px; text-align: center; text-transform: uppercase;">3. MIJOZNING ISH
+        JOYI HAQIDA MA'LUMOT:</div>
+    <table style="border: none; margin-bottom: 15px;">
+        <tr>
+            <td style="border: none; padding: 2px 0; width: 35%;">Muassasa nomlanishi:</td>
+            <td style="border: none; padding: 2px 0;"><span class="var">{{ loan.financial_info.ish_joyi }}</span></td>
         </tr>
         <tr>
-            <th>Uy telefoni raqami:</th>
-            <td><span class="var">&nbsp;</span></td>
+            <td style="border: none; padding: 2px 0;">Ro‘yxatdan o‘tish manzili:</td>
+            <td style="border: none; padding: 2px 0;">O'ZBEKISTON RESPUBLIKASI</td>
         </tr>
         <tr>
-            <th>Uyali telefon raqami (Asosiy):</th>
-            <td><span class="var">{{ loan.client.telefon }}</span></td>
-        </tr>
-        <tr>
-            <th>Ish telefoni raqami:</th>
-            <td><span class="var">&nbsp;</span></td>
+            <td style="border: none; padding: 2px 0;">Lavozimi:</td>
+            <td style="border: none; padding: 2px 0;" class="var">-</td>
         </tr>
     </table>
 
+    <!-- 4. Daromad va Xarajat -->
+    <div style="font-weight: bold; margin-bottom: 5px; text-align: center; text-transform: uppercase;">4. MIJOZNING
+        OYLIK DAROMADLARI VA XARAJATLARI HAQIDA MA'LUMOT</div>
     <table>
         <tr>
-            <td colspan="2" class="section-header">3. MIJOZNING ISH JOYI HAQIDA MA'LUMOT:</td>
-        </tr>
-        <tr>
-            <th>Muassasa nomlanishi:</th>
-            <td><span class="var">{{ loan.financial_info.ish_joyi }}</span></td>
-        </tr>
-        <tr>
-            <th>Lavozimi:</th>
-            <td><span class="var">{{ loan.financial_info.ish_joyi }}</span></td>
-        </tr>
-        <tr>
-            <th>Ro‘yxatdan o‘tish manzili:</th>
-            <td><span class="var">&nbsp;</span></td>
-        </tr>
-    </table>
-
-    <table>
-        <tr>
-            <td colspan="6" class="section-header">4. MIJOZNING OYLIK DAROMADLARI VA XARAJATLARI HAQIDA MA'LUMOT</td>
-        </tr>
-        <tr>
-            <th rowspan="2">Daromad manbalari</th>
-            <th colspan="3" style="text-align: center;">Daromadlar summasi (so'm)</th>
-            <th rowspan="2">Xarajatlar</th>
-            <th rowspan="2">Мiqdori (so'm)</th>
-        </tr>
-        <tr>
-            <th style="font-size: 8pt;">Mijoz</th>
-            <th style="font-size: 8pt;">Turmush o'rtog'i</th>
-            <th style="font-size: 8pt;">Boshqa oila a'zolari</th>
+            <th>Daromad manbalari</th>
+            <th>Mijoz</th>
+            <th>Turmush o'rtog'i</th>
+            <th>Boshqa oila a'zolari</th>
+            <th>Xarajatlar</th>
+            <th>Miqdori (so'm)</th>
         </tr>
         <tr>
             <td>ish haqi (asosiy ish)</td>
-            <td style="text-align: right;">{{ loan.financial_info.daromad|intcomma }}</td>
-            <td style="text-align: right;">0</td>
-            <td style="text-align: right;">0</td>
+            <td style="text-align: right;" class="var">{{ loan.financial_info.daromad|intcomma }}</td>
+            <td style="text-align: right;">-</td>
+            <td style="text-align: right;">-</td>
             <td>uy-joy va kommunal xizmatlar uchun to'lov</td>
-            <td style="text-align: right;">0</td>
+            <td style="text-align: right;">-</td>
         </tr>
         <tr>
             <td>ish haqi (o‘rindoshlik)</td>
-            <td style="text-align: right;">0</td>
-            <td style="text-align: right;">0</td>
-            <td style="text-align: right;">0</td>
+            <td style="text-align: right;">-</td>
+            <td style="text-align: right;">-</td>
+            <td style="text-align: right;">-</td>
             <td>oilaviy xarajatlar</td>
-            <td style="text-align: right;">{{ loan.financial_info.xarajatlar|intcomma }}</td>
+            <td style="text-align: right;" class="var">{{ loan.financial_info.xarajatlar|intcomma }}</td>
         </tr>
         <tr>
             <td>boshqa daromadlar</td>
-            <td style="text-align: right;">0</td>
-            <td style="text-align: right;">0</td>
-            <td style="text-align: right;">0</td>
+            <td style="text-align: right;">-</td>
+            <td style="text-align: right;">-</td>
+            <td style="text-align: right;">-</td>
             <td>boshqa xarajatlar</td>
-            <td style="text-align: right;">0</td>
+            <td style="text-align: right;">-</td>
         </tr>
         <tr>
-            <th>JAMI</th>
-            <th style="text-align: right;">{{ loan.financial_info.daromad|intcomma }}</th>
-            <th style="text-align: right;">0</th>
-            <th style="text-align: right;">0</th>
-            <th>JAMI XARAJATLAR</th>
-            <th style="text-align: right;">{{ loan.financial_info.xarajatlar|intcomma }}</th>
+            <th style="font-weight: bold;">JAMI</th>
+            <th style="text-align: right; font-weight: bold;" class="var">{{ loan.financial_info.daromad|intcomma }}
+            </th>
+            <th style="text-align: right; font-weight: bold;">-</th>
+            <th style="text-align: right; font-weight: bold;">-</th>
+            <th style="font-weight: bold;"></th>
+            <th style="text-align: right; font-weight: bold;" class="var">{{ loan.financial_info.xarajatlar|intcomma }}
+            </th>
         </tr>
     </table>
 
-    <div class="declaration">
-        Men, <span class="var">{{ loan.client.fish }}</span>, ushbu anketada ko‘rsatilgan barcha ma'lumotlar
-        anketa to'ldirilgan sanada to'g'ri va aniq ekanligini tasdiqlayman.
-    </div>
-    <div class="declaration">
-        Men, <span class="var">{{ loan.client.fish }}</span>, quyidagilarni tan olaman va roziman:
-    </div>
-    <div class="declaration" style="margin-left: 0.5cm;">
-        1. Ushbu anketada ko‘rsatilgan har qanday ma’lumot «PULLOL BUSINESS MIKROMOLIYA TASHKILOTI» MChJ, uning
-        xodimlari va huquqiy vorislari tomonidan istalgan manba va ma’lumotlardan foydalangan holda istalgan vaqtda
-        tekshirilishi va qayta tekshirilishi mumkin.
-    </div>
-    <div class="declaration" style="margin-left: 0.5cm;">
-        2. Mazkur anketaning «PULLOL BUSINESS MIKROMOLIYA TASHKILOTI» MChJ tomonidan qabul qilinishi «PULLOL BUSINESS
-        MIKROMOLIYA TASHKILOTI» MChJ tomonidan menga mikroqarz berish majburiyatini yuklamaydi.
-    </div>
-    <div class="declaration">
-        Men, <span class="var">{{ loan.client.fish }}</span>, ushbu anketadagi barcha ma'lumotlar anketa
-        to'ldirilgan sanada to'g'ri ekanligini tasdiqlayman va ushbu anketaning 1- va 2-bandlarini tan olaman va ularga
-        rozilik bildiraman. Mazkur anketaning 4-bo'limida ko'rsatilgan daromadlarim haqidagi ma'lumotlarni qabul
-        qilishingizni va moliyaviy tahlilda foydalanishingizni so’rayman.
+    <div class="agreement-text" style="margin-top:20px;">
+        <p>Men, <span class="var">{{ loan.client.fish }}</span>, ushbu anketada ko‘rsatilgan barcha ma'lumotlar anketa
+            to'ldirilgan sanada to'g'ri va aniq ekanligini tasdiqlayman.</p>
+        <p>Men, <span class="var">{{ loan.client.fish }}</span>, quyidagilarni tan olaman va roziman:</p>
+        <p>1. Ushbu anketada ko‘rsatilgan har qanday ma’lumot «PULLOL BUSINESS MIKROMOLIYA TASHKILOTI» MChJ, uning
+            xodimlari va huquqiy vorislari tomonidan istalgan manba va ma’lumotlardan foydalangan holda istalgan vaqtda
+            tekshirilishi va qayta tekshirilishi mumkin.</p>
+        <p>2. Mazkur anketaning «PULLOL BUSINESS MIKROMOLIYA TASHKILOTI» MChJ tomonidan qabul qilinishi «PULLOL BUSINESS
+            MIKROMOLIYA TASHKILOTI» MChJ tomonidan menga mikroqarz berish majburiyatini yuklamaydi.</p>
+        <p>Men, <span
+                style="display:inline-block; border-bottom: 1px solid #000; width: 300px; text-align:center;">&nbsp;</span>
+            (to'liq ismi sharifi), ushbu anketadagi barcha ma'lumotlar anketa to'ldirilgan sanada to'g'ri ekanligini
+            tasdiqlayman va ushbu anketaning 1- va 2-bandlarini tan olaman va ularga rozilik bildiraman. Mazkur
+            anketaning 4-bo'limida ko'rsatilgan daromadlarim haqidagi ma'lumotlarni qabul qilishingizni va moliyaviy
+            tahlilda foydalanishingizni so’rayman.</p>
     </div>
 
-    <table class="signature-table">
+    <table style="margin-top: 40px; border: none;">
         <tr>
-            <td style="width: 50%;">
-                <div class="signer-info"></div>
-                <span class="sub-text">Mijozning imzosi</span>
+            <td style="border: none; width: 45%; text-align: left; padding: 0;">Mijozning to'liq ismi sharifi:
+                <br><strong><span class="var">{{ loan.client.fish }}</span></strong>
             </td>
-            <td style="width: 10%;"></td>
-            <td style="width: 40%;">
-                <div class="signer-info"><span class="var">{{ loan.created_at|date:"d.m.Y" }}</span></div>
-                <span class="sub-text">To'ldirilgan sana</span>
+            <td style="border: none; width: 25%; text-align: center; padding: 0;">Sana: <br><strong>
+                <span class="var">
+                    {{loan.details.shartnoma_sanasi|date:"d.m.Y" }}
+                </span></strong>
             </td>
+            <td style="border: none; width: 30%; text-align: left; padding: 0;">Imzo: <br>_____________________</td>
         </tr>
     </table>
+
 
 </body>
 

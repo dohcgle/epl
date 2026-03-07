@@ -1131,8 +1131,13 @@
                         <div class="row">
                             <div class="col-md-4 form-group">
                                 <label>Filial nomi <span class="text-danger">*</span></label>
-                                <input type="text" v-model="financial.filial_nomi" data-model="financial.filial_nomi"
-                                    class="form-control text-uppercase">
+                                <select v-model="financial.filial_nomi" class="form-control text-uppercase"
+                                    data-model="financial.filial_nomi">
+                                    <option value="">TALLANG...</option>
+                                    <option value="BUXORO FILIALI">BUXORO FILIALI</option>
+                                    <option value="URGANCH FILIALI">URGANCH FILIALI</option>
+                                    <option value="TO'RTKO'L FILIALI">TO'RTKO'L FILIALI</option>
+                                </select>
                             </div>
                             <div class="col-md-4 form-group">
                                 <label>Filial boshlig'i F.I.Sh <span class="text-danger">*</span></label>
@@ -1477,6 +1482,42 @@
                     }
                 } else {
                     personal.value.fish_inisiali = '';
+                }
+            });
+
+            // Shartnoma raqami avtomatik katta harflarda bo'lishi
+            watch(() => loan.value.shartnoma_raqami, (newVal) => {
+                if (newVal) {
+                    loan.value.shartnoma_raqami = newVal.toUpperCase();
+                }
+            });
+
+            // Filial tanlanganda boshliqni avtomatik to'ldirish
+            watch(() => financial.value.filial_nomi, (newVal) => {
+                if (newVal === 'BUXORO FILIALI') {
+                    financial.value.filial_boshligi = 'IKROMOV BAHODIR ABDURAXIMOVICH';
+                } else if (newVal === 'URGANCH FILIALI') {
+                    financial.value.filial_boshligi = 'ORAZOV JASURBEK XASANOVICH';
+                } else if (newVal === "TO'RTKO'L FILIALI") {
+                    financial.value.filial_boshligi = "DJUMANAZAROV BOBUR ANVAR O'G'LI";
+                } else {
+                    financial.value.filial_boshligi = '';
+                }
+            });
+
+            // Filial boshlig'i F.I.Sh kiritilganda inisialni avtomatik yasash
+            watch(() => financial.value.filial_boshligi, (newVal) => {
+                if (newVal) {
+                    const parts = newVal.trim().split(/\s+/);
+                    if (parts.length >= 3) {
+                        financial.value.filial_boshligi_inisiali = `${parts[1][0]}.${parts[2][0]}.${parts[0]}`.toUpperCase();
+                    } else if (parts.length === 2) {
+                        financial.value.filial_boshligi_inisiali = `${parts[1][0]}.${parts[0]}`.toUpperCase();
+                    } else {
+                        financial.value.filial_boshligi_inisiali = newVal.toUpperCase();
+                    }
+                } else {
+                    financial.value.filial_boshligi_inisiali = '';
                 }
             });
 

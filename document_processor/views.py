@@ -182,11 +182,12 @@ def create_loan_vue(request):
             for contact in contacts:
                 # Vue da har bir contact dict {} ko'rinishida keladi: fish, telefon, qarindoshlik
                 contact_fish = clean_str(contact.get('fish'))
-                if contact_fish:
+                contact_telefon = clean_str(contact.get('telefon'))
+                if contact_fish or contact_telefon:
                     ContactPerson.objects.create(
                         application=application,
                         fish=contact_fish,
-                        telefon=clean_str(contact.get('telefon')),
+                        telefon=contact_telefon,
                         qarindoshlik=clean_str(contact.get('qarindoshlik'))
                     )
 
@@ -733,11 +734,13 @@ def view_document_pdf(request, loan_id, doc_type):
         context['qr_akramov'] = generate_qr_code(doc_url)
         context['qr_eshbekov'] = generate_qr_code(doc_url)
         context['qr_manager'] = generate_qr_code(doc_url)
+        context['qr_filial_boshligi'] = generate_qr_code(doc_url)
     except Exception as e:
         print(f"QR Code Error: {e}")
         context['qr_obidov'] = ""
         context['qr_akramov'] = ""
         context['qr_eshbekov'] = ""
+        context['qr_filial_boshligi'] = ""
 
     # Schedule
     grafik_matni = loan.loan_grafik_matni
@@ -1024,18 +1027,19 @@ def edit_loan_vue_api(request, loan_id):
             contacts_data = data.get('contacts') or []
             for c in contacts_data:
                 c_fish = clean_str(c.get('fish')) # Ba'zan fish ham kelishi mumkin
-                if c_fish or c.get('telefon'):
+                c_telefon = clean_str(c.get('telefon'))
+                if c_fish or c_telefon:
                     ContactPerson.objects.create(
                         application=loan,
                         fish=c_fish,
-                        telefon=clean_phone(c.get('telefon')),
+                        telefon=c_telefon,
                         qarindoshlik=clean_str(c.get('qarindoshlik'))
                     )
 
             # 3. Kredit Ma'lumotlari (Loan Details)
             l_d = data.get('loan') or {}
             details, _ = LoanDetails.objects.get_or_create(application=loan)
-            details.shartnoma_raqami = clean_str(l_d.get('shartnoma_raqami'))
+            details.shartnoma_raqami = clean_str(l_d.get('shartnoma_raqami')).upper() if l_d.get('shartnoma_raqami') else ''
             details.shartnoma_sanasi = parse_date(l_d.get('shartnoma_sanasi'))
             details.boshlanish_sanasi = parse_date(l_d.get('boshlanish_sanasi'))
             details.tugash_sanasi = parse_date(l_d.get('tugash_sanasi'))

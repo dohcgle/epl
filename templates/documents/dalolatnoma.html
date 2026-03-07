@@ -145,8 +145,8 @@
         garovga beruvchi O‘zbekiston Respublikasi fuqarosi
         <strong><span class="var">{{ collateral.owner_client.fish }}</span></strong> (3-tomon)
         o‘rtalarida,
-        <span class="var">{{ loan.details.shartnoma_sanasi|date:"d.m.Y" }}</span> y.dagi
-        № <span class="var">{{ loan.details.shartnoma_raqami }}</span>-BR-sonli Mikroqarz shartnomasiga muvofiq
+        <span class="var">{{ loan.details.shartnoma_sanasi|date:"d.m.Y" }}</span> yildagi
+        № <span class="var">{{ loan.details.shartnoma_raqami }}</span>-sonli Mikroqarz shartnomasiga muvofiq
         1-tomon 2-tomonga berilgan mikroqarz bo‘yicha ta’minot sifatida taqdim etilgan,
         3-tomonga mulk huquqi asosida tegishli bo‘lgan mulkning garov qiymatini kelishish muzokaralari o‘tkazildi.
     </p>
@@ -161,8 +161,8 @@
             </span>
         </strong>
         (2-tomon) o‘rtalarida,
-        <span class="var">{{ loan.details.shartnoma_sanasi|date:"d.m.Y" }}</span> y.dan
-        № <span class="var">{{ loan.details.shartnoma_raqami }}</span>-BR-sonli Mikroqarz shartnomasiga muvofiq
+        <span class="var">{{ loan.details.shartnoma_sanasi|date:"d.m.Y" }}</span> yildan
+        № <span class="var">{{ loan.details.shartnoma_raqami }}</span>-sonli Mikroqarz shartnomasiga muvofiq
         1-tomon 2-tomonga berilgan mikroqarz bo‘yicha ta’minot sifatida taqdim etilgan,
         2-tomonga mulk huquqi asosida tegishli bo‘lgan mulkning garov qiymatini kelishish muzokaralari o‘tkazildi.
     </p>
@@ -226,7 +226,7 @@
         ega bo‘lgan garov predmetini taqdim etadi,
         1-tomon esa ushbu garov predmetini <span class="var">{{ loan.details.shartnoma_sanasi|date:"d.m.Y" }}</span>
         yildagi
-        №<span class="var">{{ loan.id }}</span>-BR mikroqarz
+        №<span class="var">{{ loan.id }}</span> mikroqarz
         shartnomasi bo‘yicha berilgan mikroqarz bo‘yicha
         <strong><span class="var">{{ avto.bahosi|intcomma }}</span>
             (<span class="var">{{ avto.bahosi_soz }}</span>) so‘m</strong> bo‘lgan kelishilgan garov
@@ -382,6 +382,7 @@
         <tr>
             <td style="width: 35%; font-weight: bold;">
                 1-tomon:<br>
+                «PULLOL BUSINESS MIKROMOLIYA TASHKILOTI» MChJ <br>
                 <span class="var">{{ loan.financial_info.filial_nomi }}</span> boshlig‘i
             </td>
             <td style="width: 30%; text-align: center;">
@@ -415,7 +416,7 @@
             <td style="font-weight: bold;">
                 2-tomon:<br>
                 O‘zbekiston Respublikasi fuqarosi <br>
-                {% if garov_boshqa_shaxs %}Qarz oluvchi{% else %}Qarz oluvchi va Garovga beruvchi{% endif %}
+                
             </td>
             <td style="text-align: center;">
                 <div class="signature-line"></div>
@@ -432,7 +433,7 @@
             <td style="font-weight: bold;">
                 3-tomon:<br>
                 O‘zbekiston Respublikasi fuqarosi <br>
-                Garovga beruvchi
+                
             </td>
             <td style="text-align: center;">
                 <div class="signature-line"></div>
@@ -445,10 +446,7 @@
         {% endif %}
     </table>
 
-    <div class="footer-note">
-        № 202602386000102 06.01.2026 sanasidan xususiy faoliyat ko‘rsatuvchi notarius tomonidan BUXORO VILOYATI BUXORO
-        SHAHRI ASHXOBOD KO‘CHASI 1/3-UY SHARIPOV ZAFAR JO‘RABOYEVICH berilgan ishonchnomaga asosan.
-    </div>
+    
 
 </body>
 

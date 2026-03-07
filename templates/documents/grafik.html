@@ -178,21 +178,28 @@
                     </div>
                 </td>
                 <td style="text-align: left;">
-                    <strong><span class="var">{{ loan.client.fish }}</span></strong><br>
+                     <strong><span class="var">{{ loan.client.fish }}</span></strong><br>
                     Manzil: <span class="var">{{ loan.client.manzil }}</span><br>
-                    Pasport: <span class="var">{{ loan.client.pasport_seriya }}</span><br>
-                    Tel: <span class="var">{{ loan.client.telefon }}</span><br><br>
+                    Pasport: <span class="var">{{ loan.client.pasport_seriya }}</span>,
+                    <span class="var">{{ loan.client.pasport_berilgan }}</span> tomonidan berilgan.<br>
 
-                    {% if contact_1.fish %}
-                    <span class="var">{{ contact_1.get_qarindoshlik_display }}</span>: 
+                    <span class="var">Tel:</span>
+                    {% if loan.client.telefon %}
+                    <span class="var">{{ loan.client.telefon }}</span>
+                    {% endif %}<br>
+
+                    {% if contact_1 %}
+                    <span class="var">{{ contact_1.get_qarindoshlik_display }}</span>:
                     <span class="var">{{ contact_1.telefon }}</span><br>
                     {% endif %}
-                    {% if contact_2.fish %}
-                    <span class="var">{{ contact_2.get_qarindoshlik_display }}</span>: 
+
+                    {% if contact_2 %}
+                    <span class="var">{{ contact_2.get_qarindoshlik_display }}</span>:
                     <span class="var">{{ contact_2.telefon }}</span><br>
                     {% endif %}
-                    {% if contact_3.fish %}
-                    <span class="var">{{ contact_3.get_qarindoshlik_display }}</span>: 
+
+                    {% if contact_3 %}
+                    <span class="var">{{ contact_3.get_qarindoshlik_display }}</span>:
                     <span class="var">{{ contact_3.telefon }}</span><br>
                     {% endif %}
                     <br>
