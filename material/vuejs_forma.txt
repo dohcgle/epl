@@ -1,0 +1,22 @@
+5. Mijozning Moliyaviy Holati
+
+2. Mijoz bilan ulanish uchun aloqa ma'lumotlari:					
+- Uy telefoni raqami
+- Uyali telefon raqami
+- Ish telefoni raqami
+
+3. MIJOZNING ISH JOYI HAQIDA MA'LUMOT:					
+- Muassasa nomlanishi
+- Ro‘yxatdan o‘tish manzili
+- Lavozimi
+
+4. MIJOZNING OYLIK DAROMADLARI VA XARAJATLARI		
+Daromadlar:
+    - ish haqi (asosiy ish)
+    - ish haqi (o‘rindoshlik)
+    - boshqa daromadlar
+
+Xarajatlar:
+    - uy-joy va kommunal xizmatlar uchun to'lov
+    - oilaviy xarajatlar
+    - boshqa xarajatlar

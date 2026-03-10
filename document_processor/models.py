@@ -239,14 +239,36 @@ class FinancialInfo(models.Model):
 
     application = models.OneToOneField(LoanApplication, on_delete=models.CASCADE, related_name='financial_info', null=True, blank=True)
     
-    # Moliyaviy
+    # --- ALOQA MA'LUMOTLARI ---
+    aloqa_uy_tel = models.CharField("Uy telefoni raqami", max_length=50, blank=True, null=True)
+    aloqa_uyali_tel = models.CharField("Uyali telefon raqami", max_length=50, blank=True, null=True)
+    aloqa_ish_tel = models.CharField("Ish telefoni raqami", max_length=50, blank=True, null=True)
+
+    # --- ISH JOYI MA'LUMOTLARI ---
+    ish_muassasa = models.CharField("Muassasa nomlanishi", max_length=255, blank=True, null=True)
+    ish_manzil = models.CharField("Ro'yxatdan o'tish manzili", max_length=255, blank=True, null=True)
+    ish_lavozim = models.CharField("Lavozimi", max_length=150, blank=True, null=True)
+    
+    # Eski tizim bilan muvofiqlik uchun (ixtiyoriy saqlanadi)
     ish_joyi = models.TextField("Ish joyi va lavozimi", blank=True, null=True)
-    daromad = models.BigIntegerField("Oylik daromad", blank=True, null=True)
-    xarajatlar = models.BigIntegerField("Oylik xarajatlar", blank=True, null=True)
+
+    # --- DAROMADLAR ---
+    daromad_asosiy = models.BigIntegerField("Ish haqi (asosiy ish)", blank=True, null=True)
+    daromad_orindosh = models.BigIntegerField("Ish haqi (o'rindoshlik)", blank=True, null=True)
+    daromad_boshqa = models.BigIntegerField("Boshqa daromadlar", blank=True, null=True)
+    daromad = models.BigIntegerField("Jami daromad", blank=True, null=True) # Eski bilan compatibility
+
+    # --- XARAJATLAR ---
+    xarajat_kommunal = models.BigIntegerField("Uy-joy va kommunal", blank=True, null=True)
+    xarajat_oilaviy = models.BigIntegerField("Oilaviy xarajatlar", blank=True, null=True)
+    xarajat_boshqa = models.BigIntegerField("Boshqa xarajatlar", blank=True, null=True)
+    xarajatlar = models.BigIntegerField("Jami xarajatlar", blank=True, null=True) # Eski bilan compatibility
+
+    # --- MAJBURIYATLAR VA BOSHQA ---
     tahminiy_tolov = models.BigIntegerField("Tahminiy oylik to'lov", blank=True, null=True)
     majburiyatlar = models.TextField("Miyjud qarz majburiyatlari", blank=True, null=True)
 
-    # Tashkilot (Filial & MChJ)
+    # --- TASHKILOT (Filial & MChJ) ---
     filial_nomi = models.CharField("Filial nomi", max_length=100, choices=FILIAL_CHOICES, default='Buxoro filiali', null=True, blank=True)
     filial_boshligi = models.CharField("Filial boshlig'i F.I.Sh", max_length=255, blank=True, null=True)
     filial_boshligi_inisiali = models.CharField("Filial boshlig'i Inisiali", max_length=100, blank=True, null=True)

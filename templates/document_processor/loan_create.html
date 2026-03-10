@@ -1098,33 +1098,182 @@
                 <div :class="['step-container', { 'step-active': currentStep === 5 }]">
                     <div class="form-section">
                         <h4>5. Mijozning Moliyaviy Holati</h4>
-                        <div class="form-group">
-                            <label>Mijozning ish joyi va lavozimi <span class="text-danger">*</span></label>
-                            <input type="text" v-model="financial.ish_joyi" data-model="financial.ish_joyi"
-                                class="form-control text-uppercase">
-                        </div>
-                        <div class="row">
-                            <div class="col-md-4 form-group">
-                                <label>Oylik daromadi <span class="text-danger">*</span></label>
-                                <input type="text" v-model="financial.daromad" data-model="financial.daromad"
-                                    class="form-control money-mask">
+
+                        <!-- 1) Fieldset: Mijoz bilan bog'lanish uchun aloqa ma'lumotlari -->
+                        <fieldset class="border p-3 mb-4 rounded">
+                            <legend class="w-auto px-2 font-weight-bold text-primary" style="font-size: 1.1rem;">
+                                <i class="fas fa-phone-alt mr-2"></i>Mijoz bilan bog'lanish uchun aloqa ma'lumotlari
+                            </legend>
+                            <div class="row">
+                                <div class="col-md-4 form-group">
+                                    <label>Uy telefoni raqami</label>
+                                    <input type="text" v-model="financial.aloqa_uy_tel"
+                                        data-model="financial.aloqa_uy_tel" class="form-control phone-mask"
+                                        placeholder="+998 90 123-45-67">
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <label>Uyali telefon raqami <span class="text-danger">*</span></label>
+                                    <input type="text" v-model="financial.aloqa_uyali_tel"
+                                        data-model="financial.aloqa_uyali_tel" class="form-control phone-mask"
+                                        placeholder="+998 90 123-45-67">
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <label>Ish telefoni raqami</label>
+                                    <input type="text" v-model="financial.aloqa_ish_tel"
+                                        data-model="financial.aloqa_ish_tel" class="form-control phone-mask"
+                                        placeholder="+998 90 123-45-67">
+                                </div>
                             </div>
-                            <div class="col-md-4 form-group">
-                                <label>Oylik xarajatlari <span class="text-danger">*</span></label>
-                                <input type="text" v-model="financial.xarajatlar" data-model="financial.xarajatlar"
-                                    class="form-control money-mask">
+                        </fieldset>
+
+                        <!-- 2) MIJOZNING ISH JOYI HAQIDA MA'LUMOT -->
+                        <fieldset class="border p-3 mb-4 rounded">
+                            <legend class="w-auto px-2 font-weight-bold text-success" style="font-size: 1.1rem;">
+                                <i class="fas fa-briefcase mr-2"></i>Mijozning ish joyi haqida ma'lumot
+                            </legend>
+                            <div class="row">
+                                <div class="col-md-4 form-group">
+                                    <label>Muassasa nomlanishi <span class="text-danger">*</span></label>
+                                    <input type="text" v-model="financial.ish_muassasa"
+                                        data-model="financial.ish_muassasa" class="form-control text-uppercase">
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <label>Ro'yxatdan o'tish manzili <span class="text-danger">*</span></label>
+                                    <input type="text" v-model="financial.ish_manzil" data-model="financial.ish_manzil"
+                                        class="form-control text-uppercase">
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <label>Lavozimi <span class="text-danger">*</span></label>
+                                    <input type="text" v-model="financial.ish_lavozim"
+                                        data-model="financial.ish_lavozim" class="form-control text-uppercase">
+                                </div>
                             </div>
-                            <div class="col-md-4 form-group">
-                                <label>Tahminiy oylik to'lovi <span class="text-danger">*</span></label>
-                                <input type="text" v-model="financial.tahminiy_tolov"
-                                    data-model="financial.tahminiy_tolov" class="form-control money-mask">
+
+                            <!-- Eski tizimdagi yashirin qo'llab-quvvatlanuvchi maydon (ish joyi) -->
+                            <div class="form-group d-none">
+                                <label>Mijozning ish joyi va lavozimi <span class="text-danger">*</span></label>
+                                <input type="text" v-model="financial.ish_joyi" data-model="financial.ish_joyi"
+                                    class="form-control text-uppercase">
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label>Mavjud majburiyatlari (agar bo'lsa) <span class="text-danger">*</span></label>
-                            <textarea v-model="financial.majburiyatlar" class="form-control" rows="2"
-                                data-model="financial.majburiyatlar"></textarea>
-                        </div>
+                        </fieldset>
+
+                        <!-- 3) MIJOZNING OYLIK DAROMADLARI VA XARAJATLARI -->
+                        <fieldset class="border p-3 mb-4 rounded">
+                            <legend class="w-auto px-2 font-weight-bold text-info" style="font-size: 1.1rem;">
+                                <i class="fas fa-wallet mr-2"></i>Mijozning oylik daromadlari va xarajatlari
+                            </legend>
+                            <div class="row">
+                                <!-- COLUMN 1: Daromadlar -->
+                                <div class="col-md-6 border-right">
+                                    <h5 class="text-center text-success font-weight-bold mb-3">Daromadlar</h5>
+
+                                    <div class="form-group row align-items-center">
+                                        <label class="col-sm-6 mb-0">Ish haqi (asosiy ish) <span
+                                                class="text-danger">*</span></label>
+                                        <div class="col-sm-6">
+                                            <input type="text" v-model="financial.daromad_asosiy"
+                                                data-model="financial.daromad_asosiy"
+                                                class="form-control money-mask text-right">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row align-items-center">
+                                        <label class="col-sm-6 mb-0">Ish haqi (o'rindoshlik)</label>
+                                        <div class="col-sm-6">
+                                            <input type="text" v-model="financial.daromad_orindosh"
+                                                data-model="financial.daromad_orindosh"
+                                                class="form-control money-mask text-right">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row align-items-center">
+                                        <label class="col-sm-6 mb-0">Boshqa daromadlar</label>
+                                        <div class="col-sm-6">
+                                            <input type="text" v-model="financial.daromad_boshqa"
+                                                data-model="financial.daromad_boshqa"
+                                                class="form-control money-mask text-right">
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <div class="form-group row align-items-center bg-light p-2 rounded">
+                                        <label class="col-sm-6 mb-0 font-weight-bold text-success">Daromadlar
+                                            jami:</label>
+                                        <div class="col-sm-6">
+                                            <input type="text"
+                                                :value="jamiDaromad.toLocaleString('uz-UZ').replace(/,/g, ' ')"
+                                                class="form-control text-right font-weight-bold form-control-plaintext"
+                                                readonly>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- COLUMN 2: Xarajatlar -->
+                                <div class="col-md-6">
+                                    <h5 class="text-center text-danger font-weight-bold mb-3">Xarajatlar</h5>
+
+                                    <div class="form-group row align-items-center">
+                                        <label class="col-sm-6 mb-0">Uy-joy va kommunal to'lovlar</label>
+                                        <div class="col-sm-6">
+                                            <input type="text" v-model="financial.xarajat_kommunal"
+                                                data-model="financial.xarajat_kommunal"
+                                                class="form-control money-mask text-right">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row align-items-center">
+                                        <label class="col-sm-6 mb-0">Oilaviy xarajatlar <span
+                                                class="text-danger">*</span></label>
+                                        <div class="col-sm-6">
+                                            <input type="text" v-model="financial.xarajat_oilaviy"
+                                                data-model="financial.xarajat_oilaviy"
+                                                class="form-control money-mask text-right">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row align-items-center">
+                                        <label class="col-sm-6 mb-0">Boshqa xarajatlar</label>
+                                        <div class="col-sm-6">
+                                            <input type="text" v-model="financial.xarajat_boshqa"
+                                                data-model="financial.xarajat_boshqa"
+                                                class="form-control money-mask text-right">
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <div class="form-group row align-items-center bg-light p-2 rounded">
+                                        <label class="col-sm-6 mb-0 font-weight-bold text-danger">Xarajatlar
+                                            jami:</label>
+                                        <div class="col-sm-6">
+                                            <input type="text"
+                                                :value="jamiXarajat.toLocaleString('uz-UZ').replace(/,/g, ' ')"
+                                                class="form-control text-right font-weight-bold form-control-plaintext"
+                                                readonly>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Eski tizimdagi yashirin qo'llab-quvvatlanuvchi maydonlar -->
+                            <div class="row mt-4 d-none">
+                                <div class="col-md-4 form-group">
+                                    <label>Oylik daromadi <span class="text-danger">*</span></label>
+                                    <input type="text" v-model="financial.daromad" data-model="financial.daromad"
+                                        class="form-control money-mask">
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <label>Oylik xarajatlari <span class="text-danger">*</span></label>
+                                    <input type="text" v-model="financial.xarajatlar" data-model="financial.xarajatlar"
+                                        class="form-control money-mask">
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <label>Tahminiy oylik to'lovi <span class="text-danger">*</span></label>
+                                    <input type="text" v-model="financial.tahminiy_tolov"
+                                        data-model="financial.tahminiy_tolov" class="form-control money-mask">
+                                </div>
+                            </div>
+
+                            <div class="form-group mt-3">
+                                <label>Mavjud majburiyatlari (agar bo'lsa) <span class="text-danger">*</span></label>
+                                <textarea v-model="financial.majburiyatlar" class="form-control" rows="2"
+                                    data-model="financial.majburiyatlar"></textarea>
+                            </div>
+                        </fieldset>
+
                     </div>
                     <div class="form-section">
                         <h4>6. Tashkilot Ma'lumotlari</h4>
@@ -1345,7 +1494,20 @@
                 filial_boshligi_inisiali: '',
                 tashkilot_nomi: '',
                 direktor_fish: '',
-                direktor_fish_inisiali: ''
+                direktor_fish_inisiali: '',
+                // Yangi maydonlar
+                aloqa_uy_tel: '',
+                aloqa_uyali_tel: '',
+                aloqa_ish_tel: '',
+                ish_muassasa: '',
+                ish_manzil: '',
+                ish_lavozim: '',
+                daromad_asosiy: '',
+                daromad_orindosh: '',
+                daromad_boshqa: '',
+                xarajat_kommunal: '',
+                xarajat_oilaviy: '',
+                xarajat_boshqa: ''
             });
 
             // Tanlovlar (Choices) - Djangodan mustaqil bo'lish uchun
@@ -1459,14 +1621,44 @@
                 const reqFinancial = [
                     'ish_joyi', 'daromad', 'xarajatlar', 'tahminiy_tolov', 'majburiyatlar',
                     'filial_nomi', 'filial_boshligi', 'filial_boshligi_inisiali',
-                    'tashkilot_nomi', 'direktor_fish', 'direktor_fish_inisiali'
+                    'tashkilot_nomi', 'direktor_fish', 'direktor_fish_inisiali',
+                    'aloqa_uyali_tel', 'ish_muassasa', 'ish_manzil', 'ish_lavozim'
                 ];
                 for (let field of reqFinancial) {
                     if (!financial.value[field] || String(financial.value[field]).trim() === '') {
                         return false;
                     }
                 }
+
+                // Number fields validation (asosiy daromad va ba'zi xarajatlar majburiy bo'lishi mumkin)
+                const reqNumFields = ['daromad_asosiy', 'xarajat_oilaviy'];
+                for (let f of reqNumFields) {
+                    if (financial.value[f] === null || financial.value[f] === undefined || String(financial.value[f]).trim() === '') {
+                        return false;
+                    }
+                }
                 return true;
+            });
+
+            // Daromadlar va Xarajatlar jami
+            const jamiDaromad = computed(() => {
+                const parseNum = (val) => {
+                    if (!val) return 0;
+                    return parseFloat(String(val).replace(/ /g, '')) || 0;
+                };
+                return parseNum(financial.value.daromad_asosiy) +
+                    parseNum(financial.value.daromad_orindosh) +
+                    parseNum(financial.value.daromad_boshqa);
+            });
+
+            const jamiXarajat = computed(() => {
+                const parseNum = (val) => {
+                    if (!val) return 0;
+                    return parseFloat(String(val).replace(/ /g, '')) || 0;
+                };
+                return parseNum(financial.value.xarajat_kommunal) +
+                    parseNum(financial.value.xarajat_oilaviy) +
+                    parseNum(financial.value.xarajat_boshqa);
             });
 
             // F.I.Sh kiritilganda inisialni avtomatik yasash
@@ -1689,7 +1881,9 @@
                 const reqFinancial = [
                     'ish_joyi', 'daromad', 'xarajatlar', 'tahminiy_tolov', 'majburiyatlar',
                     'filial_nomi', 'filial_boshligi', 'filial_boshligi_inisiali',
-                    'tashkilot_nomi', 'direktor_fish', 'direktor_fish_inisiali'
+                    'tashkilot_nomi', 'direktor_fish', 'direktor_fish_inisiali',
+                    'aloqa_uyali_tel', 'ish_muassasa', 'ish_manzil', 'ish_lavozim',
+                    'daromad_asosiy', 'xarajat_oilaviy'
                 ];
                 for (let field of reqFinancial) {
                     if (!financial.value[field]) {
@@ -1904,6 +2098,10 @@
                         "XALQ BANKI ATB",
                         "ENTER ENGINEERING PTE. LTD."
                     ];
+                    const lavozimList = [
+                        "HISOBCHI", "HAYDOVCHI", "MENEJJER", "MUHANDIS", "O'QITUVCHI",
+                        "SHIFOKOR", "BO'LIM BOSHLIG'I", "YURIST", "FARROSH", "QOROVUL"
+                    ];
                     const filialList = [
                         "TOSHKENT SHAHAR ASOSIY FILIALI",
                         "YUNUSOBOD FILIALI",
@@ -1921,19 +2119,51 @@
                     ];
 
                     const randomIsh = ishJoyiList[Math.floor(Math.random() * ishJoyiList.length)];
+                    const randomLavozim = lavozimList[Math.floor(Math.random() * lavozimList.length)];
                     const randomFilial = filialList[Math.floor(Math.random() * filialList.length)];
                     const randomMajburiyat = majburiyatList[Math.floor(Math.random() * majburiyatList.length)];
                     const randomBoshliq = getRandomNameObj();
 
-                    const daromadVal = (Math.floor(Math.random() * 10) + 5) * 1000000;
-                    const xarajatVal = Math.floor(daromadVal * (0.3 + Math.random() * 0.2));
-                    const tolovVal = 1000000 + (Math.floor(Math.random() * 5) * 500000);
+                    // Aloqa
+                    financial.value.aloqa_uy_tel = '+99871' + Math.floor(2000000 + Math.random() * 999999);
+                    financial.value.aloqa_uyali_tel = personal.value.telefon || ('+99890' + Math.floor(1000000 + Math.random() * 9000000));
+                    financial.value.aloqa_ish_tel = '+99871' + Math.floor(2000000 + Math.random() * 999999);
 
+                    // Ish joyi
+                    financial.value.ish_muassasa = randomIsh;
+                    financial.value.ish_manzil = getRandomManzil();
+                    financial.value.ish_lavozim = randomLavozim;
+
+                    // Eski yashirin maydonga ham yozib qo'yamiz (compatibility uchun)
                     financial.value.ish_joyi = randomIsh;
-                    financial.value.daromad = daromadVal.toLocaleString('uz-UZ').replace(/,/g, ' ');
-                    financial.value.xarajatlar = xarajatVal.toLocaleString('uz-UZ').replace(/,/g, ' ');
-                    financial.value.tahminiy_tolov = tolovVal.toLocaleString('uz-UZ').replace(/,/g, ' ');
+
+                    // Daromadlar
+                    const asosiyDaromad = (Math.floor(Math.random() * 10) + 5) * 1000000;
+                    const orindoshDaromad = Math.random() > 0.7 ? (Math.floor(Math.random() * 5) + 1) * 1000000 : null; // 30% ehtimollik
+                    const boshqaDaromad = Math.random() > 0.8 ? (Math.floor(Math.random() * 3) + 1) * 1000000 : null; // 20% ehtimollik
+
+                    financial.value.daromad_asosiy = asosiyDaromad.toLocaleString('uz-UZ').replace(/,/g, ' ');
+                    financial.value.daromad_orindosh = orindoshDaromad ? orindoshDaromad.toLocaleString('uz-UZ').replace(/,/g, ' ') : '';
+                    financial.value.daromad_boshqa = boshqaDaromad ? boshqaDaromad.toLocaleString('uz-UZ').replace(/,/g, ' ') : '';
+
+                    // Xarajatlar
+                    const kommunalXarajat = Math.floor((asosiyDaromad * 0.1) / 10000) * 10000;
+                    const oilaviyXarajat = Math.floor((asosiyDaromad * 0.4) / 10000) * 10000;
+                    const boshqaXarajat = Math.random() > 0.5 ? Math.floor((asosiyDaromad * 0.1) / 10000) * 10000 : null;
+
+                    financial.value.xarajat_kommunal = kommunalXarajat.toLocaleString('uz-UZ').replace(/,/g, ' ');
+                    financial.value.xarajat_oilaviy = oilaviyXarajat.toLocaleString('uz-UZ').replace(/,/g, ' ');
+                    financial.value.xarajat_boshqa = boshqaXarajat ? boshqaXarajat.toLocaleString('uz-UZ').replace(/,/g, ' ') : '';
+
                     financial.value.majburiyatlar = randomMajburiyat;
+
+                    // Eski maydonlar uchun ham jamilab tashlaymiz
+                    const jamiDaromadRandom = asosiyDaromad + (orindoshDaromad || 0) + (boshqaDaromad || 0);
+                    const jamiXarajatRandom = kommunalXarajat + oilaviyXarajat + (boshqaXarajat || 0);
+                    financial.value.daromad = jamiDaromadRandom.toLocaleString('uz-UZ').replace(/,/g, ' ');
+                    financial.value.xarajatlar = jamiXarajatRandom.toLocaleString('uz-UZ').replace(/,/g, ' ');
+                    const tolovVal = 1000000 + (Math.floor(Math.random() * 5) * 500000);
+                    financial.value.tahminiy_tolov = tolovVal.toLocaleString('uz-UZ').replace(/,/g, ' ');
 
                     financial.value.filial_nomi = randomFilial;
                     financial.value.filial_boshligi = randomBoshliq.fullName;
@@ -1996,7 +2226,8 @@
                 steps, stepTitles,
                 nextStep, prevStep, setOwnerType, submitForm, fillRandomStep,
                 kinshipChoices, loanTypeChoices, graphChoices, propertyTypeChoices,
-                borrowerFish, borrowerInitials, isStep1Valid, isStep2Valid, isStep3Valid, isStep4Valid, isStep5Valid
+                borrowerFish, borrowerInitials, isStep1Valid, isStep2Valid, isStep3Valid, isStep4Valid, isStep5Valid,
+                jamiDaromad, jamiXarajat
             };
         },
         delimiters: ['[[', ']]']

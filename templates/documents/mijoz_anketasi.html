@@ -131,27 +131,23 @@
         BOG'LANISH UCHUN ALOQA MA'LUMOTLARI:</div>
     <table style="border: none; margin-bottom: 15px;">
         <tr>
-            <td style="border: none; padding: 2px 0; width: 35%;">Mijoz:</td>
-            <td style="border: none; padding: 2px 0;" class="var">{{ loan.client.telefon }}</td>
-        </tr>
-        {% with contact1=loan.contacts.all.0 %}
-        <tr>
-            <td style="border: none; padding: 2px 0;">Kontakt 1:</td>
-            <td style="border: none; padding: 2px 0;"><span class="var">{{ contact1.telefon|default:"-" }}</span> 
-                {% if contact1 %}(<span class="var">{{ contact1.qarindoshlik|upper }}</span>)
-                {% endif %}
+            <td style="border: none; padding: 2px 0; width: 35%;">Uy telefoni raqami:</td>
+            <td style="border: none; padding: 2px 0;" class="var">
+                {{ loan.financial_info.aloqa_uy_tel|default:"-" }}
             </td>
         </tr>
-        {% endwith %}
-        {% with contact2=loan.contacts.all.1 %}
         <tr>
-            <td style="border: none; padding: 2px 0;">Kontakt 2:</td>
-            <td style="border: none; padding: 2px 0;"><span class="var">{{ contact2.telefon|default:"-" }}</span> 
-                {% if contact2 %}(<span class="var">{{ contact2.qarindoshlik|upper }}</span>)
-                {% endif %}
+            <td style="border: none; padding: 2px 0;">Uyali telefon raqami:</td>
+            <td style="border: none; padding: 2px 0;">
+                <span class="var">{{ loan.financial_info.aloqa_uyali_tel|default:"-" }}</span>
             </td>
         </tr>
-        {% endwith %}
+        <tr>
+            <td style="border: none; padding: 2px 0;">Ish telefoni raqami:</td>
+            <td style="border: none; padding: 2px 0;">
+                <span class="var">{{ loan.financial_info.aloqa_ish_tel|default:"-" }}</span>
+            </td>
+        </tr>
     </table>
 
     <!-- 3. Ish joyi ma'lumotlari -->
@@ -160,15 +156,27 @@
     <table style="border: none; margin-bottom: 15px;">
         <tr>
             <td style="border: none; padding: 2px 0; width: 35%;">Muassasa nomlanishi:</td>
-            <td style="border: none; padding: 2px 0;"><span class="var">{{ loan.financial_info.ish_joyi }}</span></td>
+            <td style="border: none; padding: 2px 0;">
+                <span class="var">
+                    {{ loan.financial_info.ish_muassasa|default:"-" }}
+                </span>
+            </td>
         </tr>
         <tr>
             <td style="border: none; padding: 2px 0;">Ro‘yxatdan o‘tish manzili:</td>
-            <td style="border: none; padding: 2px 0;">O'ZBEKISTON RESPUBLIKASI</td>
+            <td style="border: none; padding: 2px 0;">
+                <span class="var">
+                    {{ loan.financial_info.ish_manzil|default:"-" }}
+                </span>
+            </td>
         </tr>
         <tr>
             <td style="border: none; padding: 2px 0;">Lavozimi:</td>
-            <td style="border: none; padding: 2px 0;" class="var">-</td>
+            <td style="border: none; padding: 2px 0;" class="var">
+                <span class="var">
+                    {{ loan.financial_info.ish_lavozim|default:"-" }}
+                </span>
+            </td>
         </tr>
     </table>
 
@@ -186,36 +194,82 @@
         </tr>
         <tr>
             <td>ish haqi (asosiy ish)</td>
-            <td style="text-align: right;" class="var">{{ loan.financial_info.daromad|intcomma }}</td>
+            <td style="text-align: right;" class="var">
+                {% if loan.financial_info.daromad_asosiy %}
+                {{ loan.financial_info.daromad_asosiy|intcomma }}
+                {% else %}
+                    -
+                {% endif %}
+            </td>
             <td style="text-align: right;">-</td>
             <td style="text-align: right;">-</td>
             <td>uy-joy va kommunal xizmatlar uchun to'lov</td>
-            <td style="text-align: right;">-</td>
+            <td style="text-align: right;" class="var">
+                {% if loan.financial_info.xarajat_kommunal %}
+                {{ loan.financial_info.xarajat_kommunal|intcomma }}
+                {% else %}
+                -
+                {% endif %}
+            </td>
         </tr>
         <tr>
             <td>ish haqi (o‘rindoshlik)</td>
-            <td style="text-align: right;">-</td>
+            <td style="text-align: right;" class="var">
+                {% if loan.financial_info.daromad_orindosh %}
+                {{ loan.financial_info.daromad_orindosh|intcomma }}
+                {% else %}
+                -
+                {% endif %}
+            </td>
             <td style="text-align: right;">-</td>
             <td style="text-align: right;">-</td>
             <td>oilaviy xarajatlar</td>
-            <td style="text-align: right;" class="var">{{ loan.financial_info.xarajatlar|intcomma }}</td>
+            <td style="text-align: right;" class="var">
+                {% if loan.financial_info.xarajat_oilaviy %}
+                {{ loan.financial_info.xarajat_oilaviy|intcomma }}
+                {% else %}
+                -
+                {% endif %}
+            </td>
         </tr>
         <tr>
             <td>boshqa daromadlar</td>
-            <td style="text-align: right;">-</td>
+            <td style="text-align: right;" class="var">
+                {% if loan.financial_info.daromad_boshqa %}
+                {{ loan.financial_info.daromad_boshqa|intcomma }}
+                {% else %}
+                -
+                {% endif %}
+            </td>
             <td style="text-align: right;">-</td>
             <td style="text-align: right;">-</td>
             <td>boshqa xarajatlar</td>
-            <td style="text-align: right;">-</td>
+            <td style="text-align: right;" class="var">
+                {% if loan.financial_info.xarajat_boshqa %}
+                {{ loan.financial_info.xarajat_boshqa|intcomma }}
+                {% else %}
+                -
+                {% endif %}
+            </td>
         </tr>
         <tr>
             <th style="font-weight: bold;">JAMI</th>
-            <th style="text-align: right; font-weight: bold;" class="var">{{ loan.financial_info.daromad|intcomma }}
+            <th style="text-align: right; font-weight: bold;" class="var">
+                {% if loan.financial_info.daromad %}
+                {{ loan.financial_info.daromad|intcomma }}
+                {% else %}
+                    -
+                {% endif %}
             </th>
             <th style="text-align: right; font-weight: bold;">-</th>
             <th style="text-align: right; font-weight: bold;">-</th>
-            <th style="font-weight: bold;"></th>
-            <th style="text-align: right; font-weight: bold;" class="var">{{ loan.financial_info.xarajatlar|intcomma }}
+            <th style="font-weight: bold;">JAMI: </th>
+            <th style="text-align: right; font-weight: bold;" class="var">
+                {% if loan.financial_info.xarajatlar %}
+                {{ loan.financial_info.xarajatlar|intcomma }}
+                {% else %}
+                -
+                {% endif %}
             </th>
         </tr>
     </table>
@@ -243,9 +297,9 @@
                 <br><strong><span class="var">{{ loan.client.fish }}</span></strong>
             </td>
             <td style="border: none; width: 25%; text-align: center; padding: 0;">Sana: <br><strong>
-                <span class="var">
-                    {{loan.details.shartnoma_sanasi|date:"d.m.Y" }}
-                </span></strong>
+                    <span class="var">
+                        {{loan.details.shartnoma_sanasi|date:"d.m.Y" }}
+                    </span></strong>
             </td>
             <td style="border: none; width: 30%; text-align: left; padding: 0;">Imzo: <br>_____________________</td>
         </tr>

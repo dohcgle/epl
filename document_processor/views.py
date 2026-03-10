@@ -164,9 +164,29 @@ def create_loan_vue(request):
             # 4. FINANCIAL INFO yaratish
             FinancialInfo.objects.create(
                 application=application,
-                ish_joyi=clean_str(financial.get('ish_joyi')),
-                daromad=clean_int(financial.get('daromad')),
-                xarajatlar=clean_int(financial.get('xarajatlar')),
+                # Aloqa
+                aloqa_uy_tel=clean_str(financial.get('aloqa_uy_tel')),
+                aloqa_uyali_tel=clean_str(financial.get('aloqa_uyali_tel')),
+                aloqa_ish_tel=clean_str(financial.get('aloqa_ish_tel')),
+                
+                # Ish joyi
+                ish_muassasa=clean_str(financial.get('ish_muassasa')),
+                ish_manzil=clean_str(financial.get('ish_manzil')),
+                ish_lavozim=clean_str(financial.get('ish_lavozim')),
+                ish_joyi=clean_str(financial.get('ish_joyi')), # eski field
+                
+                # Daromad
+                daromad_asosiy=clean_int(financial.get('daromad_asosiy')),
+                daromad_orindosh=clean_int(financial.get('daromad_orindosh')),
+                daromad_boshqa=clean_int(financial.get('daromad_boshqa')),
+                daromad=clean_int(financial.get('daromad')), # eski jami
+                
+                # Xarajat
+                xarajat_kommunal=clean_int(financial.get('xarajat_kommunal')),
+                xarajat_oilaviy=clean_int(financial.get('xarajat_oilaviy')),
+                xarajat_boshqa=clean_int(financial.get('xarajat_boshqa')),
+                xarajatlar=clean_int(financial.get('xarajatlar')), # eski jami
+                
                 tahminiy_tolov=clean_int(financial.get('tahminiy_tolov')),
                 majburiyatlar=clean_str(financial.get('majburiyatlar')),
                 
@@ -447,6 +467,26 @@ def edit_loan(request, loan_id):
             financial.xarajatlar = clean_int(request.POST.get('qarz_oluvchi_xarajatlar'))
             financial.tahminiy_tolov = clean_int(request.POST.get('qarz_oluvchi_tahminiy_tolov'))
             financial.majburiyatlar = request.POST.get('qarz_oluvchi_majburiyatlar')
+
+            # Aloqa 
+            financial.aloqa_uy_tel = request.POST.get('qarz_oluvchi_aloqa_uy_tel')
+            financial.aloqa_uyali_tel = request.POST.get('qarz_oluvchi_aloqa_uyali_tel')
+            financial.aloqa_ish_tel = request.POST.get('qarz_oluvchi_aloqa_ish_tel')
+
+            # Ish joyi
+            financial.ish_muassasa = request.POST.get('qarz_oluvchi_ish_muassasa')
+            financial.ish_manzil = request.POST.get('qarz_oluvchi_ish_manzil')
+            financial.ish_lavozim = request.POST.get('qarz_oluvchi_ish_lavozim')
+
+            # Daromadlar
+            financial.daromad_asosiy = clean_int(request.POST.get('qarz_oluvchi_daromad_asosiy'))
+            financial.daromad_orindosh = clean_int(request.POST.get('qarz_oluvchi_daromad_orindosh'))
+            financial.daromad_boshqa = clean_int(request.POST.get('qarz_oluvchi_daromad_boshqa'))
+
+            # Xarajatlar
+            financial.xarajat_kommunal = clean_int(request.POST.get('qarz_oluvchi_xarajat_kommunal'))
+            financial.xarajat_oilaviy = clean_int(request.POST.get('qarz_oluvchi_xarajat_oilaviy'))
+            financial.xarajat_boshqa = clean_int(request.POST.get('qarz_oluvchi_xarajat_boshqa'))
             
             financial.filial_nomi = request.POST.get('filial_nomi')
             financial.filial_boshligi = request.POST.get('filial_boshligi')
@@ -614,6 +654,26 @@ def edit_loan(request, loan_id):
             'qarz_oluvchi_xarajatlar': financial.xarajatlar,
             'qarz_oluvchi_majburiyatlar': financial.majburiyatlar,
             'qarz_oluvchi_tahminiy_tolov': financial.tahminiy_tolov,
+
+            # Aloqa
+            'qarz_oluvchi_aloqa_uy_tel': financial.aloqa_uy_tel,
+            'qarz_oluvchi_aloqa_uyali_tel': financial.aloqa_uyali_tel,
+            'qarz_oluvchi_aloqa_ish_tel': financial.aloqa_ish_tel,
+
+            # Ish joyi
+            'qarz_oluvchi_ish_muassasa': financial.ish_muassasa,
+            'qarz_oluvchi_ish_manzil': financial.ish_manzil,
+            'qarz_oluvchi_ish_lavozim': financial.ish_lavozim,
+
+            # Daromad
+            'qarz_oluvchi_daromad_asosiy': financial.daromad_asosiy,
+            'qarz_oluvchi_daromad_orindosh': financial.daromad_orindosh,
+            'qarz_oluvchi_daromad_boshqa': financial.daromad_boshqa,
+
+            # Xarajat
+            'qarz_oluvchi_xarajat_kommunal': financial.xarajat_kommunal,
+            'qarz_oluvchi_xarajat_oilaviy': financial.xarajat_oilaviy,
+            'qarz_oluvchi_xarajat_boshqa': financial.xarajat_boshqa,
             
             'filial_nomi': financial.filial_nomi,
             'filial_boshligi': financial.filial_boshligi,
