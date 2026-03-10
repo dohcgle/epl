@@ -23,6 +23,13 @@ class Client(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     updated_at = models.DateTimeField(auto_now=True, null=True)
 
+    def save(self, *args, **kwargs):
+        if self.fish:
+            self.fish = self.fish.upper()
+        if self.fish_inisiali:
+            self.fish_inisiali = self.fish_inisiali.upper()
+        super().save(*args, **kwargs)
+
     class Meta:
         verbose_name = "Mijoz/Shaxs"
         verbose_name_plural = "Mijozlar/Shaxslar"
@@ -277,6 +284,17 @@ class FinancialInfo(models.Model):
     direktor_fish = models.CharField("Direktor F.I.Sh", max_length=255, default="OBIDOV ABDULLA SHOKIR O'G'LI", blank=True, null=True)
     direktor_fish_inisiali = models.CharField("Direktor Inisiali", max_length=100, default="A.SH.OBIDOV", blank=True, null=True)
 
+    def save(self, *args, **kwargs):
+        if self.direktor_fish:
+            self.direktor_fish = self.direktor_fish.upper()
+        if self.direktor_fish_inisiali:
+            self.direktor_fish_inisiali = self.direktor_fish_inisiali.upper()
+        if self.filial_boshligi:
+            self.filial_boshligi = self.filial_boshligi.upper()
+        if self.filial_boshligi_inisiali:
+            self.filial_boshligi_inisiali = self.filial_boshligi_inisiali.upper()
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return f"Financials for App #{self.application.id if self.application else 'Unknown'}"
 
@@ -332,6 +350,13 @@ class AutoCollateral(models.Model):
     
     bahosi = models.BigIntegerField("Baholangan qiymati", blank=True, null=True)
     bahosi_soz = models.CharField("Qiymat so'z bilan", max_length=255, blank=True, null=True)
+
+    def save(self, *args, **kwargs):
+        if self.nomi:
+            self.nomi = self.nomi.upper()
+        if self.davlat_raqami:
+            self.davlat_raqami = self.davlat_raqami.upper()
+        super().save(*args, **kwargs)
 
 
 # 6.2 Ko'chmas Mulk

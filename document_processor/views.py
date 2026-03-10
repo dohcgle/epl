@@ -130,10 +130,44 @@ def create_loan_vue(request):
                     pasport_berilgan=clean_str(personal.get('pasport_berilgan')),
                     jshshir=jshshir,
                     tugilgan_sana=parse_date(personal.get('tugilgan_sana')),
-                    jinsi=clean_str(personal.get('jinsi')),
+                    jinsi=clean_str(personal.get('jinsi')).lower() if personal.get('jinsi') else None,
                     telefon=clean_str(personal.get('telefon')),
                     manzil=clean_str(personal.get('manzil'))
                 )
+            else:
+                # Update existing client information with new form data
+                updated = False
+                n_fish = clean_str(personal.get('fish'))
+                if n_fish:
+                    client.fish = n_fish
+                    updated = True
+                n_fish_inisiali = clean_str(personal.get('fish_inisiali'))
+                if n_fish_inisiali:
+                    client.fish_inisiali = n_fish_inisiali
+                    updated = True
+                n_pb = clean_str(personal.get('pasport_berilgan'))
+                if n_pb:
+                    client.pasport_berilgan = n_pb
+                    updated = True
+                n_ts = parse_date(personal.get('tugilgan_sana'))
+                if n_ts:
+                    client.tugilgan_sana = n_ts
+                    updated = True
+                n_jinsi = clean_str(personal.get('jinsi')).lower() if personal.get('jinsi') else None
+                if n_jinsi:
+                    client.jinsi = n_jinsi
+                    updated = True
+                n_telefon = clean_str(personal.get('telefon'))
+                if n_telefon:
+                    client.telefon = n_telefon
+                    updated = True
+                n_manzil = clean_str(personal.get('manzil'))
+                if n_manzil:
+                    client.manzil = n_manzil
+                    updated = True
+                
+                if updated:
+                    client.save()
             
             # 2. LOAN APPLICATION yaratish
             application = LoanApplication.objects.create(
@@ -249,6 +283,41 @@ def create_loan_vue(request):
                          manzil=clean_str(collateral.get('owner_address')),
                          jinsi=clean_str(collateral.get('owner_gender')).lower() if collateral.get('owner_gender') else None
                      )
+                elif other_client:
+                     updated_other = False
+                     
+                     n_o_fish = clean_str(collateral.get('owner_fish'))
+                     if n_o_fish:
+                         other_client.fish = n_o_fish
+                         updated_other = True
+                         
+                     n_o_init = clean_str(collateral.get('owner_initials'))
+                     if n_o_init:
+                         other_client.fish_inisiali = n_o_init
+                         updated_other = True
+                         
+                     n_o_pb = clean_str(collateral.get('owner_passport_given_by'))
+                     if n_o_pb:
+                         other_client.pasport_berilgan = n_o_pb
+                         updated_other = True
+                         
+                     n_o_ts = parse_date(collateral.get('owner_birth_date'))
+                     if n_o_ts:
+                         other_client.tugilgan_sana = n_o_ts
+                         updated_other = True
+                         
+                     n_o_manzil = clean_str(collateral.get('owner_address'))
+                     if n_o_manzil:
+                         other_client.manzil = n_o_manzil
+                         updated_other = True
+                         
+                     n_o_jinsi = clean_str(collateral.get('owner_gender')).lower() if collateral.get('owner_gender') else None
+                     if n_o_jinsi:
+                         other_client.jinsi = n_o_jinsi
+                         updated_other = True
+                         
+                     if updated_other:
+                         other_client.save()
                 
                 if other_client:
                     owner_client = other_client
