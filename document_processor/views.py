@@ -20,6 +20,8 @@ from .models import (
     Collateral, AutoCollateral, RealEstateCollateral, GoldCollateral, InsuranceCollateral
 )
 
+from .utils import parse_date, clean_int, clean_float, clean_str, clean_phone
+
 # --- HELPER FUNCTIONS ---
 def is_operator(user):
     return user.groups.filter(name='Operator').exists() or user.is_superuser
@@ -29,36 +31,6 @@ def is_moderator(user):
 
 def is_director(user):
     return user.groups.filter(name='Director').exists() or user.is_superuser
-
-def parse_date(date_str):
-    if not date_str: return None
-    try:
-        return datetime.strptime(date_str.strip(), '%d.%m.%Y').date()
-    except:
-        return None
-
-def clean_int(val):
-    if not val: return None
-    try:
-        return int(float(str(val).replace(' ', '')))
-    except:
-        return None
-
-def clean_float(val):
-    if not val: return None
-    try:
-        return float(str(val).replace(' ', '').replace(',', '.'))
-    except:
-        return None
-
-def clean_str(val):
-    if val is None: return ''
-    return str(val).strip()
-
-def clean_phone(val):
-    if not val: return ''
-    # Faqat raqamlarni qoldiramiz
-    return ''.join(filter(str.isdigit, str(val)))
 
 # --- VIEWS ---
 
@@ -79,12 +51,97 @@ def dashboard_view(request):
 
     recent_docs = loans.order_by('-created_at')[:10]
 
+    # Total Sum (Muvaffaqiyatli yoki barcha arizalar bo'yicha)
+    base_details_qs = LoanDetails.objects.filter(application__in=loans)
+    total_amount = base_details_qs.aggregate(Sum('miqdori'))['miqdori__sum'] or 0
+    total_amount = int(total_amount / 1000) # ming so'mda ifodalash uchun (shartga qarab o'zgartirish mumkin, template "ming so'm" deydi)
+
+    # 1. Age Chart (Yosh taqsimoti)
+    import json
+    from datetime import date
+    
+    age_labels = ['18-25', '26-35', '36-45', '46-55', '56+']
+    age_data = [0, 0, 0, 0, 0]
+    today = date.today()
+    
+    # We load clients related to the filtered loans
+    clients_qs = Client.objects.filter(loan_applications__in=loans).distinct()
+    for client in clients_qs:
+        if client.tugilgan_sana:
+            age = today.year - client.tugilgan_sana.year - ((today.month, today.day) < (client.tugilgan_sana.month, client.tugilgan_sana.day))
+            if 18 <= age <= 25: age_data[0] += 1
+            elif 26 <= age <= 35: age_data[1] += 1
+            elif 36 <= age <= 45: age_data[2] += 1
+            elif 46 <= age <= 55: age_data[3] += 1
+            elif age >= 56: age_data[4] += 1
+
+    # 2. Duration Chart
+    duration_counts = base_details_qs.values('muddat_oy').annotate(count=Count('id')).order_by('muddat_oy')
+    duration_labels = [str(item['muddat_oy']) + ' oy' for item in duration_counts if item['muddat_oy']]
+    duration_data = [item['count'] for item in duration_counts if item['muddat_oy']]
+
+    # 3. Schedule Chart (Grafik)
+    schedule_counts = base_details_qs.values('grafik_turi').annotate(count=Count('id'))
+    schedule_labels = [item['grafik_turi'].capitalize() for item in schedule_counts if item['grafik_turi']]
+    schedule_data = [item['count'] for item in schedule_counts if item['grafik_turi']]
+
+    # 4. Credit Type Chart
+    credit_type_counts = base_details_qs.values('turi').annotate(count=Count('id'))
+    credit_type_labels = [item['turi'].capitalize() for item in credit_type_counts if item['turi']]
+    credit_type_data = [item['count'] for item in credit_type_counts if item['turi']]
+
+    # 5. Owner Chart (Garov Egasi)
+    collateral_qs = Collateral.objects.filter(application__in=loans)
+    owner_counts = collateral_qs.values('owner_type').annotate(count=Count('id'))
+    t_map = {
+        'borrower': "O'zi",
+        'other': "Boshqa shaxs",
+        'general_proxy': "Bosh ishonchnoma"
+    }
+    owner_labels = [t_map.get(item['owner_type'], item['owner_type']) for item in owner_counts if item['owner_type']]
+    owner_data = [item['count'] for item in owner_counts if item['owner_type']]
+
+    # 6. Collateral Chart (Garov Turi)
+    col_type_counts = collateral_qs.values('type').annotate(count=Count('id'))
+    col_map = dict(Collateral.COLLATERAL_TYPES)
+    collateral_labels = [col_map.get(item['type'], item['type']) for item in col_type_counts if item['type']]
+    collateral_data = [item['count'] for item in col_type_counts if item['type']]
+
+    # 7. Branch Chart (Filiallar)
+    financial_qs = FinancialInfo.objects.filter(application__in=loans)
+    branch_counts = financial_qs.values('filial_nomi').annotate(count=Count('id'))
+    branch_labels = [item['filial_nomi'] for item in branch_counts if item['filial_nomi']]
+    branch_data = [item['count'] for item in branch_counts if item['filial_nomi']]
+
     context = {
         'total_docs': total_docs,
         'pending_count': pending_count,
         'completed_count': completed_count,
         'rejected_count': rejected_count,
         'recent_docs': recent_docs,
+        'total_amount': total_amount,
+        
+        # JSON dumps for charts
+        'age_labels': json.dumps(age_labels),
+        'age_data': json.dumps(age_data),
+        
+        'duration_labels': json.dumps(duration_labels),
+        'duration_data': json.dumps(duration_data),
+        
+        'schedule_labels': json.dumps(schedule_labels),
+        'schedule_data': json.dumps(schedule_data),
+        
+        'credit_type_labels': json.dumps(credit_type_labels),
+        'credit_type_data': json.dumps(credit_type_data),
+        
+        'owner_labels': json.dumps(owner_labels),
+        'owner_data': json.dumps(owner_data),
+        
+        'collateral_labels': json.dumps(collateral_labels),
+        'collateral_data': json.dumps(collateral_data),
+        
+        'branch_labels': json.dumps(branch_labels),
+        'branch_data': json.dumps(branch_data),
     }
 
     return render(request, 'document_processor/dashboard.html', context)
@@ -221,7 +278,6 @@ def create_loan_vue(request):
                 xarajat_boshqa=clean_int(financial.get('xarajat_boshqa')),
                 xarajatlar=clean_int(financial.get('xarajatlar')), # eski jami
                 
-                tahminiy_tolov=clean_int(financial.get('tahminiy_tolov')),
                 majburiyatlar=clean_str(financial.get('majburiyatlar')),
                 
                 filial_nomi=clean_str(financial.get('filial_nomi')) or 'Buxoro filiali',
@@ -534,7 +590,6 @@ def edit_loan(request, loan_id):
             financial.ish_joyi = request.POST.get('qarz_oluvchi_ish_joyi')
             financial.daromad = clean_int(request.POST.get('qarz_oluvchi_daromad'))
             financial.xarajatlar = clean_int(request.POST.get('qarz_oluvchi_xarajatlar'))
-            financial.tahminiy_tolov = clean_int(request.POST.get('qarz_oluvchi_tahminiy_tolov'))
             financial.majburiyatlar = request.POST.get('qarz_oluvchi_majburiyatlar')
 
             # Aloqa 
@@ -722,7 +777,6 @@ def edit_loan(request, loan_id):
             'qarz_oluvchi_daromad': financial.daromad,
             'qarz_oluvchi_xarajatlar': financial.xarajatlar,
             'qarz_oluvchi_majburiyatlar': financial.majburiyatlar,
-            'qarz_oluvchi_tahminiy_tolov': financial.tahminiy_tolov,
 
             # Aloqa
             'qarz_oluvchi_aloqa_uy_tel': financial.aloqa_uy_tel,
@@ -1043,33 +1097,32 @@ def get_loan_data_api(request, loan_id):
     
     if collaterals:
         # Hamma garovlar bitta egaga yoki bitta ishonchnomaga bog'langan deb hisoblaymiz (soddalashtirilgan)
-        first_col = collaterals[0]
-        collateral_data["owner_type"] = first_col.egasi
+        collateral_data["owner_type"] = first_col.owner_type
         
-        if first_col.egasi != 'borrower':
+        if first_col.owner_type != 'borrower' and first_col.owner_client:
+            owner = first_col.owner_client
             collateral_data.update({
-                "owner_fish": first_col.uchinchi_shaxs_fish or '',
-                "owner_initials": first_col.uchinchi_shaxs_inisiali or '',
-                "owner_birth_date": first_col.uchinchi_shaxs_tug_sana.strftime('%d.%m.%Y') if first_col.uchinchi_shaxs_tug_sana else '',
-                "owner_passport": first_col.uchinchi_shaxs_pasport or '',
-                "owner_jshshir": first_col.uchinchi_shaxs_jshshir or '',
-                "owner_gender": first_col.uchinchi_shaxs_jinsi or '',
-                "owner_passport_given_by": first_col.uchinchi_shaxs_pasport_kim_tomondan or '',
-                "owner_address": first_col.uchinchi_shaxs_manzil or '',
+                "owner_fish": owner.fish or '',
+                "owner_initials": owner.fish_inisiali or '',
+                "owner_birth_date": owner.tugilgan_sana.strftime('%d.%m.%Y') if owner.tugilgan_sana else '',
+                "owner_passport": owner.pasport_seriya or '',
+                "owner_jshshir": owner.jshshir or '',
+                "owner_gender": owner.jinsi or '',
+                "owner_passport_given_by": owner.pasport_berilgan or '',
+                "owner_address": owner.manzil or '',
             })
             
-        if first_col.egasi == 'general_proxy' and hasattr(first_col, 'ishonchnoma'):
-            ishn = first_col.ishonchnoma
+        if first_col.owner_type == 'general_proxy':
             collateral_data.update({
-                "notarius_fish": ishn.notarius_fish or '',
-                "notarius_address": ishn.notarius_manzil or '',
-                "reestr_number": ishn.reestr_raqami or '',
-                "reestr_date": ishn.reestr_sanasi.strftime('%d.%m.%Y') if ishn.reestr_sanasi else '',
+                "notarius_fish": first_col.notarius_fish or '',
+                "notarius_address": first_col.notarius_address or '',
+                "reestr_number": first_col.reestr_number or '',
+                "reestr_date": first_col.reestr_date.strftime('%d.%m.%Y') if first_col.reestr_date else '',
             })
 
         for col in collaterals:
             # Avto
-            if col.turi == 'avto' and hasattr(col, 'auto_detail'):
+            if col.type == 'avto' and hasattr(col, 'auto_detail'):
                 auto = col.auto_detail
                 collateral_data["selected_types"].append("avto")
                 collateral_data.update({
@@ -1082,7 +1135,7 @@ def get_loan_data_api(request, loan_id):
                     "avto_bahosi": auto.bahosi or '', "avto_bahosi_soz": auto.bahosi_soz or '',
                 })
             # Mulk
-            elif col.turi == 'kochmas' and hasattr(col, 'real_estate_detail'):
+            elif col.type == 'kochmas' and hasattr(col, 'real_estate_detail'):
                 mulk = col.real_estate_detail
                 collateral_data["selected_types"].append("kochmas")
                 collateral_data.update({
@@ -1093,7 +1146,7 @@ def get_loan_data_api(request, loan_id):
                     "mulk_bahosi": mulk.bahosi or '', "mulk_bahosi_soz": mulk.bahosi_soz or '',
                 })
             # Tilla
-            elif col.turi == 'tilla' and hasattr(col, 'gold_detail'):
+            elif col.type == 'tilla' and hasattr(col, 'gold_detail'):
                 tilla = col.gold_detail
                 collateral_data["selected_types"].append("tilla")
                 collateral_data.update({
@@ -1102,7 +1155,7 @@ def get_loan_data_api(request, loan_id):
                     "tilla_bahosi": tilla.bahosi or '', "tilla_bahosi_soz": tilla.bahosi_soz or ''
                 })
             # Sugurta
-            elif col.turi == 'sugurta' and hasattr(col, 'insurance_detail'):
+            elif col.type == 'sugurta' and hasattr(col, 'insurance_detail'):
                 sugurta = col.insurance_detail
                 collateral_data["selected_types"].append("sugurta")
                 collateral_data.update({
@@ -1117,12 +1170,28 @@ def get_loan_data_api(request, loan_id):
     financial_data = {}
     if financial:
         financial_data = {
-            "ish_joyi": financial.ish_joyi, "daromad": financial.daromadi,
-            "xarajatlar": financial.xarajatlari, "tahminiy_tolov": financial.kredit_tolovi,
-            "majburiyatlar": financial.boshqa_majburiyatlar, "tashkilot_nomi": loan.tashkilot_nomi,
-            "direktor_fish": loan.direktor_fish, "direktor_fish_inisiali": loan.direktor_inisiali,
-            "filial_nomi": loan.filial_nomi or '', "filial_boshligi": loan.filial_boshligi_fish or '',
-            "filial_boshligi_inisiali": loan.filial_boshligi_inisiali or ''
+            "ish_joyi": financial.ish_joyi,
+            "ish_muassasa": financial.ish_muassasa or '',
+            "ish_manzil": financial.ish_manzil or '',
+            "ish_lavozim": financial.ish_lavozim or '',
+            "aloqa_uy_tel": financial.aloqa_uy_tel or '',
+            "aloqa_uyali_tel": financial.aloqa_uyali_tel or '',
+            "aloqa_ish_tel": financial.aloqa_ish_tel or '',
+            "daromad_asosiy": financial.daromad_asosiy,
+            "daromad_orindosh": financial.daromad_orindosh,
+            "daromad_boshqa": financial.daromad_boshqa,
+            "daromad": financial.daromad,
+            "xarajat_kommunal": financial.xarajat_kommunal,
+            "xarajat_oilaviy": financial.xarajat_oilaviy,
+            "xarajat_boshqa": financial.xarajat_boshqa,
+            "xarajatlar": financial.xarajatlar,
+            "majburiyatlar": financial.majburiyatlar,
+            "tashkilot_nomi": financial.tashkilot_nomi,
+            "direktor_fish": financial.direktor_fish,
+            "direktor_fish_inisiali": financial.direktor_fish_inisiali,
+            "filial_nomi": financial.filial_nomi or '',
+            "filial_boshligi": financial.filial_boshligi or '',
+            "filial_boshligi_inisiali": financial.filial_boshligi_inisiali or ''
         }
     data["financial"] = financial_data
     
@@ -1187,10 +1256,26 @@ def edit_loan_vue_api(request, loan_id):
             f_data = data.get('financial') or {}
             fin_info, _ = FinancialInfo.objects.get_or_create(application=loan)
             fin_info.ish_joyi = clean_str(f_data.get('ish_joyi'))
+            fin_info.ish_muassasa = clean_str(f_data.get('ish_muassasa'))
+            fin_info.ish_manzil = clean_str(f_data.get('ish_manzil'))
+            fin_info.ish_lavozim = clean_str(f_data.get('ish_lavozim'))
+            
+            fin_info.aloqa_uy_tel = clean_str(f_data.get('aloqa_uy_tel'))
+            fin_info.aloqa_uyali_tel = clean_str(f_data.get('aloqa_uyali_tel'))
+            fin_info.aloqa_ish_tel = clean_str(f_data.get('aloqa_ish_tel'))
+
+            fin_info.daromad_asosiy = clean_int(f_data.get('daromad_asosiy'))
+            fin_info.daromad_orindosh = clean_int(f_data.get('daromad_orindosh'))
+            fin_info.daromad_boshqa = clean_int(f_data.get('daromad_boshqa'))
             fin_info.daromad = clean_int(f_data.get('daromad'))
+
+            fin_info.xarajat_kommunal = clean_int(f_data.get('xarajat_kommunal'))
+            fin_info.xarajat_oilaviy = clean_int(f_data.get('xarajat_oilaviy'))
+            fin_info.xarajat_boshqa = clean_int(f_data.get('xarajat_boshqa'))
             fin_info.xarajatlar = clean_int(f_data.get('xarajatlar'))
-            fin_info.tahminiy_tolov = clean_int(f_data.get('tahminiy_tolov'))
+
             fin_info.majburiyatlar = clean_str(f_data.get('majburiyatlar'))
+            
             fin_info.filial_nomi = clean_str(f_data.get('filial_nomi')) or fin_info.filial_nomi
             fin_info.filial_boshligi = clean_str(f_data.get('filial_boshligi'))
             fin_info.filial_boshligi_inisiali = clean_str(f_data.get('filial_boshligi_inisiali'))

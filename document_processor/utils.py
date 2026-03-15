@@ -1,3 +1,35 @@
+from datetime import datetime
+import re
+
+def parse_date(date_str):
+    if not date_str: return None
+    if isinstance(date_str, datetime): return date_str.date()
+    try:
+        return datetime.strptime(date_str.strip(), '%d.%m.%Y').date()
+    except:
+        return None
+
+def clean_int(val):
+    if not val: return None
+    try:
+        return int(float(str(val).replace(' ', '').replace('\u00A0', '')))
+    except:
+        return None
+
+def clean_float(val):
+    if not val: return None
+    try:
+        return float(str(val).replace(' ', '').replace('\u00A0', '').replace(',', '.'))
+    except:
+        return None
+
+def clean_str(val):
+    if val is None: return ''
+    return str(val).strip()
+
+def clean_phone(val):
+    if not val: return ''
+    return ''.join(filter(str.isdigit, str(val)))
 
 import qrcode
 import io

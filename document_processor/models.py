@@ -272,7 +272,6 @@ class FinancialInfo(models.Model):
     xarajatlar = models.BigIntegerField("Jami xarajatlar", blank=True, null=True) # Eski bilan compatibility
 
     # --- MAJBURIYATLAR VA BOSHQA ---
-    tahminiy_tolov = models.BigIntegerField("Tahminiy oylik to'lov", blank=True, null=True)
     majburiyatlar = models.TextField("Miyjud qarz majburiyatlari", blank=True, null=True)
 
     # --- TASHKILOT (Filial & MChJ) ---

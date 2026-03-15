@@ -390,31 +390,31 @@
                                 <div class="row">
                                     <div class="col-md-4 form-group">
                                         <label>Qarz oluvchi F.I.Sh <span class="text-danger">*</span></label>
-                                        <input type="text" v-model="personal.fish" class="form-control text-uppercase"
-                                            placeholder="Masalan: HAMROYEV BOBUR RAVSHANOVICH">
+                                        <input type="text" v-model="personal.fish" class="form-control"
+                                            placeholder="Masalan: HAMROYEV BOBUR RAVSHANOVICH"
+                                            v-uppercase>
                                     </div>
                                     <div class="col-md-2 form-group">
                                         <label>F.I.Sh inisiali <span class="text-danger">*</span></label>
                                         <input type="text" v-model="personal.fish_inisiali"
-                                            class="form-control text-uppercase">
+                                            class="form-control" v-uppercase>
                                     </div>
                                     <div class="col-md-3 form-group">
                                         <label>Pasport seriya va raqami <span class="text-danger">*</span></label>
                                         <input type="text" v-model="personal.pasport_seriya"
-                                            data-model="personal.pasport_seriya"
-                                            class="form-control text-uppercase passport-mask">
+                                            class="form-control" v-uppercase v-mask="'AA9999999'">
                                     </div>
                                     <div class="col-md-3 form-group">
                                         <label>JSHSHIR (14 ta raqam) <span class="text-danger">*</span></label>
-                                        <input type="text" v-model="personal.jshshir" data-model="personal.jshshir"
-                                            class="form-control jshshir-mask">
+                                        <input type="text" v-model="personal.jshshir"
+                                            class="form-control" v-mask="'99999999999999'">
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-4 form-group">
                                         <label>Tug'ilgan sanasi <span class="text-danger">*</span></label>
                                         <input type="text" v-model="personal.tugilgan_sana"
-                                            data-model="personal.tugilgan_sana" class="form-control date-mask">
+                                            v-mask="'99.99.9999'" class="form-control">
                                     </div>
                                     <div class="col-md-4 form-group">
                                         <label>Jinsi <span class="text-danger">*</span></label>
@@ -426,8 +426,8 @@
                                     </div>
                                     <div class="col-md-4 form-group">
                                         <label>Telefon raqami <span class="text-danger">*</span></label>
-                                        <input type="text" v-model="personal.telefon" data-model="personal.telefon"
-                                            class="form-control phone-mask">
+                                        <input type="text" v-model="personal.telefon"
+                                            v-mask="'+\\9\\98 99 999-99-99'" class="form-control">
                                     </div>
                                 </div>
                                 <div class="row">
@@ -435,12 +435,12 @@
                                         <label>Pasport berilgan joy (Kim tomondan) <span
                                                 class="text-danger">*</span></label>
                                         <input type="text" v-model="personal.pasport_berilgan"
-                                            class="form-control text-uppercase" data-model="personal.pasport_berilgan">
+                                            class="form-control" v-uppercase>
                                     </div>
                                     <div class="col-md-6 form-group">
                                         <label>Yashash manzili <span class="text-danger">*</span></label>
-                                        <input type="text" v-model="personal.manzil" class="form-control text-uppercase"
-                                            data-model="personal.manzil">
+                                        <input type="text" v-model="personal.manzil" class="form-control"
+                                            v-uppercase>
                                     </div>
                                 </div>
                             </div>
@@ -456,13 +456,12 @@
                                         <div class="col-md-6 form-group">
                                             <label>Telefoni <span class="text-danger">*</span></label>
                                             <input type="text" v-model="contact.telefon"
-                                                :data-model="'contacts[' + index + '].telefon'"
-                                                class="form-control phone-mask">
+                                                v-mask="'+\\9\\98 99 999-99-99'"
+                                                class="form-control">
                                         </div>
                                         <div class="col-md-6 form-group">
                                             <label>Qarindoshligi <span class="text-danger">*</span></label>
                                             <select v-model="contact.qarindoshlik"
-                                                :data-model="'contacts[' + index + '].qarindoshlik'"
                                                 class="form-control">
                                                 <option value="">Tanlang...</option>
                                                 <option v-for="c in kinshipChoices" :key="c.val" :value="c.val">[[
@@ -482,69 +481,67 @@
                                     <div class="col-md-6 form-group">
                                         <label>Shartnoma raqami <span class="text-danger">*</span></label>
                                         <input type="text" v-model="loan.shartnoma_raqami"
-                                            data-model="loan.shartnoma_raqami" class="form-control text-uppercase">
+                                            class="form-control" v-uppercase>
                                     </div>
                                     <div class="col-md-4 form-group">
                                         <label>Shartnoma sanasi <span class="text-danger">*</span></label>
                                         <input type="text" v-model="loan.shartnoma_sanasi"
-                                            data-model="loan.shartnoma_sanasi" class="form-control date-mask">
+                                            v-mask="'99.99.9999'" class="form-control">
                                     </div>
                                     <div class="col-md-4 form-group">
                                         <label>Boshlanish sanasi <span class="text-danger">*</span></label>
                                         <input type="text" v-model="loan.boshlanish_sanasi"
-                                            data-model="loan.boshlanish_sanasi" class="form-control date-mask">
+                                            v-mask="'99.99.9999'" class="form-control">
                                     </div>
                                     <div class="col-md-4 form-group">
                                         <label>Tugash sanasi <span class="text-danger">*</span></label>
-                                        <input type="text" v-model="loan.tugash_sanasi" data-model="loan.tugash_sanasi"
-                                            class="form-control date-mask">
+                                        <input type="text" v-model="loan.tugash_sanasi"
+                                            v-mask="'99.99.9999'" class="form-control">
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6 form-group">
                                         <label>Kredit miqdori <span class="text-danger">*</span></label>
-                                        <input type="text" v-model="loan.miqdori" data-model="loan.miqdori"
-                                            class="form-control money-mask">
+                                        <input type="text" v-model="loan.miqdori"
+                                            v-mask="{ alias: 'numeric', groupSeparator: ' ', autoGroup: true, digits: 0, rightAlign: false }"
+                                            class="form-control">
                                     </div>
                                     <div class="col-md-6 form-group">
                                         <label>Miqdori so'z bilan <span class="text-danger">*</span></label>
                                         <input type="text" v-model="loan.miqdori_soz"
-                                            class="form-control text-uppercase" data-model="loan.miqdori_soz">
+                                            class="form-control" v-uppercase>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-3 form-group">
                                         <label>Muddati (oy) <span class="text-danger">*</span></label>
-                                        <input type="number" v-model="loan.muddat_oy" class="form-control"
-                                            data-model="loan.muddat_oy">
+                                        <input type="number" v-model="loan.muddat_oy" class="form-control">
                                     </div>
                                     <div class="col-md-3 form-group">
                                         <label>Muddati so'z bilan <span class="text-danger">*</span></label>
                                         <input type="text" v-model="loan.muddat_oy_soz"
-                                            class="form-control text-uppercase" data-model="loan.muddat_oy_soz">
+                                            class="form-control" v-uppercase>
                                     </div>
                                     <div class="col-md-3 form-group">
                                         <label>Foiz stavkasi (%) <span class="text-danger">*</span></label>
-                                        <input type="text" v-model="loan.foiz" class="form-control"
-                                            data-model="loan.foiz">
+                                        <input type="text" v-model="loan.foiz" class="form-control">
                                     </div>
                                     <div class="col-md-3 form-group">
                                         <label>Foizi so'z bilan <span class="text-danger">*</span></label>
-                                        <input type="text" v-model="loan.foiz_soz" class="form-control text-uppercase"
-                                            data-model="loan.foiz_soz">
+                                        <input type="text" v-model="loan.foiz_soz" class="form-control" v-uppercase>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6 form-group">
                                         <label>Kredit turi <span class="text-danger">*</span></label>
-                                        <select v-model="loan.turi" class="form-control" data-model="loan.turi">
+                                        <select v-model="loan.turi" class="form-control">
                                             <option v-for="type in loanTypeChoices" :key="type.val" :value="type.val">[[
                                                 type.label ]]</option>
                                         </select>
                                     </div>
                                     <div class="col-md-6 form-group">
                                         <label>Grafik turi <span class="text-danger">*</span></label>
-                                        <select v-model="loan.grafik" class="form-control" data-model="loan.grafik">
+                                        <select v-model="loan.grafik" class="form-control">
                                             <option v-for="g in graphChoices" :key="g.val" :value="g.val">[[ g.label ]]
                                             </option>
                                         </select>
@@ -554,8 +551,7 @@
                             <div class="form-section">
                                 <div class="form-group">
                                     <label>Grafik matni <span class="text-danger">*</span></label>
-                                    <textarea v-model="loan.grafik_matni" class="form-control" rows="5"
-                                        data-model="loan.grafik_matni"></textarea>
+                                    <textarea v-model="loan.grafik_matni" class="form-control" rows="5"></textarea>
                                     <small class="form-text text-muted">Exceldan nusxa olingan grafikni
                                         bu yerga
                                         joylang.</small>
@@ -575,7 +571,7 @@
                                     <div class="selectable-group">
                                         <div class="selectable-item">
                                             <input type="radio" id="owner_borrower" value="borrower" v-model="ownerType"
-                                                data-model="ownerType">
+                                                @click="setOwnerType('borrower')">
                                             <label for="owner_borrower" class="selectable-card type-borrower">
                                                 <i class="fas fa-user-check"></i>
                                                 <span>Qarz oluvchi (O'zi)</span>
@@ -583,7 +579,7 @@
                                         </div>
                                         <div class="selectable-item">
                                             <input type="radio" id="owner_other" value="other" v-model="ownerType"
-                                                data-model="ownerType">
+                                                @click="setOwnerType('other')">
                                             <label for="owner_other" class="selectable-card type-other">
                                                 <i class="fas fa-user-friends"></i>
                                                 <span>Boshqa shaxs</span>
@@ -591,7 +587,7 @@
                                         </div>
                                         <div class="selectable-item">
                                             <input type="radio" id="owner_proxy" value="general_proxy"
-                                                v-model="ownerType" data-model="ownerType">
+                                                v-model="ownerType">
                                             <label for="owner_proxy" class="selectable-card type-proxy">
                                                 <i class="fas fa-file-contract"></i>
                                                 <span>Bosh ishonchnoma</span>
@@ -606,7 +602,7 @@
                                     <div class="selectable-group">
                                         <div class="selectable-item">
                                             <input type="checkbox" id="type_avto" value="avto"
-                                                v-model="selectedCollaterals" data-model="selectedCollaterals">
+                                                v-model="selectedCollaterals">
                                             <label for="type_avto" class="selectable-card type-avto">
                                                 <i class="fas fa-car"></i>
                                                 <span>Avtomobil</span>
@@ -614,7 +610,7 @@
                                         </div>
                                         <div class="selectable-item">
                                             <input type="checkbox" id="type_mulk" value="kochmas"
-                                                v-model="selectedCollaterals" data-model="selectedCollaterals">
+                                                v-model="selectedCollaterals">
                                             <label for="type_mulk" class="selectable-card type-mulk">
                                                 <i class="fas fa-building"></i>
                                                 <span>Ko'chmas mulk</span>
@@ -622,7 +618,7 @@
                                         </div>
                                         <div class="selectable-item">
                                             <input type="checkbox" id="type_tilla" value="tilla"
-                                                v-model="selectedCollaterals" data-model="selectedCollaterals">
+                                                v-model="selectedCollaterals">
                                             <label for="type_tilla" class="selectable-card type-tilla">
                                                 <i class="fas fa-coins"></i>
                                                 <span>Tilla buyumlar</span>
@@ -630,7 +626,7 @@
                                         </div>
                                         <div class="selectable-item">
                                             <input type="checkbox" id="type_sugurta" value="sugurta"
-                                                v-model="selectedCollaterals" data-model="selectedCollaterals">
+                                                v-model="selectedCollaterals">
                                             <label for="type_sugurta" class="selectable-card type-sugurta">
                                                 <i class="fas fa-shield-alt"></i>
                                                 <span>Sug'urta polisi</span>
@@ -655,24 +651,24 @@
                                     <div class="col-md-6 form-group">
                                         <label>Notarius F.I.Sh</label>
                                         <input type="text" v-model="collateral.notarius_fish"
-                                            class="form-control text-uppercase" data-model="collateral.notarius_fish">
+                                            class="form-control" v-uppercase>
                                     </div>
                                     <div class="col-md-6 form-group">
                                         <label>Notarius manzili</label>
                                         <input type="text" v-model="collateral.notarius_address" class="form-control"
-                                            data-model="collateral.notarius_address">
+                                            v-uppercase>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6 form-group">
                                         <label>Reestr raqami</label>
                                         <input type="text" v-model="collateral.reestr_number" class="form-control"
-                                            data-model="collateral.reestr_number">
+                                            v-uppercase>
                                     </div>
                                     <div class="col-md-6 form-group">
                                         <label>Reestr sanasi</label>
                                         <input type="text" v-model="collateral.reestr_date"
-                                            data-model="collateral.reestr_date" class="form-control date-mask">
+                                            v-mask="'99.99.9999'" class="form-control">
                                     </div>
                                 </div>
                             </div>
@@ -690,37 +686,35 @@
                                     <div class="col-md-8 form-group">
                                         <label>F.I.Sh</label>
                                         <input type="text" v-model="collateral.owner_fish"
-                                            class="form-control text-uppercase" data-model="collateral.owner_fish">
+                                            class="form-control" v-uppercase>
                                     </div>
                                     <div class="col-md-4 form-group">
                                         <label>F.I.Sh inisiali</label>
                                         <input type="text" v-model="collateral.owner_initials"
-                                            class="form-control text-uppercase" data-model="collateral.owner_initials">
+                                            class="form-control" v-uppercase>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-4 form-group">
                                         <label>Tug'ilgan sanasi</label>
                                         <input type="text" v-model="collateral.owner_birth_date"
-                                            data-model="collateral.owner_birth_date" class="form-control date-mask">
+                                            v-mask="'99.99.9999'" class="form-control">
                                     </div>
                                     <div class="col-md-4 form-group">
                                         <label>Pasport seriya va raqami</label>
                                         <input type="text" v-model="collateral.owner_passport"
-                                            data-model="collateral.owner_passport"
-                                            class="form-control text-uppercase passport-mask">
+                                            class="form-control" v-uppercase v-mask="'AA9999999'">
                                     </div>
                                     <div class="col-md-4 form-group">
                                         <label>JSHSHIR (14 ta raqam)</label>
                                         <input type="text" v-model="collateral.owner_jshshir"
-                                            data-model="collateral.owner_jshshir" class="form-control jshshir-mask">
+                                            v-mask="'99999999999999'" class="form-control">
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-4 form-group">
                                         <label>Jinsi</label>
-                                        <select v-model="collateral.owner_gender" class="form-control"
-                                            data-model="collateral.owner_gender">
+                                        <select v-model="collateral.owner_gender" class="form-control">
                                             <option value="">Tanlang</option>
                                             <option value="Erkak">Erkak</option>
                                             <option value="Ayol">Ayol</option>
@@ -729,14 +723,13 @@
                                     <div class="col-md-8 form-group">
                                         <label>Pasport berilgan joy (Kim tomondan)</label>
                                         <input type="text" v-model="collateral.owner_passport_given_by"
-                                            class="form-control text-uppercase"
-                                            data-model="collateral.owner_passport_given_by">
+                                            class="form-control" v-uppercase>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label>Yashash manzili</label>
                                     <input type="text" v-model="collateral.owner_address"
-                                        class="form-control text-uppercase" data-model="collateral.owner_address">
+                                        class="form-control" v-uppercase>
                                 </div>
                             </div>
                         </div>
@@ -754,37 +747,35 @@
                                     <div class="col-md-8 form-group">
                                         <label>F.I.Sh</label>
                                         <input type="text" v-model="collateral.owner_fish"
-                                            class="form-control text-uppercase" data-model="collateral.owner_fish">
+                                            class="form-control" v-uppercase>
                                     </div>
                                     <div class="col-md-4 form-group">
                                         <label>F.I.Sh inisiali</label>
                                         <input type="text" v-model="collateral.owner_initials"
-                                            class="form-control text-uppercase" data-model="collateral.owner_initials">
+                                            class="form-control" v-uppercase>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-4 form-group">
                                         <label>Tug'ilgan sanasi</label>
                                         <input type="text" v-model="collateral.owner_birth_date"
-                                            data-model="collateral.owner_birth_date" class="form-control date-mask">
+                                            v-mask="'99.99.9999'" class="form-control">
                                     </div>
                                     <div class="col-md-4 form-group">
                                         <label>Pasport seriya va raqami</label>
                                         <input type="text" v-model="collateral.owner_passport"
-                                            data-model="collateral.owner_passport"
-                                            class="form-control text-uppercase passport-mask">
+                                            v-mask="'AA9999999'" class="form-control" v-uppercase>
                                     </div>
                                     <div class="col-md-4 form-group">
                                         <label>JSHSHIR (14 ta raqam)</label>
                                         <input type="text" v-model="collateral.owner_jshshir"
-                                            data-model="collateral.owner_jshshir" class="form-control jshshir-mask">
+                                            v-mask="'99999999999999'" class="form-control">
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-4 form-group">
                                         <label>Jinsi</label>
-                                        <select v-model="collateral.owner_gender" class="form-control"
-                                            data-model="collateral.owner_gender">
+                                        <select v-model="collateral.owner_gender" class="form-control">
                                             <option value="">Tanlang</option>
                                             <option value="Erkak">Erkak</option>
                                             <option value="Ayol">Ayol</option>
@@ -793,14 +784,13 @@
                                     <div class="col-md-8 form-group">
                                         <label>Pasport berilgan joy (Kim tomondan)</label>
                                         <input type="text" v-model="collateral.owner_passport_given_by"
-                                            class="form-control text-uppercase"
-                                            data-model="collateral.owner_passport_given_by">
+                                            class="form-control" v-uppercase>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label>Yashash manzili</label>
                                     <input type="text" v-model="collateral.owner_address"
-                                        class="form-control text-uppercase" data-model="collateral.owner_address">
+                                        class="form-control" v-uppercase>
                                 </div>
                             </div>
                         </div>
@@ -827,87 +817,87 @@
                                     <div class="col-md-6 form-group">
                                         <label>Avtomobil nomi <span class="text-danger">*</span></label>
                                         <input type="text" v-model="collateral.avto_nomi"
-                                            class="form-control text-uppercase" placeholder="Masalan: CHEVROLET COBALT"
-                                            data-model="collateral.avto_nomi">
+                                            class="form-control" placeholder="Masalan: CHEVROLET COBALT"
+                                            v-uppercase>
                                     </div>
                                     <div class="col-md-6 form-group">
                                         <label>Kuzov turi <span class="text-danger">*</span></label>
                                         <input type="text" v-model="collateral.avto_kuzov_turi"
-                                            class="form-control text-uppercase" data-model="collateral.avto_kuzov_turi">
+                                            class="form-control" v-uppercase>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6 form-group">
                                         <label>Kuzov raqami <span class="text-danger">*</span></label>
                                         <input type="text" v-model="collateral.avto_kuzov"
-                                            class="form-control text-uppercase" data-model="collateral.avto_kuzov">
+                                            class="form-control" v-uppercase>
                                     </div>
                                     <div class="col-md-6 form-group">
                                         <label>Dvigatel raqami <span class="text-danger">*</span></label>
                                         <input type="text" v-model="collateral.avto_dvigatel"
-                                            class="form-control text-uppercase" data-model="collateral.avto_dvigatel">
+                                            class="form-control" v-uppercase>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6 form-group">
                                         <label>Shassi raqami <span class="text-danger">*</span></label>
                                         <input type="text" v-model="collateral.avto_shassi"
-                                            class="form-control text-uppercase" placeholder="RAKAMSIZ"
-                                            data-model="collateral.avto_shassi">
+                                            class="form-control" placeholder="RAKAMSIZ"
+                                            v-uppercase>
                                     </div>
                                     <div class="col-md-6 form-group">
                                         <label>Rangi <span class="text-danger">*</span></label>
                                         <input type="text" v-model="collateral.avto_rang"
-                                            class="form-control text-uppercase" data-model="collateral.avto_rang">
+                                            class="form-control" v-uppercase>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6 form-group">
                                         <label>Ishlab chiqarilgan yili <span class="text-danger">*</span></label>
-                                        <input type="number" v-model="collateral.avto_yil" class="form-control"
-                                            data-model="collateral.avto_yil">
+                                        <input type="number" v-model="collateral.avto_yil" class="form-control">
                                     </div>
                                     <div class="col-md-6 form-group">
                                         <label>Avtotransport egasi <span class="text-danger">*</span></label>
                                         <input type="text" v-model="collateral.avto_egasi"
-                                            class="form-control text-uppercase" data-model="collateral.avto_egasi">
+                                            class="form-control" v-uppercase>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6 form-group">
                                         <label>Texnik passport <span class="text-danger">*</span></label>
                                         <input type="text" v-model="collateral.avto_texpasport"
-                                            class="form-control text-uppercase" data-model="collateral.avto_texpasport">
+                                            class="form-control" v-uppercase>
                                     </div>
                                     <div class="col-md-6 form-group">
                                         <label>Texnik pasport berilgan sana <span class="text-danger">*</span></label>
                                         <input type="text" v-model="collateral.avto_texpasport_sana"
-                                            data-model="collateral.avto_texpasport_sana" class="form-control date-mask">
+                                            v-mask="'99.99.9999'" class="form-control">
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6 form-group">
                                         <label>Ro'yxatdan o'tgan manzili <span class="text-danger">*</span></label>
                                         <input type="text" v-model="collateral.avto_manzil"
-                                            class="form-control text-uppercase" data-model="collateral.avto_manzil">
+                                            class="form-control" v-uppercase>
                                     </div>
                                     <div class="col-md-6 form-group">
                                         <label>Davlat raqami <span class="text-danger">*</span></label>
                                         <input type="text" v-model="collateral.avto_raqam"
-                                            class="form-control text-uppercase" data-model="collateral.avto_raqam">
+                                            class="form-control" v-uppercase>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6 form-group">
                                         <label>Kelishilgan garov qiymati <span class="text-danger">*</span></label>
                                         <input type="text" v-model="collateral.avto_bahosi"
-                                            data-model="collateral.avto_bahosi" class="form-control money-mask">
+                                            v-mask="{ alias: 'numeric', groupSeparator: ' ', autoGroup: true, digits: 0, rightAlign: false }" 
+                                            class="form-control">
                                     </div>
                                     <div class="col-md-6 form-group">
                                         <label>Kelishilgan garov qiymati soz bilan <span
                                                 class="text-danger">*</span></label>
                                         <input type="text" v-model="collateral.avto_bahosi_soz"
-                                            class="form-control text-uppercase" data-model="collateral.avto_bahosi_soz">
+                                            class="form-control" v-uppercase>
                                     </div>
                                 </div>
                             </div>
@@ -925,58 +915,56 @@
                                     <div class="col-md-12 form-group">
                                         <label>Ko'chmas mulk nomi <span class="text-danger">*</span></label>
                                         <input type="text" v-model="collateral.mulk_turi"
-                                            class="form-control text-uppercase"
-                                            placeholder="Masalan: HOVLI UY, KVARTIRA" data-model="collateral.mulk_turi">
+                                            class="form-control"
+                                            placeholder="Masalan: HOVLI UY, KVARTIRA" v-uppercase>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6 form-group">
                                         <label>Umumiy yer maydoni <span class="text-danger">*</span></label>
                                         <input type="text" v-model="collateral.mulk_umumiy"
-                                            class="form-control text-uppercase" data-model="collateral.mulk_umumiy">
+                                            class="form-control" v-uppercase>
                                     </div>
                                     <div class="col-md-6 form-group">
                                         <label>Qurilish osti maydoni <span class="text-danger">*</span></label>
                                         <input type="text" v-model="collateral.mulk_qurilish"
-                                            class="form-control text-uppercase" data-model="collateral.mulk_qurilish">
+                                            class="form-control" v-uppercase>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6 form-group">
                                         <label>Umumiy foydalanish maydoni <span class="text-danger">*</span></label>
                                         <input type="text" v-model="collateral.mulk_foydalanish"
-                                            class="form-control text-uppercase"
-                                            data-model="collateral.mulk_foydalanish">
+                                            class="form-control" v-uppercase>
                                     </div>
                                     <div class="col-md-6 form-group">
                                         <label>Yashash maydoni <span class="text-danger">*</span></label>
                                         <input type="text" v-model="collateral.mulk_yashash"
-                                            class="form-control text-uppercase" data-model="collateral.mulk_yashash">
+                                            class="form-control" v-uppercase>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6 form-group">
                                         <label>Ko'chmas mulk egasi <span class="text-danger">*</span></label>
                                         <input type="text" v-model="collateral.mulk_egasi"
-                                            class="form-control text-uppercase" data-model="collateral.mulk_egasi">
+                                            class="form-control" v-uppercase>
                                     </div>
                                     <div class="col-md-6 form-group">
                                         <label>Reestr raqami <span class="text-danger">*</span></label>
                                         <input type="text" v-model="collateral.mulk_reestr_raqami"
-                                            class="form-control text-uppercase"
-                                            data-model="collateral.mulk_reestr_raqami">
+                                            class="form-control" v-uppercase>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6 form-group">
                                         <label>Kadastr raqami <span class="text-danger">*</span></label>
                                         <input type="text" v-model="collateral.mulk_kadastr"
-                                            class="form-control text-uppercase" data-model="collateral.mulk_kadastr">
+                                            class="form-control" v-uppercase>
                                     </div>
                                     <div class="col-md-6 form-group">
                                         <label>Manzili <span class="text-danger">*</span></label>
                                         <input type="text" v-model="collateral.mulk_manzil"
-                                            class="form-control text-uppercase" data-model="collateral.mulk_manzil">
+                                            class="form-control" v-uppercase>
                                     </div>
                                 </div>
                                 <!-- Qo'shimcha saqlanib qoladigan ustunlar yashirin emas lekin eskicha -->
@@ -984,13 +972,14 @@
                                     <div class="col-md-6 form-group">
                                         <label>Kelishilgan garov qiymati <span class="text-danger">*</span></label>
                                         <input type="text" v-model="collateral.mulk_bahosi"
-                                            data-model="collateral.mulk_bahosi" class="form-control money-mask">
+                                            v-mask="{ alias: 'numeric', groupSeparator: ' ', autoGroup: true, digits: 0, rightAlign: false }" 
+                                            class="form-control">
                                     </div>
                                     <div class="col-md-6 form-group">
                                         <label>Kelishilgan garov qiymati so'z bilan <span
                                                 class="text-danger">*</span></label>
                                         <input type="text" v-model="collateral.mulk_bahosi_soz"
-                                            class="form-control text-uppercase" data-model="collateral.mulk_bahosi_soz">
+                                            class="form-control" v-uppercase>
                                     </div>
                                 </div>
                             </div>
@@ -1006,38 +995,34 @@
                             <div class="card-body">
                                 <div class="form-group">
                                     <label>Buyum nomi va tavsifi</label>
-                                    <textarea v-model="collateral.tilla_nomi" class="form-control text-uppercase"
-                                        rows="2" placeholder="Masalan: TILLA ZANJIR, 585 PROBA..."
-                                        data-model="collateral.tilla_nomi"></textarea>
+                                    <textarea v-model="collateral.tilla_nomi" class="form-control"
+                                        v-uppercase rows="2" placeholder="Masalan: TILLA ZANJIR, 585 PROBA..."></textarea>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-4 form-group">
                                         <label>Probi (Tambasi)</label>
-                                        <input type="text" v-model="collateral.tilla_probi" class="form-control"
-                                            data-model="collateral.tilla_probi">
+                                        <input type="text" v-model="collateral.tilla_probi" class="form-control">
                                     </div>
                                     <div class="col-md-4 form-group">
                                         <label>Vazni (gramm)</label>
-                                        <input type="text" v-model="collateral.tilla_vazni" class="form-control"
-                                            data-model="collateral.tilla_vazni">
+                                        <input type="text" v-model="collateral.tilla_vazni" class="form-control">
                                     </div>
                                     <div class="col-md-4 form-group">
                                         <label>Soni</label>
-                                        <input type="number" v-model="collateral.tilla_soni" class="form-control"
-                                            data-model="collateral.tilla_soni">
+                                        <input type="number" v-model="collateral.tilla_soni" class="form-control">
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6 form-group">
                                         <label>Kelishilgan garov qiymati</label>
                                         <input type="text" v-model="collateral.tilla_bahosi"
-                                            data-model="collateral.tilla_bahosi" class="form-control money-mask">
+                                            v-mask="{ alias: 'numeric', groupSeparator: ' ', autoGroup: true, digits: 0, rightAlign: false }" 
+                                            class="form-control">
                                     </div>
                                     <div class="col-md-6 form-group">
                                         <label>Kelishilgan garov qiymati so'z bilan</label>
                                         <input type="text" v-model="collateral.tilla_bahosi_soz"
-                                            class="form-control text-uppercase"
-                                            data-model="collateral.tilla_bahosi_soz">
+                                            class="form-control" v-uppercase>
                                     </div>
                                 </div>
                             </div>
@@ -1054,31 +1039,31 @@
                                 <div class="form-group">
                                     <label>Sug'urta kompaniyasi nomi</label>
                                     <input type="text" v-model="collateral.sugurta_kompaniya"
-                                        class="form-control text-uppercase" data-model="collateral.sugurta_kompaniya">
+                                        class="form-control" v-uppercase>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6 form-group">
                                         <label>Polis seriya va raqami</label>
                                         <input type="text" v-model="collateral.sugurta_polisi"
-                                            class="form-control text-uppercase" data-model="collateral.sugurta_polisi">
+                                            class="form-control" v-uppercase>
                                     </div>
                                     <div class="col-md-6 form-group">
                                         <label>Polis berilgan sana</label>
                                         <input type="text" v-model="collateral.sugurta_sana"
-                                            data-model="collateral.sugurta_sana" class="form-control date-mask">
+                                            v-mask="'99.99.9999'" class="form-control">
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6 form-group">
                                         <label>Polis summasi</label>
                                         <input type="text" v-model="collateral.sugurta_summa"
-                                            data-model="collateral.sugurta_summa" class="form-control money-mask">
+                                            v-mask="{ alias: 'numeric', groupSeparator: ' ', autoGroup: true, digits: 0, rightAlign: false }" 
+                                            class="form-control">
                                     </div>
                                     <div class="col-md-6 form-group">
                                         <label>Polis summasi so'z bilan</label>
                                         <input type="text" v-model="collateral.sugurta_summa_soz"
-                                            class="form-control text-uppercase"
-                                            data-model="collateral.sugurta_summa_soz">
+                                            class="form-control" v-uppercase>
                                     </div>
                                 </div>
                             </div>
@@ -1108,19 +1093,19 @@
                                 <div class="col-md-4 form-group">
                                     <label>Uy telefoni raqami</label>
                                     <input type="text" v-model="financial.aloqa_uy_tel"
-                                        data-model="financial.aloqa_uy_tel" class="form-control phone-mask"
+                                        v-mask="'+\\9\\98 99 999-99-99'" class="form-control"
                                         placeholder="+998 90 123-45-67">
                                 </div>
                                 <div class="col-md-4 form-group">
                                     <label>Uyali telefon raqami <span class="text-danger">*</span></label>
                                     <input type="text" v-model="financial.aloqa_uyali_tel"
-                                        data-model="financial.aloqa_uyali_tel" class="form-control phone-mask"
+                                        v-mask="'+\\9\\98 99 999-99-99'" class="form-control"
                                         placeholder="+998 90 123-45-67">
                                 </div>
                                 <div class="col-md-4 form-group">
                                     <label>Ish telefoni raqami</label>
                                     <input type="text" v-model="financial.aloqa_ish_tel"
-                                        data-model="financial.aloqa_ish_tel" class="form-control phone-mask"
+                                        v-mask="'+\\9\\98 99 999-99-99'" class="form-control"
                                         placeholder="+998 90 123-45-67">
                                 </div>
                             </div>
@@ -1135,25 +1120,18 @@
                                 <div class="col-md-4 form-group">
                                     <label>Muassasa nomlanishi <span class="text-danger">*</span></label>
                                     <input type="text" v-model="financial.ish_muassasa"
-                                        data-model="financial.ish_muassasa" class="form-control text-uppercase">
+                                        class="form-control" v-uppercase>
                                 </div>
                                 <div class="col-md-4 form-group">
                                     <label>Ro'yxatdan o'tish manzili <span class="text-danger">*</span></label>
-                                    <input type="text" v-model="financial.ish_manzil" data-model="financial.ish_manzil"
-                                        class="form-control text-uppercase">
+                                    <input type="text" v-model="financial.ish_manzil"
+                                        class="form-control" v-uppercase>
                                 </div>
                                 <div class="col-md-4 form-group">
                                     <label>Lavozimi <span class="text-danger">*</span></label>
                                     <input type="text" v-model="financial.ish_lavozim"
-                                        data-model="financial.ish_lavozim" class="form-control text-uppercase">
+                                        class="form-control" v-uppercase>
                                 </div>
-                            </div>
-
-                            <!-- Eski tizimdagi yashirin qo'llab-quvvatlanuvchi maydon (ish joyi) -->
-                            <div class="form-group d-none">
-                                <label>Mijozning ish joyi va lavozimi <span class="text-danger">*</span></label>
-                                <input type="text" v-model="financial.ish_joyi" data-model="financial.ish_joyi"
-                                    class="form-control text-uppercase">
                             </div>
                         </fieldset>
 
@@ -1172,24 +1150,24 @@
                                                 class="text-danger">*</span></label>
                                         <div class="col-sm-6">
                                             <input type="text" v-model="financial.daromad_asosiy"
-                                                data-model="financial.daromad_asosiy"
-                                                class="form-control money-mask text-right">
+                                                v-mask="{ alias: 'numeric', groupSeparator: ' ', autoGroup: true, digits: 0, rightAlign: false }"
+                                                class="form-control text-right">
                                         </div>
                                     </div>
                                     <div class="form-group row align-items-center">
                                         <label class="col-sm-6 mb-0">Ish haqi (o'rindoshlik)</label>
                                         <div class="col-sm-6">
                                             <input type="text" v-model="financial.daromad_orindosh"
-                                                data-model="financial.daromad_orindosh"
-                                                class="form-control money-mask text-right">
+                                                v-mask="{ alias: 'numeric', groupSeparator: ' ', autoGroup: true, digits: 0, rightAlign: false }"
+                                                class="form-control text-right">
                                         </div>
                                     </div>
                                     <div class="form-group row align-items-center">
                                         <label class="col-sm-6 mb-0">Boshqa daromadlar</label>
                                         <div class="col-sm-6">
                                             <input type="text" v-model="financial.daromad_boshqa"
-                                                data-model="financial.daromad_boshqa"
-                                                class="form-control money-mask text-right">
+                                                v-mask="{ alias: 'numeric', groupSeparator: ' ', autoGroup: true, digits: 0, rightAlign: false }"
+                                                class="form-control text-right">
                                         </div>
                                     </div>
                                     <hr>
@@ -1213,8 +1191,8 @@
                                         <label class="col-sm-6 mb-0">Uy-joy va kommunal to'lovlar</label>
                                         <div class="col-sm-6">
                                             <input type="text" v-model="financial.xarajat_kommunal"
-                                                data-model="financial.xarajat_kommunal"
-                                                class="form-control money-mask text-right">
+                                                v-mask="{ alias: 'numeric', groupSeparator: ' ', autoGroup: true, digits: 0, rightAlign: false }"
+                                                class="form-control text-right">
                                         </div>
                                     </div>
                                     <div class="form-group row align-items-center">
@@ -1222,16 +1200,16 @@
                                                 class="text-danger">*</span></label>
                                         <div class="col-sm-6">
                                             <input type="text" v-model="financial.xarajat_oilaviy"
-                                                data-model="financial.xarajat_oilaviy"
-                                                class="form-control money-mask text-right">
+                                                v-mask="{ alias: 'numeric', groupSeparator: ' ', autoGroup: true, digits: 0, rightAlign: false }"
+                                                class="form-control text-right">
                                         </div>
                                     </div>
                                     <div class="form-group row align-items-center">
                                         <label class="col-sm-6 mb-0">Boshqa xarajatlar</label>
                                         <div class="col-sm-6">
                                             <input type="text" v-model="financial.xarajat_boshqa"
-                                                data-model="financial.xarajat_boshqa"
-                                                class="form-control money-mask text-right">
+                                                v-mask="{ alias: 'numeric', groupSeparator: ' ', autoGroup: true, digits: 0, rightAlign: false }"
+                                                class="form-control text-right">
                                         </div>
                                     </div>
                                     <hr>
@@ -1252,25 +1230,21 @@
                             <div class="row mt-4 d-none">
                                 <div class="col-md-4 form-group">
                                     <label>Oylik daromadi <span class="text-danger">*</span></label>
-                                    <input type="text" v-model="financial.daromad" data-model="financial.daromad"
-                                        class="form-control money-mask">
+                                    <input type="text" v-model="financial.daromad"
+                                        v-mask="{ alias: 'numeric', groupSeparator: ' ', autoGroup: true, digits: 0, rightAlign: false }"
+                                        class="form-control">
                                 </div>
                                 <div class="col-md-4 form-group">
                                     <label>Oylik xarajatlari <span class="text-danger">*</span></label>
-                                    <input type="text" v-model="financial.xarajatlar" data-model="financial.xarajatlar"
-                                        class="form-control money-mask">
-                                </div>
-                                <div class="col-md-4 form-group">
-                                    <label>Tahminiy oylik to'lovi <span class="text-danger">*</span></label>
-                                    <input type="text" v-model="financial.tahminiy_tolov"
-                                        data-model="financial.tahminiy_tolov" class="form-control money-mask">
+                                    <input type="text" v-model="financial.xarajatlar"
+                                        v-mask="{ alias: 'numeric', groupSeparator: ' ', autoGroup: true, digits: 0, rightAlign: false }"
+                                        class="form-control">
                                 </div>
                             </div>
 
                             <div class="form-group mt-3">
                                 <label>Mavjud majburiyatlari (agar bo'lsa) <span class="text-danger">*</span></label>
-                                <textarea v-model="financial.majburiyatlar" class="form-control" rows="2"
-                                    data-model="financial.majburiyatlar"></textarea>
+                                <textarea v-model="financial.majburiyatlar" class="form-control" rows="2"></textarea>
                             </div>
                         </fieldset>
 
@@ -1280,8 +1254,7 @@
                         <div class="row">
                             <div class="col-md-4 form-group">
                                 <label>Filial nomi <span class="text-danger">*</span></label>
-                                <select v-model="financial.filial_nomi" class="form-control text-uppercase"
-                                    data-model="financial.filial_nomi">
+                                <select v-model="financial.filial_nomi" class="form-control text-uppercase">
                                     <option value="">TALLANG...</option>
                                     <option value="BUXORO FILIALI">BUXORO FILIALI</option>
                                     <option value="URGANCH FILIALI">URGANCH FILIALI</option>
@@ -1291,29 +1264,29 @@
                             <div class="col-md-4 form-group">
                                 <label>Filial boshlig'i F.I.Sh <span class="text-danger">*</span></label>
                                 <input type="text" v-model="financial.filial_boshligi"
-                                    data-model="financial.filial_boshligi" class="form-control text-uppercase">
+                                    class="form-control" v-uppercase>
                             </div>
                             <div class="col-md-4 form-group">
                                 <label>Filial boshlig'i inisiali <span class="text-danger">*</span></label>
                                 <input type="text" v-model="financial.filial_boshligi_inisiali"
-                                    data-model="financial.filial_boshligi_inisiali" class="form-control text-uppercase">
+                                    class="form-control" v-uppercase>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-4 form-group">
                                 <label>Tashkilot nomi <span class="text-danger">*</span></label>
                                 <input type="text" v-model="financial.tashkilot_nomi"
-                                    data-model="financial.tashkilot_nomi" class="form-control text-uppercase">
+                                    class="form-control" v-uppercase>
                             </div>
                             <div class="col-md-4 form-group">
                                 <label>Direktor F.I.Sh <span class="text-danger">*</span></label>
                                 <input type="text" v-model="financial.direktor_fish"
-                                    data-model="financial.direktor_fish" class="form-control text-uppercase">
+                                    class="form-control" v-uppercase>
                             </div>
                             <div class="col-md-4 form-group">
                                 <label>Direktor inisiali <span class="text-danger">*</span></label>
                                 <input type="text" v-model="financial.direktor_fish_inisiali"
-                                    data-model="financial.direktor_fish_inisiali" class="form-control text-uppercase">
+                                    class="form-control" v-uppercase>
                             </div>
                         </div>
                     </div>
@@ -1374,7 +1347,7 @@
 {% block extra_js %}
 <script src="{% static 'js/vue.global.js' %}"></script>
 <script>
-    const { createApp, ref, computed, onMounted, watch } = Vue;
+    const { createApp, ref, computed, onMounted, watch, nextTick } = Vue;
 
     const app = createApp({
         setup() {
@@ -1484,17 +1457,15 @@
 
             // 5. Moliyaviy va Tashkilot
             const financial = ref({
-                ish_joyi: '',
                 daromad: '',
                 xarajatlar: '',
-                tahminiy_tolov: '',
                 majburiyatlar: '',
                 filial_nomi: '',
                 filial_boshligi: '',
                 filial_boshligi_inisiali: '',
-                tashkilot_nomi: '',
-                direktor_fish: '',
-                direktor_fish_inisiali: '',
+                tashkilot_nomi: '"PULLOL BUSINESS MIKROMOLIYA TASHKILOTI" MChJ',
+                direktor_fish: 'OBIDOV ABDULLA SHOKIR O\'G\'LI',
+                direktor_fish_inisiali: 'A.SH.OBIDOV',
                 // Yangi maydonlar
                 aloqa_uy_tel: '',
                 aloqa_uyali_tel: '',
@@ -1619,7 +1590,7 @@
             // Moliyaviy va Tashkilot ma'lumotlari to'ldirilganligini tekshirish
             const isStep5Valid = computed(() => {
                 const reqFinancial = [
-                    'ish_joyi', 'daromad', 'xarajatlar', 'tahminiy_tolov', 'majburiyatlar',
+                    'daromad', 'xarajatlar', 'majburiyatlar',
                     'filial_nomi', 'filial_boshligi', 'filial_boshligi_inisiali',
                     'tashkilot_nomi', 'direktor_fish', 'direktor_fish_inisiali',
                     'aloqa_uyali_tel', 'ish_muassasa', 'ish_manzil', 'ish_lavozim'
@@ -1661,9 +1632,23 @@
                     parseNum(financial.value.xarajat_boshqa);
             });
 
+            // Daromadlar va xarajatlarni jami maydonlarga sync qilish
+            watch(jamiDaromad, (newVal) => {
+                financial.value.daromad = newVal.toLocaleString('uz-UZ').replace(/,/g, ' ');
+            });
+
+            watch(jamiXarajat, (newVal) => {
+                financial.value.xarajatlar = newVal.toLocaleString('uz-UZ').replace(/,/g, ' ');
+            });
+
             // F.I.Sh kiritilganda inisialni avtomatik yasash
             watch(() => personal.value.fish, (newVal) => {
                 if (newVal) {
+                    // Force uppercase if updated programmatically
+                    if (newVal !== newVal.toUpperCase()) {
+                        personal.value.fish = newVal.toUpperCase();
+                    }
+                    
                     const parts = newVal.trim().split(/\s+/);
                     if (parts.length >= 3) {
                         // Kiritilgan F.I.Sh dan inisial: Ism_bosh_harfi.Otasining_ismi_bosh_harfi.Familiya
@@ -1730,6 +1715,13 @@
                     }
                 } else {
                     collateral.value.owner_initials = '';
+                }
+            });
+
+            // Avto egasi sync if ownerType is borrower
+            watch([() => personal.value.fish, ownerType], ([newFish, newOwnerType]) => {
+                if (newOwnerType === 'borrower') {
+                    collateral.value.avto_egasi = newFish;
                 }
             });
 
@@ -1879,7 +1871,7 @@
 
                 // VALIDATSIYA: Moliyaviy va Tashkilot ma'lumotlari
                 const reqFinancial = [
-                    'ish_joyi', 'daromad', 'xarajatlar', 'tahminiy_tolov', 'majburiyatlar',
+                    'daromad', 'xarajatlar', 'majburiyatlar',
                     'filial_nomi', 'filial_boshligi', 'filial_boshligi_inisiali',
                     'tashkilot_nomi', 'direktor_fish', 'direktor_fish_inisiali',
                     'aloqa_uyali_tel', 'ish_muassasa', 'ish_manzil', 'ish_lavozim',
@@ -2134,9 +2126,6 @@
                     financial.value.ish_manzil = getRandomManzil();
                     financial.value.ish_lavozim = randomLavozim;
 
-                    // Eski yashirin maydonga ham yozib qo'yamiz (compatibility uchun)
-                    financial.value.ish_joyi = randomIsh;
-
                     // Daromadlar
                     const asosiyDaromad = (Math.floor(Math.random() * 10) + 5) * 1000000;
                     const orindoshDaromad = Math.random() > 0.7 ? (Math.floor(Math.random() * 5) + 1) * 1000000 : null; // 30% ehtimollik
@@ -2163,7 +2152,7 @@
                     financial.value.daromad = jamiDaromadRandom.toLocaleString('uz-UZ').replace(/,/g, ' ');
                     financial.value.xarajatlar = jamiXarajatRandom.toLocaleString('uz-UZ').replace(/,/g, ' ');
                     const tolovVal = 1000000 + (Math.floor(Math.random() * 5) * 500000);
-                    financial.value.tahminiy_tolov = tolovVal.toLocaleString('uz-UZ').replace(/,/g, ' ');
+                    
 
                     financial.value.filial_nomi = randomFilial;
                     financial.value.filial_boshligi = randomBoshliq.fullName;
@@ -2178,46 +2167,6 @@
             onMounted(() => {
                 // Form elementlariga AdminLTE/Bootstrap classlarni qo'shish
                 $('input:not([type="checkbox"]), select, textarea').addClass('form-control');
-
-                // InputMask orqali maskalarni qo'llash
-                $('.phone-mask').inputmask("+\\9\\98 99 999-99-99");
-                $('.jshshir-mask').inputmask("99999999999999");
-                $('.passport-mask').inputmask("AA9999999");
-                $('.date-mask').inputmask("99.99.9999");
-
-                const numericOptions = { alias: "numeric", groupSeparator: " ", autoGroup: true, digits: 0, rightAlign: false };
-                $('.money-mask').inputmask(numericOptions);
-
-                // Inputmask tufayli VueJS xabardor bo'lishi uchun hodisalarni qo'shish
-                // Barcha [data-model] inputlarini qamrab olamiz
-                $('input[data-model], select[data-model], textarea[data-model]').on('input keyup change', function () {
-                    const val = $(this).val();
-                    let modelPath = $(this).attr('data-model');
-
-                    if (!modelPath) return;
-
-                    // Dinamik model yangilash
-                    const parts = modelPath.split('.');
-                    if (parts.length === 2) {
-                        const objName = parts[0];
-                        const propName = parts[1];
-
-                        // contacts[0].telefon kabi holatlar uchun
-                        if (objName.startsWith('contacts[')) {
-                            const match = objName.match(/contacts\[(\d+)\]/);
-                            if (match) {
-                                const idx = parseInt(match[1]);
-                                contacts.value[idx][propName] = val;
-                            }
-                        } else {
-                            // Oddiy obyektlar uchun: personal, loan, collateral, financial
-                            if (objName === 'personal') personal.value[propName] = val;
-                            if (objName === 'loan') loan.value[propName] = val;
-                            if (objName === 'collateral') collateral.value[propName] = val;
-                            if (objName === 'financial') financial.value[propName] = val;
-                        }
-                    }
-                });
             });
 
             return {
@@ -2231,6 +2180,55 @@
             };
         },
         delimiters: ['[[', ']]']
+    });
+
+    // --- VUE DIRECTIVES (PURE VUE, NO JQUERY SYNC) ---
+    
+    // 1. v-mask: Inputmask kutubxonasini Vue bilan bog'laydi
+    app.directive('mask', {
+        mounted(el, binding) {
+            const maskOptions = typeof binding.value === 'string' ? { mask: binding.value } : binding.value;
+            
+            // Inputmask obyektini yaratish va eventlarni Vue modeliga bog'lash
+            const im = new Inputmask({
+                ...maskOptions,
+                oncomplete: function() {
+                    el.dispatchEvent(new Event('input', { bubbles: true }));
+                },
+                onincomplete: function() {
+                    el.dispatchEvent(new Event('input', { bubbles: true }));
+                },
+                oncleared: function() {
+                    el.dispatchEvent(new Event('input', { bubbles: true }));
+                }
+            });
+            im.mask(el);
+        },
+        updated(el, binding) {
+            // Faqat binding qiymati (maska patterni) o'zgargandagina qayta murojaat qilamiz
+            if (JSON.stringify(binding.value) !== JSON.stringify(binding.oldValue)) {
+                const maskOptions = typeof binding.value === 'string' ? { mask: binding.value } : binding.value;
+                Inputmask(maskOptions).mask(el);
+            }
+        }
+    });
+
+    // 2. v-uppercase: Matnni avtomatik katta harflarga o'tkazadi
+    app.directive('uppercase', {
+        mounted(el) {
+            el.addEventListener('input', (event) => {
+                const start = el.selectionStart;
+                const end = el.selectionEnd;
+                const val = el.value.toUpperCase();
+                
+                if (el.value !== val) {
+                    el.value = val;
+                    el.setSelectionRange(start, end);
+                    // Vue modelni ogohlantirish (faqat kerak bo'lganda)
+                    el.dispatchEvent(new Event('input', { bubbles: true }));
+                }
+            });
+        }
     });
 
     app.mount('#app');

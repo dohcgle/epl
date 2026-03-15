@@ -8,6 +8,10 @@ from .views import (
         profile_view, view_document_pdf, delete_loan, edit_loan, create_loan_vue,
     get_loan_data_api, edit_loan_vue_api, edit_loan_vue_page
 )
+from .api_views import (
+    LoanApplicationCreateAPIView, LoanApplicationUpdateAPIView, LoanApplicationDetailAPIView
+)
+from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
 urlpatterns = [
     path('', dashboard_view, name='dashboard'),
@@ -30,6 +34,15 @@ urlpatterns = [
     path('loans/edit-vue/<int:loan_id>/', edit_loan_vue_page, name='edit_loan_vue_page'),
     path('api/loans/<int:loan_id>/', get_loan_data_api, name='get_loan_data_api'),
     path('api/loans/update/<int:loan_id>/', edit_loan_vue_api, name='edit_loan_vue_api'),
+    
+    # DRF API V2
+    path('api/v2/loans/create/', LoanApplicationCreateAPIView.as_view(), name='api_loan_create'),
+    path('api/v2/loans/<int:loan_id>/', LoanApplicationDetailAPIView.as_view(), name='api_loan_detail'),
+    path('api/v2/loans/update/<int:loan_id>/', LoanApplicationUpdateAPIView.as_view(), name='api_loan_update'),
+
+    # Swagger Documentation
+    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
+    path('api/docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
     
     # User Profile & Auth
     path('profile/', profile_view, name='profile'),

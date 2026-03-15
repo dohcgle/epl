@@ -30,6 +30,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.humanize',
+    # Third party apps
+    'rest_framework',
+    'drf_spectacular',
     # Local apps
     'document_processor',
 ]
@@ -139,3 +142,14 @@ DATE_INPUT_FORMATS = [
     '%d/%m/%Y',  # '25/10/2006'
     '%d/%m/%y',  # '25/10/06'
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'EPL API Monitoring',
+    'DESCRIPTION': 'Loan application and monitoring system API',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+}
