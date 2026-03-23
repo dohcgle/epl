@@ -1,150 +1,113 @@
 {% extends 'base_adminlte.html' %}
 {% load humanize %}
-{% load auth_extras %}
 
 {% block page_title %}Moderator Kabineti{% endblock %}
 
-{% block extra_css %}
-<!-- DataTables -->
-<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap4.min.css">
-<style>
-    .filters th {
-        padding: 5px !important;
-    }
-
-    .filters input {
-        width: 100%;
-        padding: 3px;
-        box-sizing: border-box;
-    }
-</style>
-{% endblock %}
-
 {% block content %}
 <div class="row">
-    <div class="col-12">
-        <div class="card">
+    <!-- Active Tasks -->
+    <div class="col-12 mb-4">
+        <div class="card card-primary card-outline shadow">
             <div class="card-header">
-                <h3 class="card-title">Tasdiqlash kutilayotgan arizalar</h3>
+                <h3 class="card-title text-primary font-weight-bold">
+                    <i class="fas fa-tasks mr-2"></i> TASDIQLASH KUTILAYOTGAN ARIZALAR
+                </h3>
             </div>
-            <!-- /.card-header -->
             <div class="card-body">
-                {% if loans %}
-                <table id="loanTable" class="table table-bordered table-hover">
-                    <thead>
+                {% if wizard_loans %}
+                <table class="table table-bordered table-striped table-hover">
+                    <thead class="bg-light">
                         <tr>
-                            <th>#</th>
-                            <th>Qarz Oluvchi</th>
-                            <th>Filial</th>
-                            <th>Kredit Miqdori</th>
+                            <th style="width: 50px">#</th>
+                            <th>Mijoz F.I.Sh</th>
+                            <th>Kredit Summasi</th>
                             <th>Garov Turi</th>
-                            <th>Garov Egasi</th>
-                            <th>Operator</th>
-                            <th>Xolati</th>
-                            <th>Sanasi</th>
-                            <th>Amallar</th>
-                        </tr>
-                        <tr class="filters">
-                            <th></th>
-                            <th><input type="text" placeholder="FISH bo'yicha"></th>
-                            <th><input type="text" placeholder="Filial bo'yicha"></th>
-                            <th><input type="text" placeholder="Summa bo'yicha"></th>
-                            <th><input type="text" placeholder="Garov bo'yicha"></th>
-                            <th><input type="text" placeholder="Egasi bo'yicha"></th>
-                            <th><input type="text" placeholder="Operator bo'yicha"></th>
-                            <th><input type="text" placeholder="Status bo'yicha"></th>
-                            <th><input type="text" placeholder="Sana bo'yicha"></th>
-                            <th></th>
+                            <th>Yuborilgan vaqti</th>
+                            <th>Status</th>
+                            <th style="width: 150px">Amallar</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {% for loan in loans %}
+                        {% for w_loan in wizard_loans %}
                         <tr>
                             <td>{{ forloop.counter }}</td>
-                            <td>{{ loan.personal_fish }}</td>
-                            <td>{{ loan.financial_filial_nomi }}</td>
-                            <td>{{ loan.loan_miqdori|intcomma }} so'm</td>
-                            <td>{{ loan.garov_turi_html|safe }}</td>
-                            <td>{{ loan.garov_egasi_qisqa }}</td>
-                            <td>{{ loan.created_by.username }}</td>
+                            <td class="font-weight-bold">{{ w_loan.client_name|upper }}</td>
+                            <td class="text-success font-weight-bold">{{ w_loan.loan_amount|intcomma }} so'm</td>
                             <td>
-                                {% if loan.status == 'completed' %}
-                                <span class="badge badge-success">Imzolangan</span>
-                                {% elif loan.status == 'rejected' %}
-                                <span class="badge badge-danger">Rad Etilgan</span>
-                                {% elif loan.status == 'pending_director' %}
-                                <span class="badge badge-primary">Direktor Tasdiqi Kutilmoqda</span>
-                                {% else %}
-                                <span class="badge badge-warning">Moderator Tasdiqi Kutilmoqda</span>
-                                {% endif %}
+                                {% for type in w_loan.data.collateral.selected_types %}
+                                    <span class="badge badge-secondary">{{ type|upper }}</span>
+                                {% endfor %}
                             </td>
-                            <td>{{ loan.created_at|date:"d.m.Y H:i" }}</td>
+                            <td>{{ w_loan.created_at|date:"d.m.Y H:i" }}</td>
+                            <td><span class="badge badge-warning">MODERATOR TASDIQI KUTILMOQDA</span></td>
                             <td>
-                                <div class="btn-group">
-                                    <a href="{% url 'view_application' loan.id %}" class="btn btn-sm btn-info"
-                                        title="Ko'rish">
-                                        <i class="fas fa-eye"></i>
-                                    </a>
-                                    {% if loan.status != 'completed' %}
-                                    <a href="{% url 'edit_loan' loan.id %}" class="btn btn-sm btn-warning"
-                                        title="Tahrirlash">
-                                        <i class="fas fa-pen"></i>
-                                    </a>
-                                    {% endif %}
-                                    {% if request.user|has_group:"Director" or request.user.is_superuser %}
-                                    <a href="{% url 'delete_loan' loan.id %}" class="btn btn-sm btn-danger"
-                                        title="O'chirish"
-                                        onclick="return confirm('Haqiqatan ham o\'chirmoqchimisiz?');">
-                                        <i class="fas fa-trash"></i>
-                                    </a>
-                                    {% endif %}
-                                </div>
+                                <a href="{% url 'view_wizard_application' w_loan.id %}" class="btn btn-sm btn-primary btn-block">
+                                    <i class="fas fa-eye mr-1"></i> KO'RISH
+                                </a>
                             </td>
                         </tr>
                         {% endfor %}
                     </tbody>
                 </table>
                 {% else %}
-                <div class="alert alert-info">
-                    Hozircha tasdiqlanmagan arizalar mavjud emas.
+                <div class="text-center py-4">
+                    <i class="fas fa-check-circle text-success fa-2x mb-2"></i>
+                    <p class="text-muted">Hozircha yangi arizalar mavjud emas.</p>
                 </div>
                 {% endif %}
             </div>
-            <!-- /.card-body -->
+        </div>
+    </div>
+
+    <!-- History -->
+    <div class="col-12">
+        <div class="card card-info card-outline shadow-sm">
+            <div class="card-header">
+                <h3 class="card-title font-weight-bold">
+                    <i class="fas fa-history mr-2"></i> TASDIQLANGAN ARIZALAR (TARIX)
+                </h3>
+            </div>
+            <div class="card-body">
+                {% if history_loans %}
+                <table class="table table-sm table-bordered table-hover">
+                    <thead class="bg-light">
+                        <tr>
+                            <th style="width: 50px">#</th>
+                            <th>Mijoz F.I.Sh</th>
+                            <th>Summa</th>
+                            <th>Tasdiqlangan vaqt</th>
+                            <th>Yakuniy holat</th>
+                            <th style="width: 150px">Amallar</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for h_loan in history_loans %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ h_loan.client_name|upper }}</td>
+                            <td>{{ h_loan.loan_amount|intcomma }} so'm</td>
+                            <td>{{ h_loan.moderator_approved_at|date:"d.m.Y H:i" }}</td>
+                            <td>
+                                {% if h_loan.status == 'approved_director' %}
+                                    <span class="badge badge-success">DIREKTOR IMZOLADI</span>
+                                {% else %}
+                                    <span class="badge badge-primary">TASDIQLANGAN</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a href="{% url 'view_wizard_application' h_loan.id %}" class="btn btn-xs btn-outline-info btn-block">
+                                    <i class="fas fa-eye mr-1"></i> KO'RISH
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <p class="text-center text-muted py-3">Tarix hali bo'sh.</p>
+                {% endif %}
+            </div>
         </div>
     </div>
 </div>
-{% endblock %}
-
-{% block extra_js %}
-<!-- DataTables -->
-<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap4.min.js"></script>
-<script>
-    $(document).ready(function () {
-        var table = $('#loanTable').DataTable({
-            "order": [],
-            "language": {
-                "lengthMenu": "Har bir sahifada _MENU_ ta yozuv ko'rsatilsin",
-                "zeroRecords": "Ma'lumot topilmadi",
-                "info": "_TOTAL_ tadan _START_ dan _END_ gacha bo'lgan yozuvlar",
-                "infoEmpty": "Yozuvlar mavjud emas",
-                "infoFiltered": "(_MAX_ ta yozuvdan filtrlangan)",
-                "search": "Qidirish:",
-                "paginate": {
-                    "first": "Birinchi",
-                    "last": "Oxirgi",
-                    "next": "Keyingi",
-                    "previous": "Oldingi"
-                }
-            },
-            "dom": 'lrtip'
-        });
-
-        $('#loanTable .filters input').on('keyup change', function () {
-            var index = $(this).parent().index();
-            table.column(index).search(this.value).draw();
-        });
-    });
-</script>
 {% endblock %}

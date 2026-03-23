@@ -1,0 +1,1078 @@
+{% extends 'base_adminlte.html' %}
+{% load static %}
+
+{% block content %}
+<div id="app" v-cloak class="container-fluid mt-4">
+    <div class="card card-outline card-primary shadow-lg" style="border-radius: 15px;">
+        <!-- Stepper Indicator -->
+        <div class="card-header bg-white border-0 py-4">
+            <div class="stepper d-flex justify-content-between">
+                <div v-for="(step, index) in steps" :key="index" class="step-item text-center"
+                    :class="{ 'active': currentStep === index + 1, 'completed': currentStep > index + 1 }">
+                    <div class="step-circle">[[ index + 1 ]]</div>
+                    <div class="step-label mt-2">[[ step ]]</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-body px-5 py-4">
+            <!-- STEP 1: MIJOZ VA KONTAKTLAR -->
+            <div v-if="currentStep === 1" class="animation-fade-in">
+                <h4 class="mb-4 text-primary font-weight-bold"><i class="fas fa-user-edit mr-2"></i> 1. Mijoz va
+                    bog'lanish uchun shaxslar</h4>
+
+                <!-- Mijoz ma'lumotlari -->
+                <div class="row">
+                    <div class="col-md-3 form-group">
+                        <label>F.I.Sh <span class="text-danger">*</span></label>
+                        <input type="text" key="fish" v-model="form.client_info.fish" class="form-control"
+                            placeholder="FALONCHI PISTONCHI" v-uppercase>
+                    </div>
+                    <div class="col-md-2 form-group">
+                        <label>Inisiali <span class="text-danger">*</span></label>
+                        <input type="text" key="fish_inisiali" v-model="form.client_info.fish_inisiali"
+                            class="form-control" placeholder="N.AXMEDOV" v-uppercase>
+                    </div>
+                    <div class="col-md-3 form-group">
+                        <label>Pasport <span class="text-danger">*</span></label>
+                        <input type="text" key="pasport" v-model="form.client_info.pasport" class="form-control"
+                            v-mask="'AA9999999'" placeholder="AA1234567">
+                    </div>
+                    <div class="col-md-2 form-group">
+                        <label>JSHSHIR (14 ta raqam) <span class="text-danger">*</span></label>
+                        <input type="text" key="jshshir" v-model="form.client_info.jshshir" class="form-control"
+                            v-mask="'99999999999999'">
+                    </div>
+                    <div class="col-md-2 form-group">
+                        <label>Tug'ilgan sanasi <span class="text-danger">*</span></label>
+                        <input type="text" key="tugilgan_sana" v-model="form.client_info.tugilgan_sana"
+                            class="form-control" v-mask="'99.99.9999'" placeholder="01.01.1990">
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-2 form-group">
+                        <label>Jinsi <span class="text-danger">*</span></label>
+                        <select key="jinsi" v-model="form.client_info.jinsi" class="form-control">
+                            <option value="">Tanlang...</option>
+                            <option value="erkak">Erkak</option>
+                            <option value="ayol">Ayol</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3 form-group">
+                        <label>Telefon raqami <span class="text-danger">*</span></label>
+                        <input type="text" key="telefon" v-model="form.client_info.telefon" class="form-control"
+                            v-mask="'+998 99 999-99-99'">
+                    </div>
+                    <div class="col-md-4 form-group">
+                        <label>Pasport berilgan joyi <span class="text-danger">*</span></label>
+                        <input type="text" v-model="form.client_info.pasport_berilgan" class="form-control" v-uppercase>
+                    </div>
+                    <div class="col-md-3 form-group">
+                        <label>Amal qilish muddati <span class="text-danger">*</span></label>
+                        <input type="text" v-model="form.client_info.pasport_amal_qilish" class="form-control"
+                            v-mask="'99.99.9999'" placeholder="01.01.2030">
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12 form-group">
+                        <label>Yashash manzili <span class="text-danger">*</span></label>
+                        <input type="text" key="manzil" v-model="form.client_info.manzil" class="form-control"
+                            v-uppercase>
+                    </div>
+                </div>
+
+                <hr class="my-4">
+
+                <!-- Kontaktlar bloki -->
+                <h5 class="text-secondary font-weight-bold mb-3"><i class="fas fa-users mr-2"></i> Bog'lanish uchun
+                    shaxslar (Kamida 2 ta)</h5>
+                <div class="row">
+                    <div v-for="(contact, index) in form.client_info.contacts" :key="index" class="col-md-6">
+                        <div class="p-3 border rounded bg-light mb-3">
+                            <h6 class="font-weight-bold text-info">[[ index + 1 ]]-shaxs</h6>
+                            <div class="row">
+                                <div class="col-md-6 form-group">
+                                    <label>Telefoni</label>
+                                    <input type="text" key="telefon" v-model="contact.telefon"
+                                        class="form-control form-control-sm" v-mask="'+998 99 999-99-99'">
+                                </div>
+                                <div class="col-md-6 form-group">
+                                    <label>Qarindoshligi</label>
+                                    <select key="qarindoshlik" v-model="contact.qarindoshlik"
+                                        class="form-control form-control-sm">
+                                        <option value="">Tanlang...</option>
+                                        <option value="ota">Ota</option>
+                                        <option value="ona">Ona</option>
+                                        <option value="turmush_ortogi">Turmush o'rtog'i</option>
+                                        <option value="aka">Aka</option>
+                                        <option value="uka">Uka</option>
+                                        <option value="opa">Opa</option>
+                                        <option value="singil">Singil</option>
+                                        <option value="boshqa">Boshqa</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Qolgan steplar shu tartibda ketadi... -->
+
+
+
+            <!-- STEP 2: KREDIT MA'LUMOTLARI -->
+            <div v-if="currentStep === 2" class="animation-fade-in">
+                <h4 class="mb-4 text-primary font-weight-bold"><i class="fas fa-file-invoice-dollar mr-2"></i> 2. Kredit
+                    shartlari</h4>
+
+                <!-- 1-qator: Shartnoma raqami va sanasi -->
+                <div class="row">
+                    <div class="col-md-6 form-group">
+                        <label>Shartnoma raqami va sanasi</label>
+                        <div class="d-flex">
+                            <input type="text" v-model="form.loan_details.shartnoma_raqami" class="form-control mr-2"
+                                placeholder="123-BH">
+                            <input type="text" v-model="form.loan_details.sana" class="form-control"
+                                v-mask="'99.99.9999'">
+                        </div>
+                    </div>
+                    <div class="col-md-6 form-group">
+                        <label>Kredit turi va Grafigi</label>
+                        <div class="d-flex">
+                            <select v-model="form.loan_details.turi" class="form-control mr-2 text-uppercase">
+                                <option value="mikroqarz">Mikroqarz</option>
+                                <option value="mikrokredit">Mikrokredit</option>
+                            </select>
+                            <select v-model="form.loan_details.grafik" class="form-control text-uppercase">
+                                <option value="annuitet">ANNUITET</option>
+                                <option value="differensial">DIFFERENSIAL</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2-qator: Boshlanish va Tugash sanasi -->
+                <div class="row">
+                    <div class="col-md-6 form-group">
+                        <label>Boshlanish sanasi</label>
+                        <input type="text" v-model="form.loan_details.boshlanish_sanasi" class="form-control"
+                            v-mask="'99.99.9999'">
+                    </div>
+                    <div class="col-md-6 form-group">
+                        <label>Tugash sanasi</label>
+                        <input type="text" v-model="form.loan_details.tugash_sanasi" class="form-control"
+                            v-mask="'99.99.9999'">
+                    </div>
+                </div>
+
+                <hr>
+
+                <!-- KREDIT SUMMASI -->
+                <div class="row align-items-end mb-3">
+                    <div class="col-md-4 form-group mb-0">
+                        <label>Kredit summasi <span class="text-danger">*</span></label>
+                        <input type="text" v-model="form.loan_details.summa"
+                            class="form-control font-weight-bold text-success" v-mask="'decimal'">
+                    </div>
+                    <div class="col-md-8 form-group mb-0">
+                        <input type="text" v-model="form.loan_details.summa_soz"
+                            class="form-control form-control-sm bg-light border-0 text-uppercase font-weight-bold"
+                            readonly placeholder="Summa so'z bilan...">
+                    </div>
+                </div>
+
+                <!-- MUDDAT -->
+                <div class="row align-items-end mb-3">
+                    <div class="col-md-4 form-group mb-0">
+                        <label>Muddat (oy) <span class="text-danger">*</span></label>
+                        <input type="number" v-model="form.loan_details.muddat" class="form-control">
+                    </div>
+                    <div class="col-md-8 form-group mb-0">
+                        <input type="text" v-model="form.loan_details.muddat_soz"
+                            class="form-control form-control-sm bg-light border-0 text-uppercase" readonly
+                            placeholder="Muddat so'z bilan...">
+                    </div>
+                </div>
+
+                <!-- YILLIK FOIZ -->
+                <div class="row align-items-end mb-3">
+                    <div class="col-md-4 form-group mb-0">
+                        <label>Yillik foiz (%) <span class="text-danger">*</span></label>
+                        <input type="number" v-model="form.loan_details.foiz" class="form-control">
+                    </div>
+                    <div class="col-md-8 form-group mb-0">
+                        <input type="text" v-model="form.loan_details.foiz_soz"
+                            class="form-control form-control-sm bg-light border-0 text-uppercase" readonly
+                            placeholder="Foiz so'z bilan...">
+                    </div>
+                </div>
+
+                <!-- OYLIK TO'LOV -->
+                <div class="row align-items-end mb-3">
+                    <div class="col-md-4 form-group mb-0">
+                        <label>Oylik to'lov (raqamda) <span class="text-danger">*</span></label>
+                        <input type="number" v-model="form.loan_details.oylik_tolov"
+                            class="form-control font-weight-bold text-primary">
+                    </div>
+                    <div class="col-md-8 form-group mb-0">
+                        <input type="text" v-model="form.loan_details.oylik_tolov_soz"
+                            class="form-control form-control-sm bg-light border-0 text-uppercase" readonly
+                            placeholder="Oylik to'lov so'z bilan...">
+                    </div>
+                </div>
+
+                <!-- Grafik matni -->
+                <div class="mt-4">
+                    <label class="font-weight-bold text-muted small"><i class="fas fa-table mr-1"></i> Grafik matni
+                        (Exceldan nusxa)</label>
+                    <textarea v-model="form.loan_details.grafik_matni" class="form-control border-warning"
+                        rows="4"></textarea>
+                </div>
+            </div>
+
+            <!-- STEP 3: MOLIYAVIY HOLAT -->
+            <div v-if="currentStep === 3" class="animation-fade-in">
+                <h4 class="mb-4 text-primary font-weight-bold"><i class="fas fa-wallet mr-2"></i> 3. Moliyaviy holat
+                </h4>
+
+                <!-- Ish joyi ma'lumotlari -->
+                <div class="card card-outline card-primary mb-4 shadow-sm">
+                    <div class="card-header">
+                        <h3 class="card-title font-weight-bold small">Ish joyi va Aloqa</h3>
+                    </div>
+                    <div class="card-body row py-2">
+                        <div class="col-md-4 form-group"><label>Muassasa nomi</label><input type="text"
+                                v-model="form.financial.ish_muassasa" class="form-control" v-uppercase></div>
+                        <div class="col-md-4 form-group"><label>Lavozimi</label><input type="text"
+                                v-model="form.financial.ish_lavozim" class="form-control" v-uppercase></div>
+                        <div class="col-md-4 form-group"><label>Ish manzili</label><input type="text"
+                                v-model="form.financial.ish_manzil" class="form-control" v-uppercase></div>
+
+                        <div class="col-md-4 form-group"><label>Uy telefoni</label><input type="text"
+                                v-model="form.financial.aloqa_uy_tel" class="form-control" v-mask="'+998 99 999-99-99'">
+                        </div>
+                        <div class="col-md-4 form-group"><label>Uyali telefoni</label><input type="text"
+                                v-model="form.financial.aloqa_uyali_tel" class="form-control"
+                                v-mask="'+998 99 999-99-99'"></div>
+                        <div class="col-md-4 form-group"><label>Ish telefoni</label><input type="text"
+                                v-model="form.financial.aloqa_ish_tel" class="form-control"
+                                v-mask="'+998 99 999-99-99'"></div>
+                    </div>
+                </div>
+
+                <!-- Daromadlar -->
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card card-outline card-success shadow-sm">
+                            <div class="card-header d-flex justify-content-between">
+                                <h3 class="card-title font-weight-bold small">Daromadlar</h3>
+                                <span class="badge badge-success px-3 py-2">
+                                    KOMBINAT: [[ form.financial.daromad_jami ]]
+                                </span>
+                            </div>
+                            <div class="card-body py-2">
+                                <div class="form-group mb-2"><label class="small">Asosiy daromad</label><input
+                                        type="number" v-model="form.financial.daromad_asosiy"
+                                        class="form-control form-control-sm border-success"></div>
+                                <div class="form-group mb-2"><label class="small">O'rindoshlik daromadi</label><input
+                                        type="number" v-model="form.financial.daromad_orindosh"
+                                        class="form-control form-control-sm border-success"></div>
+                                <div class="form-group mb-0"><label class="small">Boshqa daromadlar</label><input
+                                        type="number" v-model="form.financial.daromad_boshqa"
+                                        class="form-control form-control-sm border-success"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Xarajatlar -->
+                    <div class="col-md-6">
+                        <div class="card card-outline card-danger shadow-sm">
+                            <div class="card-header d-flex justify-content-between">
+                                <h3 class="card-title font-weight-bold small">Xarajatlar</h3>
+                                <span class="badge badge-danger px-3 py-2">
+                                    KOMBINAT: [[ form.financial.xarajat_jami ]]
+                                </span>
+                            </div>
+                            <div class="card-body py-2">
+                                <div class="form-group mb-2"><label class="small">Kommunal xarajatlar</label><input
+                                        type="number" v-model="form.financial.xarajat_kommunal"
+                                        class="form-control form-control-sm border-danger"></div>
+                                <div class="form-group mb-2"><label class="small">Oilaviy xarajatlar</label><input
+                                        type="number" v-model="form.financial.xarajat_oilaviy"
+                                        class="form-control form-control-sm border-danger"></div>
+                                <div class="form-group mb-0"><label class="small">Boshqa xarajatlar</label><input
+                                        type="number" v-model="form.financial.xarajat_boshqa"
+                                        class="form-control form-control-sm border-danger"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Majburiyatlar -->
+                <div class="mt-3">
+                    <label class="font-weight-bold small text-muted">Mavjud majburiyatlar (boshqa banklardagi
+                        kreditlar)</label>
+                    <textarea v-model="form.financial.majburiyatlar" class="form-control" rows="2" v-uppercase
+                        placeholder="MASALAN: MIKROQARZ - 2MLN, AVTOKREDIT - 5MLN"></textarea>
+                </div>
+            </div>
+
+            <!-- STEP 4: GAROV TA'MINOTI -->
+            <div v-if="currentStep === 4" class="animation-fade-in">
+                <h4 class="mb-4 text-primary font-weight-bold"><i class="fas fa-shield-alt mr-2"></i> 4. Garov ta'minoti
+                </h4>
+
+                <!-- Garov turini tanlash -->
+                <div class="row mb-4">
+                    <div class="col-md-12">
+                        <label class="d-block mb-2 text-secondary font-weight-bold italic text-sm text-uppercase">Garov
+                            turini tanlang:</label>
+                        <div class="d-flex flex-wrap shadow-sm p-3 bg-light rounded border border-primary">
+                            <div class="custom-control custom-checkbox mr-4"><input class="custom-control-input"
+                                    type="checkbox" id="g_avto" value="avto"
+                                    v-model="form.collateral.selected_types"><label for="g_avto"
+                                    class="custom-control-label">AVTOTRANSPORT</label></div>
+                            <div class="custom-control custom-checkbox mr-4"><input class="custom-control-input"
+                                    type="checkbox" id="g_mulk" value="mulk"
+                                    v-model="form.collateral.selected_types"><label for="g_mulk"
+                                    class="custom-control-label">KO'CHMAS MULK</label></div>
+                            <div class="custom-control custom-checkbox mr-4"><input class="custom-control-input"
+                                    type="checkbox" id="g_sugurta" value="sugurta"
+                                    v-model="form.collateral.selected_types"><label for="g_sugurta"
+                                    class="custom-control-label">SUG'URTA POLISI</label></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Garov egasini tanlash -->
+                <div class="row mb-4" v-if="form.collateral.selected_types.length > 0">
+                    <div class="col-md-12">
+                        <label class="d-block mb-2 text-secondary font-weight-bold italic text-sm text-uppercase">
+                            Garov egasini tanlang:
+                        </label>
+                        <div class="d-flex flex-wrap shadow-sm p-3 bg-light rounded border border-primary">
+                            <div class="custom-control custom-radio mr-4">
+                                <input class="custom-control-input" type="radio" id="owner_self" value="self"
+                                    v-model="form.collateral.owner_type">
+                                <label class="custom-control-label" for="owner_self">O'zi</label>
+                            </div>
+                            <div class="custom-control custom-radio mr-4">
+                                <input class="custom-control-input" type="radio" id="owner_other" value="other"
+                                    v-model="form.collateral.owner_type">
+                                <label class="custom-control-label" for="owner_other">Boshqa shaxs</label>
+                            </div>
+                            <div class="custom-control custom-radio mr-4">
+                                <input class="custom-control-input" type="radio" id="owner_proxy" value="proxy"
+                                    v-model="form.collateral.owner_type">
+                                <label class="custom-control-label" for="owner_proxy">Bosh ishonchnoma</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div v-if="form.collateral.selected_types.length > 0">
+
+                    <!-- 1. GAROV EGASI -->
+                    <div class="card card-outline card-secondary mb-4 shadow-sm">
+                        <div class="card-header py-2">
+                            <h3 class="card-title font-weight-bold small text-secondary">Garov egasi ma'lumotlari</h3>
+                        </div>
+                        <div class="card-body row py-2">
+                            <div class="col-md-4 form-group small"><label>Garov egasi F.I.Sh</label><input type="text"
+                                    v-model="form.collateral.data.owner_fish" class="form-control form-control-sm"
+                                    v-uppercase></div>
+                            <div class="col-md-2 form-group small"><label>Inisiali</label><input type="text"
+                                    v-model="form.collateral.data.owner_initials" class="form-control form-control-sm"
+                                    v-uppercase></div>
+                            <div class="col-md-2 form-group small"><label>Tug'ilgan sanasi</label><input type="text"
+                                    v-model="form.collateral.data.owner_birth_date" class="form-control form-control-sm"
+                                    v-mask="'99.99.9999'"></div>
+                            <div class="col-md-2 form-group small"><label>Pasport</label><input type="text"
+                                    v-model="form.collateral.data.owner_passport" class="form-control form-control-sm"
+                                    v-mask="'AA9999999'"></div>
+                            <div class="col-md-2 form-group small"><label>JSHSHIR</label><input type="text"
+                                    v-model="form.collateral.data.owner_jshshir" class="form-control form-control-sm"
+                                    v-mask="'99999999999999'"></div>
+                            <div class="col-md-2 form-group small"><label>Jinsi</label>
+                                <select v-model="form.collateral.data.owner_gender"
+                                    class="form-control form-control-sm">
+                                    <option value="">Tanlang...</option>
+                                    <option value="erkak">Erkak</option>
+                                    <option value="ayol">Ayol</option>
+                                </select>
+                            </div>
+                            <div class="col-md-7 form-group small mb-2"><label>Pasport berilgan joyi</label><input
+                                    type="text" v-model="form.collateral.data.owner_passport_given_by"
+                                    class="form-control form-control-sm" v-uppercase></div>
+                            <div class="col-md-3 form-group small mb-2"><label>Amal qilish muddati</label><input
+                                    type="text" v-model="form.collateral.data.owner_passport_expiry"
+                                    class="form-control form-control-sm" v-mask="'99.99.9999'"></div>
+                            <div class="col-md-12 form-group small"><label>Manzili</label><input type="text"
+                                    v-model="form.collateral.data.owner_address" class="form-control form-control-sm"
+                                    v-uppercase></div>
+                        </div>
+                    </div>
+
+                    <!-- 1. Bosh ishonchnoma -->
+                    <div v-if="form.collateral.owner_type === 'proxy'"
+                        class="card card-outline card-secondary mb-4 shadow-sm">
+                        <div class="card-header py-2">
+                            <h3 class="card-title font-weight-bold small text-secondary">Bosh ishonchnoma</h3>
+                        </div>
+                        <div class="card-body row py-2">
+                            <div class="col-md-3 form-group"><label class="small">Notarius F.I.Sh</label><input
+                                    type="text" v-model="form.collateral.data.notarius_fish"
+                                    class="form-control form-control-sm" v-uppercase></div>
+                            <div class="col-md-4 form-group"><label class="small">Notarius manzili</label><input
+                                    type="text" v-model="form.collateral.data.notarius_address"
+                                    class="form-control form-control-sm" v-uppercase></div>
+                            <div class="col-md-2 form-group"><label class="small">Reestr raqami</label><input
+                                    type="text" v-model="form.collateral.data.reestr_number"
+                                    class="form-control form-control-sm"></div>
+                            <div class="col-md-3 form-group"><label class="small">Reestr sanasi</label><input
+                                    type="text" v-model="form.collateral.data.reestr_date"
+                                    class="form-control form-control-sm" v-mask="'99.99.9999'"></div>
+                        </div>
+                    </div>
+
+                    <!-- 2. AVTOTRANSPORT (Dinamik) -->
+                    <div v-if="form.collateral.selected_types.includes('avto')"
+                        class="card card-outline card-success mb-4 shadow-sm">
+                        <div class="card-header py-2">
+                            <h3 class="card-title text-success font-weight-bold small">Avtotransport batafsil
+                                ma'lumotlari</h3>
+                        </div>
+                        <div class="card-body row py-2">
+                            <div class="col-md-3 form-group small"><label>Avto nomi</label><input type="text"
+                                    v-model="form.collateral.data.avto_nomi" class="form-control form-control-sm"
+                                    v-uppercase placeholder="CHEVROLET COBALT"></div>
+                            <div class="col-md-3 form-group small"><label>Kuzov turi</label><input type="text"
+                                    v-model="form.collateral.data.avto_kuzov_turi" class="form-control form-control-sm"
+                                    v-uppercase></div>
+                            <div class="col-md-3 form-group small"><label>Kuzov raqami</label><input type="text"
+                                    v-model="form.collateral.data.avto_kuzov" class="form-control form-control-sm"
+                                    v-uppercase></div>
+                            <div class="col-md-3 form-group small"><label>Dvigatel raqami</label><input type="text"
+                                    v-model="form.collateral.data.avto_dvigatel" class="form-control form-control-sm"
+                                    v-uppercase></div>
+                            <div class="col-md-3 form-group small"><label>Shassi raqami</label><input type="text"
+                                    v-model="form.collateral.data.avto_shassi" class="form-control form-control-sm"
+                                    v-uppercase></div>
+                            <div class="col-md-3 form-group small"><label>Rangi</label><input type="text"
+                                    v-model="form.collateral.data.avto_rang" class="form-control form-control-sm"
+                                    v-uppercase></div>
+                            <div class="col-md-2 form-group small"><label>Yili</label><input type="number"
+                                    v-model="form.collateral.data.avto_yil" class="form-control form-control-sm"></div>
+                            <div class="col-md-3 form-group small"><label>Davlat raqami</label><input type="text"
+                                    v-model="form.collateral.data.avto_raqam" class="form-control form-control-sm"
+                                    v-uppercase></div>
+                            <div class="col-md-5 form-group small"><label>Ro'yxatdan o'tgan manzili</label><input
+                                    type="text" v-model="form.collateral.data.avto_manzil"
+                                    class="form-control form-control-sm" v-uppercase></div>
+                            <div class="col-md-4 form-group small"><label>Texpasport va sanasi</label>
+                                <div class="d-flex"><input type="text" v-model="form.collateral.data.avto_texpasport"
+                                        class="form-control form-control-sm mr-1"><input type="text"
+                                        v-model="form.collateral.data.avto_texpasport_sana"
+                                        class="form-control form-control-sm" v-mask="'99.99.9999'"></div>
+                            </div>
+                            <div class="col-md-4 form-group small"><label>Baholangan qiymati (Raqamda)</label><input
+                                    type="text" v-model="form.collateral.data.avto_bahosi"
+                                    class="form-control form-control-sm font-weight-bold" v-mask="'decimal'"></div>
+                            <div class="col-md-4 form-group small"><label>Bahosi (So'z bilan)</label><input type="text"
+                                    v-model="form.collateral.data.avto_bahosi_soz"
+                                    class="form-control form-control-sm bg-light border-0" readonly v-uppercase></div>
+                        </div>
+                    </div>
+
+                    <!-- 3. KO'CHMAS MULK (Dinamik) -->
+                    <div v-if="form.collateral.selected_types.includes('mulk')"
+                        class="card card-outline card-info mb-4 shadow-sm">
+                        <div class="card-header py-2">
+                            <h3 class="card-title text-info font-weight-bold small">Ko'chmas mulk batafsil ma'lumotlari
+                            </h3>
+                        </div>
+                        <div class="card-body row py-2">
+                            <div class="col-md-3 form-group small">
+                                <label>Mulk turi</label>
+                                <select v-model="form.collateral.data.mulk_turi" class="form-control form-control-sm">
+                                    <option value="">Tanlang...</option>
+                                    <option value="uy">Uy</option>
+                                    <option value="xonadon">Xonadon</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3 form-group small">
+                                <label>Mulk nomi</label>
+                                <input type="text" v-model="form.collateral.data.mulk_nomi"
+                                    class="form-control form-control-sm" v-uppercase
+                                    placeholder="MASALAN: TURAR-JOY BINO INSHOOTLARI">
+                            </div>
+                            <div class="col-md-3 form-group small">
+                                <label>Kadastr raqami</label>
+                                <input type="text" v-model="form.collateral.data.mulk_kadastr_raqami"
+                                    class="form-control form-control-sm">
+                            </div>
+                            <div class="col-md-3 form-group small">
+                                <label>Reestr raqami</label>
+                                <input type="text" v-model="form.collateral.data.mulk_reestr_raqami"
+                                    class="form-control form-control-sm">
+                            </div>
+                            <div class="col-md-4 form-group small">
+                                <label>Manzili</label>
+                                <input type="text" v-model="form.collateral.data.mulk_manzili"
+                                    class="form-control form-control-sm" v-uppercase>
+                            </div>
+                            <div class="col-md-2 form-group small">
+                                <label>Umumiy yer maydoni</label>
+                                <input type="text" v-model="form.collateral.data.mulk_umumiy_yer_maydoni"
+                                    class="form-control form-control-sm">
+                            </div>
+                            <div class="col-md-2 form-group small">
+                                <label>Qurilish osti maydoni</label>
+                                <input type="text" v-model="form.collateral.data.mulk_qurilish_osti_maydoni"
+                                    class="form-control form-control-sm">
+                            </div>
+                            <div class="col-md-2 form-group small">
+                                <label>Umumiy foydalanish maydoni</label>
+                                <input type="text" v-model="form.collateral.data.mulk_umumiy_foydalanish_maydoni"
+                                    class="form-control form-control-sm">
+                            </div>
+                            <div class="col-md-2 form-group small">
+                                <label>Yashash maydoni</label>
+                                <input type="text" v-model="form.collateral.data.mulk_yashash_maydoni"
+                                    class="form-control form-control-sm">
+                            </div>
+                            <div class="col-md-4 form-group small mb-0">
+                                <label>Baholangan qiymati (Raqamda)</label>
+                                <input type="text" v-model="form.collateral.data.mulk_bahosi"
+                                    class="form-control form-control-sm font-weight-bold" v-mask="'decimal'">
+                            </div>
+                            <div class="col-md-8 form-group small mb-0">
+                                <label>Bahosi (So'z bilan)</label>
+                                <input type="text" v-model="form.collateral.data.mulk_bahosi_soz"
+                                    class="form-control form-control-sm bg-light border-0 text-uppercase" readonly>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 4. SUG'URTA POLISI (Dinamik) -->
+                    <div v-if="form.collateral.selected_types.includes('sugurta')"
+                        class="card card-outline card-warning mb-4 shadow-sm">
+                        <div class="card-header py-2">
+                            <h3 class="card-title text-warning font-weight-bold small">Sug'urta polisi batafsil
+                                ma'lumotlari</h3>
+                        </div>
+                        <div class="card-body row py-2">
+                            <div class="col-md-4 form-group small"><label>Sug'urta kompaniyasi</label><input type="text"
+                                    v-model="form.collateral.data.sugurta_kompaniya"
+                                    class="form-control form-control-sm" v-uppercase></div>
+                            <div class="col-md-4 form-group small mb-0"><label>Sug'urta summasi</label><input
+                                    type="text" v-model="form.collateral.data.sugurta_summa"
+                                    class="form-control form-control-sm font-weight-bold" v-mask="'decimal'"></div>
+                            <div class="col-md-8 form-group small mb-0"><label>Summa (So'z bilan)</label><input
+                                    type="text" v-model="form.collateral.data.sugurta_summa_soz"
+                                    class="form-control form-control-sm bg-light border-0 text-uppercase" readonly>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div v-else class="text-center p-5 border rounded bg-light border-primary shadow-sm">
+                    <i class="fas fa-shield-alt fa-3x text-primary mb-3 opacity-50"></i>
+                    <p class="text-primary font-weight-bold">Iltimos, yuqoridagi ro'yxatdan garov turini tanlang.</p>
+                    <small class="text-muted">Bir vaqtning o'zida bir nechta garov turini tanlashingiz mumkin.</small>
+                </div>
+            </div>
+
+
+
+            <!-- STEP 5: TASDIQLASH VA MA'MURIYAT -->
+            <div v-if="currentStep === 5" class="animation-fade-in">
+                <h4 class="mb-4 text-primary font-weight-bold"><i class="fas fa-user-tie mr-2"></i> 5. Ma'muriyat va
+                    Tasdiqlash</h4>
+
+                <div class="card card-outline card-info shadow-sm mb-4">
+                    <div class="card-header">
+                        <h3 class="card-title font-weight-bold small">Tashkilot ma'lumotlari</h3>
+                    </div>
+                    <div class="card-body row py-3">
+                        <div class="col-md-7 form-group">
+                            <label>Tashkilot nomi <span class="text-danger">*</span></label>
+                            <input type="text" v-model="form.administrative.tashkilot_nomi" class="form-control"
+                                v-uppercase>
+                        </div>
+                        <div class="col-md-5 form-group">
+                            <label>Filial nomi <span class="text-danger">*</span></label>
+                            <select v-model="form.administrative.filial" class="form-control">
+                                <option value="BUXORO FILIALI">BUXORO FILIALI</option>
+                                <option value="URGANCH FILIALI">URGANCH FILIALI</option>
+                                <option value="TO'RTKO'L FILIALI">TO'RTKO'L FILIALI</option>
+                            </select>
+                        </div>
+                        
+                        <!-- Filial Boshligi -->
+                        <div class="col-md-8 form-group">
+                            <label>Filial boshlig'i F.I.Sh <span class="text-danger">*</span></label>
+                            <input type="text" v-model="form.administrative.filial_boshlig_fish" class="form-control"
+                                v-uppercase>
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <label>Filial boshlig'i inisiali <span class="text-danger">*</span></label>
+                            <input type="text" v-model="form.administrative.filial_boshlig_fish_inisiali" class="form-control"
+                                v-uppercase>
+                        </div>
+
+                        <!-- Direktor -->
+                        <div class="col-md-8 form-group mb-0">
+                            <label>Direktor F.I.Sh <span class="text-danger">*</span></label>
+                            <input type="text" v-model="form.administrative.direktor_fish" class="form-control"
+                                v-uppercase>
+                        </div>
+                        <div class="col-md-4 form-group mb-0">
+                            <label>Direktor inisiali <span class="text-danger">*</span></label>
+                            <input type="text" v-model="form.administrative.direktor_fish_inisiali" class="form-control"
+                                v-uppercase px-2>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="alert alert-warning border-warning">
+                    <h5 class="font-weight-bold"><i class="fas fa-exclamation-triangle mr-2"></i> Diqqat!</h5>
+                    <p class="mb-0">Ma'lumotlarni saqlashdan oldin barcha qadamlarni tekshirib chiqing. "Saqlash"
+                        tugmasini bosganingizdan so'ng barcha ma'lumotlar bazaga yoziladi va PDF shakllanadi.</p>
+                </div>
+            </div>
+
+            <!-- Navigatsiya tugmalari -->
+            <div class="card-footer bg-white border-0 pb-5 d-flex justify-content-between">
+                <button v-if="currentStep > 1" @click="currentStep--"
+                    class="btn btn-outline-secondary btn-lg px-5">Orqaga</button>
+                <div v-else></div>
+
+                <button v-if="currentStep < 5" @click="currentStep++"
+                    class="btn btn-primary btn-lg px-5">Keyingisi</button>
+                <button v-else @click="saveLoan"
+                    class="btn btn-success btn-lg px-5 text-uppercase font-weight-bold">Saqlash (PDF
+                    Tayyorlash)</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Debug: Unified JSON Output -->
+    <div class="card mt-5 shadow-sm border-info">
+        <div class="card-header bg-info text-white">
+            <h3 class="card-title font-weight-bold"><i class="fas fa-code mr-2"></i> DEBUG: Unified JSON</h3>
+        </div>
+        <div class="card-body p-0">
+            <pre class="bg-light p-3 mb-0"
+                style="max-height: 500px; overflow-y: auto; font-size: 13px;">[[ JSON.stringify(form, null, 2) ]]</pre>
+        </div>
+    </div>
+    {% endblock content %}
+
+    {% block extra_js %}
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script>
+        const { createApp, ref, computed, watch } = Vue;
+
+        // 1. Avval app obyektini yaratamiz
+        const app = createApp({
+            setup() {
+                const currentStep = ref(1);
+                const steps = ["Mijoz", "Kredit", "Moliyaviy", "Garov", "Tasdiqlash"];
+
+                const form = ref({
+                    client_info: {
+                        fish: 'NARBAYEV QUDAYBERGEN QALBAYEVICH',
+                        fish_inisiali: 'Q.Q.NARBAYEV',
+                        pasport: 'AD1074617',
+                        jshshir: '31002873680015',
+                        tugilgan_sana: '10.02.1987',
+                        pasport_berilgan: 'IIV 26264',
+                        pasport_amal_qilish: '14.08.2032',
+                        jinsi: '',
+                        telefon: '+998907448844',
+                        manzil: 'YUNUSOBOD TUMANI 5-3A-34',
+                        contacts: [
+                            { telefon: '', qarindoshlik: '' },
+                            { telefon: '', qarindoshlik: '' }
+                        ]
+                    },
+                    loan_details: {
+                        shartnoma_raqami: '53',
+                        sana: '02.02.2026',
+                        summa: '100000000',
+                        summa_soz: '',
+                        boshlanish_sanasi:'02.02.2026',
+                        tugash_sanasi: '02.02.2029',
+                        muddat: '36',
+                        muddat_soz: '',
+                        foiz: '55',
+                        foiz_soz: '',
+                        oylik_tolov: '8200000',
+                        oylik_tolov_soz: '',
+                        turi: 'mikroqarz',
+                        grafik: 'differensial',
+                        grafik_matni: ''
+                    },
+                    financial: {
+                        daromad_jami: 0,
+                        xarajat_jami: 0,
+                        majburiyatlar: 'Hozircha yuq',
+                        aloqa_uy_tel: '',
+                        aloqa_uyali_tel: '',
+                        aloqa_ish_tel: '',
+                        ish_muassasa: 'Toshkent Davlat Texnika Universiteti',
+                        ish_manzil: 'Yunusobod tumani 5',
+                        ish_lavozim: 'Professor',
+                        daromad_asosiy: 22000000,
+                        daromad_orindosh: 0,
+                        daromad_boshqa: 10000000,
+                        xarajat_kommunal: 700000,
+                        xarajat_oilaviy: 500000,
+                        xarajat_boshqa: 600000
+                    },
+                    collateral: {
+                        selected_types: [],
+                        owner_type: '',
+                        data: {
+                            // Owner info
+                            owner_fish: '', owner_initials: '', owner_birth_date: '', owner_passport: '',
+                            owner_jshshir: '', owner_gender: '', owner_passport_given_by: '',
+                            owner_passport_expiry: '', owner_address: '',
+                            // Notarius info
+                            notarius_fish: '', notarius_address: '', reestr_number: '', reestr_date: '',
+                            // Avto fields
+                            avto_nomi: 'CHEVROLET COBALT', avto_kuzov_turi: 'Sedan', avto_kuzov: 'XWBJA69VERA108471', avto_dvigatel: 'B15D213241352MTAX0118',
+                            avto_shassi: 'RAQAMSIZ', avto_rang: 'Oq', avto_yil: 2022,
+                            avto_texpasport: 'TP0000000', avto_texpasport_sana: '01.01.2022', avto_manzil: 'Toshkent',
+                            avto_raqam: '01A123AA', avto_bahosi: '150000000', avto_bahosi_soz: '',
+                            // Mulk fields
+                            mulk_turi: '',
+                            mulk_nomi: '',
+                            mulk_kadastr_raqami: '',
+                            mulk_reestr_raqami: '',
+                            mulk_manzili: '',
+                            mulk_umumiy_yer_maydoni: '',
+                            mulk_qurilish_osti_maydoni: '',
+                            mulk_umumiy_foydalanish_maydoni: '',
+                            mulk_yashash_maydoni: '',
+                            mulk_bahosi: '',
+                            mulk_bahosi_soz: '',
+                            // Sugurta fields
+                            sugurta_kompaniya: 'АО СК "IMPEX INSURANCE"',
+                            sugurta_summa: '140000000',
+                            sugurta_summa_soz: ''
+                        }
+                    },
+                    administrative: {
+                        tashkilot_nomi: '«PULLOL BUSINESS MIKROMOLIYA TASHKILOTI» MChJ',
+                        filial: 'BUXORO FILIALI',
+                        filial_boshlig_fish: 'IKROMOV BAHODIR ABDURAXIMOVICH',
+                        filial_boshlig_fish_inisiali: 'B.A.IKROMOV',
+                        direktor_fish: 'OBIDOV ABDULLA SHOKIROVICH',
+                        direktor_fish_inisiali: 'A.SH.OBIDOV'
+                    }
+                });
+
+                const saveLoan = async () => {
+                    try {
+                        const response = await fetch('/loans/wizard/save/', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                // CSRFni vaqtinchalik o'chirib turish uchun viewda @csrf_exempt ishlatildi
+                            },
+                            body: JSON.stringify(form.value)
+                        });
+                        
+                        const result = await response.json();
+                        
+                        if (result.status === 'success') {
+                            alert("Muvaffaqiyatli saqlandi! ID: " + result.id);
+                            window.location.href = '/loans/moderator/';
+                        } else {
+                            alert("Xatolik: " + result.message);
+                        }
+                    } catch (error) {
+                        console.error('Save error:', error);
+                        alert("Server bilan bog'lanishda xatolik yuz berdi.");
+                    }
+                };
+
+                // ... FISH inisiali qilib beradi:
+                watch(() => form.value.client_info.fish, (newVal) => {
+                    if (!newVal) {
+                        form.value.client_info.fish_inisiali = '';
+                        return;
+                    }
+                    const parts = newVal.trim().split(/\s+/); // Bo'sh joylar bo'yicha bo'lamiz
+
+                    if (parts.length >= 3) {
+                        // AXMEDOV NODIR RAJABOVICH -> N.R.AXMEDOV (yoki o'zingizga yoqqan format)
+                        form.value.client_info.fish_inisiali = `${parts[1][0]}.${parts[2][0]}.${parts[0]}`.toUpperCase();
+                    } else if (parts.length === 2) {
+                        // AXMEDOV NODIR -> N.AXMEDOV
+                        form.value.client_info.fish_inisiali = `${parts[1][0]}.${parts[0]}`.toUpperCase();
+                    } else {
+                        form.value.client_info.fish_inisiali = newVal.toUpperCase();
+                    }
+                });
+
+                // Direktor inisialini ham avtomatlashtiramiz:
+                watch(() => form.value.administrative.direktor_fish, (newVal) => {
+                    if (!newVal) {
+                        form.value.administrative.direktor_fish_inisiali = '';
+                        return;
+                    }
+                    const parts = newVal.trim().split(/\s+/);
+                    if (parts.length >= 3) {
+                        form.value.administrative.direktor_fish_inisiali = `${parts[1][0]}.${parts[2][0]}.${parts[0]}`.toUpperCase();
+                    } else if (parts.length === 2) {
+                        form.value.administrative.direktor_fish_inisiali = `${parts[1][0]}.${parts[0]}`.toUpperCase();
+                    } else {
+                        form.value.administrative.direktor_fish_inisiali = newVal.toUpperCase();
+                    }
+                });
+
+                // Filial boshlig'ini ham avtomatlashtiramiz:
+                watch(() => form.value.administrative.filial_boshlig_fish, (newVal) => {
+                    if (!newVal) {
+                        form.value.administrative.filial_boshlig_fish_inisiali = '';
+                        return;
+                    }
+                    const parts = newVal.trim().split(/\s+/);
+                    if (parts.length >= 3) {
+                        form.value.administrative.filial_boshlig_fish_inisiali = `${parts[1][0]}.${parts[2][0]}.${parts[0]}`.toUpperCase();
+                    } else if (parts.length === 2) {
+                        form.value.administrative.filial_boshlig_fish_inisiali = `${parts[1][0]}.${parts[0]}`.toUpperCase();
+                    } else {
+                        form.value.administrative.filial_boshlig_fish_inisiali = newVal.toUpperCase();
+                    }
+                });
+
+
+                watch(() => form.value.loan_details.oylik_tolov, (val) => {
+                    if (val) {
+                        form.value.loan_details.oylik_tolov_soz = numberToWordsUz(val) + " SO'M";
+                    } else {
+                        form.value.loan_details.oylik_tolov_soz = '';
+                    }
+                });
+
+
+
+                const numberToWordsUz = (num) => {
+                    if (num === 0) return "NOL";
+                    if (!num) return "";
+                    const birliklar = ["", "BIR", "IKKI", "UCH", "TO'RT", "BESH", "OLTI", "YETTI", "SAKKIZ", "TO'QQIZ"];
+                    const onliklar = ["", "O'N", "YIGIRMA", "O'TIZ", "QIRQ", "ELLIK", "OLTMISH", "YETMISH", "SAKKIZMISH", "TO'QSAN"];
+                    const darajalar = ["", "MING", "MILLION", "MILLIARD", "TRILLION"];
+
+                    let strOutput = "";
+                    let qoldiq = Math.floor(num);
+                    let index = 0;
+
+                    while (qoldiq > 0) {
+                        let chunk = qoldiq % 1000;
+                        let yuz = Math.floor(chunk / 100);
+                        let on = Math.floor((chunk % 100) / 10);
+                        let bir = chunk % 10;
+
+                        let chunkStr = "";
+                        if (yuz > 0) chunkStr += birliklar[yuz] + " YUZ ";
+                        if (on > 0) chunkStr += onliklar[on] + " ";
+                        if (bir > 0) chunkStr += birliklar[bir] + " ";
+
+                        if (chunkStr.trim() !== "") {
+                            strOutput = chunkStr + (index > 0 ? darajalar[index] + " " : "") + strOutput;
+                        }
+                        qoldiq = Math.floor(qoldiq / 1000);
+                        index++;
+                    }
+                    return strOutput.trim();
+                };
+
+                watch(() => form.value.loan_details.foiz, (val) => {
+                    form.value.loan_details.foiz_soz = numberToWordsUz(val) + " FOIZ";
+                });
+
+                // Summa va Muddat uchun watcherlar:
+                watch(() => form.value.loan_details.summa, (val) => {
+                    form.value.loan_details.summa_soz = numberToWordsUz(val) + " SO'M";
+                });
+                watch(() => form.value.loan_details.muddat, (val) => {
+                    form.value.loan_details.muddat_soz = numberToWordsUz(val);
+                });
+
+                // Jami daromadni hisoblash
+                watch([
+                    () => form.value.financial.daromad_asosiy,
+                    () => form.value.financial.daromad_orindosh,
+                    () => form.value.financial.daromad_boshqa
+                ], () => {
+                    const f = form.value.financial;
+                    f.daromad_jami = Number(f.daromad_asosiy) + Number(f.daromad_orindosh) + Number(f.daromad_boshqa);
+                });
+
+                // Jami xarajatni hisoblash
+                watch([
+                    () => form.value.financial.xarajat_kommunal,
+                    () => form.value.financial.xarajat_oilaviy,
+                    () => form.value.financial.xarajat_boshqa
+                ], () => {
+                    const f = form.value.financial;
+                    f.xarajat_jami = Number(f.xarajat_kommunal) + Number(f.xarajat_oilaviy) + Number(f.xarajat_boshqa);
+                });
+
+                watch(() => form.value.collateral.data.avto_bahosi, (val) => {
+                    form.value.collateral.data.avto_bahosi_soz = numberToWordsUz(val.toString().replace(/\s/g, '')) + " SO'M";
+                });
+                watch(() => form.value.collateral.data.mulk_bahosi, (val) => {
+                    form.value.collateral.data.mulk_bahosi_soz = numberToWordsUz(val.toString().replace(/\s/g, '')) + " SO'M";
+                });
+                watch(() => form.value.collateral.data.sugurta_summa, (val) => {
+                    form.value.collateral.data.sugurta_summa_soz = numberToWordsUz(val.toString().replace(/\s/g, '')) + " SO'M";
+                });
+
+                // Garov egasi "O'zi" tanlanganda
+                watch(() => form.value.collateral.owner_type, (newVal) => {
+                    const coll = form.value.collateral.data;
+
+                    if (newVal === 'self') {
+                        const client = form.value.client_info;
+                        coll.owner_fish = client.fish;
+                        coll.owner_initials = client.fish_inisiali;
+                        coll.owner_birth_date = client.tugilgan_sana;
+                        coll.owner_passport = client.pasport;
+                        coll.owner_jshshir = client.jshshir;
+                        coll.owner_address = client.manzil;
+                        coll.owner_gender = client.jinsi;
+                        coll.owner_passport_given_by = client.pasport_berilgan;
+                        coll.owner_passport_expiry = client.pasport_amal_qilish;
+                    } else if (newVal === 'other' || newVal === 'proxy') {
+                        coll.owner_fish = '';
+                        coll.owner_initials = '';
+                        coll.owner_birth_date = '';
+                        coll.owner_passport = '';
+                        coll.owner_jshshir = '';
+                        coll.owner_address = '';
+                        coll.owner_gender = '';
+                        coll.owner_passport_given_by = '';
+                        coll.owner_passport_expiry = '';
+                    }
+                });
+
+
+
+
+
+                return { currentStep, steps, form, saveLoan };
+            },
+            delimiters: ['[[', ']]']
+        });
+
+        // 1. v-mask: Inputmask-ni Vue bilan xavfsiz bog'lash
+        app.directive('mask', {
+            mounted(el, binding) {
+                Inputmask(binding.value, {
+                    showMaskOnHover: false,
+                    showMaskOnFocus: true,
+                    clearIncomplete: false,
+                    autoUnmask: false,
+                    // Eng muhim qism: Har qanday o'zgarishni (shu jumladan paste) darhol Vue-ga xabar qilamiz
+                    onKeyValidation: function () {
+                        el.dispatchEvent(new Event('input', { bubbles: true }));
+                    },
+                    onComplete: function () {
+                        el.dispatchEvent(new Event('input', { bubbles: true }));
+                    },
+                    onincomplete: function () {
+                        el.dispatchEvent(new Event('input', { bubbles: true }));
+                    }
+                }).mask(el);
+
+                // Copy/Paste uchun qo'shimcha "puchok":
+                el.addEventListener('paste', () => {
+                    setTimeout(() => {
+                        el.dispatchEvent(new Event('input', { bubbles: true }));
+                    }, 50); // 50ms kutamizki, Inputmask matnni joylab olsin
+                });
+            },
+            updated(el) {
+                if (el.inputmask) {
+                    const start = el.selectionStart;
+                    if (el.value !== el.inputmask._valueGet()) {
+                        el.inputmask.setValue(el.value);
+                        el.setSelectionRange(start, start);
+                    }
+                }
+            }
+        });
+
+
+
+
+
+        // 2. v-uppercase: Kursorni yo'qotmaslik uchun yangilangan versiya
+        app.directive('uppercase', {
+            mounted(el) {
+                el.addEventListener('input', (e) => {
+                    const start = el.selectionStart;
+                    const end = el.selectionEnd;
+                    el.value = el.value.toUpperCase();
+                    el.setSelectionRange(start, end);
+                    el.dispatchEvent(new Event('input'));
+                });
+            }
+        });
+
+
+        // 3. Eng oxirida mount qilamiz
+        app.mount('#app');
+    </script>
+
+
+    <style>
+        /* Premium dizayn uchun stepper stillari */
+        .step-item {
+            flex: 1;
+            position: relative;
+        }
+
+        .step-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #f4f6f9;
+            border: 2px solid #dee2e6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            font-weight: bold;
+            color: #adb5bd;
+        }
+
+        .active .step-circle {
+            border-color: #007bff;
+            color: #007bff;
+            background: #fff;
+            box-shadow: 0 0 10px rgba(0, 123, 255, 0.3);
+        }
+
+        .completed .step-circle {
+            background: #28a745;
+            border-color: #28a745;
+            color: #fff;
+        }
+
+        [v-cloak] {
+            display: none;
+        }
+    </style>
+    {% endblock extra_js %}

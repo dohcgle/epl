@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.humanize',
+    'django_jsonform',
     # Third party apps
     'rest_framework',
     'drf_spectacular',

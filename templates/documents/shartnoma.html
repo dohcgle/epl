@@ -213,12 +213,12 @@
         <span class="var">{{ loan.created_at|date:"d.m.Y" }}</span> y. da imzolangan 1-sonli Garov predmeti qiymatini
         tasdiqlash dalolatnomasiga muvofiq
         <span class="bold"><span class="var">{{ avto.bahosi|intcomma }}</span>
-            (<span class="var">{{ avto.bahosi_soz }}</span>)</span> so‘mni tashkil qiladi. Garovning aniq shartlari
-        tegishli notarial
-        rasmiylashtirilgan garov shartnomasi bilan belgilanadi.
+            (<span class="var">{{ avto.bahosi_soz }}</span>)</span> so‘mni tashkil qiladi. 
     </p>
-    {% elif is_kochmas %}
-    <p>3.1.1. Mikromoliya tashkiloti va Qarz oluvchi
+    {% endif %}
+
+    {% if is_kochmas %}
+    <p>3.1.1.1. Mikromoliya tashkiloti va Qarz oluvchi
         {% if collateral.owner_type != 'borrower' %}
         va <span class="bold">
             <span class="var">{{ collateral.owner_client.fish }}</span></span>
@@ -227,18 +227,18 @@
         tasdiqlash dalolatnomasiga muvofiq
         <span class="bold"><span class="var">{{ mulk.manzil }}</span></span> manzilida joylashgan, yer uchastkasi
         maydoni - <span class="var">{{ mulk.umumiy_maydon }}</span>,
-        yashash maydoni - <span class="var">{{ mulk.yashash_maydoni }}</span> bo‘lgan,
-        <span class="bold"><span class="var">{{ mulk.turi }}</span></span> ko‘rinishidagi ko‘chmas mulk (bundan
+        yashash maydoni - <span class="var">{{ mulk.yashash_maydon }}</span> bo‘lgan,
+        <span class="bold"><span class="var">{{ mulk.nomi }}</span></span> ko‘rinishidagi ko‘chmas mulk (bundan
         keyin “Garov predmeti”), egalik huquqiga ko‘ra <span class="bold">
             <span class="var">{{ collateral.owner_client.fish }}</span></span> ga tegishli va kelishilgan garov qiymati
         <span class="var">{{ loan.created_at|date:"d.m.Y" }}</span> y. da imzolangan 1-sonli Garov predmeti qiymatini
         tasdiqlash dalolatnomasiga muvofiq
         <span class="bold"><span class="var">{{ mulk.bahosi|intcomma }}</span>
-            (<span class="var">{{ mulk.bahosi_soz }}</span>)</span> so‘mni tashkil qiladi. Garovning aniq shartlari
-        tegishli tarzda
-        notarial tasdiqlangan garov shartnomasi bilan belgilangan.
+            (<span class="var">{{ mulk.bahosi_soz }}</span>)</span> so‘mni tashkil qiladi.
     </p>
     {% endif %}
+    
+    <p>Garovning aniq shartlari tegishli notarial/rasmiy rasmiylashtirilgan garov shartnomasi bilan belgilanadi.</p>
 
     {% if is_sugurta_mavjud %}
     <p>3.1.2. «<span class="var">{{ sugurta.kompaniya }}</span>» sug‘urta kompaniyasi (keyingi
@@ -514,20 +514,10 @@
                     <span class="var">{{ loan.client.telefon }}</span>
                     {% endif %}<br>
 
-                    {% if contact_1 %}
-                    <span class="var">{{ contact_1.get_qarindoshlik_display }}</span>:
-                    <span class="var">{{ contact_1.telefon }}</span><br>
-                    {% endif %}
-
-                    {% if contact_2 %}
-                    <span class="var">{{ contact_2.get_qarindoshlik_display }}</span>:
-                    <span class="var">{{ contact_2.telefon }}</span><br>
-                    {% endif %}
-
-                    {% if contact_3 %}
-                    <span class="var">{{ contact_3.get_qarindoshlik_display }}</span>:
-                    <span class="var">{{ contact_3.telefon }}</span><br>
-                    {% endif %}
+                    {% for contact in loan.client.contact_persons %}
+                    <span class="var">{{ contact.get_qarindoshlik_display }}</span>:
+                    <span class="var">{{ contact.fish }}</span> <span class="var">{{ contact.telefon }}</span><br>
+                    {% endfor %}
 
                     <div style="margin-top: 40px; border-bottom: 1px solid #000; width: 80%;"></div>
                     <div style="font-size: 8pt; text-align: center;">(Imzo)</div>

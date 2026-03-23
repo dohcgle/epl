@@ -8,7 +8,6 @@ class UmumiyMalumotForm(forms.Form):
     qarz_oluvchi_pasport_seriya = forms.CharField(label="Pasport seriyasi va raqami", max_length=20, required=False)
     qarz_oluvchi_pasport_berilgan = forms.CharField(label="Kim tomonidan va qachon berilgan", widget=forms.Textarea(attrs={'rows': 2}), required=False)
     qarz_oluvchi_manzil = forms.CharField(label="Doimiy yashash manzili", widget=forms.Textarea(attrs={'rows': 2}), required=False)
-    qarz_oluvchi_ish_joyi = forms.CharField(label="Ish joyi va lavozimi", widget=forms.Textarea(attrs={'rows': 2}), required=False)
     qarz_oluvchi_daromad = forms.IntegerField(label="O'rtacha oylik daromad (so'm)", required=False)
     qarz_oluvchi_xarajatlar = forms.IntegerField(label="O'rtacha oylik xarajatlar (so'm)", required=False)
     qarz_oluvchi_majburiyatlar = forms.CharField(label="Mavjud kredit va qarz majburiyatlari", widget=forms.Textarea(attrs={'rows': 2}), required=False)

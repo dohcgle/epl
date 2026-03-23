@@ -179,21 +179,49 @@
         -* ro‘yxatdan o‘tgan manzili/garaj manzili: <strong><span class="var">{{ avto.manzil }}</span></strong><br>
         -* davlat raqami: <strong><span class="var">{{ avto.davlat_raqami }}</span></strong>
     </div>
+    {% endif %}
 
-    {% elif is_kochmas %}
+    {% if is_kochmas %}
     <p>
-        5. <strong><span class="var">{{ collateral.owner_client.fish }}</span></strong>ga tegishli
-        <strong><span class="var">{{ mulk.turi }}</span></strong> ko‘rinishidagi
+        {% if is_avto %}6{% else %}5{% endif %}. <strong><span class="var">{{ collateral.owner_client.fish }}</span></strong>ga tegishli
+        <strong><span class="var">{{ mulk.nomi }}</span></strong> ko‘rinishidagi
         ko‘chmas mulkni quyidagi ma’lumotlarga muvofiq garovga qabul qilinsin:
     </p>
 
-    <p>Manzil: <span class="var">{{ mulk.manzil }}</span></p>
-    <p>Kelishilgan qiymati: <strong><span class="var">{{ mulk.bahosi|intcomma }}</span></strong> so‘m.</p>
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 25%;">Nomi</th>
+                <th style="width: 15%;">Qurilish osti maydoni</th>
+                <th style="width: 15%;">Umumiy maydoni</th>
+                <th style="width: 15%;">Yashash maydoni</th>
+                <th style="width: 30%;">Kelishilgan garov qiymati, so'm</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><span class="var">{{ mulk.nomi }}</span></td>
+                <td><span class="var">{{ mulk.qurilish_maydon|default:"0" }}</span></td>
+                <td><span class="var">{{ mulk.umumiy_maydon|default:"0" }}</span></td>
+                <td><span class="var">{{ mulk.yashash_maydon|default:"0" }}</span></td>
+                <td>
+                    <span class="var">{{ mulk.bahosi|intcomma }}</span><br>
+                    (<span class="var">{{ mulk.bahosi_soz }}</span>)
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="list-item" style="font-size: 9pt;">
+        -* manzili: <strong><span class="var">{{ mulk.manzil }}</span></strong><br>
+        -* kadastr raqami: <strong><span class="var">{{ mulk.kadastr_raqami }}</span></strong><br>
+        -* reestr raqami: <strong><span class="var">{{ mulk.reestr_raqami|default:collateral.reestr_number }}</span></strong>
+    </div>
     {% endif %}
 
-    {% if is_sugurta %}
+    {% if is_sugurta_mavjud %}
     <div class="list-item" style="margin-top: 15px;">
-        6. <strong>«<span class="var">{{ sugurta.kompaniya }}</span>» АJ</strong> sug‘urta kompaniyasi bilan
+        {% if is_avto and is_kochmas %}7{% elif is_avto or is_kochmas %}6{% else %}5{% endif %}. <strong>«<span class="var">{{ sugurta.kompaniya }}</span>» АJ</strong> sug‘urta kompaniyasi bilan
         Mikroqarz to'lamaslik xavfini <strong><span class="var">{{ sugurta.summa|intcomma }}</span> (<span
                 class="var">{{ sugurta.summa_soz }}</span>) so'm</strong> miqdoriga sug’urta qilish shartnomasi
         tuzilsin.

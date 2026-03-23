@@ -119,27 +119,12 @@
                         </li>
 
                         <!-- Operator Menu -->
-                        <!-- Operator Menu -->
                         {% if request.user|has_group:"Operator" or request.user.is_superuser %}
                         <li class="nav-item">
-                            <a href="{% url 'create_loan' %}"
-                                class="nav-link {% if request.resolver_match.url_name == 'create_loan' %}active{% endif %}">
-                                <i class="nav-icon fas fa-plus-circle"></i>
-                                <p>Ariza Kiritish (Eski)</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{% url 'create_loan_vue' %}"
-                                class="nav-link {% if request.resolver_match.url_name == 'create_loan_vue' %}active{% endif %}">
-                                <i class="nav-icon fas fa-bolt"></i>
-                                <p>Ariza kiritish (Vue JS)</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{% url 'document_list' %}"
-                                class="nav-link {% if 'documents' in request.path %}active{% endif %}">
-                                <i class="nav-icon fas fa-list"></i>
-                                <p>Mening Arizalarim</p>
+                            <a href="{% url 'loan_wizard' %}"
+                                class="nav-link {% if 'wizard' in request.path %}active{% endif %}">
+                                <i class="nav-icon fas fa-magic"></i>
+                                <p>Ariza kiritish (Vizard)</p>
                             </a>
                         </li>
                         {% endif %}

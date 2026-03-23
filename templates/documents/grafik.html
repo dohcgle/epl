@@ -188,20 +188,10 @@
                     <span class="var">{{ loan.client.telefon }}</span>
                     {% endif %}<br>
 
-                    {% if contact_1 %}
-                    <span class="var">{{ contact_1.get_qarindoshlik_display }}</span>:
-                    <span class="var">{{ contact_1.telefon }}</span><br>
-                    {% endif %}
-
-                    {% if contact_2 %}
-                    <span class="var">{{ contact_2.get_qarindoshlik_display }}</span>:
-                    <span class="var">{{ contact_2.telefon }}</span><br>
-                    {% endif %}
-
-                    {% if contact_3 %}
-                    <span class="var">{{ contact_3.get_qarindoshlik_display }}</span>:
-                    <span class="var">{{ contact_3.telefon }}</span><br>
-                    {% endif %}
+                    {% for contact in loan.client.contact_persons %}
+                    <span class="var">{{ contact.get_qarindoshlik_display }}</span>:
+                    <span class="var">{{ contact.fish }}</span> <span class="var">{{ contact.telefon }}</span><br>
+                    {% endfor %}
                     <br>
                     <div style="height: 30px; border-bottom: 1px solid black; margin-bottom: 5px;"></div>
                     <div style="text-align: center;">(Imzo)</div>

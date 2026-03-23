@@ -908,66 +908,62 @@
                             class="card card-indigo card-outline mb-4 animation-fade-in">
                             <div class="card-header bg-light">
                                 <h3 class="card-title font-weight-bold text-indigo"><i class="fas fa-building mr-2"></i>
-                                    Ko'chmas Mulk Ma'lumotlari</h3>
+                                    Ko'chmas Mulk Ma'lumotlari (v1.1)</h3>
                             </div>
-                            <div class="card-body">
+                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-md-12 form-group">
-                                        <label>Ko'chmas mulk nomi <span class="text-danger">*</span></label>
-                                        <input type="text" v-model="collateral.mulk_turi"
-                                            class="form-control"
-                                            placeholder="Masalan: HOVLI UY, KVARTIRA" v-uppercase>
+                                        <label>Ko'chmas mulk turi <span class="text-danger">*</span></label>
+                                        <select v-model="collateral.mulk_turi" class="form-control">
+                                            <option value="">TANLANG...</option>
+                                            <option value="Uy">UY</option>
+                                            <option value="Kvartira">KVARTIRA</option>
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6 form-group">
                                         <label>Umumiy yer maydoni <span class="text-danger">*</span></label>
-                                        <input type="text" v-model="collateral.mulk_umumiy"
+                                        <input type="text" v-model="collateral.mulk_umumiy_yer_maydoni"
                                             class="form-control" v-uppercase>
                                     </div>
                                     <div class="col-md-6 form-group">
                                         <label>Qurilish osti maydoni <span class="text-danger">*</span></label>
-                                        <input type="text" v-model="collateral.mulk_qurilish"
+                                        <input type="text" v-model="collateral.mulk_qurilish_osti_maydoni"
                                             class="form-control" v-uppercase>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6 form-group">
                                         <label>Umumiy foydalanish maydoni <span class="text-danger">*</span></label>
-                                        <input type="text" v-model="collateral.mulk_foydalanish"
+                                        <input type="text" v-model="collateral.mulk_umumiy_foydalanish_maydoni"
                                             class="form-control" v-uppercase>
                                     </div>
                                     <div class="col-md-6 form-group">
                                         <label>Yashash maydoni <span class="text-danger">*</span></label>
-                                        <input type="text" v-model="collateral.mulk_yashash"
+                                        <input type="text" v-model="collateral.mulk_yashash_maydoni"
                                             class="form-control" v-uppercase>
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-6 form-group">
-                                        <label>Ko'chmas mulk egasi <span class="text-danger">*</span></label>
-                                        <input type="text" v-model="collateral.mulk_egasi"
-                                            class="form-control" v-uppercase>
-                                    </div>
                                     <div class="col-md-6 form-group">
                                         <label>Reestr raqami <span class="text-danger">*</span></label>
                                         <input type="text" v-model="collateral.mulk_reestr_raqami"
                                             class="form-control" v-uppercase>
                                     </div>
-                                </div>
-                                <div class="row">
                                     <div class="col-md-6 form-group">
                                         <label>Kadastr raqami <span class="text-danger">*</span></label>
-                                        <input type="text" v-model="collateral.mulk_kadastr"
-                                            class="form-control" v-uppercase>
-                                    </div>
-                                    <div class="col-md-6 form-group">
-                                        <label>Manzili <span class="text-danger">*</span></label>
-                                        <input type="text" v-model="collateral.mulk_manzil"
+                                        <input type="text" v-model="collateral.mulk_kadastr_raqami"
                                             class="form-control" v-uppercase>
                                     </div>
                                 </div>
-                                <!-- Qo'shimcha saqlanib qoladigan ustunlar yashirin emas lekin eskicha -->
+                                <div class="row">
+                                    <div class="col-md-12 form-group">
+                                        <label>Manzili <span class="text-danger">*</span></label>
+                                        <input type="text" v-model="collateral.mulk_manzili"
+                                            class="form-control" v-uppercase>
+                                    </div>
+                                </div>
                                 <div class="row">
                                     <div class="col-md-6 form-group">
                                         <label>Kelishilgan garov qiymati <span class="text-danger">*</span></label>
@@ -1255,7 +1251,7 @@
                             <div class="col-md-4 form-group">
                                 <label>Filial nomi <span class="text-danger">*</span></label>
                                 <select v-model="financial.filial_nomi" class="form-control text-uppercase">
-                                    <option value="">TALLANG...</option>
+                                    <option value="">TANLANG...</option>
                                     <option value="BUXORO FILIALI">BUXORO FILIALI</option>
                                     <option value="URGANCH FILIALI">URGANCH FILIALI</option>
                                     <option value="TO'RTKO'L FILIALI">TO'RTKO'L FILIALI</option>
@@ -1429,14 +1425,13 @@
 
                 // --- KO'CHMAS MULK MA'LUMOTLARI ---
                 mulk_turi: '',
-                mulk_umumiy: '',
-                mulk_qurilish: '',
-                mulk_foydalanish: '',
-                mulk_yashash: '',
-                mulk_egasi: '',
+                mulk_umumiy_yer_maydoni: '',
+                mulk_qurilish_osti_maydoni: '',
+                mulk_umumiy_foydalanish_maydoni: '',
+                mulk_yashash_maydoni: '',
                 mulk_reestr_raqami: '',
-                mulk_kadastr: '',
-                mulk_manzil: '',
+                mulk_kadastr_raqami: '',
+                mulk_manzili: '',
                 mulk_bahosi: '',
                 mulk_bahosi_soz: '',
 
@@ -1446,6 +1441,7 @@
                 tilla_vazni: '',
                 tilla_soni: null,
                 tilla_bahosi: '',
+                tilla_bahosi_soz: '',
 
                 // --- SUG'URTA MA'LUMOTLARI ---
                 sugurta_kompaniya: '',
@@ -1568,7 +1564,7 @@
                     l.grafik_matni && l.grafik_matni.trim() !== '';
             });
 
-            // Garov ta'minoti ma'lumotlari to'ldirilganligini tekshirish (faqat Avtomobil majburiy maydonlari uchun)
+            // Garov ta'minoti ma'lumotlari to'ldirilganligini tekshirish
             const isStep4Valid = computed(() => {
                 if (selectedCollaterals.value.includes('avto')) {
                     const reqAvto = [
@@ -1578,6 +1574,38 @@
                         'avto_raqam', 'avto_bahosi', 'avto_bahosi_soz'
                     ];
                     for (let field of reqAvto) {
+                        const val = collateral.value[field];
+                        if (val === null || val === undefined || String(val).trim() === '') {
+                            return false;
+                        }
+                    }
+                }
+                if (selectedCollaterals.value.includes('kochmas')) {
+                    const reqMulk = [
+                        'mulk_turi', 'mulk_umumiy_yer_maydoni', 'mulk_qurilish_osti_maydoni',
+                        'mulk_umumiy_foydalanish_maydoni', 'mulk_yashash_maydoni',
+                        'mulk_reestr_raqami', 'mulk_kadastr_raqami', 'mulk_manzili',
+                        'mulk_bahosi', 'mulk_bahosi_soz'
+                    ];
+                    for (let field of reqMulk) {
+                        const val = collateral.value[field];
+                        if (val === null || val === undefined || String(val).trim() === '') {
+                            return false;
+                        }
+                    }
+                }
+                if (selectedCollaterals.value.includes('tilla')) {
+                    const reqTilla = ['tilla_nomi', 'tilla_probi', 'tilla_vazni', 'tilla_soni', 'tilla_bahosi', 'tilla_bahosi_soz'];
+                    for (let field of reqTilla) {
+                        const val = collateral.value[field];
+                        if (val === null || val === undefined || String(val).trim() === '') {
+                            return false;
+                        }
+                    }
+                }
+                if (selectedCollaterals.value.includes('sugurta')) {
+                    const reqSugurta = ['sugurta_kompaniya', 'sugurta_polisi', 'sugurta_sana', 'sugurta_summa', 'sugurta_summa_soz'];
+                    for (let field of reqSugurta) {
                         const val = collateral.value[field];
                         if (val === null || val === undefined || String(val).trim() === '') {
                             return false;
@@ -1869,6 +1897,44 @@
                     }
                 }
 
+                // VALIDATSIYA: Ko'chmas mulk ma'lumotlari
+                if (selectedCollaterals.value.includes('kochmas')) {
+                    const reqMulk = [
+                        'mulk_turi', 'mulk_umumiy_yer_maydoni', 'mulk_qurilish_osti_maydoni',
+                        'mulk_umumiy_foydalanish_maydoni', 'mulk_yashash_maydoni',
+                        'mulk_reestr_raqami', 'mulk_kadastr_raqami', 'mulk_manzili',
+                        'mulk_bahosi', 'mulk_bahosi_soz'
+                    ];
+                    for (let field of reqMulk) {
+                        if (!collateral.value[field]) {
+                            alert("Ko'chmas mulk ma'lumotlaridagi barcha qatorlar to'ldirilishi shart!");
+                            return;
+                        }
+                    }
+                }
+
+                // VALIDATSIYA: Tilla buyumlar ma'lumotlari
+                if (selectedCollaterals.value.includes('tilla')) {
+                    const reqTilla = ['tilla_nomi', 'tilla_probi', 'tilla_vazni', 'tilla_soni', 'tilla_bahosi', 'tilla_bahosi_soz'];
+                    for (let field of reqTilla) {
+                        if (!collateral.value[field]) {
+                            alert("Tilla buyumlar ma'lumotlaridagi barcha qatorlar to'ldirilishi shart!");
+                            return;
+                        }
+                    }
+                }
+
+                // VALIDATSIYA: Sug'urta ma'lumotlari
+                if (selectedCollaterals.value.includes('sugurta')) {
+                    const reqSugurta = ['sugurta_kompaniya', 'sugurta_polisi', 'sugurta_sana', 'sugurta_summa', 'sugurta_summa_soz'];
+                    for (let field of reqSugurta) {
+                        if (!collateral.value[field]) {
+                            alert("Sug'urta ma'lumotlaridagi barcha qatorlar to'ldirilishi shart!");
+                            return;
+                        }
+                    }
+                }
+
                 // VALIDATSIYA: Moliyaviy va Tashkilot ma'lumotlari
                 const reqFinancial = [
                     'daromad', 'xarajatlar', 'majburiyatlar',
@@ -2057,16 +2123,14 @@
                     }
 
                     if (selectedCollaterals.value.includes('kochmas')) {
-                        const egasi = ownerType.value === 'borrower' ? personal.value.fish : collateral.value.owner_fish;
-                        collateral.value.mulk_turi = 'uy';
-                        collateral.value.mulk_umumiy = '450';
-                        collateral.value.mulk_qurilish = '150';
-                        collateral.value.mulk_foydalanish = '300';
-                        collateral.value.mulk_yashash = '120';
-                        collateral.value.mulk_egasi = egasi || "OBIDOV ABDULLA SHOKIR O'G'LI";
+                        collateral.value.mulk_turi = 'Uy';
+                        collateral.value.mulk_umumiy_yer_maydoni = '450';
+                        collateral.value.mulk_qurilish_osti_maydoni = '150';
+                        collateral.value.mulk_umumiy_foydalanish_maydoni = '300';
+                        collateral.value.mulk_yashash_maydoni = '120';
                         collateral.value.mulk_reestr_raqami = 'R-' + String(10000 + rand);
-                        collateral.value.mulk_kadastr = '11:05:04:02:03:0014';
-                        collateral.value.mulk_manzil = getRandomManzil();
+                        collateral.value.mulk_kadastr_raqami = '11:05:04:02:03:0014';
+                        collateral.value.mulk_manzili = getRandomManzil();
                         collateral.value.mulk_bahosi = '450 000 000';
                         collateral.value.mulk_bahosi_soz = "TO'RT YUZ ELLIK MILLION SO'M";
                     }
@@ -2233,4 +2297,5 @@
 
     app.mount('#app');
 </script>
+<!-- Cache bust: 2026-03-17 11:20:00 -->
 {% endblock extra_js %}

@@ -107,14 +107,14 @@ BEGIN
     -- 5. Handle Financial Info
     INSERT INTO document_processor_financialinfo (
         application_id, aloqa_uy_tel, aloqa_uyali_tel, aloqa_ish_tel,
-        ish_muassasa, ish_manzil, ish_lavozim, ish_joyi,
+        ish_muassasa, ish_manzil, ish_lavozim,
         daromad_asosiy, daromad_orindosh, daromad_boshqa, daromad,
         xarajat_kommunal, xarajat_oilaviy, xarajat_boshqa, xarajatlar,
         majburiyatlar, filial_nomi, filial_boshligi, 
         filial_boshligi_inisiali, tashkilot_nomi, direktor_fish, direktor_fish_inisiali
     ) VALUES (
         v_app_id, v_financial->>'aloqa_uy_tel', v_financial->>'aloqa_uyali_tel', v_financial->>'aloqa_ish_tel',
-        v_financial->>'ish_muassasa', v_financial->>'ish_manzil', v_financial->>'ish_lavozim', v_financial->>'ish_joyi',
+        v_financial->>'ish_muassasa', v_financial->>'ish_manzil', v_financial->>'ish_lavozim',
         (v_financial->>'daromad_asosiy')::BIGINT, (v_financial->>'daromad_orindosh')::BIGINT, (v_financial->>'daromad_boshqa')::BIGINT, (v_financial->>'daromad')::BIGINT,
         (v_financial->>'xarajat_kommunal')::BIGINT, (v_financial->>'xarajat_oilaviy')::BIGINT, (v_financial->>'xarajat_boshqa')::BIGINT, (v_financial->>'xarajatlar')::BIGINT,
         v_financial->>'majburiyatlar', 
@@ -124,7 +124,7 @@ BEGIN
     )
     ON CONFLICT (application_id) DO UPDATE SET
         aloqa_uy_tel = EXCLUDED.aloqa_uy_tel, aloqa_uyali_tel = EXCLUDED.aloqa_uyali_tel, aloqa_ish_tel = EXCLUDED.aloqa_ish_tel,
-        ish_muassasa = EXCLUDED.ish_muassasa, ish_manzil = EXCLUDED.ish_manzil, ish_lavozim = EXCLUDED.ish_lavozim, ish_joyi = EXCLUDED.ish_joyi,
+        ish_muassasa = EXCLUDED.ish_muassasa, ish_manzil = EXCLUDED.ish_manzil, ish_lavozim = EXCLUDED.ish_lavozim,
         daromad_asosiy = EXCLUDED.daromad_asosiy, daromad_orindosh = EXCLUDED.daromad_orindosh, daromad_boshqa = EXCLUDED.daromad_boshqa, daromad = EXCLUDED.daromad,
         xarajat_kommunal = EXCLUDED.xarajat_kommunal, xarajat_oilaviy = EXCLUDED.xarajat_oilaviy, xarajat_boshqa = EXCLUDED.xarajat_boshqa, xarajatlar = EXCLUDED.xarajatlar,
         majburiyatlar = EXCLUDED.majburiyatlar, filial_nomi = EXCLUDED.filial_nomi,
@@ -191,10 +191,10 @@ BEGIN
                 collateral_id, turi, umumiy_maydon, qurilish_maydon, foydalanish_maydon,
                 yashash_maydon, reestr_raqami, kadastr_raqami, manzil, bahosi, bahosi_soz
             ) VALUES (
-                v_base_col_id, v_collateral->>'mulk_turi', v_collateral->>'mulk_umumiy',
-                v_collateral->>'mulk_qurilish', v_collateral->>'mulk_foydalanish',
-                v_collateral->>'mulk_yashash', v_collateral->>'mulk_reestr_raqami',
-                v_collateral->>'mulk_kadastr', v_collateral->>'mulk_manzil',
+                v_base_col_id, v_collateral->>'mulk_turi', v_collateral->>'mulk_umumiy_yer_maydoni',
+                v_collateral->>'mulk_qurilish_osti_maydoni', v_collateral->>'mulk_umumiy_foydalanish_maydoni',
+                v_collateral->>'mulk_yashash_maydoni', v_collateral->>'mulk_reestr_raqami',
+                v_collateral->>'mulk_kadastr_raqami', v_collateral->>'mulk_manzili',
                 (v_collateral->>'mulk_bahosi')::BIGINT, v_collateral->>'mulk_bahosi_soz'
             );
         ELSIF v_type = 'tilla' THEN

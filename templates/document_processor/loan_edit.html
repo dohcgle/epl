@@ -922,66 +922,62 @@
                                 <h3 class="card-title font-weight-bold text-indigo"><i class="fas fa-building mr-2"></i>
                                     Ko'chmas Mulk Ma'lumotlari</h3>
                             </div>
-                            <div class="card-body">
+                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-md-12 form-group">
-                                        <label>Ko'chmas mulk nomi <span class="text-danger">*</span></label>
-                                        <input type="text" v-model="collateral.mulk_turi"
-                                            class="form-control text-uppercase"
-                                            placeholder="Masalan: HOVLI UY, KVARTIRA" data-model="collateral.mulk_turi">
+                                        <label>Ko'chmas mulk turi <span class="text-danger">*</span></label>
+                                        <select v-model="collateral.mulk_turi" class="form-control" data-model="collateral.mulk_turi">
+                                            <option value="">TANLANG...</option>
+                                            <option value="Uy">UY</option>
+                                            <option value="Kvartira">KVARTIRA</option>
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6 form-group">
                                         <label>Umumiy yer maydoni <span class="text-danger">*</span></label>
-                                        <input type="text" v-model="collateral.mulk_umumiy"
-                                            class="form-control text-uppercase" data-model="collateral.mulk_umumiy">
+                                        <input type="text" v-model="collateral.mulk_umumiy_yer_maydoni"
+                                            class="form-control text-uppercase" data-model="collateral.mulk_umumiy_yer_maydoni">
                                     </div>
                                     <div class="col-md-6 form-group">
                                         <label>Qurilish osti maydoni <span class="text-danger">*</span></label>
-                                        <input type="text" v-model="collateral.mulk_qurilish"
-                                            class="form-control text-uppercase" data-model="collateral.mulk_qurilish">
+                                        <input type="text" v-model="collateral.mulk_qurilish_osti_maydoni"
+                                            class="form-control text-uppercase" data-model="collateral.mulk_qurilish_osti_maydoni">
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6 form-group">
                                         <label>Umumiy foydalanish maydoni <span class="text-danger">*</span></label>
-                                        <input type="text" v-model="collateral.mulk_foydalanish"
+                                        <input type="text" v-model="collateral.mulk_umumiy_foydalanish_maydoni"
                                             class="form-control text-uppercase"
-                                            data-model="collateral.mulk_foydalanish">
+                                            data-model="collateral.mulk_umumiy_foydalanish_maydoni">
                                     </div>
                                     <div class="col-md-6 form-group">
                                         <label>Yashash maydoni <span class="text-danger">*</span></label>
-                                        <input type="text" v-model="collateral.mulk_yashash"
-                                            class="form-control text-uppercase" data-model="collateral.mulk_yashash">
+                                        <input type="text" v-model="collateral.mulk_yashash_maydoni"
+                                            class="form-control text-uppercase" data-model="collateral.mulk_yashash_maydoni">
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-6 form-group">
-                                        <label>Ko'chmas mulk egasi <span class="text-danger">*</span></label>
-                                        <input type="text" v-model="collateral.mulk_egasi"
-                                            class="form-control text-uppercase" data-model="collateral.mulk_egasi">
-                                    </div>
                                     <div class="col-md-6 form-group">
                                         <label>Reestr raqami <span class="text-danger">*</span></label>
                                         <input type="text" v-model="collateral.mulk_reestr_raqami"
                                             class="form-control text-uppercase"
                                             data-model="collateral.mulk_reestr_raqami">
                                     </div>
-                                </div>
-                                <div class="row">
                                     <div class="col-md-6 form-group">
                                         <label>Kadastr raqami <span class="text-danger">*</span></label>
-                                        <input type="text" v-model="collateral.mulk_kadastr"
-                                            class="form-control text-uppercase" data-model="collateral.mulk_kadastr">
-                                    </div>
-                                    <div class="col-md-6 form-group">
-                                        <label>Manzili <span class="text-danger">*</span></label>
-                                        <input type="text" v-model="collateral.mulk_manzil"
-                                            class="form-control text-uppercase" data-model="collateral.mulk_manzil">
+                                        <input type="text" v-model="collateral.mulk_kadastr_raqami"
+                                            class="form-control text-uppercase" data-model="collateral.mulk_kadastr_raqami">
                                     </div>
                                 </div>
-                                <!-- Qo'shimcha saqlanib qoladigan ustunlar yashirin emas lekin eskicha -->
+                                <div class="row">
+                                    <div class="col-md-12 form-group">
+                                        <label>Manzili <span class="text-danger">*</span></label>
+                                        <input type="text" v-model="collateral.mulk_manzili"
+                                            class="form-control text-uppercase" data-model="collateral.mulk_manzili">
+                                    </div>
+                                </div>
                                 <div class="row">
                                     <div class="col-md-6 form-group">
                                         <label>Kelishilgan garov qiymati <span class="text-danger">*</span></label>
@@ -1102,8 +1098,6 @@
                         <h4>5. Mijozning Moliyaviy Holati</h4>
                         <div class="form-group">
                             <label>Mijozning ish joyi va lavozimi <span class="text-danger">*</span></label>
-                            <input type="text" v-model="financial.ish_joyi" data-model="financial.ish_joyi"
-                                class="form-control text-uppercase">
                         </div>
                         <div class="row">
                             <div class="col-md-4 form-group">
@@ -1272,12 +1266,12 @@
                 owner_fish: '', owner_initials: '', owner_birth_date: '', owner_passport: '', owner_jshshir: '', owner_gender: '', owner_passport_given_by: '', owner_address: '',
                 notarius_fish: '', notarius_address: '', reestr_number: '', reestr_date: '',
                 avto_nomi: '', avto_kuzov_turi: '', avto_kuzov: '', avto_dvigatel: '', avto_shassi: '', avto_rang: '', avto_yil: null, avto_texpasport: '', avto_texpasport_sana: '', avto_manzil: '', avto_raqam: '', avto_bahosi: '', avto_bahosi_soz: '',
-                mulk_turi: '', mulk_umumiy: '', mulk_qurilish: '', mulk_foydalanish: '', mulk_yashash: '', mulk_reestr_raqami: '', mulk_kadastr: '', mulk_manzil: '', mulk_bahosi: '', mulk_bahosi_soz: '',
+                mulk_turi: '', mulk_umumiy_yer_maydoni: '', mulk_qurilish_osti_maydoni: '', mulk_umumiy_foydalanish_maydoni: '', mulk_yashash_maydoni: '', mulk_reestr_raqami: '', mulk_kadastr_raqami: '', mulk_manzili: '', mulk_bahosi: '', mulk_bahosi_soz: '',
                 tilla_nomi: '', tilla_probi: '', tilla_vazni: '', tilla_soni: null, tilla_bahosi: '', tilla_bahosi_soz: '',
                 sugurta_kompaniya: '', sugurta_polisi: '', sugurta_sana: '', sugurta_summa: '', sugurta_summa_soz: ''
             });
 
-            const financial = ref({ ish_joyi: '', daromad: '', xarajatlar: '', tahminiy_tolov: '', majburiyatlar: '', filial_nomi: '', filial_boshligi: '', filial_boshligi_inisiali: '', tashkilot_nomi: '', direktor_fish: '', direktor_fish_inisiali: '' });
+            const financial = ref({ daromad: '', xarajatlar: '', tahminiy_tolov: '', majburiyatlar: '', filial_nomi: '', filial_boshligi: '', filial_boshligi_inisiali: '', tashkilot_nomi: '', direktor_fish: '', direktor_fish_inisiali: '' });
 
             const steps = [1, 2, 3, 4, 5];
             const stepTitles = ["Shaxsiy Ma'lumotlar", "Bog'lanish uchun shaxslar", "Kredit Ma'lumotlari & Grafik", "Garov Ta'minoti", "Moliyaviy Holat & Tashkilot"];
@@ -1331,7 +1325,7 @@
             // Moliyaviy va Tashkilot ma'lumotlari to'ldirilganligini tekshirish
             const isStep5Valid = computed(() => {
                 const reqFinancial = [
-                    'ish_joyi', 'daromad', 'xarajatlar', 'tahminiy_tolov', 'majburiyatlar',
+                    'daromad', 'xarajatlar', 'tahminiy_tolov', 'majburiyatlar',
                     'filial_nomi', 'filial_boshligi', 'filial_boshligi_inisiali',
                     'tashkilot_nomi', 'direktor_fish', 'direktor_fish_inisiali'
                 ];
@@ -1440,90 +1434,100 @@
                         }
                     }
                 }
-            }
 
-            // VALIDATSIYA: Moliyaviy va Tashkilot ma'lumotlari
-            const reqFinancial = [
-                'ish_joyi', 'daromad', 'xarajatlar', 'tahminiy_tolov', 'majburiyatlar',
-                'filial_nomi', 'filial_boshligi', 'filial_boshligi_inisiali',
-                'tashkilot_nomi', 'direktor_fish', 'direktor_fish_inisiali'
-            ];
-            for (let field of reqFinancial) {
-                if (!financial.value[field]) {
-                    alert("Moliyaviy Holat va Tashkilot Ma'lumotlari (5 va 6-qadam) qatorlari to'liq kiritilmagan!");
-                    return;
+                // VALIDATSIYA: Moliyaviy va Tashkilot ma'lumotlari
+                const reqFinancial = [
+                    'daromad', 'xarajatlar', 'tahminiy_tolov', 'majburiyatlar',
+                    'filial_nomi', 'filial_boshligi', 'filial_boshligi_inisiali',
+                    'tashkilot_nomi', 'direktor_fish', 'direktor_fish_inisiali'
+                ];
+                for (let field of reqFinancial) {
+                    if (!financial.value[field]) {
+                        alert("Moliyaviy Holat va Tashkilot Ma'lumotlari (5 va 6-qadam) qatorlari to'liq kiritilmagan!");
+                        return;
+                    }
                 }
-            }
 
-            try {
-                const res = await fetch(`/api/loans/update/{{ loan_id }}/`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json', 'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value },
-                    body: JSON.stringify(fullData)
+                try {
+                    const res = await fetch(`/api/loans/update/{{ loan_id }}/`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                        },
+                        body: JSON.stringify(fullData)
+                    });
+                    const data = await res.json();
+                    if (res.ok && data.status === 'success') {
+                        alert("Muvaffaqiyatli saqlandi!");
+                        window.location.href = '/documents/';
+                    } else {
+                        alert("Xatolik: " + (data.message || "Noma'lum"));
+                    }
+                } catch (e) {
+                    alert("Tarmoq xatosi!");
+                }
+            };
+
+            const fillRandomStep = (step) => { /* Not implemented in edit */ };
+
+            onMounted(() => {
+                try {
+                    const data = {{ loan_data_json|safe }};
+                    if (data) {
+                        if (data.personal) Object.assign(personal.value, data.personal);
+                        if (data.contacts) contacts.value = (data.contacts.length >= 2) ? data.contacts : contacts.value;
+                        if (data.loan) Object.assign(loan.value, data.loan);
+                        if (data.financial) Object.assign(financial.value, data.financial);
+                        if (data.collateral) {
+                            ownerType.value = data.collateral.owner_type || 'borrower';
+                            selectedCollaterals.value = data.collateral.selected_types || [];
+                            Object.assign(collateral.value, data.collateral);
+                        }
+                    }
+                } catch (e) {
+                    console.error("Data load error", e);
+                }
+
+                $('input:not([type="checkbox"]), select, textarea').addClass('form-control');
+                $('.phone-mask').inputmask("+\\9\\98 99 999-99-99");
+                $('.jshshir-mask').inputmask("99999999999999");
+                $('.passport-mask').inputmask("AA9999999");
+                $('.date-mask').inputmask("99.99.9999");
+                $('.money-mask').inputmask({ alias: "numeric", groupSeparator: " ", autoGroup: true, digits: 0, rightAlign: false });
+
+                $('input[data-model], select[data-model], textarea[data-model]').on('input keyup change', function () {
+                    const val = $(this).val();
+                    const modelPath = $(this).attr('data-model');
+                    if (!modelPath) return;
+                    const parts = modelPath.split('.');
+                    if (parts.length === 2) {
+                        const objName = parts[0];
+                        const propName = parts[1];
+                        if (objName.startsWith('contacts[')) {
+                            const match = objName.match(/contacts\[(\d+)\]/);
+                            if (match) contacts.value[parseInt(match[1])][propName] = val;
+                        } else {
+                            if (objName === 'personal') personal.value[propName] = val;
+                            if (objName === 'loan') loan.value[propName] = val;
+                            if (objName === 'collateral') collateral.value[propName] = val;
+                            if (objName === 'financial') financial.value[propName] = val;
+                        }
+                    }
                 });
-                const data = await res.json();
-                if (res.ok && data.status === 'success') { alert("Muvaffaqiyatli saqlandi!"); window.location.href = '/documents/'; }
-                else { alert("Xatolik: " + (data.message || "Noma'lum")); }
-            } catch (e) { alert("Tarmoq xatosi!"); }
-        };
+            });
 
-        const fillRandomStep = (step) => { /* Not implemented in edit */ };
-
-        onMounted(() => {
-        try {
-            const data = {{ loan_data_json| safe
-        }};
-    if (data) {
-        if (data.personal) Object.assign(personal.value, data.personal);
-        if (data.contacts) contacts.value = (data.contacts.length >= 2) ? data.contacts : contacts.value;
-        if (data.loan) Object.assign(loan.value, data.loan);
-        if (data.financial) Object.assign(financial.value, data.financial);
-        if (data.collateral) {
-            ownerType.value = data.collateral.owner_type || 'borrower';
-            selectedCollaterals.value = data.collateral.selected_types || [];
-            Object.assign(collateral.value, data.collateral);
-        }
-    }
-        } catch (e) { console.error("Data load error", e); }
-
-    $('input:not([type="checkbox"]), select, textarea').addClass('form-control');
-    $('.phone-mask').inputmask("+\\9\\98 99 999-99-99");
-    $('.jshshir-mask').inputmask("99999999999999");
-    $('.passport-mask').inputmask("AA9999999");
-    $('.date-mask').inputmask("99.99.9999");
-    $('.money-mask').inputmask({ alias: "numeric", groupSeparator: " ", autoGroup: true, digits: 0, rightAlign: false });
-
-    $('input[data-model], select[data-model], textarea[data-model]').on('input keyup change', function () {
-        const val = $(this).val();
-        const modelPath = $(this).attr('data-model');
-        if (!modelPath) return;
-        const parts = modelPath.split('.');
-        if (parts.length === 2) {
-            const objName = parts[0];
-            const propName = parts[1];
-            if (objName.startsWith('contacts[')) {
-                const match = objName.match(/contacts\[(\d+)\]/);
-                if (match) contacts.value[parseInt(match[1])][propName] = val;
-            } else {
-                if (objName === 'personal') personal.value[propName] = val;
-                if (objName === 'loan') loan.value[propName] = val;
-                if (objName === 'collateral') collateral.value[propName] = val;
-                if (objName === 'financial') financial.value[propName] = val;
-            }
-        }
-    });
-    });
-
-    return {
-        currentStep, ownerType, selectedCollaterals, sugurtaMavjud,
-        personal, contacts, loan, collateral, financial,
-        steps, stepTitles, kinshipChoices, loanTypeChoices, graphChoices, propertyTypeChoices,
-        nextStep, prevStep, setOwnerType, submitForm, fillRandomStep, showJsonPreview,
-        borrowerFish, borrowerInitials, isStep1Valid, isStep2Valid, isStep3Valid, isStep4Valid, isStep5Valid
-    };
+            return {
+                currentStep, ownerType, selectedCollaterals, sugurtaMavjud,
+                personal, contacts, loan, collateral, financial,
+                steps, stepTitles, kinshipChoices, loanTypeChoices, graphChoices, propertyTypeChoices,
+                nextStep, prevStep, setOwnerType, submitForm, fillRandomStep, showJsonPreview,
+                borrowerFish, borrowerInitials, isStep1Valid, isStep2Valid, isStep3Valid, isStep4Valid, isStep5Valid
+            };
         },
     delimiters: ['[[', ']]']
     });
     app.mount('#app');
 </script>
 {% endblock extra_js %}
+```

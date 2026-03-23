@@ -74,10 +74,10 @@
                                 </tr>
                                 <tr>
                                     <th>Garov Turi</th>
-                                    <td>{{ loan.get_garov_turi_display }}</td>
+                                    <td>{{ loan.garov_turi }}</td>
                                 </tr>
 
-                                {% if loan.garov_turi == 'avto' %}
+                                {% if loan.garov_turi_raw == 'avto' %}
                                 <tr>
                                     <th>Avtomobil</th>
                                     <td>{{ loan.collateral_avto_nomi }} - {{ loan.collateral_avto_raqam }} ({{
@@ -89,7 +89,7 @@
                                 </tr>
                                 {% endif %}
 
-                                {% if loan.garov_turi == 'kochmas_mulk' %}
+                                {% if loan.garov_turi_raw == 'kochmas' %}
                                 <tr>
                                     <th>Ko'chmas Mulk</th>
                                     <td>{{ loan.collateral_mulk_turi }} - {{ loan.collateral_mulk_manzil }}</td>

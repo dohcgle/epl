@@ -1,0 +1,106 @@
+{% extends 'base_adminlte.html' %}
+{% load humanize %}
+
+{% block page_title %}Vizard Arizasini Ko'rish{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-9 mx-auto">
+        <div class="card card-outline card-primary shadow">
+            <div class="card-header">
+                <h3 class="card-title font-weight-bold">
+                    <i class="fas fa-file-invoice mr-2"></i> {{ wizard.client_name|upper }} - ARIZA MA'LUMOTLARI
+                </h3>
+                <div class="card-tools">
+                    <span class="badge badge-info p-2">{{ wizard.status|upper }}</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <!-- Mijoz Ma'lumotlari -->
+                <div class="mb-4">
+                    <h5 class="text-primary border-bottom pb-2 font-weight-bold">1. MIJOZ MA'LUMOTLARI</h5>
+                    <div class="row">
+                        <div class="col-sm-4"><strong>F.I.Sh:</strong> {{ wizard.data.client_info.fish }}</div>
+                        <div class="col-sm-4"><strong>Pasport:</strong> {{ wizard.data.client_info.pasport }}</div>
+                        <div class="col-sm-4"><strong>JSHSHIR:</strong> {{ wizard.data.client_info.jshshir }}</div>
+                        <div class="col-sm-12 mt-2"><strong>Manzil:</strong> {{ wizard.data.client_info.manzil }}</div>
+                    </div>
+                </div>
+
+                <!-- Kredit Shartlari -->
+                <div class="mb-4">
+                    <h5 class="text-primary border-bottom pb-2 font-weight-bold">2. KREDIT SHARTLARI</h5>
+                    <div class="row">
+                        <div class="col-sm-4"><strong>Summa:</strong> {{ wizard.loan_amount|intcomma }} so'm</div>
+                        <div class="col-sm-4"><strong>Muddat:</strong> {{ wizard.data.loan_details.muddat }} oy</div>
+                        <div class="col-sm-4"><strong>Foiz:</strong> {{ wizard.data.loan_details.foiz }}%</div>
+                        <div class="col-sm-4 mt-2"><strong>Turi:</strong> {{ wizard.data.loan_details.turi|upper }}</div>
+                        <div class="col-sm-4 mt-2"><strong>Grafik:</strong> {{ wizard.data.loan_details.grafik|upper }}</div>
+                    </div>
+                </div>
+
+                <!-- Garov -->
+                <div class="mb-4">
+                    <h5 class="text-primary border-bottom pb-2 font-weight-bold">3. GAROV MA'LUMOTLARI</h5>
+                    <p><strong>Tanlangan turlar:</strong> {{ wizard.data.collateral.selected_types|join:", "|upper }}</p>
+                    <p><strong>Garov egasi:</strong> {{ wizard.data.collateral.data.owner_fish|default:"—" }}</p>
+                </div>
+
+                <!-- HUJJATLAR -->
+                {% if wizard.status != 'pending_moderator' %}
+                <div class="mb-4">
+                    <h5 class="text-success border-bottom pb-2 font-weight-bold">4. TAYYOR HUJJATLAR (PDF)</h5>
+                    <div class="row">
+                        <!-- Har bir hujjat uchun alohida tugmalar -->
+                        <div class="col-md-3 mb-2">
+                             <a href="{% url 'generate_pdf' wizard.id 'xulosa' %}" target="_blank" class="btn btn-outline-danger btn-sm btn-block">XULOSA</a>
+                        </div>
+                        <div class="col-md-3 mb-2">
+                             <a href="{% url 'generate_pdf' wizard.id 'buyruq' %}" target="_blank" class="btn btn-outline-danger btn-sm btn-block">BUYRUQ</a>
+                        </div>
+                        <div class="col-md-3 mb-2">
+                             <a href="{% url 'generate_pdf' wizard.id 'protokol' %}" target="_blank" class="btn btn-outline-danger btn-sm btn-block">PROTOKOL</a>
+                        </div>
+                        <div class="col-md-3 mb-2">
+                             <a href="{% url 'generate_pdf' wizard.id 'shartnoma' %}" target="_blank" class="btn btn-outline-danger btn-sm btn-block">SHARTNOMA</a>
+                        </div>
+                        <div class="col-md-3 mb-2">
+                             <a href="{% url 'generate_pdf' wizard.id 'grafik' %}" target="_blank" class="btn btn-outline-danger btn-sm btn-block">GRAFIK</a>
+                        </div>
+                        <div class="col-md-3 mb-2">
+                             <a href="{% url 'generate_pdf' wizard.id 'dalolatnoma' %}" target="_blank" class="btn btn-outline-danger btn-sm btn-block">DALOLATNOMA</a>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <a href="{% url 'generate_all_pdfs' wizard.id %}" class="btn btn-primary">
+                            <i class="fas fa-file-archive mr-2"></i> Barcha hujjatlarni yuklash (ZIP)
+                        </a>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+            <div class="card-footer d-flex py-3">
+                <a href="{% url 'dashboard' %}" class="btn btn-secondary mr-auto">
+                    <i class="fas fa-arrow-left mr-1"></i> ORQAGA
+                </a>
+                
+                {% if wizard.status == 'pending_moderator' %}
+                <form action="{% url 'approve_wizard_moderator' wizard.id %}" method="POST">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-success font-weight-bold">
+                        <i class="fas fa-check-circle mr-2"></i> MODERATOR: TASDIQLASH
+                    </button>
+                </form>
+                {% elif wizard.status == 'approved_moderator' %}
+                <form action="{% url 'approve_wizard_director' wizard.id %}" method="POST">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger font-weight-bold">
+                        <i class="fas fa-signature mr-2"></i> DIREKTOR: IMZOLASH
+                    </button>
+                </form>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -222,55 +222,17 @@
     </div>
 
     <p>
-        Tomonlar o‘rtasida o‘tkazilgan muzokaralar natijalariga ko‘ra, 2-tomon ta’minot sifatida quyidagi tafsilotlarga
+        Tomonlar o‘rtasida o‘tkazilgan muzokaralar natijalariga ko‘ra, 2-tomon ta’minot sifatida yuqoridagi tafsilotlarga
         ega bo‘lgan garov predmetini taqdim etadi,
-        1-tomon esa ushbu garov predmetini <span class="var">{{ loan.details.shartnoma_sanasi|date:"d.m.Y" }}</span>
-        yildagi
-        №<span class="var">{{ loan.id }}</span> mikroqarz
-        shartnomasi bo‘yicha berilgan mikroqarz bo‘yicha
+        1-tomon esa ushbu garov predmetini
         <strong><span class="var">{{ avto.bahosi|intcomma }}</span>
             (<span class="var">{{ avto.bahosi_soz }}</span>) so‘m</strong> bo‘lgan kelishilgan garov
-        qiymatida qabul qiladi:
+        qiymatida qabul qiladi.
     </p>
-
-    <table>
-        <thead>
-            <tr>
-                <th>Nomi</th>
-                <th>Kuzov turi va kuzov raqami*</th>
-                <th>Dvigatel va shassi raqami*</th>
-                <th>Ishlab chiqarilgan yili va rangi*</th>
-                <th>Kelishilgan garov qiymati, so‘m</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>
-                    <span class="var">{{ avto.nomi }}</span>
-                </td>
-                <td>
-                    Kuzov turi: <span class="var"> {{ avto.kuzov_turi }}</span>, <br>
-                    Kuzov raqami: <span class="var"> {{ avto.kuzov_raqami }}</span>
-                </td>
-                <td>
-                    Dvigatel: <span class="var"> {{ avto.dvigatel }}</span>, <br>
-                    Shassi: <span class="var"> {{ avto.shassi }}</span>
-                </td>
-                <td>
-                    <span class="var">{{ avto.yil }} yil</span>, <br>
-                    <span class="var">{{ avto.rang }}</span>
-                </td>
-                <td>
-                    <span class="var">{{ avto.bahosi|intcomma }}</span><br>
-                    (<span class="var">{{ avto.bahosi_soz }}</span>)
-                </td>
-            </tr>
-        </tbody>
-    </table>
     {% endif %}
     {% if is_kochmas %}
     <p>
-        Garov predmeti sifatida <span class="var">{{ mulk.turi }}</span>, {% if garov_boshqa_shaxs %}3-tomonga{% else
+        Garov predmeti sifatida <span class="var">{{ mulk.nomi }}</span>, {% if garov_boshqa_shaxs %}3-tomonga{% else
         %}2-tomonga{% endif %} egalik huquqi tegishli bo'lgan, quyidagi tafsilotlarga ega ko'chmas mulk taqdim etiladi:
     </p>
 
@@ -280,22 +242,25 @@
                 <th>Nomi</th>
                 <th>Umumiy yer maydoni, (m2)</th>
                 <th>Qurilish osti maydoni, (m2)</th>
-                <th>Umumiy foydali maydoni, (m2)</th>
                 <th>Yashash maydoni, (m2)</th>
+                <th>Kelishilgan garov qiymati, so‘m</th>
             </tr>
         </thead>
         <tbody>
             <tr>
-                <td><span class="var">{{ mulk.turi }}</span></td>
+                <td><span class="var">{{ mulk.nomi }}</span></td>
                 <td><span class="var">{{ mulk.umumiy_maydon|default:"—" }}</span></td>
                 <td><span class="var">{{ mulk.qurilish_maydon|default:"—" }}</span></td>
-                <td><span class="var">{{ mulk.foydalanish_maydon|default:"—" }}</span></td>
                 <td><span class="var">{{ mulk.yashash_maydon|default:"—" }}</span></td>
+                <td>
+                    <span class="var">{{ mulk.bahosi|intcomma }}</span><br>
+                    (<span class="var">{{ mulk.bahosi_soz }}</span>)
+                </td>
             </tr>
         </tbody>
     </table>
 
-    <div style="font-size: 10pt; margin-left: 1cm; margin-bottom: 20px;">
+    <div style="font-size: 10pt; margin-left: 1cm; margin-bottom: 5px;">
         -* ko‘chmas mulk egasi:
         <span class="var">
             {% if garov_boshqa_shaxs %}{{ collateral.owner_client.fish }}
@@ -315,63 +280,22 @@
     </div>
 
     <p>
-        Tomonlar o‘rtasida o‘tkazilgan muzokaralar natijalariga ko‘ra, 2-tomon ta’minot sifatida quyidagi tafsilotlarga
-        ega bo‘lgan garov predmetini taqdim etadi
-        1-tomon esa ushbu garov predmetini
-        <span class="var">{{ loan.details.shartnoma_sanasi|date:"d.m.Y" }}</span>
-        y.dan № <span class="var">{{ loan.details.shartnoma_raqami }}</span>
-        <span class="var">
-            {{ loan.details.get_turi_display }}</span> shartnomasi bo‘yicha berilgan
-        <span class="var">
-            {{ loan.details.get_turi_display|lower }}</span> bo‘yicha
-        <strong>
+        Tomonlar ushbu garov predmetini <strong>
             <span class="var">
                 {{ mulk.bahosi|intcomma }}</span> (<span class="var">{{ mulk.bahosi_soz }}</span>)
-            so‘m</strong> bo‘lgan kelishilgan garov qiymatida qabul qiladi:
+            so‘m</strong> bo‘lgan kelishilgan garov qiymatida qabul qiladi.
     </p>
-
-    <table>
-        <thead>
-            <tr>
-                <th>Nomi</th>
-                <th>Umumiy yer maydoni, (m2)</th>
-                <th>Qurilish osti maydoni, (m2)</th>
-                <th>Umumiy foydali maydoni, (m2)</th>
-                <th>Yashash maydoni, (m2)</th>
-                <th>Kelishilgan garov qiymati, so‘m</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td><span class="var">{{ mulk.turi }}</span></td>
-                <td><span class="var">{{ mulk.umumiy_maydon|default:"—" }}</span></td>
-                <td><span class="var">{{ mulk.qurilish_maydon|default:"—" }}</span></td>
-                <td><span class="var">{{ mulk.foydalanish_maydon|default:"—" }}</span></td>
-                <td><span class="var">{{ mulk.yashash_maydon|default:"—" }}</span></td>
-                <td>
-                    <span class="var">{{ mulk.bahosi|intcomma }}</span><br>
-                    (<span class="var">{{ mulk.bahosi_soz }}</span>)
-                </td>
-            </tr>
-        </tbody>
-    </table>
     {% endif %}
-
-    <p>
-        Shu bilan birga, garov predmetining kelishilgan garov qiymati deganda ushbu mulk garov sifatida taqdim
-        etilgan/qabul qilingan qiymati tushuniladi.
-    </p>
 
     <p>
         Shunday qilib, garov predmetining kelishilgan garov qiymati
         <strong>
             {% if is_avto %}
-            <span class="var">{{ avto.bahosi|intcomma }}</span>
-            (<span class="var">{{ avto.bahosi_soz }}</span>)
-            {% else %}
-            <span class="var">{{ mulk.bahosi|intcomma }}</span>
+            <span class="var">{{ avto.bahosi|intcomma }}</span> so‘m {% if is_kochmas %}va{% endif %}
             {% endif %}
-            so‘mni
+            {% if is_kochmas %}
+            <span class="var">{{ mulk.bahosi|intcomma }}</span> so‘m
+            {% endif %}
         </strong>
         tashkil etadi.
     </p>

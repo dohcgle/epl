@@ -183,17 +183,13 @@
             {{ loan.details.get_turi_display }}
         </span> ta’minoti:
     </p>
-    {% if collateral.type == 'avto' %}
+    {% if is_avto %}
     <div class="list-item">
         1. Egalik huquqi <strong><span class="var">{{ collateral.owner_client.fish }}</span></strong>ga
         tegishli bo‘lgan
         garovga olingan avtomobil markasi
         <strong><span class="var">{{ avto.nomi }}</span></strong>,
-        rangi - <strong>
-            <span class="var">
-                {{ avto.rang }}
-            </span>
-        </strong>,
+        rangi - <strong><span class="var">{{ avto.rang }}</span></strong>,
         ishlab chiqarilgan yili - <strong><span class="var">{{ avto.yil }}</span></strong>,
         davlat raqam belgisi <strong><span class="var">{{ avto.davlat_raqami }}</span></strong>,
         kuzov turi - <strong><span class="var">{{ avto.kuzov_turi }}</span></strong>,
@@ -202,28 +198,27 @@
         shassi raqami - <strong><span class="var">{{ avto.shassi }}</span></strong>.
     </div>
     {% endif %}
-    {% if collateral.type == 'kochmas' %}
+
+    {% if is_kochmas %}
     <div class="list-item">
-        1. Egalik huquqi <strong><span class="var">{{ collateral.owner_client.fish }}</span></strong>ga
+        Egalik huquqi <strong><span class="var">{{ collateral.owner_client.fish }}</span></strong>ga
         tegishli bo‘lgan
         garovga olingan ko‘chmas mulk turi -
-        <strong><span class="var">{{ mulk.turi }}</span></strong>,
+        <strong><span class="var">{{ mulk.nomi }}</span></strong>,
         umumiy maydoni - <strong><span class="var">{{ mulk.umumiy_maydon }}</span></strong> kv.m,
-        qurilish osti maydoni - <strong><span class="var">{{ mulk.qurilish_maydon }}</span></strong> kv.m,
-        yashash maydoni - <strong><span class="var">{{ mulk.yashash_maydon }}</span></strong> kv.m,
         kadastr raqami - <strong><span class="var">{{ mulk.kadastr_raqami }}</span></strong>,
         manzili - <strong><span class="var">{{ mulk.manzil }}</span></strong>.
     </div>
     {% endif %}
-    {% if collateral.type == 'tilla' %}
+
+    {% if is_tilla %}
     <div class="list-item">
-        1. Egalik huquqi <strong><span class="var">{{ collateral.owner_client.fish }}</span></strong>ga
+        Egalik huquqi <strong><span class="var">{{ collateral.owner_client.fish }}</span></strong>ga
         tegishli bo‘lgan
         garovga olingan tilla buyumlar nomi -
         <strong><span class="var">{{ tilla.nomi }}</span></strong>,
         probasi - <strong><span class="var">{{ tilla.probi }}</span></strong>,
-        vazni - <strong><span class="var">{{ tilla.vazni }}</span></strong> gr,
-        soni - <strong><span class="var">{{ tilla.soni }}</span></strong> ta.
+        vazni - <strong><span class="var">{{ tilla.vazni }}</span></strong> gr.
     </div>
     {% endif %}
 
@@ -272,62 +267,38 @@
 
     <div class="">
         <div class="list-item">5. <span class="var">{{ loan.details.get_turi_display }}</span> bo‘yicha ta’minot:</div>
-        {% if collateral.type == 'avto' %}
+        {% if is_avto %}
         <div class="list-item" style="text-indent: 0; margin-left: 1.5cm;">
             1. Garov - <strong><span class="var">{{ collateral.owner_client.fish }}</span></strong>ga mulk
-            huquqi
-            asosida
-            tegishli
-            avtotransport vositasi <strong><span class="var">{{ avto.nomi }}</span></strong>, quyidagi
-            tafsilotlarga
-            muvofiq:
+            huquqi asosida tegishli avtotransport vositasi <strong><span class="var">{{ avto.nomi }}</span></strong>:
         </div>
 
         <table>
             <thead>
                 <tr>
                     <th>Nomi</th>
-                    <th>Kuzov turi va kuzov raqami*</th>
-                    <th>Dvigatel va shassi raqami*</th>
-                    <th>Ishlab chiqarilgan yili va rangi*</th>
-                    <th>Kelishilgan garov qiymati, so‘m</th>
+                    <th>Kuzov turi va raqami*</th>
+                    <th>Dvigatel va shassi*</th>
+                    <th>Yili va rangi*</th>
+                    <th>Garov qiymati, so‘m</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
                     <td><span class="var">{{ avto.nomi }}</span></td>
-                    <td>kuzov turi - <span class="var">{{ avto.kuzov_turi }}</span>, <br>
-                        kuzov raqami <span class="var">{{ avto.kuzov_raqami }}</span>
-                    </td>
-                    <td>dvigatel raqami <span class="var">{{ avto.dvigatel }}</span>,<br>
-                        shassi raqami - <span class="var">{{ avto.shassi }}</span>
-                    </td>
-                    <td>rangi - <span class="var">{{ avto.rang }}</span>,<br>
-                        ishlab chiqarilgan yili - <span class="var">{{ avto.yil }}</span>
-                    </td>
-                    <td><span class="var">{{ avto.bahosi|intcomma }}</span> <br>
-                        (<span class="var">{{ avto.bahosi_soz }}</span>)
-                    </td>
+                    <td><span class="var">{{ avto.kuzov_turi }}</span>, <br><span class="var">{{ avto.kuzov_raqami }}</span></td>
+                    <td><span class="var">{{ avto.dvigatel }}</span>, <br><span class="var">{{ avto.shassi }}</span></td>
+                    <td><span class="var">{{ avto.yil }}</span>, <br><span class="var">{{ avto.rang }}</span></td>
+                    <td><span class="var">{{ avto.bahosi|intcomma }}</span> <br>({{ avto.bahosi_soz }})</td>
                 </tr>
             </tbody>
         </table>
+        {% endif %}
 
-        <div class="list-item" style="text-indent: 0; margin-left: 1.5cm; font-size: 9pt;">
-            -* avtotransport egasi: <span class="var">{{ collateral.owner_client.fish }}</span><br>
-            -* texnik pasport: <span class="var">{{ avto.texpasport }}</span>
-            <span class="var">{{ avto.texpasport_sana|date:"d.m.Y" }}</span> yilda berilgan<br>
-            -* ro‘yxatdan o‘tgan manzili/garaj manzili: <span class="var">{{ avto.manzil }}</span><br>
-            -* davlat raqami: <span class="var">{{ avto.davlat_raqami }}</span>
-        </div>
-        {% elif collateral.type == 'kochmas' or collateral.type == 'kochmas_mulk' %}
+        {% if is_kochmas %}
         <div class="list-item" style="text-indent: 0; margin-left: 1.5cm;">
-            1. Garov - <strong><span class="var">{{ collateral.owner_client.fish }}</span></strong>ga mulk
-            huquqi
-            asosida
-            tegishli
-            ko‘chmas mulk <strong><span class="var">{{ mulk.turi }}</span></strong>, quyidagi
-            tafsilotlarga
-            muvofiq:
+            Garov - <strong><span class="var">{{ collateral.owner_client.fish }}</span></strong>ga mulk
+            huquqi asosida tegishli ko‘chmas mulk <strong><span class="var">{{ mulk.nomi }}</span></strong>:
         </div>
 
         <table>
@@ -336,41 +307,26 @@
                     <th>Nomi</th>
                     <th>Umumiy yer maydoni, (m2)</th>
                     <th>Qurilish osti maydoni, (m2)</th>
-                    <th>Umumiy foydali maydoni, (m2)</th>
                     <th>Yashash maydoni, (m2)</th>
-                    <th>Kelishilgan garov qiymati, so‘m</th>
+                    <th>Garov qiymati, so‘m</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td><span class="var">{{ mulk.turi }}</span></td>
+                    <td><span class="var">{{ mulk.nomi }}</span></td>
                     <td><span class="var">{{ mulk.umumiy_maydon|default:"—" }}</span></td>
                     <td><span class="var">{{ mulk.qurilish_maydon|default:"—" }}</span></td>
-                    <td><span class="var">{{ mulk.foydalanish_maydon|default:"—" }}</span></td>
                     <td><span class="var">{{ mulk.yashash_maydon|default:"—" }}</span></td>
-                    <td><span class="var">{{ mulk.bahosi|intcomma }}</span> <br>
-                        (<span class="var">{{ mulk.bahosi_soz }}</span>)
-                    </td>
+                    <td><span class="var">{{ mulk.bahosi|intcomma }}</span> <br>({{ mulk.bahosi_soz }})</td>
                 </tr>
             </tbody>
         </table>
+        {% endif %}
 
-        <div class="list-item" style="text-indent: 0; margin-left: 1.5cm; font-size: 9pt;">
-            -* ko‘chmas mulk egasi: <span class="var">{{ collateral.owner_client.fish }}</span><br>
-            -* reestr raqami: <span class="var">{{ mulk.reestr_raqami|default:collateral.reestr_number }}</span><br>
-            -* kadastr raqami: <span class="var">{{ mulk.kadastr_raqami }}</span><br>
-            -* manzili: <span class="var">{{ mulk.manzil }}</span>
-        </div>
-
-        {% elif collateral.type == 'tilla' %}
+        {% if is_tilla %}
         <div class="list-item" style="text-indent: 0; margin-left: 1.5cm;">
-            1. Garov - <strong><span class="var">{{ collateral.owner_client.fish }}</span></strong>ga mulk
-            huquqi
-            asosida
-            tegishli
-            tilla buyumlar <strong><span class="var">{{ tilla.nomi }}</span></strong>, quyidagi
-            tafsilotlarga
-            muvofiq:
+            Garov - <strong><span class="var">{{ collateral.owner_client.fish }}</span></strong>ga mulk
+            huquqi asosida tegishli tilla buyumlar <strong><span class="var">{{ tilla.nomi }}</span></strong>:
         </div>
 
         <table>
@@ -380,7 +336,7 @@
                     <th>Probasi</th>
                     <th>Vazni (gr)</th>
                     <th>Soni (dona)</th>
-                    <th>Kelishilgan garov qiymati, so‘m</th>
+                    <th>Garov qiymati, so‘m</th>
                 </tr>
             </thead>
             <tbody>
@@ -389,16 +345,10 @@
                     <td><span class="var">{{ tilla.probi }}</span></td>
                     <td><span class="var">{{ tilla.vazni }}</span></td>
                     <td><span class="var">{{ tilla.soni }}</span></td>
-                    <td><span class="var">{{ tilla.bahosi|intcomma }}</span> <br>
-                        (<span class="var">{{ tilla.bahosi_soz }}</span>)
-                    </td>
+                    <td><span class="var">{{ tilla.bahosi|intcomma }}</span> <br>({{ tilla.bahosi_soz }})</td>
                 </tr>
             </tbody>
         </table>
-
-        <div class="list-item" style="text-indent: 0; margin-left: 1.5cm; font-size: 9pt;">
-            -* tilla buyumlar egasi: <span class="var">{{ collateral.owner_client.fish }}</span>
-        </div>
         {% endif %}
 
         {% if is_sugurta_mavjud %}

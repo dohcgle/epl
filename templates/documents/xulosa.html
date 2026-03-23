@@ -89,7 +89,9 @@
         amal qilish muddati — <span class="var">21.12.2035 y.</span>
     </p>
     <p>Ro‘yxatdan o‘tgan manzili: <span class="var">{{ loan.client.manzil }}</span></p>
-    <p>Ish joyi: lavozimi <span class="var">{{ loan.financial_info.ish_joyi }}</span></p>
+    <p>Ish joyi: <span class="var">{{ loan.financial_info.ish_muassasa }}</span>, 
+        lavozimi <span class="var">{{ loan.financial_info.ish_lavozim }}</span>
+    </p>
 
     <p class="bold center uppercase" style="margin-top: 8px;">
         Mijoz tomonidan so‘ralgan
@@ -128,7 +130,7 @@
             {{ loan.details.get_turi_display }}
         </span> ta’minoti:
     </p>
-    {% if collateral.type == 'avto' %}
+    {% if is_avto %}
     <p>
         1. Egalik huquqi <strong><span class="var">{{ collateral.owner_client.fish }}</span></strong>ga
         tegishli bo‘lgan
@@ -142,23 +144,23 @@
         dvigatel raqami <strong><span class="var">{{ avto.dvigatel }}</span></strong>,
         shassi raqami - <strong><span class="var">{{ avto.shassi }}</span></strong>.
     </p>
-    {% elif collateral.type == 'kochmas' or collateral.type == 'kochmas_mulk' %}
+    {% endif %}
+
+    {% if is_kochmas %}
     <p>
-        1. Egalik huquqi <strong><span class="var">{{ collateral.owner_client.fish }}</span></strong>ga
-        tegishli bo‘lgan
-        garovga olingan ko‘chmas mulk turi -
-        <strong><span class="var">{{ mulk.turi }}</span></strong>,
+        Garovga olingan ko‘chmas mulk turi -
+        <strong><span class="var">{{ mulk.nomi }}</span></strong>,
         umumiy maydoni - <strong><span class="var">{{ mulk.umumiy_maydon }}</span></strong> kv.m,
         qurilish osti maydoni - <strong><span class="var">{{ mulk.qurilish_maydon }}</span></strong> kv.m,
         yashash maydoni - <strong><span class="var">{{ mulk.yashash_maydon }}</span></strong> kv.m,
         kadastr raqami - <strong><span class="var">{{ mulk.kadastr_raqami }}</span></strong>,
         manzili - <strong><span class="var">{{ mulk.manzil }}</span></strong>.
     </p>
-    {% elif collateral.type == 'tilla' %}
+    {% endif %}
+
+    {% if is_tilla %}
     <p>
-        1. Egalik huquqi <strong><span class="var">{{ collateral.owner_client.fish }}</span></strong>ga
-        tegishli bo‘lgan
-        garovga olingan tilla buyumlar nomi -
+        Garovga olingan tilla buyumlar nomi -
         <strong><span class="var">{{ tilla.nomi }}</span></strong>,
         probasi - <strong><span class="var">{{ tilla.probi }}</span></strong>,
         vazni - <strong><span class="var">{{ tilla.vazni }}</span></strong> gr,
@@ -198,7 +200,7 @@
         </span> bo‘yicha
         ta’minot:
     </p>
-    {% if collateral.type == 'avto' %}
+    {% if is_avto %}
     <p>
         - <strong><span class="var">{{ collateral.owner_client.fish }}</span></strong>ga mulk huquqi asosida tegishli
         avtotransport vositasi <strong><span class="var">{{ avto.nomi }}</span></strong>, quyidagi tafsilotlarga
@@ -236,15 +238,16 @@
 
     <p style="font-size: 8.5pt;">
         -* avtotransport egasi: <span class="var">{{ collateral.owner_client.fish }}</span><br>
-        -* texnik pasport: <span class="var">{{ avto.texpasport }}</span>
-        <span class="var">{{ avto.texpasport_sana|date:"d.m.Y" }}</span> yilda berilgan<br>
+        -* texnik pasport: <span class="var">{{ avto.texpasport }}</span><br>
         -* ro‘yxatdan o‘tgan manzili/garaj manzili: <span class="var">{{ avto.manzil }}</span><br>
         -* davlat raqami: <span class="var">{{ avto.davlat_raqami }}</span>
     </p>
-    {% elif collateral.type == 'kochmas' or collateral.type == 'kochmas_mulk' %}
+    {% endif %}
+
+    {% if is_kochmas %}
     <p>
         - <strong><span class="var">{{ collateral.owner_client.fish }}</span></strong>ga mulk huquqi asosida tegishli
-        ko‘chmas mulk <strong><span class="var">{{ mulk.turi }}</span></strong>, quyidagi tafsilotlarga muvofiq:
+        ko‘chmas mulk <strong><span class="var">{{ mulk.nomi }}</span></strong>, quyidagi tafsilotlarga muvofiq:
     </p>
 
     <table class="data-table">
@@ -259,7 +262,7 @@
         </thead>
         <tbody>
             <tr>
-                <td><span class="var">{{ mulk.turi }}</span></td>
+                <td><span class="var">{{ mulk.nomi }}</span></td>
                 <td><span class="var">{{ mulk.qurilish_maydon|default:"—" }}</span></td>
                 <td><span class="var">{{ mulk.foydalanish_maydon|default:"—" }}</span></td>
                 <td><span class="var">{{ mulk.yashash_maydon|default:"—" }}</span></td>
@@ -276,8 +279,9 @@
         -* kadastr raqami: <span class="var">{{ mulk.kadastr_raqami }}</span><br>
         -* manzili: <span class="var">{{ mulk.manzil }}</span>
     </p>
+    {% endif %}
 
-    {% elif collateral.type == 'tilla' %}
+    {% if is_tilla %}
     <p>
         - <strong><span class="var">{{ collateral.owner_client.fish }}</span></strong>ga mulk huquqi asosida tegishli
         tilla buyumlar <strong><span class="var">{{ tilla.nomi }}</span></strong>, quyidagi tafsilotlarga muvofiq:
@@ -305,10 +309,6 @@
             </tr>
         </tbody>
     </table>
-
-    <p style="font-size: 8.5pt;">
-        -* tilla buyumlar egasi: <span class="var">{{ collateral.owner_client.fish }}</span>
-    </p>
     {% endif %}
 
     <div class="page-break" style="height: 0; margin: 0; padding: 0;"></div>
@@ -351,7 +351,7 @@
     </p>
     <p class="bold" style="margin-top: 10px;"><span class="var">{{ loan.details.get_turi_display }}</span> ta’minoti:
     </p>
-    {% if collateral.type == 'avto' %}
+    {% if is_avto %}
     <p>
         1. Egalik huquqi <strong><span class="var">{{ collateral.owner_client.fish }}</span></strong>ga
         tegishli bo‘lgan
@@ -364,28 +364,26 @@
         kuzov raqami <strong><span class="var">{{ avto.kuzov_raqami }}</span></strong>,
         dvigatel raqami <strong><span class="var">{{ avto.dvigatel }}</span></strong>,
         shassi raqami - <strong><span class="var">{{ avto.shassi }}</span></strong>.
+        Kelishilgan qiymati: <strong><span class="var">{{ avto.bahosi|intcomma }}</span> so'm</strong>.
     </p>
-    {% elif collateral.type == 'kochmas' or collateral.type == 'kochmas_mulk' %}
+    {% endif %}
+
+    {% if is_kochmas %}
     <p>
-        1. Egalik huquqi <strong><span class="var">{{ collateral.owner_client.fish }}</span></strong>ga
-        tegishli bo‘lgan
-        garovga olingan ko‘chmas mulk turi -
-        <strong><span class="var">{{ mulk.turi }}</span></strong>,
-        umumiy maydoni - <strong><span class="var">{{ mulk.umumiy_maydon }}</span></strong> kv.m,
-        qurilish osti maydoni - <strong><span class="var">{{ mulk.qurilish_maydon }}</span></strong> kv.m,
-        yashash maydoni - <strong><span class="var">{{ mulk.yashash_maydon }}</span></strong> kv.m,
+        Garovga olingan ko‘chmas mulk turi -
+        <strong><span class="var">{{ mulk.nomi }}</span></strong>,
         kadastr raqami - <strong><span class="var">{{ mulk.kadastr_raqami }}</span></strong>,
         manzili - <strong><span class="var">{{ mulk.manzil }}</span></strong>.
+        Kelishilgan qiymati: <strong><span class="var">{{ mulk.bahosi|intcomma }}</span> so'm</strong>.
     </p>
-    {% elif collateral.type == 'tilla' %}
+    {% endif %}
+
+    {% if is_tilla %}
     <p>
-        1. Egalik huquqi <strong><span class="var">{{ collateral.owner_client.fish }}</span></strong>ga
-        tegishli bo‘lgan
-        garovga olingan tilla buyumlar nomi -
+        Garovga olingan tilla buyumlar nomi -
         <strong><span class="var">{{ tilla.nomi }}</span></strong>,
-        probasi - <strong><span class="var">{{ tilla.probi }}</span></strong>,
-        vazni - <strong><span class="var">{{ tilla.vazni }}</span></strong> gr,
-        soni - <strong><span class="var">{{ tilla.soni }}</span></strong> ta.
+        vazni - <strong><span class="var">{{ tilla.vazni }}</span></strong> gr.
+        Kelishilgan qiymati: <strong><span class="var">{{ tilla.bahosi|intcomma }}</span> so'm</strong>.
     </p>
     {% endif %}
 
