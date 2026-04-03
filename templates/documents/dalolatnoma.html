@@ -222,7 +222,8 @@
     </div>
 
     <p>
-        Tomonlar o‘rtasida o‘tkazilgan muzokaralar natijalariga ko‘ra, 2-tomon ta’minot sifatida yuqoridagi tafsilotlarga
+        Tomonlar o‘rtasida o‘tkazilgan muzokaralar natijalariga ko‘ra, 2-tomon ta’minot sifatida yuqoridagi
+        tafsilotlarga
         ega bo‘lgan garov predmetini taqdim etadi,
         1-tomon esa ushbu garov predmetini
         <strong><span class="var">{{ avto.bahosi|intcomma }}</span>
@@ -260,23 +261,12 @@
         </tbody>
     </table>
 
-    <div style="font-size: 10pt; margin-left: 1cm; margin-bottom: 5px;">
-        -* ko‘chmas mulk egasi:
-        <span class="var">
-            {% if garov_boshqa_shaxs %}{{ collateral.owner_client.fish }}
-            {% else %}
-            {{ loan.client.fish }}
-            {% endif %}
-        </span><br>
-        -* reestr raqami:
-        <span class="var">
-            {{ mulk.reestr_raqami|default:collateral.reestr_number }}</span><br>
-        -* kadastr raqami:
-        <span class="var">
-            {{ mulk.kadastr_raqami }}</span><br>
-        -* manzili:
-        <span class="var">
-            {{ mulk.manzil }}</span>
+    <div style="font-size: 9pt; margin-left: 1.5cm; margin-bottom: 10px;">
+        -* ko‘chmas mulk egasi: <span class="var">{{ collateral.owner_client.fish }}</span><br>
+        -* reestr raqami: <span class="var">{{ mulk.reestr_raqami|default:collateral.reestr_number }}</span><br>
+        -* kadastr raqami: <span class="var">{{ mulk.kadastr_raqami }}</span><br>
+        -* manzil: <span class="var">{{ mulk.manzil }}</span><br>
+        -* umumiy maydoni: <span class="var">{{ mulk.umumiy_maydon }}</span> kv.m
     </div>
 
     <p>
@@ -340,7 +330,7 @@
             <td style="font-weight: bold;">
                 2-tomon:<br>
                 O‘zbekiston Respublikasi fuqarosi <br>
-                
+
             </td>
             <td style="text-align: center;">
                 <div class="signature-line"></div>
@@ -357,7 +347,7 @@
             <td style="font-weight: bold;">
                 3-tomon:<br>
                 O‘zbekiston Respublikasi fuqarosi <br>
-                
+
             </td>
             <td style="text-align: center;">
                 <div class="signature-line"></div>
@@ -370,7 +360,7 @@
         {% endif %}
     </table>
 
-    
+
 
 </body>
 

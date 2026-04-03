@@ -142,7 +142,7 @@
     <div class="sub-header">mikromoliya tashkiloti</div>
 
     <div class="doc-title">Kredit qo‘mitasining yig‘ilishi</div>
-    <div class="doc-number">№ <span class="var">{{ loan.details.shartnoma_raqami }}</span> 
+    <div class="doc-number">№ <span class="var">{{ loan.details.shartnoma_raqami }}</span>
         protokolidan ko‘chirma</div>
 
     <div class="date-place">
@@ -286,8 +286,10 @@
             <tbody>
                 <tr>
                     <td><span class="var">{{ avto.nomi }}</span></td>
-                    <td><span class="var">{{ avto.kuzov_turi }}</span>, <br><span class="var">{{ avto.kuzov_raqami }}</span></td>
-                    <td><span class="var">{{ avto.dvigatel }}</span>, <br><span class="var">{{ avto.shassi }}</span></td>
+                    <td><span class="var">{{ avto.kuzov_turi }}</span>, <br><span class="var">{{ avto.kuzov_raqami
+                            }}</span></td>
+                    <td><span class="var">{{ avto.dvigatel }}</span>, <br><span class="var">{{ avto.shassi }}</span>
+                    </td>
                     <td><span class="var">{{ avto.yil }}</span>, <br><span class="var">{{ avto.rang }}</span></td>
                     <td><span class="var">{{ avto.bahosi|intcomma }}</span> <br>({{ avto.bahosi_soz }})</td>
                 </tr>
@@ -322,12 +324,12 @@
             </tbody>
         </table>
         <div style="font-size: 9pt; margin-left: 1.5cm; margin-bottom: 10px;">
-        -* ko‘chmas mulk egasi: <span class="var">{{ collateral.owner_client.fish }}</span><br>
-        -* reestr raqami: <span class="var">{{ mulk.reestr_raqami|default:collateral.reestr_number }}</span><br>
-        -* kadastr raqami: <span class="var">{{ mulk.kadastr_raqami }}</span><br>
-        -* manzil: <span class="var">{{ mulk.manzil }}</span><br>
-        -* umumiy maydoni: <span class="var">{{ mulk.umumiy_maydon }}</span> kv.m
-    </div>
+            -* ko‘chmas mulk egasi: <span class="var">{{ collateral.owner_client.fish }}</span><br>
+            -* reestr raqami: <span class="var">{{ mulk.reestr_raqami|default:collateral.reestr_number }}</span><br>
+            -* kadastr raqami: <span class="var">{{ mulk.kadastr_raqami }}</span><br>
+            -* manzil: <span class="var">{{ mulk.manzil }}</span><br>
+            -* umumiy maydoni: <span class="var">{{ mulk.umumiy_maydon }}</span> kv.m
+        </div>
         {% endif %}
 
         {% if is_tilla %}

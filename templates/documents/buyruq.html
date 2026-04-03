@@ -115,7 +115,8 @@
     </div>
 
     <p>
-        Men, <strong><span class="var">{{ loan.financial_info.direktor_fish_inisiali }}</span></strong> «PULLOL BUSINESS MIKROMOLIYA
+        Men, <strong><span class="var">{{ loan.financial_info.direktor_fish_inisiali }}</span></strong> «PULLOL BUSINESS
+        MIKROMOLIYA
         TASHKILOTI» MChJ direktori,
         jismoniy shaxs <strong><span class="var">{{ loan.client.fish }}</span></strong>ga quyidagi shartlarda
         mikroqarz berishni buyuraman:
@@ -183,7 +184,8 @@
 
     {% if is_kochmas %}
     <p>
-        {% if is_avto %}6{% else %}5{% endif %}. <strong><span class="var">{{ collateral.owner_client.fish }}</span></strong>ga tegishli
+        {% if is_avto %}6{% else %}5{% endif %}. <strong><span class="var">{{ collateral.owner_client.fish
+                }}</span></strong>ga tegishli
         <strong><span class="var">{{ mulk.nomi }}</span></strong> ko‘rinishidagi
         ko‘chmas mulkni quyidagi ma’lumotlarga muvofiq garovga qabul qilinsin:
     </p>
@@ -212,16 +214,19 @@
         </tbody>
     </table>
 
-    <div class="list-item" style="font-size: 9pt;">
-        -* manzili: <strong><span class="var">{{ mulk.manzil }}</span></strong><br>
-        -* kadastr raqami: <strong><span class="var">{{ mulk.kadastr_raqami }}</span></strong><br>
-        -* reestr raqami: <strong><span class="var">{{ mulk.reestr_raqami|default:collateral.reestr_number }}</span></strong>
+    <div style="font-size: 9pt; margin-left: 1.5cm; margin-bottom: 10px;">
+        -* ko‘chmas mulk egasi: <span class="var">{{ collateral.owner_client.fish }}</span><br>
+        -* reestr raqami: <span class="var">{{ mulk.reestr_raqami|default:collateral.reestr_number }}</span><br>
+        -* kadastr raqami: <span class="var">{{ mulk.kadastr_raqami }}</span><br>
+        -* manzil: <span class="var">{{ mulk.manzil }}</span><br>
+        -* umumiy maydoni: <span class="var">{{ mulk.umumiy_maydon }}</span> kv.m
     </div>
     {% endif %}
 
     {% if is_sugurta_mavjud %}
     <div class="list-item" style="margin-top: 15px;">
-        {% if is_avto and is_kochmas %}7{% elif is_avto or is_kochmas %}6{% else %}5{% endif %}. <strong>«<span class="var">{{ sugurta.kompaniya }}</span>» АJ</strong> sug‘urta kompaniyasi bilan
+        {% if is_avto and is_kochmas %}7{% elif is_avto or is_kochmas %}6{% else %}5{% endif %}. <strong>«<span
+                class="var">{{ sugurta.kompaniya }}</span>» АJ</strong> sug‘urta kompaniyasi bilan
         Mikroqarz to'lamaslik xavfini <strong><span class="var">{{ sugurta.summa|intcomma }}</span> (<span
                 class="var">{{ sugurta.summa_soz }}</span>) so'm</strong> miqdoriga sug’urta qilish shartnomasi
         tuzilsin.
