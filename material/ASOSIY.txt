@@ -6,3 +6,35 @@ Quyidagi hujjatlar eng asosiy:
 4. grafik.html  
 5. dalolatnoma.html
 6. buyruq.html
+
+----------------------------------
+users:
+
+FIO: IKROMOV BAHODIR ABDURAXIMOVICH
+Login: b.ikromov
+Password: Pullol2026
+ROLE: operator
+Filial: Buxoro
+
+FIO: ORAZOV JASURBEK XASANOVICH
+Login: j.orazov
+Password: Pullol2026
+ROLE: operator
+Filial: Urganch
+
+FIO: ORAZOV JASURBEK XASANOVICH
+Login: j.orazov
+Password: Pullol2026
+ROLE: operator
+Filial: Tortko'l
+
+FIO: MOMINOV BOTIR
+Login: b.mominov
+Password: Pullol2026
+ROLE: moderator
+
+FIO: OBIDOV ABDULLOH SHOKIR OGLI
+Login: a.obidov
+Password: Pullol2026
+ROLE: direktor
+

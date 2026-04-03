@@ -321,6 +321,13 @@
                 </tr>
             </tbody>
         </table>
+        <div style="font-size: 9pt; margin-left: 1.5cm; margin-bottom: 10px;">
+        -* ko‘chmas mulk egasi: <span class="var">{{ collateral.owner_client.fish }}</span><br>
+        -* reestr raqami: <span class="var">{{ mulk.reestr_raqami|default:collateral.reestr_number }}</span><br>
+        -* kadastr raqami: <span class="var">{{ mulk.kadastr_raqami }}</span><br>
+        -* manzil: <span class="var">{{ mulk.manzil }}</span><br>
+        -* umumiy maydoni: <span class="var">{{ mulk.umumiy_maydon }}</span> kv.m
+    </div>
         {% endif %}
 
         {% if is_tilla %}

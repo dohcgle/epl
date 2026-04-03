@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.db import models
-from .models import LoanWizardApplication
+from .models import LoanWizardApplication, Profile
 import json
 from django.utils.safestring import mark_safe
 
@@ -50,3 +50,9 @@ class LoanWizardApplicationAdmin(admin.ModelAdmin):
             </script>
         """)
     json_actions.short_description = 'JSON Amallar'
+
+
+
+@admin.register(Profile)
+class ProfileAdmin(admin.ModelAdmin):
+    list_display = ['user', 'filial']

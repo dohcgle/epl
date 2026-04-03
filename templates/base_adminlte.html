@@ -92,14 +92,11 @@
                             {{ request.user.username }}
                             {% endif %}
                         </a>
-                        <!-- Role yashirildi -->
-                        <!-- <small class="text-muted">
-                            {% if request.user.is_superuser %}
-                                Administrator
-                            {% elif request.user.groups.exists %}
-                                {{ request.user.groups.first.name }}
-                            {% endif %}
-                        </small> -->
+                        <!-- Filialni chiqarish -->
+                        <small class="text-muted d-block">
+                            <i class="fas fa-map-marker-alt mr-1"></i>
+                            {{ request.user.profile.filial|default:"Asosiy filial" }}
+                        </small>
                     </div>
                 </div>
 
@@ -119,7 +116,7 @@
                         </li>
 
                         <!-- Operator Menu -->
-                        {% if request.user|has_group:"Operator" or request.user.is_superuser %}
+                        {% if request.user|has_group:"operator" or request.user.is_superuser %}
                         <li class="nav-item">
                             <a href="{% url 'loan_wizard' %}"
                                 class="nav-link {% if 'wizard' in request.path %}active{% endif %}">
@@ -130,7 +127,7 @@
                         {% endif %}
 
                         <!-- Moderator Menu -->
-                        {% if request.user|has_group:"Moderator" or request.user.is_superuser %}
+                        {% if request.user|has_group:"moderator" or request.user.is_superuser %}
                         <li class="nav-item">
                             <a href="{% url 'moderator_dashboard' %}"
                                 class="nav-link {% if 'moderator' in request.path %}active{% endif %}">
@@ -141,7 +138,7 @@
                         {% endif %}
 
                         <!-- Director Menu -->
-                        {% if request.user|has_group:"Director" or request.user.is_superuser %}
+                        {% if request.user|has_group:"direktor" or request.user.is_superuser %}
                         <li class="nav-item">
                             <a href="{% url 'director_dashboard' %}"
                                 class="nav-link {% if 'director' in request.path %}active{% endif %}">

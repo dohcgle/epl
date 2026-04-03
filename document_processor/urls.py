@@ -1,6 +1,7 @@
 from django.urls import path
 from .views import (
     dashboard_view, loan_wizard_view, save_wizard_data, 
+    operator_dashboard, # <-- SHUNI QO'SHDIK
     moderator_dashboard, director_dashboard, view_wizard_application,
     approve_wizard_moderator, approve_wizard_director, 
     generate_pdf, generate_all_pdfs, profile_view
@@ -15,6 +16,7 @@ urlpatterns = [
     path('loans/wizard/view/<int:wizard_id>/', view_wizard_application, name='view_wizard_application'),
     
     # Moderator & Director
+    path('loans/operator/', operator_dashboard, name='operator_dashboard'),
     path('loans/moderator/', moderator_dashboard, name='moderator_dashboard'),
     path('loans/director/', director_dashboard, name='director_dashboard'),
     

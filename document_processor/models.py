@@ -42,3 +42,11 @@ class LoanWizardApplication(models.Model):
 
     def __str__(self):
         return f"Wizard #{self.id} - {self.client_name or 'Noma`lum'}"
+
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+    filial = models.CharField("Filial nomi", max_length=100, blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.filial or 'Filial kiritilmagan'}"

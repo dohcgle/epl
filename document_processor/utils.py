@@ -148,7 +148,19 @@ def build_context_from_payload(payload):
     if 'summa_soz' in loan_obj and 'miqdori_soz' not in loan_obj:
         loan_obj['miqdori_soz'] = loan_obj['summa_soz']
         
-    if 'sana' in loan_obj: loan_obj['shartnoma_sanasi'] = parse_date(loan_obj['sana'])
+    
+
+    # Sanalarni Date obyektiga o'tkazish
+    if 'sana' in loan_obj: 
+        loan_obj['shartnoma_sanasi'] = parse_date(loan_obj['sana'])
+    
+    if 'boshlanish_sanasi' in loan_obj:
+        loan_obj['boshlanish_sanasi'] = parse_date(loan_obj['boshlanish_sanasi'])
+        
+    if 'tugash_sanasi' in loan_obj:
+        loan_obj['tugash_sanasi'] = parse_date(loan_obj['tugash_sanasi'])
+
+
     if 'boshlanish_sanasi' in loan_obj and isinstance(loan_obj['boshlanish_sanasi'], str):
         loan_obj['shartnoma_sanasi'] = parse_date(loan_obj['boshlanish_sanasi']) # Fallback
     
@@ -232,13 +244,17 @@ def build_context_from_payload(payload):
                 new_key = key.replace('mulk_', '')
                 if new_key == 'umumiy_yer_maydoni': new_key = 'umumiy_maydon'
                 if new_key == 'qurilish_osti_maydoni': new_key = 'qurilish_maydon'
+                if new_key == 'umumiy_foydalanish_maydoni': new_key = 'yashash_maydon'
                 if new_key == 'yashash_maydoni': new_key = 'yashash_maydon'
                 if new_key == 'manzili': new_key = 'manzil'
+                if new_key == 'nomi' and not val: val = "KO'CHMAS MULK"
                 collateral_data[new_key] = val
             
     ctx['is_sugurta_mavjud'] = 'sugurta' in selected_types
     ctx['is_sugurta'] = ctx['is_sugurta_mavjud']
-    ctx['garov_boshqa_shaxs'] = coll.get('owner_type') != 'borrower'
+    # Garov boshqa shaxs bo'lsa (other yoki proxy), demak 3-tomon bor
+    owner_type = coll.get('owner_type', 'borrower')
+    ctx['garov_boshqa_shaxs'] = owner_type in ['other', 'proxy']
     
     if ctx['is_sugurta_mavjud']:
         for key, val in list(collateral_data.items()):

@@ -53,6 +53,27 @@ def dashboard_view(request):
     return render(request, 'document_processor/dashboard.html', context)
 
 @login_required
+@user_passes_test(is_operator)
+def operator_dashboard(request):
+    # Operator faqat o'zi kiritgan arizalarni ko'radi
+    # 1. Jarayondagi (Moderator yoki Direktor kutayotganlar)
+    active_loans = LoanWizardApplication.objects.filter(
+        created_by=request.user, 
+        status__in=['pending_moderator', 'approved_moderator']
+    ).order_by('-created_at')
+    
+    # 2. Yakunlangan (Direktor imzolangan) arizalar (oxirgi 50 tasi)
+    history_loans = LoanWizardApplication.objects.filter(
+        created_by=request.user,
+        status='approved_director'
+    ).order_by('-director_approved_at')[:50]
+    
+    return render(request, 'document_processor/operator_dashboard.html', {
+        'active_loans': active_loans,
+        'history_loans': history_loans
+    })
+
+@login_required
 def loan_wizard_view(request):
     return render(request, 'document_processor/loan_wizard.html')
 
