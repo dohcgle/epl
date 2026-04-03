@@ -307,22 +307,25 @@
             <thead>
                 <tr>
                     <th>Nomi</th>
-                    <th>Umumiy yer maydoni, (m2)</th>
-                    <th>Qurilish osti maydoni, (m2)</th>
-                    <th>Yashash maydoni, (m2)</th>
-                    <th>Garov qiymati, so‘m</th>
+                    <th>Umumiy yer maydoni (m2)</th>                    
+                    <th>Qurilish osti maydoni (m2)</th>
+                    <th>Umumiy foydali maydoni (m2)</th>
+                    <th>Yashash maydoni (m2)</th>
+                    <th>Kelishilgan garov qiymati, so‘m</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
                     <td><span class="var">{{ mulk.nomi }}</span></td>
-                    <td><span class="var">{{ mulk.umumiy_maydon|default:"—" }}</span></td>
+                    <td><span class="var">{{ mulk.yer_maydon|default:"—" }}</span></td>
                     <td><span class="var">{{ mulk.qurilish_maydon|default:"—" }}</span></td>
+                    <td><span class="var">{{ mulk.umumiy_maydon|default:"—" }}</span></td>
                     <td><span class="var">{{ mulk.yashash_maydon|default:"—" }}</span></td>
-                    <td><span class="var">{{ mulk.bahosi|intcomma }}</span> <br>({{ mulk.bahosi_soz }})</td>
+                    <td><span class="var">{{ mulk.bahosi|intcomma }} <br>({{ mulk.bahosi_soz }})</span></td>
                 </tr>
             </tbody>
         </table>
+
         <div style="font-size: 9pt; margin-left: 1.5cm; margin-bottom: 10px;">
             -* ko‘chmas mulk egasi: <span class="var">{{ collateral.owner_client.fish }}</span><br>
             -* reestr raqami: <span class="var">{{ mulk.reestr_raqami|default:collateral.reestr_number }}</span><br>
@@ -384,7 +387,7 @@
                     <img src="{{ qr_manager }}" class="qr-code">
                     {% endif %}
                 </td>
-                <td style="width: 35%; text-align: right;" class="bold">S.O.Eshbekov</td>
+                <td style="width: 35%; text-align: right;" class="bold">S.O.ESHBEKOV</td>
             </tr>
             <tr style="height: 5px;">
                 <td></td>
@@ -398,7 +401,7 @@
                     <img src="{{ qr_akramov }}" class="qr-code">
                     {% endif %}
                 </td>
-                <td style="text-align: right;" class="bold">R.N.Akramov</td>
+                <td style="text-align: right;" class="bold">R.N.AKRAMOV</td>
             </tr>
             <tr style="height: 5px;">
                 <td></td>

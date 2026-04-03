@@ -241,22 +241,21 @@
         <thead>
             <tr>
                 <th>Nomi</th>
-                <th>Umumiy yer maydoni, (m2)</th>
-                <th>Qurilish osti maydoni, (m2)</th>
-                <th>Yashash maydoni, (m2)</th>
+                <th>Umumiy yer maydoni (m2)</th>
+                <th>Qurilish osti maydoni (m2)</th>
+                <th>Umumiy foydali maydoni (m2)</th>
+                <th>Yashash maydoni (m2)</th>
                 <th>Kelishilgan garov qiymati, so‘m</th>
             </tr>
         </thead>
         <tbody>
             <tr>
                 <td><span class="var">{{ mulk.nomi }}</span></td>
-                <td><span class="var">{{ mulk.umumiy_maydon|default:"—" }}</span></td>
+                <td><span class="var">{{ mulk.yer_maydon|default:"—" }}</span></td>
                 <td><span class="var">{{ mulk.qurilish_maydon|default:"—" }}</span></td>
+                <td><span class="var">{{ mulk.umumiy_maydon|default:"—" }}</span></td>
                 <td><span class="var">{{ mulk.yashash_maydon|default:"—" }}</span></td>
-                <td>
-                    <span class="var">{{ mulk.bahosi|intcomma }}</span><br>
-                    (<span class="var">{{ mulk.bahosi_soz }}</span>)
-                </td>
+                <td><span class="var">{{ mulk.bahosi|intcomma }} <br>({{ mulk.bahosi_soz }})</span></td>
             </tr>
         </tbody>
     </table>

@@ -122,7 +122,7 @@ def parse_pasted_schedule(text):
             continue
     return schedule, fmt(total_p), fmt(total_i), fmt(grand_total_val)
 
-def build_document_context(app_or_payload):
+def build_document_context(app_or_payload, doc_url=None):
     if hasattr(app_or_payload, 'data'): # LoanWizardApplication instance 
         payload = app_or_payload.data
     elif isinstance(app_or_payload, dict):
@@ -130,9 +130,9 @@ def build_document_context(app_or_payload):
     else:
         # If it's something else (like legacy LoanApplication), we don't support it anymore
         return {} 
-    return build_context_from_payload(payload)
+    return build_context_from_payload(payload, doc_url=doc_url)
 
-def build_context_from_payload(payload):
+def build_context_from_payload(payload, doc_url=None):
     personal = payload.get('client_info') or payload.get('personal') or {}
     loan_obj = payload.get('loan_details') or payload.get('loan') or {}
     coll = payload.get('collateral') or {}
@@ -196,10 +196,10 @@ def build_context_from_payload(payload):
             'created_at': c_at,
         },
         'sugurta': collateral_data if 'sugurta' in selected_types else {},
-        'qr_manager': generate_qr_code('S.O.Eshbekov'),
-        'qr_akramov': generate_qr_code('R.N.Akramov'),
-        'qr_filial_boshligi': generate_qr_code(f_info.get('filial_boshligi_inisiali', 'Filial Boshlig\'i')),
-        'qr_obidov': generate_qr_code(f_info.get('direktor_fish_inisiali', 'A.Sh.Obidov')),
+        'qr_manager': generate_qr_code(doc_url or 'S.O.ESHBEKOV'),
+        'qr_akramov': generate_qr_code(doc_url or 'R.N.AKRAMOV'),
+        'qr_filial_boshligi': generate_qr_code(doc_url or f_info.get('filial_boshligi_inisiali', 'Filial Boshligi')),
+        'qr_obidov': generate_qr_code(doc_url or f_info.get('direktor_fish_inisiali', 'A.SH.OBIDOV')),
     }
 
     grafik_text = loan_obj.get('grafik_matni')
@@ -242,9 +242,9 @@ def build_context_from_payload(payload):
         for key, val in list(collateral_data.items()):
             if key.startswith('mulk_'):
                 new_key = key.replace('mulk_', '')
-                if new_key == 'umumiy_yer_maydoni': new_key = 'umumiy_maydon'
+                if new_key == 'umumiy_yer_maydoni': new_key = 'yer_maydon'
                 if new_key == 'qurilish_osti_maydoni': new_key = 'qurilish_maydon'
-                if new_key == 'umumiy_foydalanish_maydoni': new_key = 'yashash_maydon'
+                if new_key == 'umumiy_foydalanish_maydoni': new_key = 'umumiy_maydon'
                 if new_key == 'yashash_maydoni': new_key = 'yashash_maydon'
                 if new_key == 'manzili': new_key = 'manzil'
                 if new_key == 'nomi' and not val: val = "KO'CHMAS MULK"

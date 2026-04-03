@@ -89,7 +89,7 @@
         amal qilish muddati — <span class="var">21.12.2035 y.</span>
     </p>
     <p>Ro‘yxatdan o‘tgan manzili: <span class="var">{{ loan.client.manzil }}</span></p>
-    <p>Ish joyi: <span class="var">{{ loan.financial_info.ish_muassasa }}</span>, 
+    <p>Ish joyi: <span class="var">{{ loan.financial_info.ish_muassasa }}</span>,
         lavozimi <span class="var">{{ loan.financial_info.ish_lavozim }}</span>
     </p>
 
@@ -254,21 +254,21 @@
         <thead>
             <tr>
                 <th>Nomi</th>
-                <th>Qurilish osti maydoni, (m2)</th>
-                <th>Umumiy foydali maydoni, (m2)</th>
-                <th>Yashash maydoni, (m2)</th>
+                <th>Umumiy yer maydoni (m2)</th>
+                <th>Qurilish osti maydoni (m2)</th>
+                <th>Umumiy foydali maydoni (m2)</th>
+                <th>Yashash maydoni (m2)</th>
                 <th>Kelishilgan garov qiymati, so‘m</th>
             </tr>
         </thead>
         <tbody>
             <tr>
                 <td><span class="var">{{ mulk.nomi }}</span></td>
+                <td><span class="var">{{ mulk.yer_maydon|default:"—" }}</span></td>
                 <td><span class="var">{{ mulk.qurilish_maydon|default:"—" }}</span></td>
-                <td><span class="var">{{ mulk.foydalanish_maydon|default:"—" }}</span></td>
+                <td><span class="var">{{ mulk.umumiy_maydon|default:"—" }}</span></td>
                 <td><span class="var">{{ mulk.yashash_maydon|default:"—" }}</span></td>
-                <td><span class="var">{{ mulk.bahosi|intcomma }}</span> <br>
-                    (<span class="var">{{ mulk.bahosi_soz }}</span>)
-                </td>
+                <td><span class="var">{{ mulk.bahosi|intcomma }} <br>({{ mulk.bahosi_soz }})</span></td>
             </tr>
         </tbody>
     </table>
@@ -407,7 +407,7 @@
                 <img src="{{ qr_manager }}" class="qr-code">
                 {% endif %}
             </td>
-            <td style="width: 35%; text-align: right;" class="bold">S.O.Eshbekov</td>
+            <td style="width: 35%; text-align: right;" class="bold">S.O.ESHBEKOV</td>
         </tr>
         <tr style="height: 15px;">
             <td></td>
@@ -421,7 +421,7 @@
                 <img src="{{ qr_akramov }}" class="qr-code">
                 {% endif %}
             </td>
-            <td style="text-align: right;" class="bold">R.N.Akramov</td>
+            <td style="text-align: right;" class="bold">R.N.AKRAMOV</td>
         </tr>
         <tr style="height: 15px;">
             <td></td>

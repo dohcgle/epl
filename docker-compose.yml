@@ -4,7 +4,7 @@ services:
   web:
     restart: always
     build: .
-    command: gunicorn --bind 0.0.0.0:8000 --timeout 300 config.wsgi:application
+    command: gunicorn --bind 0.0.0.0:8000 --timeout 300 --access-logfile - config.wsgi:application
     volumes:
       - .:/app
       - media_volume:/app/media

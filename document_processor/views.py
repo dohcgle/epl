@@ -159,8 +159,8 @@ def approve_wizard_director(request, wizard_id):
         return redirect('director_dashboard')
     return render(request, 'document_processor/view_wizard_application.html', {'wizard': wizard})
 
-@login_required
 def generate_pdf(request, wizard_id, doc_type):
+    print(f"DEBUG: generate_pdf hit! id={wizard_id}, doc={doc_type}, user={request.user}")
     wizard = get_object_or_404(LoanWizardApplication, id=wizard_id)
     templates = {
         'xulosa': 'documents/xulosa.html',
@@ -174,7 +174,8 @@ def generate_pdf(request, wizard_id, doc_type):
     if not template_path:
         return HttpResponse("Hujjat turi topilmadi", status=404)
         
-    context = build_document_context(wizard)
+    full_url = request.build_absolute_uri().replace("http://localhost", "https://epl.pullol.uz")
+    context = build_document_context(wizard, doc_url=full_url)
     html_string = render_to_string(template_path, context)
     
     response = HttpResponse(content_type='application/pdf')
@@ -186,9 +187,10 @@ def generate_pdf(request, wizard_id, doc_type):
 def generate_all_pdfs(request, wizard_id):
     wizard = get_object_or_404(LoanWizardApplication, id=wizard_id)
     doc_types = ['xulosa', 'buyruq', 'protokol', 'shartnoma', 'grafik', 'dalolatnoma']
+    doc_url_base = request.build_absolute_uri('/')[:-1] # Base domain
     zip_buffer = io.BytesIO()
     with zipfile.ZipFile(zip_buffer, 'w') as zip_file:
-        context = build_document_context(wizard)
+        # We need a context for each doc because QR will be different
         templates = {
             'xulosa': 'documents/xulosa.html',
             'buyruq': 'documents/buyruq.html',
@@ -198,6 +200,9 @@ def generate_all_pdfs(request, wizard_id):
             'dalolatnoma': 'documents/dalolatnoma.html',
         }
         for doc_type in doc_types:
+            # Build specific URL for this document type
+            doc_url = request.build_absolute_uri(f'/loans/view/{wizard_id}/doc/{doc_type}/').replace("http://localhost", "https://epl.pullol.uz")
+            context = build_document_context(wizard, doc_url=doc_url)
             template_path = templates.get(doc_type)
             html_string = render_to_string(template_path, context)
             pdf_buffer = io.BytesIO()
